@@ -4,6 +4,11 @@ Gym Vault is an online platform to help gym owners and potential gym clients con
 
 # Running the application
 
+## Initial setup
+
+- In `backend` run `npm install`
+- In `frontend` run `npm install`
+
 ## To start the backend
 
 ### `cd backend && node index.js`
