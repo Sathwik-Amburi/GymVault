@@ -3,7 +3,7 @@ const express = require("express");
 const gymvaultDb = require("./database/database");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const PORT = 3000;
+const PORT = 8000;
 const apiRoute = require("./routes/apiRoute");
 const app = express();
 
