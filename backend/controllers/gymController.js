@@ -24,8 +24,14 @@ const addGym = async (req, res) => {
   }
 };
 
-const filterGym = (req, res) => {
-  
+const filterGyms = async (req, res) => {
+  const { search } = req.query
+  const gyms = await gymService.filterGyms(search, ["name", "city"])
+  if (gyms.length > 0) {
+    res.status(200).json({ message: `${gyms.length} results found`, response: gyms })
+  } else {
+    res.status(404).json({ message: `No results found`})
+  }
 }
 
-module.exports = { getAllGyms, addGym };
+module.exports = { getAllGyms, addGym, filterGyms };

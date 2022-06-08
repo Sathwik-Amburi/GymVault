@@ -19,6 +19,23 @@ class GymService {
       console.log("Error while adding gym service", error.message);
     }
   };
+
+
+  filterGyms = async (searchString, searchFields) => {
+
+    let queryArray = [];
+    searchFields.forEach((searchField) => {
+      queryArray.push({ [searchField]: { "$regex": searchString, "$options": "i"  } })
+    })
+
+    try {
+      const gyms = await gymModel.find({ $or: queryArray })
+      return gyms
+    } catch (error) {
+      console.log("Error while filtering gyms", error.message);
+    }
+
+  }
 }
 
 module.exports = new GymService();
