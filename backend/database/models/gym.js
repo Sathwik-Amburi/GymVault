@@ -6,6 +6,12 @@ const GymSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  city: {
+    type: String,
+    required: true,
+  },
+
   phoneNumber: {
     type: Number,
     default: 0,

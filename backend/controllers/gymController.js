@@ -24,4 +24,8 @@ const addGym = async (req, res) => {
   }
 };
 
+const filterGym = (req, res) => {
+  
+}
+
 module.exports = { getAllGyms, addGym };
