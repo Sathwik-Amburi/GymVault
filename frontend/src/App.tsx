@@ -1,10 +1,13 @@
 import { FC } from "react";
-import LandingPage from "./components/LandingPage";
+import FrontPage from "./components/FrontPage";
+import NavBar from "./components/NavBar";
+
 
 const App: FC = () => {
   return (
     <>
-      <LandingPage />
+      <NavBar />
+      <FrontPage />
     </>
   );
 };

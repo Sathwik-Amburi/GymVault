@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import axios from "axios";
 import { API_URL } from "./config/config";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 axios.defaults.baseURL = API_URL;
 
