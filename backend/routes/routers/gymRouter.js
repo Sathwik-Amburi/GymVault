@@ -5,5 +5,6 @@ const gymController = require("../../controllers/gymController");
 // TODO: Add remaining endpoints
 router.get("/get-all-gyms", gymController.getAllGyms);
 router.post("/add-gym", gymController.addGym);
+router.get("/filter", gymController.filterGyms)
 
 module.exports = router;
