@@ -18,8 +18,9 @@ const getGym = async (req, res) => {
   const gym = await gymService.getGym(id)
   if (gym) {
     res.status(200).json({ message: `Gym found`, response: gym })
+  } else {
+    res.status(404).json({ message: `Gym not found`})
   }
-  res.status(404).json({ message: `Gym not found`})
 }
 
 const addGym = async (req, res) => {
