@@ -6,6 +6,7 @@ import { API_URL } from "./config/config";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GymViewPage from "./components/GymDetails";
 import App from "./App";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 axios.defaults.baseURL = API_URL;
 
