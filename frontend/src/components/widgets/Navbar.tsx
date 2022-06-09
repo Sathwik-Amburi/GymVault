@@ -17,10 +17,10 @@ const Navbar: FC = () => {
         <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }} style={{ paddingLeft: "1em" }}>
           Gym Vault
         </Typography>
-        <Button>
+        <Button color="inherit" variant="outlined" style={{ marginRight: 16 }}>
           Log in
         </Button>
-        <Button>
+        <Button color="primary" variant="outlined">
           Sign up
         </Button>
       </Toolbar>
