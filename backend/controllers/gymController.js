@@ -12,6 +12,17 @@ const getAllGyms = async (req, res) => {
   }
 };
 
+const getGym = async (req, res) => {
+  console.log(req.params.id)
+  const { id } = req.params;
+  const gym = await gymService.getGym(id)
+  if (gym) {
+    res.status(200).json({ message: `Gym found`, response: gym })
+  } else {
+    res.status(404).json({ message: `Gym not found`})
+  }
+}
+
 const addGym = async (req, res) => {
   try {
     const gym = new gymModel(req.body);
@@ -34,4 +45,4 @@ const filterGyms = async (req, res) => {
   }
 }
 
-module.exports = { getAllGyms, addGym, filterGyms };
+module.exports = { getAllGyms, getGym, addGym, filterGyms };
