@@ -10,7 +10,8 @@ import { useParams } from "react-router-dom";
 
 
 const GymViewPage: FC = () => {
-  let { id } = useParams();
+  const { id } = useParams();
+  const [reviewSort, setReviewSort] = useState("newest");
   const [gym, setGym] = useState<Gym>({ 
     name: "The Olympic Gym", 
     phoneNumber: 12, 
@@ -18,20 +19,19 @@ const GymViewPage: FC = () => {
   });
 
   useEffect(() => {
-    if (!id) {
-      id = "0";
-    }
-    ApiCalls.getGym(id)
+    let fid = (id != null) ? id : ""; // empty id will gracefully fail anyway
+    ApiCalls.getGym(fid)
       .then((res) => {
         console.log(res.data);
-        setGym(res.data);
+        setGym(res.data.response);
       })
       .catch((err) => {
-        // do some error handling later, log error for now
-        console.log(err.message);
+        console.log(err);
+        alert("TODO: The gym you're seeing does not exist in the database");
       });
   }, []);
 
+  /* MOCK - need own schema */
   let reviews = [
     {
       fullname: "Carter",
@@ -42,29 +42,26 @@ const GymViewPage: FC = () => {
       _id: "0"
     },
   ];
-  let reviewCards: React.ReactElement[] = reviews.map(review => {
-    return (
-      <Paper style={{ padding: "1em" }} elevation={3}>
-        <CardHeader
-          avatar={
-            <Avatar
-              src="todo"
-            />
-          }
-          title={review.fullname}
-          subheader={
-            <>
-              May 5th, 2020
-            </>
-          }
-        />
-        <div style={{textAlign: "center" }}>
-          <StarWidget rating={review.rating} />
-        </div>
-        <p>{review.comment}</p>
-      </Paper>
-    );
-  });
+  let courses = [
+    "Cardio",
+    "Strength",
+    "Yoga",
+    "Pilates",
+    "Boxing",
+    "Zumba",
+    "Dance",
+    "Swimming",
+    "Climbing",
+  ];
+
+  // format: [name: string, included in base price: boolean]
+  let amenities = [
+    ["Sauna", false],
+    ["Pool", false],
+    ["Wi-Fi", true],
+    ["Parking", true],
+    ["Wheelchair Access", true]
+  ];
 
 
   return (
@@ -85,7 +82,7 @@ const GymViewPage: FC = () => {
             <p>Address (needs mongo schema)</p>
 
             <div style={{ textAlign: "right" }}>
-              <Button variant="contained" color="success">
+              <Button variant="contained" color="success" href={"/buy/" + gym._id}>
                 Buy Subscription
               </Button>
             </div>
@@ -96,24 +93,26 @@ const GymViewPage: FC = () => {
             <Paper style={{ padding: "2em" }}>
               <Typography variant="h6">Offered Courses</Typography>
               <br />
-              <Chip label="Cardio" style={{ margin: "0.3em" }} />
-              <Chip label="Strength" style={{ margin: "0.3em" }} />
-              <Chip label="Yoga" style={{ margin: "0.3em" }} />
-              <Chip label="Pilates" style={{ margin: "0.3em" }} />
-              <Chip label="Zumba" style={{ margin: "0.3em" }} />
-              <Chip label="Boxing" style={{ margin: "0.3em" }} />
-              <Chip label="Swimming" style={{ margin: "0.3em" }} />
-              <Chip label="Climbing" style={{ margin: "0.3em" }} />
+              { courses.map((course) => {
+                return (
+                  <Chip label={course} style={{ margin: "0.3em" }} />
+                );
+                })
+              }
               <br /><br />
               <hr />
               <br />
               <Typography variant="h6">Amenities</Typography>
               <br />
-              <Chip label="Sauna" style={{ margin: "0.3em" }} color="warning" variant="outlined" />
-              <Chip label="Pool" style={{ margin: "0.3em" }}  color="warning"  variant="outlined"/>
-              <Chip label="Wi-Fi" style={{ margin: "0.3em" }} />
-              <Chip label="Parking" style={{ margin: "0.3em" }} />
-              <Chip label="Wheelchair Access" style={{ margin: "0.3em" }} />
+              { amenities.map((amenity) => {
+                return (
+                  <Chip label={amenity[0]} style={{ margin: "0.3em" }}
+                    color={amenity[1] ? undefined : "warning"}
+                    variant={amenity[1] ? undefined : "outlined"}
+                  />
+                );
+                })
+              }
 
             </Paper>
           </Grid>
@@ -154,16 +153,54 @@ const GymViewPage: FC = () => {
         <br />
         <br />
         <Box padding={3}>  
-          <Button variant="contained">Most Recent</Button>
-          <Button>Most Positive</Button>
-          <Button>Most Critical</Button>
+          <Button variant={reviewSort == "newest" ? "contained" : undefined}
+            onClick={() => setReviewSort("newest")}
+          >
+            Most Recent
+          </Button>
+          <Button variant={reviewSort == "best" ? "contained" : undefined}
+            onClick={() => setReviewSort("best")}
+          >
+            Most Positive
+          </Button>
+          <Button variant={reviewSort == "worst" ? "contained" : undefined}
+            onClick={() => setReviewSort("worst")}
+          >
+            Most Critical
+          </Button>
         </Box>
         <Grid container spacing={3}>
           <Grid item md={3} xs={12}>
-            {reviewCards}
+            {reviews.map(review => {
+              return (
+                <Paper style={{ padding: "1em" }} elevation={3}>
+                  <CardHeader
+                    avatar={
+                      <Avatar
+                        src="todo"
+                      />
+                    }
+                    title={review.fullname}
+                    subheader={
+                      <>
+                        May 5th, 2020
+                      </>
+                    }
+                  />
+                  <div style={{textAlign: "center" }}>
+                    <StarWidget rating={review.rating} />
+                  </div>
+                  <p>{review.comment}</p>
+                </Paper>
+              );
+            })}
           </Grid>
             
         </Grid>
+        <Box padding={10} style={{ textAlign: "center" }}>
+          TODO: shall we add a "dumb" Related Gyms view here in the future?
+        </Box>
+
       </Container>
     </>
   );

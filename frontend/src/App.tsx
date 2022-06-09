@@ -36,6 +36,15 @@ const App: FC = () => {
         <Route path="/user/login" element={
           <>TODO</>
         } />
+        <Route path="/*" element={
+          <>
+            <NavBar />
+            <br />
+            <br />
+            <br />
+            404 lol
+          </>
+        } />
     </Routes>
     </BrowserRouter>
   );
