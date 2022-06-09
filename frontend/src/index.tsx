@@ -17,7 +17,7 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="gym" element={<GymViewPage />} />
+        <Route path="/gym/:id" element={<GymViewPage />} />
       </Routes>
     </BrowserRouter>
 

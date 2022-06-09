@@ -6,14 +6,31 @@ import { Gym } from "../models/allModels";
 import Navbar from "./widgets/Navbar";
 import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
+import { useParams } from "react-router-dom";
+
 
 const GymViewPage: FC = () => {
-  const [gym, setGyms] = useState<Gym>({ 
+  let { id } = useParams();
+  const [gym, setGym] = useState<Gym>({ 
     name: "The Olympic Gym", 
     phoneNumber: 12, 
-    
     _id: "0" 
   });
+
+  useEffect(() => {
+    if (!id) {
+      id = "0";
+    }
+    ApiCalls.getGym(id)
+      .then((res) => {
+        console.log(res.data);
+        setGym(res.data);
+      })
+      .catch((err) => {
+        // do some error handling later, log error for now
+        console.log(err.message);
+      });
+  }, []);
 
   let reviews = [
     {

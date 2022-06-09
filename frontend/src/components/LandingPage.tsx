@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
 import { Gym } from "../models/allModels";
+import { Link } from "react-router-dom";
 
 const LandingPage: FC = () => {
   const [gyms, setGyms] = useState<Gym[]>([
@@ -23,15 +24,20 @@ const LandingPage: FC = () => {
     <>
       <div>TODO: Implement the landing page</div>
       <div>response body from the dummy examples in the db </div>
-      {gyms.map((item) => {
-        return (
-          <>
-            <div>
-              id {item._id} name {item.name} phone number {item.phoneNumber}
-            </div>
-          </>
-        );
-      })}
+      Currently in DB:
+      <ul>
+        {gyms.map((item) => {
+          return (
+            <>
+              <li>
+               <Link to={`/gym/${item._id}`}>
+                  {item.name}
+                </Link>
+              </li>
+            </>
+          );
+        })}
+      </ul> 
     </>
   );
 };

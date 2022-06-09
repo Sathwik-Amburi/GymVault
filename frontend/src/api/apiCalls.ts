@@ -8,4 +8,11 @@ export default class ApiCalls {
       },
     });
   };
+  public static getGym = async (id: string) => {
+    return await axios.get(`/gyms/get/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
 }
