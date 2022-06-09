@@ -3,7 +3,6 @@ import { Box, Container, padding } from "@mui/system";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
 import { Gym } from "../models/allModels";
-import Navbar from "./widgets/Navbar";
 import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
 import { useParams } from "react-router-dom";
@@ -66,142 +65,138 @@ const GymViewPage: FC = () => {
 
   return (
     <>
-      <Navbar />
-      <Container maxWidth="lg" style={{ padding: "3em" }}>
-        <Grid container spacing={6}>
-          <Grid item xs={12} md={6} spacing={2}>
-            <Lightbox />
-          </Grid>
-          
-          <Grid item xs={12} md={6}>
-            <h1>{gym.name}</h1>
-            <hr />
-            <p>Gym description (needs mongo schema)</p>
+      <Grid container spacing={6}>
+        <Grid item xs={12} md={6} spacing={2}>
+          <Lightbox />
+        </Grid>
+        
+        <Grid item xs={12} md={6}>
+          <h1>{gym.name}</h1>
+          <hr />
+          <p>Gym description (needs mongo schema)</p>
+          <br />
+          <p>Tel: +49 {gym.phoneNumber}</p>
+          <p>Address (needs mongo schema)</p>
+
+          <div style={{ textAlign: "right" }}>
+            <Button variant="contained" color="success" href={"/buy/" + gym._id}>
+              Buy Subscription
+            </Button>
+          </div>
+
+        </Grid>
+
+        <Grid item md={7} xs={12}>
+          <Paper style={{ padding: "2em", backgroundColor: "#eee" }}>
+            <Typography variant="h6">Offered Courses</Typography>
             <br />
-            <p>Tel: +49 {gym.phoneNumber}</p>
-            <p>Address (needs mongo schema)</p>
+            { courses.map((course) => {
+              return (
+                <Chip label={course} style={{ margin: "0.3em" }} />
+              );
+              })
+            }
+            <br /><br />
+            <hr />
+            <br />
+            <Typography variant="h6">Amenities</Typography>
+            <br />
+            { amenities.map((amenity) => {
+              return (
+                <Chip label={amenity[0]} style={{ margin: "0.3em" }}
+                  color={amenity[1] ? undefined : "warning"}
+                  variant={amenity[1] ? undefined : "outlined"}
+                />
+              );
+              })
+            }
 
-            <div style={{ textAlign: "right" }}>
-              <Button variant="contained" color="success" href={"/buy/" + gym._id}>
-                Buy Subscription
-              </Button>
-            </div>
-
-          </Grid>
-
-          <Grid item md={7} xs={12}>
-            <Paper style={{ padding: "2em" }}>
-              <Typography variant="h6">Offered Courses</Typography>
-              <br />
-              { courses.map((course) => {
-                return (
-                  <Chip label={course} style={{ margin: "0.3em" }} />
-                );
-                })
-              }
-              <br /><br />
-              <hr />
-              <br />
-              <Typography variant="h6">Amenities</Typography>
-              <br />
-              { amenities.map((amenity) => {
-                return (
-                  <Chip label={amenity[0]} style={{ margin: "0.3em" }}
-                    color={amenity[1] ? undefined : "warning"}
-                    variant={amenity[1] ? undefined : "outlined"}
-                  />
-                );
-                })
-              }
-
+          </Paper>
+        </Grid>
+        <Grid item md={5} xs={12}>
+          <Paper style={{ padding: "2em", backgroundColor: "#eee" }}>
+            <Typography variant="h6">Reviews</Typography>
+            <br />
+            <Paper style={{ padding: "1em" }}>
+              <StarWidget rating={4.1} />
+              <small>
+                150 people reviewed this gym!
+              </small>
             </Paper>
-          </Grid>
-          <Grid item md={5} xs={12}>
-            <Paper style={{ padding: "2em", backgroundColor: "#ccc" }}>
-              <Typography variant="h6">Reviews</Typography>
-              <br />
-              <Paper style={{ padding: "1em" }}>
-                <StarWidget rating={4.1} />
-                <small>
-                  150 people reviewed this gym!
-                </small>
-              </Paper>
-              <br />
-              <Typography variant="h6">Recent Activity</Typography>
-              <br />
+            <br />
+            <Typography variant="h6">Recent Activity</Typography>
+            <br />
 
-              <Paper style={{ padding: "1em" }}>
+            <Paper style={{ padding: "1em" }}>
+              <CardHeader
+                avatar={
+                  <Avatar
+                    src="todo"
+                  />
+                }
+                title="Carter"
+                subheader={
+                  <>
+                    Rated
+                    <StarWidget rating={4.1} /> 
+                    yesterday
+                  </>
+                }
+              />
+            </Paper>
+          </Paper>
+        </Grid>
+      </Grid>
+      <br />
+      <br />
+      <Box padding={3}>  
+        <Button variant={reviewSort == "newest" ? "contained" : undefined}
+          onClick={() => setReviewSort("newest")}
+        >
+          Most Recent
+        </Button>
+        <Button variant={reviewSort == "best" ? "contained" : undefined}
+          onClick={() => setReviewSort("best")}
+        >
+          Most Positive
+        </Button>
+        <Button variant={reviewSort == "worst" ? "contained" : undefined}
+          onClick={() => setReviewSort("worst")}
+        >
+          Most Critical
+        </Button>
+      </Box>
+      <Grid container spacing={3}>
+        <Grid item md={3} xs={12}>
+          {reviews.map(review => {
+            return (
+              <Paper style={{ padding: "1em" }} elevation={3}>
                 <CardHeader
                   avatar={
                     <Avatar
                       src="todo"
                     />
                   }
-                  title="Carter"
+                  title={review.fullname}
                   subheader={
                     <>
-                      Rated
-                      <StarWidget rating={4.1} /> 
-                      yesterday
+                      May 5th, 2020
                     </>
                   }
                 />
+                <div style={{textAlign: "center" }}>
+                  <StarWidget rating={review.rating} />
+                </div>
+                <p>{review.comment}</p>
               </Paper>
-            </Paper>
-          </Grid>
+            );
+          })}
         </Grid>
-        <br />
-        <br />
-        <Box padding={3}>  
-          <Button variant={reviewSort == "newest" ? "contained" : undefined}
-            onClick={() => setReviewSort("newest")}
-          >
-            Most Recent
-          </Button>
-          <Button variant={reviewSort == "best" ? "contained" : undefined}
-            onClick={() => setReviewSort("best")}
-          >
-            Most Positive
-          </Button>
-          <Button variant={reviewSort == "worst" ? "contained" : undefined}
-            onClick={() => setReviewSort("worst")}
-          >
-            Most Critical
-          </Button>
-        </Box>
-        <Grid container spacing={3}>
-          <Grid item md={3} xs={12}>
-            {reviews.map(review => {
-              return (
-                <Paper style={{ padding: "1em" }} elevation={3}>
-                  <CardHeader
-                    avatar={
-                      <Avatar
-                        src="todo"
-                      />
-                    }
-                    title={review.fullname}
-                    subheader={
-                      <>
-                        May 5th, 2020
-                      </>
-                    }
-                  />
-                  <div style={{textAlign: "center" }}>
-                    <StarWidget rating={review.rating} />
-                  </div>
-                  <p>{review.comment}</p>
-                </Paper>
-              );
-            })}
-          </Grid>
-            
-        </Grid>
-        <Box padding={10} style={{ textAlign: "center" }}>
-          TODO: shall we add a "dumb" Related Gyms view here in the future?
-        </Box>
-
-      </Container>
+          
+      </Grid>
+      <Box padding={10} style={{ textAlign: "center" }}>
+        TODO: shall we add a "dumb" Related Gyms view here in the future?
+      </Box>
     </>
   );
 };
