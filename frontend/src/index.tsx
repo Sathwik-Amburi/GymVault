@@ -3,10 +3,8 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import axios from "axios";
 import { API_URL } from "./config/config";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import GymViewPage from "./components/GymDetails";
 import App from "./App";
-import '@fortawesome/fontawesome-free/css/all.min.css';
+//?import '@fortawesome/fontawesome-free/css/all.min.css';
 
 axios.defaults.baseURL = API_URL;
 
@@ -15,12 +13,6 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/gym/:id" element={<GymViewPage />} />
-      </Routes>
-    </BrowserRouter>
-
+    <App />
   </React.StrictMode>
 );
