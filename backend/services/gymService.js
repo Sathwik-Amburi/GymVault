@@ -12,6 +12,15 @@ class GymService {
     }
   };
 
+  getGym = async (gymId) => {
+    try {
+      const gym = await gymModel.findById(gymId);
+      return gym;
+    } catch (error) {
+      console.log("Error while fetching gym", error.message);
+    }
+  };
+
   addGym = async (gym) => {
     try {
       await gym.save();
