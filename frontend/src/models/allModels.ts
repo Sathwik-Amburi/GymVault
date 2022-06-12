@@ -3,3 +3,9 @@ export interface Gym {
   phoneNumber: number;
   _id: string;
 }
+
+export interface Course {
+  name: string;
+  phoneNumber: number;
+  _id: string;
+}

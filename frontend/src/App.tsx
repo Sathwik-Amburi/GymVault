@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import FrontPage from "./components/FrontPage";
 import Navbar from "./components/widgets/Navbar";
 import GymViewPage from "./components/GymDetails";
+import CourseViewPage from "./components/courseDetails";
 import { Container } from "@mui/system";
 
 
@@ -27,7 +28,7 @@ const App: FC = () => {
               <>TODO</>
             } />
             <Route path="/course/:id" element={
-              <>TODO</>
+              <CourseViewPage />
             } />
             <Route path="/user" element={
               <>TODO</>

@@ -15,4 +15,18 @@ export default class ApiCalls {
       },
     });
   };
+  public static getAllCourses = async () => {
+    return await axios.get("/gyms/get-all-courses", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+  public static getCourse = async (id: string) => {
+    return await axios.get(`/courses/get/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
 }
