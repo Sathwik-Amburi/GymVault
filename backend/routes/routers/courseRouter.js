@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const gymController = require("../../controllers/courseController");
+const courseController = require("../../controllers/courseController");
 
 // TODO: Add remaining endpoints
-router.get("/get-all-gyms", gymController.getAllCourses);
-router.post("/add-gym", gymController.addCourse);
-router.get("/filter", gymController.filterCourses);
-router.get("/get/:id", gymController.getCourse);
+router.get("/get-all-gyms", courseController.getAllCourses);
+router.post("/add-gym", courseController.addCourse);
+router.get("/filter", courseController.filterCourses);
+router.get("/get/:id", courseController.getCourse);
 
 module.exports = router;
