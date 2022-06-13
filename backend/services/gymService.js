@@ -29,22 +29,21 @@ class GymService {
     }
   };
 
-
   filterGyms = async (searchString, searchFields) => {
-
     let queryArray = [];
     searchFields.forEach((searchField) => {
-      queryArray.push({ [searchField]: { "$regex": searchString, "$options": "i"  } })
-    })
+      queryArray.push({
+        [searchField]: { $regex: searchString, $options: "i" },
+      });
+    });
 
     try {
-      const gyms = await gymModel.find({ $or: queryArray })
-      return gyms
+      const gyms = await gymModel.find({ $or: queryArray });
+      return gyms;
     } catch (error) {
       console.log("Error while filtering gyms", error.message);
     }
-
-  }
+  };
 }
 
 module.exports = new GymService();

@@ -13,15 +13,14 @@ const getAllGyms = async (req, res) => {
 };
 
 const getGym = async (req, res) => {
-  console.log(req.params.id)
   const { id } = req.params;
-  const gym = await gymService.getGym(id)
+  const gym = await gymService.getGym(id);
   if (gym) {
-    res.status(200).json({ message: `Gym found`, response: gym })
+    res.status(200).json({ message: `Gym found`, response: gym });
   } else {
-    res.status(404).json({ message: `Gym not found`})
+    res.status(404).json({ message: `Gym not found` });
   }
-}
+};
 
 const addGym = async (req, res) => {
   try {
@@ -36,13 +35,15 @@ const addGym = async (req, res) => {
 };
 
 const filterGyms = async (req, res) => {
-  const { search } = req.query
-  const gyms = await gymService.filterGyms(search, ["name", "city"])
+  const { search } = req.query;
+  const gyms = await gymService.filterGyms(search, ["name", "city"]);
   if (gyms.length > 0) {
-    res.status(200).json({ message: `${gyms.length} results found`, response: gyms })
+    res
+      .status(200)
+      .json({ message: `${gyms.length} results found`, response: gyms });
   } else {
-    res.status(404).json({ message: `No results found`})
+    res.status(404).json({ message: `No results found` });
   }
-}
+};
 
 module.exports = { getAllGyms, getGym, addGym, filterGyms };
