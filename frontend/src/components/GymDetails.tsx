@@ -1,4 +1,12 @@
-import { Button, Paper, Grid, Typography, Chip, Avatar, CardHeader } from "@mui/material";
+import {
+  Button,
+  Paper,
+  Grid,
+  Typography,
+  Chip,
+  Avatar,
+  CardHeader,
+} from "@mui/material";
 import { Box, Container, padding } from "@mui/system";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
@@ -7,18 +15,19 @@ import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
 import { useParams } from "react-router-dom";
 
-
 const GymViewPage: FC = () => {
   const { id } = useParams();
   const [reviewSort, setReviewSort] = useState("newest");
-  const [gym, setGym] = useState<Gym>({ 
-    name: "The Olympic Gym", 
-    phoneNumber: 12, 
-    _id: "0" 
+  const [gym, setGym] = useState<Gym>({
+    name: "",
+    phoneNumber: "",
+    _id: "0",
+    city: "Berlin",
+    address: "",
   });
 
   useEffect(() => {
-    let fid = (id != null) ? id : ""; // empty id will gracefully fail anyway
+    let fid = id != null ? id : ""; // empty id will gracefully fail anyway
     ApiCalls.getGym(fid)
       .then((res) => {
         console.log(res.data);
@@ -35,10 +44,11 @@ const GymViewPage: FC = () => {
     {
       fullname: "Carter",
       rating: 4,
-      comment: "This is a great gym. I come here almost daily to workout, and find the atmosphere very calming and relaxing.",
+      comment:
+        "This is a great gym. I come here almost daily to workout, and find the atmosphere very calming and relaxing.",
       gym: "0",
       user: "0",
-      _id: "0"
+      _id: "0",
     },
   ];
   let courses = [
@@ -59,9 +69,8 @@ const GymViewPage: FC = () => {
     ["Pool", false],
     ["Wi-Fi", true],
     ["Parking", true],
-    ["Wheelchair Access", true]
+    ["Wheelchair Access", true],
   ];
-
 
   return (
     <>
@@ -69,7 +78,7 @@ const GymViewPage: FC = () => {
         <Grid item xs={12} md={6} spacing={2}>
           <Lightbox />
         </Grid>
-        
+
         <Grid item xs={12} md={6}>
           <h1>{gym.name}</h1>
           <hr />
@@ -79,38 +88,39 @@ const GymViewPage: FC = () => {
           <p>Address (needs mongo schema)</p>
 
           <div style={{ textAlign: "right" }}>
-            <Button variant="contained" color="success" href={"/buy/" + gym._id}>
+            <Button
+              variant="contained"
+              color="success"
+              href={"/buy/" + gym._id}
+            >
               Buy Subscription
             </Button>
           </div>
-
         </Grid>
 
         <Grid item md={7} xs={12}>
           <Paper style={{ padding: "2em", backgroundColor: "#eee" }}>
             <Typography variant="h6">Offered Courses</Typography>
             <br />
-            { courses.map((course) => {
-              return (
-                <Chip label={course} style={{ margin: "0.3em" }} />
-              );
-              })
-            }
-            <br /><br />
+            {courses.map((course) => {
+              return <Chip label={course} style={{ margin: "0.3em" }} />;
+            })}
+            <br />
+            <br />
             <hr />
             <br />
             <Typography variant="h6">Amenities</Typography>
             <br />
-            { amenities.map((amenity) => {
+            {amenities.map((amenity) => {
               return (
-                <Chip label={amenity[0]} style={{ margin: "0.3em" }}
+                <Chip
+                  label={amenity[0]}
+                  style={{ margin: "0.3em" }}
                   color={amenity[1] ? undefined : "warning"}
                   variant={amenity[1] ? undefined : "outlined"}
                 />
               );
-              })
-            }
-
+            })}
           </Paper>
         </Grid>
         <Grid item md={5} xs={12}>
@@ -119,9 +129,7 @@ const GymViewPage: FC = () => {
             <br />
             <Paper style={{ padding: "1em" }}>
               <StarWidget rating={4.1} />
-              <small>
-                150 people reviewed this gym!
-              </small>
+              <small>150 people reviewed this gym!</small>
             </Paper>
             <br />
             <Typography variant="h6">Recent Activity</Typography>
@@ -129,16 +137,12 @@ const GymViewPage: FC = () => {
 
             <Paper style={{ padding: "1em" }}>
               <CardHeader
-                avatar={
-                  <Avatar
-                    src="todo"
-                  />
-                }
+                avatar={<Avatar src="todo" />}
                 title="Carter"
                 subheader={
                   <>
                     Rated
-                    <StarWidget rating={4.1} /> 
+                    <StarWidget rating={4.1} />
                     yesterday
                   </>
                 }
@@ -149,18 +153,21 @@ const GymViewPage: FC = () => {
       </Grid>
       <br />
       <br />
-      <Box padding={3}>  
-        <Button variant={reviewSort == "newest" ? "contained" : undefined}
+      <Box padding={3}>
+        <Button
+          variant={reviewSort == "newest" ? "contained" : undefined}
           onClick={() => setReviewSort("newest")}
         >
           Most Recent
         </Button>
-        <Button variant={reviewSort == "best" ? "contained" : undefined}
+        <Button
+          variant={reviewSort == "best" ? "contained" : undefined}
           onClick={() => setReviewSort("best")}
         >
           Most Positive
         </Button>
-        <Button variant={reviewSort == "worst" ? "contained" : undefined}
+        <Button
+          variant={reviewSort == "worst" ? "contained" : undefined}
           onClick={() => setReviewSort("worst")}
         >
           Most Critical
@@ -168,23 +175,15 @@ const GymViewPage: FC = () => {
       </Box>
       <Grid container spacing={3}>
         <Grid item md={3} xs={12}>
-          {reviews.map(review => {
+          {reviews.map((review) => {
             return (
               <Paper style={{ padding: "1em" }} elevation={3}>
                 <CardHeader
-                  avatar={
-                    <Avatar
-                      src="todo"
-                    />
-                  }
+                  avatar={<Avatar src="todo" />}
                   title={review.fullname}
-                  subheader={
-                    <>
-                      May 5th, 2020
-                    </>
-                  }
+                  subheader={<>May 5th, 2020</>}
                 />
-                <div style={{textAlign: "center" }}>
+                <div style={{ textAlign: "center" }}>
                   <StarWidget rating={review.rating} />
                 </div>
                 <p>{review.comment}</p>
@@ -192,7 +191,6 @@ const GymViewPage: FC = () => {
             );
           })}
         </Grid>
-          
       </Grid>
       <Box padding={10} style={{ textAlign: "center" }}>
         TODO: shall we add a "dumb" Related Gyms view here in the future?
