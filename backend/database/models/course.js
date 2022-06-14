@@ -6,7 +6,9 @@ const CourseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  gymId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", required: true },
+  gymId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Gym", required: true },
   name: {
     type: String,
     required: true,
