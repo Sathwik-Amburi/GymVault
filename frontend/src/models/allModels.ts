@@ -1,6 +1,8 @@
 export interface Gym {
   name: string;
-  phoneNumber: number;
+  phoneNumber: string;
+  city: string;
+  address: string;
   _id: string;
 }
 

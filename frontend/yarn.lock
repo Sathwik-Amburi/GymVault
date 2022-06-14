@@ -1623,7 +1623,14 @@
     "prop-types" "^15.8.1"
     "react-is" "^17.0.2"
 
-"@mui/material@^5.8.2":
+"@mui/icons-material@^5.8.3":
+  "integrity" "sha512-dAdhimSLKOV0Q8FR7AYGEaCrTUh9OV7zU4Ueo5REoUt4cC3Vy+UBKDjZk66x5ezaYb63AFgQIFwtnZj3B/QDbQ=="
+  "resolved" "https://registry.npmjs.org/@mui/icons-material/-/icons-material-5.8.3.tgz"
+  "version" "5.8.3"
+  dependencies:
+    "@babel/runtime" "^7.17.2"
+
+"@mui/material@^5.0.0", "@mui/material@^5.8.2":
   "integrity" "sha512-w/A1KG9Czf42uTyJOiRU5U1VullOz1R3xcsBvv3BtKCCWdVP+D6v/Yb8v0tJpIixMEbjeWzWGjotQBU0nd+yNA=="
   "resolved" "https://registry.npmjs.org/@mui/material/-/material-5.8.2.tgz"
   "version" "5.8.2"
@@ -7533,6 +7540,11 @@
   "integrity" "sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ="
   "resolved" "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.1.2.tgz"
   "version" "1.1.2"
+
+"prettier@2.6.2":
+  "integrity" "sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew=="
+  "resolved" "https://registry.npmjs.org/prettier/-/prettier-2.6.2.tgz"
+  "version" "2.6.2"
 
 "pretty-bytes@^5.3.0", "pretty-bytes@^5.4.1":
   "integrity" "sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg=="

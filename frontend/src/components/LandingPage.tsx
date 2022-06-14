@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const LandingPage: FC = () => {
   const [gyms, setGyms] = useState<Gym[]>([
-    { name: "", phoneNumber: 0, _id: "" },
+    { name: "", phoneNumber: "", address: "", city: "", _id: "" },
   ]);
 
   useEffect(() => {
@@ -30,14 +30,12 @@ const LandingPage: FC = () => {
           return (
             <>
               <li>
-               <Link to={`/gym/${item._id}`}>
-                  {item.name}
-                </Link>
+                <Link to={`/gym/${item._id}`}>{item.name}</Link>
               </li>
             </>
           );
         })}
-      </ul> 
+      </ul>
     </>
   );
 };
