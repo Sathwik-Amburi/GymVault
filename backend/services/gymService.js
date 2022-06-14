@@ -29,16 +29,9 @@ class GymService {
     }
   };
 
-  filterGyms = async (searchString, searchFields) => {
-    let queryArray = [];
-    searchFields.forEach((searchField) => {
-      queryArray.push({
-        [searchField]: { $regex: searchString, $options: "i" },
-      });
-    });
-
+  filterGyms = async (name, city) => {
     try {
-      const gyms = await gymModel.find({ $or: queryArray });
+      const gyms = await gymModel.find({ "name": {$regex: String(name), $options: "i"}, "city": city });
       return gyms;
     } catch (error) {
       console.log("Error while filtering gyms", error.message);
