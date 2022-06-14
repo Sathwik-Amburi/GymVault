@@ -14,6 +14,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 gymvaultDb.connect();
 
+app.get("/", (req, res) => {res.send("Connected to API")})
+
 app.use("/api", apiRoute);
 
 app.listen(PORT, () => {
