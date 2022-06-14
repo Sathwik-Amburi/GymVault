@@ -18,6 +18,18 @@ const CourseSchema = new mongoose.Schema({
         required: true,
     },
 
+    description: {
+        type: String,
+        required: true,
+        default: "",
+    },
+
+    address: {
+        type: String,
+        required: true,
+        default: "",
+    },
+
     city: {
         type: String,
         required: true,

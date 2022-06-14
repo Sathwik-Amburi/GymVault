@@ -13,7 +13,9 @@ const CourseViewPage: FC = () => {
     const [reviewSort, setReviewSort] = useState("newest");
     const [course, setCourse] = useState<Course>({
         name: "Yoga Course",
+        description: "",
         phoneNumber: 1760000000,
+        address: "",
         _id: "0"
     });
 
@@ -100,6 +102,19 @@ const CourseViewPage: FC = () => {
                     </Paper>
                 </Grid>
             </Grid>
+                <Grid item xs={12} md={6}>
+                    <h2>About this course:</h2>
+                    <hr />
+                    <p>{course.description}</p>
+                    <br />
+
+                    <div style={{ textAlign: "right" }}>
+                        <Button variant="contained" color="success" href={"/buy/" + course._id}>
+                            Buy Subscription
+                        </Button>
+                    </div>
+
+                </Grid>
             <br />
             <br />
             <br />

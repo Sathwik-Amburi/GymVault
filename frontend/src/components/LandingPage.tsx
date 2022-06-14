@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const LandingPage: FC = () => {
   const [gyms, setGyms] = useState<Gym[]>([
-    { name: "", phoneNumber: "", address: "", city: "", _id: "" },
+    { name: "", description: "", phoneNumber: "", address: "", city: "", amenities:  [], _id: "" },
   ]);
 
   useEffect(() => {
