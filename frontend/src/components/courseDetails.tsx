@@ -13,7 +13,9 @@ const CourseViewPage: FC = () => {
     const [reviewSort, setReviewSort] = useState("newest");
     const [course, setCourse] = useState<Course>({
         name: "Yoga Course",
+        description: "",
         phoneNumber: 1760000000,
+        address: "",
         _id: "0"
     });
 
@@ -86,12 +88,9 @@ const CourseViewPage: FC = () => {
             </Grid>
                 <Grid item xs={12} md={6}>
                     <h2>About this course:</h2>
-                    {/*<h1>{course.name}</h1>*/}
                     <hr />
-                    <p>Course description (needs mongo schema)</p>
+                    <p>{course.description}</p>
                     <br />
-                    <p>Tel: +49 {course.phoneNumber}</p>
-                    <p>Address (needs mongo schema)</p>
 
                     <div style={{ textAlign: "right" }}>
                         <Button variant="contained" color="success" href={"/buy/" + course._id}>

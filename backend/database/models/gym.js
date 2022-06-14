@@ -18,6 +18,16 @@ const GymSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+    required: true,
+    default: "",
+  },
+  amenities: {
+    type: [String],
+    required: true,
+    default: [],
+  }
 });
 
 const Gym = mongoose.model("Gym", GymSchema);

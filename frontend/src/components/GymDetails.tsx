@@ -24,6 +24,8 @@ const GymViewPage: FC = () => {
     _id: "0",
     city: "Berlin",
     address: "",
+    description: "",
+    amenities: [],
   });
 
   useEffect(() => {
@@ -82,10 +84,10 @@ const GymViewPage: FC = () => {
         <Grid item xs={12} md={6}>
           <h1>{gym.name}</h1>
           <hr />
-          <p>Gym description (needs mongo schema)</p>
+          <p>{gym.description}</p>
           <br />
           <p>Tel: +49 {gym.phoneNumber}</p>
-          <p>Address (needs mongo schema)</p>
+          <p>{gym.address}</p>
 
           <div style={{ textAlign: "right" }}>
             <Button
