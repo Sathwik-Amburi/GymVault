@@ -2,6 +2,17 @@ const mongoose = require("mongoose");
 
 // TODO: Add remaining fields, Add remaining Schemas
 const CourseSchema = new mongoose.Schema({
+    id: {
+        type: String,
+        required: true,
+
+    },
+
+    gymId: {
+        type: String,
+        required: true,
+    },
+
     name: {
         type: String,
         required: true,
@@ -11,10 +22,9 @@ const CourseSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-
-    phoneNumber: {
-        type: Number,
-        default: 0,
+    description:  {
+        type: String,
+        required: true
     },
 });
 
