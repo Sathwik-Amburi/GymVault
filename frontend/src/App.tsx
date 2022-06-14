@@ -19,7 +19,7 @@ const App: FC = () => {
             <Route path="/gym/add" element={<>TODO</>} />
             <Route path="/gym/:id" element={<GymViewPage />} />
             <Route path="/gym/:id/reviews" element={<>TODO</>} />
-            <Route path="/course/:id" element={<>TODO</>} />
+            <Route path="/course/:id" element={<CourseViewPage />} />
             <Route path="/user" element={<>TODO</>} />
             <Route path="/user/signup" element={<>TODO</>} />
             <Route path="/user/login" element={<>TODO</>} />
