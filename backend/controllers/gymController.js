@@ -38,7 +38,7 @@ const filterGyms = async (req, res) => {
   const { name, city } = req.query;
 
   if(!city || city == null || city == undefined){
-    return res.status(400).json({ message: "City required"})
+    return res.status(400).json({ message: "search failed", errors: ["Please choose a city"] });
   }
 
   const gyms = await gymService.filterGyms(name, city);
