@@ -51,6 +51,22 @@ const CourseViewPage: FC = () => {
                     <h1>Yoga Course</h1>
                     <Lightbox />
                 </Grid>
+                <Grid item xs={12} md={6}>
+                    <h2>About this course:</h2>
+                    {/*<h1>{course.name}</h1>*/}
+                    <hr />
+                    <p>Course description (needs mongo schema)</p>
+                    <br />
+                    <p>Tel: +49 {course.phoneNumber}</p>
+                    <p>Address (needs mongo schema)</p>
+
+                    <div style={{ textAlign: "right" }}>
+                        <Button variant="contained" color="success" href={"/buy/" + course._id}>
+                            Buy Subscription
+                        </Button>
+                    </div>
+
+                </Grid>
                 <Grid item md={5} xs={12}>
                     <h1>See what other people say about this course!</h1>
                     <Paper style={{ padding: "2em", backgroundColor: "#eee" }}>
@@ -101,9 +117,6 @@ const CourseViewPage: FC = () => {
                 </Grid>
             <br />
             <br />
-            <Grid>
-                < Lightbox />
-            </Grid>
             <br />
             <br />
             <Box padding={3}>
