@@ -6,6 +6,14 @@ const GymSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  email: {
+    type: String,
+    trim: true,
+    default: '',
+    // need to add validation for email
+    // validate: [validateLocalStrategyProperty, 'Please fill in your email'],
+    match: [/.+\@.+\..+/, 'Please fill a valid email address'],
+  },
   city: {
     type: String,
     required: true,
@@ -27,6 +35,9 @@ const GymSchema = new mongoose.Schema({
     required: true,
     default: [],
   },
+  websiteURL: {
+    type: String,
+  }
 });
 
 const Gym = mongoose.model("Gym", GymSchema);
