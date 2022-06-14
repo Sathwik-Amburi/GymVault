@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 
 // TODO: Add remaining fields, Add remaining Schemas
 const UserSchema = new mongoose.Schema({
-    userId: {
-        type: String,
-        required: true,
-        unique: true,
-    },
     role: {
         type: String,
         enum: ['user','admin','gym_owner'],

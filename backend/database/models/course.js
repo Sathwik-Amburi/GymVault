@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 
 // TODO: Add remaining fields, Add remaining Schemas
 const CourseSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: true,
-  },
   gymId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Gym", required: true
