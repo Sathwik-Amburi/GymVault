@@ -1,5 +1,7 @@
 const gymvaultDb = require("../database/database");
-const CourseModel = require("../database/models/course");
+const courseModel = require("../database/models/course");
+const gymModel = require("../database/models/gym");
+
 
 // TODO: Add remaining service functions
 class CourseService {
@@ -30,16 +32,16 @@ class CourseService {
     };
 
 
-    filterCourses = async (searchString, searchFields) => {
-
-        let queryArray = [];
-        searchFields.forEach((searchField) => {
-            queryArray.push({ [searchField]: { "$regex": searchString, "$options": "i"  } })
-        })
+    filterCourses = async (name, city) => {
 
         try {
-            const courses = await courseModel.find({ $or: queryArray })
+
+            let courses = await courseModel.find({ "name": { $regex: String(name), $options: "i" } }).populate({ path: 'gymId'})
+            courses.filter((course) => {
+                course.gymId.city = city
+            })
             return courses
+
         } catch (error) {
             console.log("Error while filtering courses", error.message);
         }

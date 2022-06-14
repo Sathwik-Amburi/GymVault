@@ -19,7 +19,7 @@ const getCourse = async (req, res) => {
     if (course) {
         res.status(200).json({ message: `Course found`, response: course })
     } else {
-        res.status(404).json({ message: `Course not found`})
+        res.status(404).json({ message: `Course not found` })
     }
 }
 
@@ -36,12 +36,19 @@ const addCourse = async (req, res) => {
 };
 
 const filterCourses = async (req, res) => {
-    const { search } = req.query
-    const courses = await courseService.filterCourses(search, ["name", "city"])
+    const { name, city } = req.query
+
+    if (!city || city == null || city == undefined) {
+        return res.status(400).json({ message: "search failed", errors: ["Please choose a city"] });
+    }
+
+    const courses = await courseService.filterCourses(name, city)
+    return res.json({ courses })
+
     if (courses.length > 0) {
         res.status(200).json({ message: `${courses.length} results found`, response: courses })
     } else {
-        res.status(404).json({ message: `No results found`})
+        res.status(404).json({ message: `No results found` })
     }
 }
 
