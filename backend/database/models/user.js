@@ -28,7 +28,6 @@ const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         trim: true,
-        default: '',
         // need to add validation for email
         // validate: [validateLocalStrategyProperty, 'Please fill in your email'],
         match: [/.+\@.+\..+/, 'Please fill a valid email address'],
@@ -39,7 +38,6 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        default: '',
         // need validation for password
         // validate: [validateLocalStrategyPassword, 'Password should be longer']
     },
