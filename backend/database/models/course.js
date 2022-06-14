@@ -8,7 +8,8 @@ const CourseSchema = new mongoose.Schema({
   },
   gymId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Gym", required: true },
+    ref: "Gym", required: true
+  },
   name: {
     type: String,
     required: true,
