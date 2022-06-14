@@ -65,7 +65,7 @@ export default function FrontPage() {
         <div
           style={{ whiteSpace: "pre-wrap", color: "grey", fontStyle: "italic" }}
         >
-          Gym Vault is an online platform to help gym owners and potential gym
+          GymVault is an online platform to help gym owners and potential gym
           clients connect faster, easier, and hassle free by allowing clientsto
           browse the large gyms catalog, choose the gym that matches their exact
           needs and pay only for what they use, all fully digitally.

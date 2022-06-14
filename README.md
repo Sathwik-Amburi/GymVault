@@ -1,6 +1,6 @@
 # GymVault
 
-Gym Vault is an online platform to help gym owners and potential gym clients connect by allowing clients to browse a gyms catalog, choose the gym that matches their needs and pay for what they use digitally.
+GymVault is an online platform to help gym owners and potential gym clients connect by allowing clients to browse a gyms catalog, choose the gym that matches their needs and pay for what they use digitally.
 
 # Running the application
 
