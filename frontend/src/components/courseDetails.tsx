@@ -85,7 +85,8 @@ const CourseViewPage: FC = () => {
                 </Grid>
             </Grid>
                 <Grid item xs={12} md={6}>
-                    <h1>{course.name}</h1>
+                    <h2>About this course:</h2>
+                    {/*<h1>{course.name}</h1>*/}
                     <hr />
                     <p>Course description (needs mongo schema)</p>
                     <br />
