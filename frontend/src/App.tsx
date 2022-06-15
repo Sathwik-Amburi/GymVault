@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import FrontPage from "./components/FrontPage";
+import FrontPage from "./components/FrontPage/FrontPage";
 import Navbar from "./components/widgets/Navbar";
 import GymViewPage from "./components/GymDetails";
 import CourseViewPage from "./components/courseDetails";
