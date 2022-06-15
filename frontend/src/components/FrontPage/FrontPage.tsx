@@ -5,13 +5,8 @@ import GlobalStyles from "@mui/material/GlobalStyles";
 import Container from "@mui/material/Container";
 import mainLogo from "../../images/gymvault.png";
 import axios from "axios";
-import GymSearch from "./GymSearch";
-import CourseSearch from "./CourseSearch";
-import Button from '@mui/material/Button';
-import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
-import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
-import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
-import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
+import SearchType from "./SearchType";
+
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
@@ -20,20 +15,19 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 /* retrieved from: https://mui.com/material-ui/getting-started/templates/pricing/*/
 
 export default function FrontPage() {
-  let [name, setName] = React.useState<string>("");
-  let [city, setCity] = React.useState<string>("");
+
   let [filter, setFilter] = React.useState<string>("gym");
   let [gymButton, setGymButton] = React.useState<object>({ backgroundColor: "#3259ad", color: "white" });
   let [courseButton, setCourseButton] = React.useState<object>({});
 
-  const toggle = (event:any) => {
-    if(filter=="gym"){
+  const toggle = (event: any) => {
+    if (filter == "gym") {
       setFilter("course")
       setGymButton({})
       setCourseButton({ backgroundColor: "#3259ad", color: "white" })
     }
 
-    else{
+    else {
       setFilter("gym")
       setGymButton({ backgroundColor: "#3259ad", color: "white" })
       setCourseButton({})
@@ -100,8 +94,7 @@ export default function FrontPage() {
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
-
-        {filter === "gym" ? <GymSearch /> : <CourseSearch />}
+        {filter === "gym" ? <SearchType type="gyms" /> : <SearchType type="courses" />}
       </Container>
     </React.Fragment>
   );
