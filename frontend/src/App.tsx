@@ -6,6 +6,8 @@ import GymViewPage from "./components/GymDetails";
 import CourseViewPage from "./components/courseDetails";
 import { Container } from "@mui/system";
 import ResultsPage from "./components/ResultsPage";
+import CheckoutPage from "./components/CheckoutPage";
+import UserSubscriptionsPage from "./components/UserSubscriptionsPage";
 
 const App: FC = () => {
   return (
@@ -20,10 +22,11 @@ const App: FC = () => {
             <Route path="/gym/:id" element={<GymViewPage />} />
             <Route path="/gym/:id/reviews" element={<>TODO</>} />
             <Route path="/course/:id" element={<CourseViewPage />} />
-            <Route path="/user" element={<>TODO</>} />
+            <Route path="/user/tickets" element={<UserSubscriptionsPage />} />
             <Route path="/user/signup" element={<>TODO</>} />
             <Route path="/user/login" element={<>TODO</>} />
             <Route path="/results" element={<ResultsPage />} />
+            <Route path="/buy/:id" element={<CheckoutPage />} />
             <Route
               path="/*"
               element={

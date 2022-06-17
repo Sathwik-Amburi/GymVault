@@ -16,6 +16,24 @@ export interface Course {
   _id: string;
 }
 
+export interface Item { 
+  gymName: string;
+  courseName: string;
+  type: string;
+  address: string;
+  description: string;
+  price: number;
+  options: Option[];
+  _id: string;
+}
+
+export interface Option {
+  name: string;
+  description: string;
+  price: number;
+  _id: string;
+}
+
 export enum SubscriptionTypes {
   DAY_PASS = "DAY_PASS",
   MONTHLY_PASS = "MONTHLY_PASS",
