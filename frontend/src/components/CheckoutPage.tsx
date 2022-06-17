@@ -22,15 +22,14 @@ const CheckoutPage: FC = () => {
     bgColor: "",
   });
   
-  const [cart, setCart] = useState<CartItem[]>([]);
-  useEffect(() => {
-    /*TODOApiCalls.getAllGyms()
-      .then((res) => setResults(res.data))
-      .catch((err) => console.log(err.message));
-      */
-  }, []);
-
-  /* Grid related stubs: */
+  const [cart, setCart] = useState<CartItem[]>([ {
+    name: "Base Ticket",
+    description: "Includes registration, max. 4 entrances/week",
+    price: 28,
+    base: true,
+    _id: "1"
+  } as CartItem ]);
+  // TODO: all of the below will go into the useEffect hook
   let items: PurchaseOption[] = [
     {
       _id: "1",
@@ -48,7 +47,8 @@ const CheckoutPage: FC = () => {
       bgColor: "#CD9400",
       fgColor: "#fff"
     } as PurchaseOption,
-  ]
+  ];
+
   let optionals: PurchaseOption[] = [
     {
       _id: "1",

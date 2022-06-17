@@ -1,4 +1,4 @@
-import { Grid, Table, TableBody, TableRow, TableCell, Typography, Paper, Button } from "@mui/material";
+import { Grid, Table, TableBody, TableRow, TableCell, Typography, Paper, Button, tableCellClasses } from "@mui/material";
 import { fontSize } from "@mui/system";
 import { FC, useEffect, useState } from "react";
 import { Item, Option } from "../../models/allModels";
@@ -29,7 +29,11 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
   let defaultBg = "#999";
 
   return (
-    <Table>
+    <Table sx={{
+      [`& .${tableCellClasses.root}`]: {
+        borderBottom: "none"
+      }
+    }}>
       <TableBody>
         { props.cart.map((opt: CartItem) => (
           <TableRow>
@@ -51,7 +55,7 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
         <TableRow>
           <TableCell>
             <Typography variant="h5" style={{fontWeight: "bold" }}>
-              € TODO
+              € {props.cart.reduce((acc, curr) => acc + curr.price, 0)}
             </Typography>
           </TableCell>
           <TableCell>
