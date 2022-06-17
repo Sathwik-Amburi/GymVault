@@ -1,21 +1,76 @@
-import { Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  IconButton,
+  Slider,
+  Typography,
+} from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
-import { Gym } from "../models/allModels";
+import { Filter, FilterTypes, Gym } from "../models/allModels";
+import { styled } from "@mui/material/styles";
 import ResultCard from "./ResultCard";
 import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import apiCalls from "../api/apiCalls";
 
 const ResultsPage: FC = () => {
+  const maxPrice = 1000;
   const [results, setResults] = useState<Gym[]>();
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [priceRange, setPriceRange] = useState<number[]>([0, maxPrice]);
+  const [activeFilters, setActiveFilters] = useState<Filter[]>();
+
   useEffect(() => {
     ApiCalls.getAllGyms()
       .then((res) => setResults(res.data))
       .catch((err) => console.log(err.message));
   }, []);
 
-  const dummyFilters = ["Pool", "Munich", "Parking"];
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
+  const handleFilter = () => {
+    apiCalls
+      .getGymsByPriceRange(priceRange)
+      .then((res) => {
+        if (res.data.message === "No results found") {
+          setResults([]);
+        } else {
+          setResults(res.data.response.gyms);
+          setActiveFilters([
+            {
+              type: FilterTypes.PRICE_RANGE,
+              name: "Price range between",
+              minPrice: priceRange[0],
+              maxPrice: priceRange[1],
+            },
+          ]);
+        }
+      })
+      .catch((err) => console.log(err.message));
+    setOpenModal(false);
+  };
+
+  const handleSliderChange = (event: Event, newValue: number | number[]) => {
+    setPriceRange(newValue as number[]);
+  };
+
+  const handleCloseFilter = (filterType: FilterTypes) => {
+    const updatedActiveFilters = activeFilters?.filter(
+      (item) => item.type !== filterType
+    );
+    setActiveFilters(updatedActiveFilters);
+    ApiCalls.getAllGyms()
+      .then((res) => setResults(res.data))
+      .catch((err) => console.log(err.message));
+  };
+
   return (
     <>
       <Grid>
@@ -31,19 +86,24 @@ const ResultsPage: FC = () => {
           justifyContent="space-between"
         >
           <Grid>
-            {dummyFilters.map((item) => {
-              return (
-                <Button
-                  variant="contained"
-                  size="small"
-                  disableElevation
-                  style={{ marginRight: "8px" }}
-                >
-                  {item}
-                  <CloseIcon fontSize="small" />
-                </Button>
-              );
-            })}
+            {activeFilters &&
+              activeFilters.map((item, index) => {
+                return (
+                  <Button
+                    variant="contained"
+                    size="small"
+                    disableElevation
+                    style={{ marginRight: "8px" }}
+                  >
+                    {item.name} {item.minPrice} and {item.maxPrice} EUR
+                    <CloseIcon
+                      fontSize="small"
+                      onClick={() => handleCloseFilter(item.type)}
+                      key={index}
+                    />
+                  </Button>
+                );
+              })}
           </Grid>
           <Grid>
             <Button
@@ -51,9 +111,52 @@ const ResultsPage: FC = () => {
               size="small"
               disableElevation
               style={{ marginRight: "8px", float: "right" }}
+              onClick={handleOpenModal}
             >
               <FilterAltIcon fontSize="small" /> Filters
             </Button>
+
+            <BootstrapDialog
+              onClose={handleCloseModal}
+              aria-labelledby="customized-dialog-title"
+              open={openModal}
+            >
+              <BootstrapDialogTitle
+                id="customized-dialog-title"
+                onClose={handleCloseModal}
+              >
+                Filter by
+              </BootstrapDialogTitle>
+              <DialogContent dividers sx={{ width: 500 }}>
+                <Typography gutterBottom>
+                  Price range (€): between {priceRange[0]} and {priceRange[1]}{" "}
+                  EUR
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  <Box sx={{ width: 300 }}>
+                    <Slider
+                      getAriaLabel={() => "Temperature range"}
+                      max={maxPrice}
+                      value={priceRange}
+                      onChange={handleSliderChange}
+                      valueLabelDisplay="auto"
+                      getAriaValueText={() => {
+                        return `${priceRange} €`;
+                      }}
+                      marks={[
+                        { value: 0, label: "0 €" },
+                        { value: 1000, label: "1000 €" },
+                      ]}
+                    />
+                  </Box>
+                </Typography>
+              </DialogContent>
+              <DialogActions>
+                <Button autoFocus onClick={handleFilter}>
+                  Filter
+                </Button>
+              </DialogActions>
+            </BootstrapDialog>
           </Grid>
         </Grid>
       </Grid>
@@ -70,6 +173,44 @@ const ResultsPage: FC = () => {
           ))}
       </Grid>
     </>
+  );
+};
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
+
+export interface DialogTitleProps {
+  id: string;
+  children?: React.ReactNode;
+  onClose: () => void;
+}
+
+const BootstrapDialogTitle = (props: DialogTitleProps) => {
+  const { children, onClose, ...other } = props;
+
+  return (
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
   );
 };
 
