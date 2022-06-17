@@ -5,6 +5,6 @@ const courseRouter = require("./routers/courseRouter");
 
 // TODO: Add remaining endpoints
 router.use("/gyms", gymRouter);
-router.use("/courses",courseRouter)
+router.use("/courses", courseRouter);
 
 module.exports = router;
