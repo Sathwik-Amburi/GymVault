@@ -24,6 +24,10 @@ export interface Item {
   description: string;
   price: number;
   options: Option[];
+
+  fgColor: string;
+  bgColor: string;
+
   _id: string;
 }
 
@@ -63,4 +67,15 @@ export interface PriceRangeFilter {
   name: string;
   minPrice: number;
   maxPrice: number;
+}
+
+
+export interface PurchaseOption {
+  name: string;
+  description: string;
+  
+  price: number;
+  bgColor: string;
+  fgColor: string;
+  _id: string;
 }
