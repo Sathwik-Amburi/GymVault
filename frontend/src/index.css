@@ -11,3 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+hr {
+  height: 5px;
+  margin: 1.5rem 0;
+  border: none;
+  background-color: #000; /* TODO set to theme color */
+  max-width: 8em;
+  border-radius: 3px;
+}
+
+.mini-hr {
+  height: 4px;
+  margin: 0.5rem 0;
+  border: none;
+  background-color: #000; /* TODO set to theme color */
+  max-width: 8em;
+  border-radius: 3px;
+}
