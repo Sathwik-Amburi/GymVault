@@ -51,7 +51,7 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
         <TableRow>
           <TableCell>
             <Typography variant="h5" style={{fontWeight: "bold" }}>
-              € xx
+              € TODO
             </Typography>
           </TableCell>
           <TableCell>
