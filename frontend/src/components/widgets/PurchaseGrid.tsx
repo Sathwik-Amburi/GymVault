@@ -1,7 +1,6 @@
-import { Grid, Table, TableBody, TableRow, TableCell, Typography, Paper } from "@mui/material";
-import { fontSize } from "@mui/system";
+import { Grid, Typography, Paper } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-import { Item, Option, PurchaseOption } from "../../models/allModels";
+import { PurchaseOption } from "../../models/allModels";
 import { CartItem } from "./PurchaseCart";
 
 interface GridProps {
@@ -48,7 +47,35 @@ const PurchaseGrid: FC<GridProps> = (props: GridProps) => {
             borderRadius: "12px",
             padding: "1.5em",
             margin: "1em",
-          }} onClick={() => setSelected(item._id)}>
+          }} onClick={() => { 
+            setSelected(item._id);
+            let cart = props.cart.filter(item => !item.base); // only 1 "base" element at a time!
+            let cartItem = {
+              name: item.name,
+              description: item.description,
+              price: item.price,
+              base: true, 
+              _id: item._id
+            } as CartItem;
+            // base elem first, options after
+            props.setCart([cartItem].concat(cart));
+          }
+            /*{
+              "_id": "1",
+              "name": "Base Ticket",
+              "description": "",
+              "price": 40,
+              "base": true,
+            },
+            {
+              "_id": "2",
+              "name": "Sauna Access",
+              "description": "",
+              "price": 40,
+              "base": false,
+            }
+          ]*/
+          }>
             <span style={{ fontSize: "1.5em" }}>
               { selected== item._id ? <i className="fas fa-circle-check"></i> : <i className="fa-regular fa-circle"></i> }
             </span>
@@ -106,7 +133,26 @@ const PurchaseGrid: FC<GridProps> = (props: GridProps) => {
             borderRadius: "12px",
             padding: "1.5em",
             margin: "1em",
-          }} onClick={() => setSelectedOption(selectedOption.includes(item._id) ? selectedOption.filter(id => id !== item._id) : [...selectedOption, item._id])}>
+          }} onClick={() => {
+            setSelectedOption(selectedOption.includes(item._id) ? selectedOption.filter(id => id !== item._id) : [...selectedOption, item._id]);
+            
+            // firstly remove the element from the cart
+            props.setCart(props.cart
+              .filter(i => i._id !== item._id));
+
+            // then add it back to the bottom if needed
+            if (!selectedOption.includes(item._id)) {
+              props.setCart(props.cart.concat([
+                {
+                  name: item.name,
+                  description: item.description,
+                  price: item.price,
+                  base: false, 
+                  _id: item._id
+                } as CartItem
+              ]));
+            }
+          }}>
             
             <span style={{ fontSize: "1.5em" }}>
               { selectedOption.includes(item._id) ? <i className="fas fa-circle-check"></i> : <i className="fa-regular fa-circle"></i> }
@@ -117,7 +163,7 @@ const PurchaseGrid: FC<GridProps> = (props: GridProps) => {
                 float: "right"
               }}
             >
-              {item.price}€
+              {item.price > 0 ? item.price + "€" : "free"}
             </Typography>
             <div style={{
               marginTop: "3em"

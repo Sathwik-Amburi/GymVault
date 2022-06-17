@@ -22,22 +22,7 @@ const CheckoutPage: FC = () => {
     bgColor: "",
   });
   
-  const [cart, setCart] = useState<CartItem[]>([
-    {
-      "_id": "1",
-      "name": "Base Ticket",
-      "description": "",
-      "price": 40,
-      "base": true,
-    },
-    {
-      "_id": "2",
-      "name": "Sauna Access",
-      "description": "",
-      "price": 40,
-      "base": false,
-    }
-  ]);
+  const [cart, setCart] = useState<CartItem[]>([]);
   useEffect(() => {
     /*TODOApiCalls.getAllGyms()
       .then((res) => setResults(res.data))
