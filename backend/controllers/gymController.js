@@ -37,17 +37,75 @@ const addGym = async (req, res) => {
 const filterGyms = async (req, res) => {
   const { name, city } = req.query;
 
-  if(!city || city == null || city == undefined){
-    return res.status(400).json({ message: "search failed", errors: ["Please choose a city"] });
+  if (!city || city == null || city == undefined) {
+    return res
+      .status(400)
+      .json({ message: "search failed", errors: ["Please choose a city"] });
   }
 
   const gyms = await gymService.filterGyms(name, city);
 
   if (gyms.length > 0) {
-    res.status(200).json({ message: `${gyms.length} results found`, response: gyms });
+    res
+      .status(200)
+      .json({ message: `${gyms.length} results found`, response: gyms });
   } else {
     res.status(404).json({ message: `No results found` });
   }
 };
 
-module.exports = { getAllGyms, getGym, addGym, filterGyms };
+const filterGymsByPriceRange = async (req, res) => {
+  const { priceRange } = req.body;
+
+  const results = await gymService.filterGymsByPriceRange(priceRange);
+
+  if (results.gyms.length > 0) {
+    res.status(200).json({
+      message: `${results.gyms.length} results found`,
+      response: results,
+    });
+  } else {
+    res.status(200).json({ message: `No results found` });
+  }
+};
+
+const addSubscription = async (req, res) => {
+  const { gymId } = req.body;
+  try {
+    await gymService.addSubscription(req.body);
+
+    res
+      .status(200)
+      .json({ message: `Subscription added successfully to gym ${gymId}` });
+  } catch (err) {
+    console.log(
+      `Error while adding subscription to gym ${gymId}`,
+      error.message
+    );
+    res
+      .status(400)
+      .json({ error: `Error while adding subscription to gym ${gymId}` });
+  }
+};
+
+const getSubscriptionsByGymId = async (req, res) => {
+  const { gymId } = req.params;
+  const subscriptions = await gymService.getSubscriptionsByGymId(gymId);
+  if (subscriptions) {
+    res
+      .status(200)
+      .json({ message: `Subscriptions found`, response: subscriptions });
+  } else {
+    res.status(404).json({ message: `Subscriptions` });
+  }
+};
+
+module.exports = {
+  getAllGyms,
+  getGym,
+  addGym,
+  filterGyms,
+  filterGymsByPriceRange,
+  addSubscription,
+  getSubscriptionsByGymId,
+};

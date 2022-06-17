@@ -1,5 +1,6 @@
 const gymvaultDb = require("../database/database");
 const gymModel = require("../database/models/gym");
+const Subscription = require("../database/models/subscription");
 
 // TODO: Add remaining service functions
 class GymService {
@@ -31,10 +32,50 @@ class GymService {
 
   filterGyms = async (name, city) => {
     try {
-      const gyms = await gymModel.find({ "name": {$regex: String(name), $options: "i"}, "city": city });
+      const gyms = await gymModel.find({
+        name: { $regex: String(name), $options: "i" },
+        city: city,
+      });
       return gyms;
     } catch (error) {
       console.log("Error while filtering gyms", error.message);
+    }
+  };
+
+  filterGymsByPriceRange = async (priceRange) => {
+    try {
+      const subscriptions = await Subscription.find({
+        price: { $gte: priceRange[0], $lte: priceRange[1] },
+      });
+
+      const gyms = await gymModel.find({
+        _id: {
+          $in: subscriptions.map((item) => {
+            return item.gymId;
+          }),
+        },
+      });
+      return { gyms, subscriptions };
+    } catch (error) {
+      console.log("Error while filtering gyms", error.message);
+    }
+  };
+
+  addSubscription = async (subscriptionBody) => {
+    try {
+      const subscription = new Subscription(subscriptionBody);
+      await subscription.save();
+    } catch (error) {
+      console.log("Error while adding subscription", error.message);
+    }
+  };
+
+  getSubscriptionsByGymId = async (gymId) => {
+    try {
+      const subscriptions = await Subscription.find({ gymId });
+      return subscriptions;
+    } catch (error) {
+      console.log("Error while subscriptions by gymId", error.message);
     }
   };
 }
