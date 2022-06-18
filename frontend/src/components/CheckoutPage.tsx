@@ -1,9 +1,7 @@
-import { Grid, Table, TableBody, TableRow, TableCell, Typography } from "@mui/material";
-import { FC, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Grid, Typography } from "@mui/material";
+import { FC, useState } from "react";
 
-import { Item, Option, PurchaseOption } from "../models/allModels";
-import Button from "@mui/material/Button";
+import { Item, PurchaseOption } from "../models/allModels";
 import PurchaseGrid from "./widgets/PurchaseGrid";
 import PurchaseCart, { CartItem } from "./widgets/PurchaseCart";
 
@@ -80,7 +78,8 @@ const CheckoutPage: FC = () => {
     <Grid container spacing={3} style={{
       padding: "3em",
       borderRadius: "20px",
-      backgroundColor: "#ccc"
+      backgroundColor: "#eee",
+      marginTop: "3em"
     }}>
       <Grid item xs={12}>
         <span style={{float: "right"}}>

@@ -9,9 +9,21 @@ import ResultsPage from "./components/ResultsPage";
 import CheckoutPage from "./components/CheckoutPage";
 import UserSubscriptionsPage from "./components/UserSubscriptionsPage";
 
+// EXP: use Montserrat font
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+const THEME = createTheme({
+  typography: {
+   "fontFamily": `"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif`,
+   "fontSize": 13,
+   "fontWeightLight": 300,
+   "fontWeightRegular": 400,
+   "fontWeightMedium": 500
+  }
+});
+
 const App: FC = () => {
   return (
-    <>
+    <ThemeProvider theme={THEME}>
       <Navbar />
 
       <Container maxWidth="lg" style={{ padding: "3em" }}>
@@ -41,7 +53,7 @@ const App: FC = () => {
           </Routes>
         </BrowserRouter>
       </Container>
-    </>
+    </ThemeProvider>
   );
 };
 
