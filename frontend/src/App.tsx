@@ -8,6 +8,7 @@ import { Container } from "@mui/system";
 import ResultsPage from "./components/ResultsPage";
 import CheckoutPage from "./components/CheckoutPage";
 import UserSubscriptionsPage from "./components/UserSubscriptionsPage";
+import SignUpPage from "./components/SignUpPage"
 
 const App: FC = () => {
   return (
@@ -23,7 +24,7 @@ const App: FC = () => {
             <Route path="/gym/:id/reviews" element={<>TODO</>} />
             <Route path="/course/:id" element={<CourseViewPage />} />
             <Route path="/user/tickets" element={<UserSubscriptionsPage />} />
-            <Route path="/user/signup" element={<>TODO</>} />
+            <Route path="/user/signup" element={<SignUpPage />} />
             <Route path="/user/login" element={<>TODO</>} />
             <Route path="/results" element={<ResultsPage />} />
             <Route path="/buy/:id" element={<CheckoutPage />} />
