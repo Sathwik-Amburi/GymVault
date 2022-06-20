@@ -48,10 +48,6 @@ const UserSchema = new mongoose.Schema({
     resetPasswordExpires: {
         type: Date
     },
-    dateOfBirth:{
-        type: Date,
-        required: true
-    },
     phoneNumber: {
         type: Number,
         required: true,
