@@ -1,7 +1,4 @@
-const gymvaultDb = require("../database/database");
 const courseModel = require("../database/models/course");
-const gymModel = require("../database/models/gym");
-
 
 // TODO: Add remaining service functions
 class CourseService {
