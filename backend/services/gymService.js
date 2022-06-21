@@ -1,4 +1,3 @@
-const gymvaultDb = require("../database/database");
 const gymModel = require("../database/models/gym");
 const Subscription = require("../database/models/subscription");
 
