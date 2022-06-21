@@ -20,4 +20,7 @@ GymVault is an online platform to help gym owners and potential gym clients conn
 ## To setup environment variables
 
 - Navigate to `prototype/backend` and create a `.env` file
-- copy into `.env` the variable `MONGODB_CONNECTION_STRING=mongodb+srv://mongoDBadmin:pg8B3Jk4SguSs0lP@gymvault.15i2jjh.mongodb.net/gymvaultDB`
+- copy into `.env` the variables 
+`MONGODB_CONNECTION_STRING=mongodb+srv://mongoDBadmin:pg8B3Jk4SguSs0lP@gymvault.15i2jjh.mongodb.net/gymvaultDB`
+`JWT_SECRET=mksejklfw38yhio336`
+`JWT_EXPIRATION=2h`
