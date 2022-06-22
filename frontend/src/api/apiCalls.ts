@@ -1,6 +1,22 @@
 import axios from "axios";
 
 export default class ApiCalls {
+  public static registerUser = async (
+    firstName: any,
+    lastName: any,
+    phoneNumber: any,
+    email: any,
+    password: any
+  ) => {
+    return await axios.post("/authentication/register", {
+      firstName,
+      lastName,
+      phoneNumber,
+      email,
+      password,
+    });
+  };
+
   public static getAllGyms = async () => {
     return await axios.get("/gyms/get-all-gyms", {
       headers: {

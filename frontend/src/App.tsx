@@ -9,20 +9,20 @@ import { Typography } from "@mui/material";
 import ResultsPage from "./components/ResultsPage";
 import CheckoutPage from "./components/CheckoutPage";
 import UserSubscriptionsPage from "./components/UserSubscriptionsPage";
-import SignUpPage from "./components/SignUpPage"
-import SignInPage from "./components/SignInPage"
-import EmailConfirmationPage from "./components/EmailConfirmationPage"
+import SignUpPage from "./components/SignUpPage";
+import SignInPage from "./components/SignInPage";
+import EmailConfirmationPage from "./components/EmailConfirmationPage";
 
 // EXP: use Montserrat font
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 const THEME = createTheme({
   typography: {
-   "fontFamily": `"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif`,
-   "fontSize": 13,
-   "fontWeightLight": 300,
-   "fontWeightRegular": 400,
-   "fontWeightMedium": 500
-  }
+    fontFamily: `"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif`,
+    fontSize: 13,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+  },
 });
 
 const App: FC = () => {
@@ -40,7 +40,10 @@ const App: FC = () => {
             <Route path="/course/:id" element={<CourseViewPage />} />
             <Route path="/user/tickets" element={<UserSubscriptionsPage />} />
             <Route path="/user/signup" element={<SignUpPage />} />
-            <Route path="/user/confirmation" element={<EmailConfirmationPage />} />
+            <Route
+              path="/user/confirmation"
+              element={<EmailConfirmationPage />}
+            />
             <Route path="/user/signin" element={<SignInPage />} />
             <Route path="/results" element={<ResultsPage />} />
             <Route path="/buy/:id" element={<CheckoutPage />} />
