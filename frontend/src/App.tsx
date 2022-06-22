@@ -23,18 +23,6 @@ const THEME = createTheme({
   }
 });
 
-// EXP: use Montserrat font
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-const THEME = createTheme({
-  typography: {
-   "fontFamily": `"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif`,
-   "fontSize": 13,
-   "fontWeightLight": 300,
-   "fontWeightRegular": 400,
-   "fontWeightMedium": 500
-  }
-});
-
 const App: FC = () => {
   return (
     <ThemeProvider theme={THEME}>
