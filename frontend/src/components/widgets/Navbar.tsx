@@ -21,10 +21,10 @@ const Navbar: FC = () => {
         >
           GymVault
         </Link>
-        { !user && ( <Button color="inherit" variant="outlined" style={{ marginRight: 16 }}>
+        { !user && ( <Button color="inherit" variant="outlined" style={{ marginRight: 16 }} href="/user/signin">
           Log in
         </Button> ) }
-        { !user && ( <Button color="primary" variant="outlined">
+        { !user && ( <Button color="primary" variant="outlined" style={{ marginRight: 16 }} href="/user/signup">
           Sign up
         </Button> ) }
 
