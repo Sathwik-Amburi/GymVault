@@ -12,6 +12,7 @@ import UserSubscriptionsPage from "./components/UserSubscriptionsPage";
 import SignUpPage from "./components/SignUpPage";
 import SignInPage from "./components/SignInPage";
 import EmailConfirmationPage from "./components/EmailConfirmationPage";
+import PageNotFound from "./components/PageNotFound";
 
 // EXP: use Montserrat font
 import { ThemeProvider, createTheme } from "@mui/material/styles";
@@ -47,22 +48,23 @@ const App: FC = () => {
             <Route path="/user/signin" element={<SignInPage />} />
             <Route path="/results" element={<ResultsPage />} />
             <Route path="/buy/:id" element={<CheckoutPage />} />
-            <Route
-              path="/*"
-              element={
-                <>
-                  <br />
-                  <br />
-                  <br />
-                  <Typography variant="h4">
-                    404 - Gym not found
-                  </Typography>
-                  We don't know what you were looking for, but we know it's not here.
-                  <br />
-                  <a href="/">Go home</a>
-                </>
-              }
-            />
+            <Route path="/*" element={<PageNotFound />} />
+            {/*<Route*/}
+            {/*  path="/*"*/}
+            {/*  element={*/}
+            {/*    <>*/}
+            {/*      <br />*/}
+            {/*      <br />*/}
+            {/*      <br />*/}
+            {/*      <Typography variant="h4">*/}
+            {/*        404 - Gym not found*/}
+            {/*      </Typography>*/}
+            {/*      We don't know what you were looking for, but we know it's not here.*/}
+            {/*      <br />*/}
+            {/*      <a href="/">Go home</a>*/}
+            {/*    </>*/}
+            {/*  }*/}
+            {/*/>*/}
           </Routes>
         </BrowserRouter>
       </Container>
