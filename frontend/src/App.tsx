@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import FrontPage from "./components/FrontPage/FrontPage";
+import FrontPage from "./components/FrontPage";
 import Navbar from "./components/widgets/Navbar";
 import GymViewPage from "./components/GymDetails";
 import CourseViewPage from "./components/courseDetails";
@@ -54,10 +54,9 @@ const App: FC = () => {
                   <br />
                   <br />
                   <br />
-                  <Typography variant="h4">
-                    404 - Gym not found
-                  </Typography>
-                  We don't know what you were looking for, but we know it's not here.
+                  <Typography variant="h4">404 - Gym not found</Typography>
+                  We don't know what you were looking for, but we know it's not
+                  here.
                   <br />
                   <a href="/">Go home</a>
                 </>

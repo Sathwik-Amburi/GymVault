@@ -3,38 +3,34 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import Container from "@mui/material/Container";
-import mainLogo from "../../images/gymvault.png";
+import mainLogo from "../images/gymvault.png";
 import axios from "axios";
 import SearchType from "./SearchType";
 
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-
-
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 /* retrieved from: https://mui.com/material-ui/getting-started/templates/pricing/*/
 
 export default function FrontPage() {
-
   let [filter, setFilter] = React.useState<string>("gym");
-  let [gymButton, setGymButton] = React.useState<object>({ backgroundColor: "#3259ad", color: "white" });
+  let [gymButton, setGymButton] = React.useState<object>({
+    backgroundColor: "#3259ad",
+    color: "white",
+  });
   let [courseButton, setCourseButton] = React.useState<object>({});
 
   const toggle = (event: any) => {
     if (filter == "gym") {
-      setFilter("course")
-      setGymButton({})
-      setCourseButton({ backgroundColor: "#3259ad", color: "white" })
+      setFilter("course");
+      setGymButton({});
+      setCourseButton({ backgroundColor: "#3259ad", color: "white" });
+    } else {
+      setFilter("gym");
+      setGymButton({ backgroundColor: "#3259ad", color: "white" });
+      setCourseButton({});
     }
-
-    else {
-      setFilter("gym")
-      setGymButton({ backgroundColor: "#3259ad", color: "white" })
-      setCourseButton({})
-    }
-
-  }
-
+  };
 
   return (
     <React.Fragment>
@@ -79,22 +75,43 @@ export default function FrontPage() {
         </div>
       </Container>
       <Container maxWidth="md" component="main">
-        <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", marginBottom: "50px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            marginBottom: "50px",
+          }}
+        >
           <ToggleButtonGroup
             // value={alignment}
             exclusive
             // onChange={handleAlignment}
             aria-label="text alignment"
           >
-            <ToggleButton onClick={toggle} style={gymButton} value="left" aria-label="left aligned">
+            <ToggleButton
+              onClick={toggle}
+              style={gymButton}
+              value="left"
+              aria-label="left aligned"
+            >
               Find Gyms
             </ToggleButton>
-            <ToggleButton onClick={toggle} style={courseButton} value="right" aria-label="right aligned">
+            <ToggleButton
+              onClick={toggle}
+              style={courseButton}
+              value="right"
+              aria-label="right aligned"
+            >
               Find Courses
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
-        {filter === "gym" ? <SearchType type="gyms" /> : <SearchType type="courses" />}
+        {filter === "gym" ? (
+          <SearchType type="gyms" />
+        ) : (
+          <SearchType type="courses" />
+        )}
       </Container>
     </React.Fragment>
   );
