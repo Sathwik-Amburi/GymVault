@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import ApiCalls from "../api/apiCalls";
 
 const theme = createTheme();
 
@@ -19,9 +20,12 @@ const SignInPage: FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    let email = data.get('email')!.toString();
+    let password = data.get('password')!.toString();
+    let user = ApiCalls.userTryLogin(email, password).then(res => {
+        console.log(res);
+    }).catch(err => {
+        console.log(err);
     });
   };
 
