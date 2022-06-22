@@ -1,4 +1,4 @@
-import * as React from "react";
+import { FC, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,41 +14,16 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ApiCalls from "../api/apiCalls";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+
+const theme = createTheme();
 
 export interface ValidationState {
   status: "" | "success" | "warning" | "error" | "validating";
   message: string;
 }
 
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright ©"}
-      <Link color="inherit" href="http://localhost:3000/">
-        GymVault
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const theme = createTheme();
-
-export default function SignUp() {
+const SignUpPage: FC = () => {
   const navigate = useNavigate();
-
-  const [registrationValidation, setRegistrationValidation] =
-    useState<ValidationState>({
-      status: "",
-      message: "",
-    });
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -61,7 +36,7 @@ export default function SignUp() {
       data.get("password")
     )
       .then(() => {
-        navigate("/login-ready");
+        navigate("/user/confirmation");
       })
       .catch((error) => {
         if (error.response.data.error.type === "DUPLICATE_EMAIL") {
@@ -72,6 +47,12 @@ export default function SignUp() {
         }
       });
   };
+
+  const [registrationValidation, setRegistrationValidation] =
+    useState<ValidationState>({
+      status: "",
+      message: "",
+    });
 
   return (
     <ThemeProvider theme={theme}>
@@ -197,15 +178,16 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/user/signin" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
   );
-}
+};
+
+export default SignUpPage;
