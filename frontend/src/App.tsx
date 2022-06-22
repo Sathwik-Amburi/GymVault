@@ -5,6 +5,7 @@ import Navbar from "./components/widgets/Navbar";
 import GymViewPage from "./components/GymDetails";
 import CourseViewPage from "./components/courseDetails";
 import { Container } from "@mui/system";
+import { Typography } from "@mui/material";
 import ResultsPage from "./components/ResultsPage";
 import CheckoutPage from "./components/CheckoutPage";
 import UserSubscriptionsPage from "./components/UserSubscriptionsPage";
@@ -50,7 +51,12 @@ const App: FC = () => {
                   <br />
                   <br />
                   <br />
-                  404 lol
+                  <Typography variant="h4">
+                    404 - Gym not found
+                  </Typography>
+                  We don't know what you were looking for, but we know it's not here.
+                  <br />
+                  <a href="/">Go home</a>
                 </>
               }
             />
