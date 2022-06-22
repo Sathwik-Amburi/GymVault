@@ -9,6 +9,7 @@ import ResultsPage from "./components/ResultsPage";
 import CheckoutPage from "./components/CheckoutPage";
 import UserSubscriptionsPage from "./components/UserSubscriptionsPage";
 import SignUpPage from "./components/SignUpPage"
+import EmailConfirmationPage from "./components/EmailConfirmationPage"
 
 const App: FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: FC = () => {
             <Route path="/course/:id" element={<CourseViewPage />} />
             <Route path="/user/tickets" element={<UserSubscriptionsPage />} />
             <Route path="/user/signup" element={<SignUpPage />} />
+            <Route path="/user/confirmation" element={<EmailConfirmationPage />} />
             <Route path="/user/login" element={<>TODO</>} />
             <Route path="/results" element={<ResultsPage />} />
             <Route path="/buy/:id" element={<CheckoutPage />} />
