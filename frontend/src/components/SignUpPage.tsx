@@ -34,8 +34,12 @@ export default function SignUp() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
+            first_name: data.get('firstName'),
+            last_name: data.get('lastName'),
+            ph_no:data.get('ph_no'),
             email: data.get('email'),
             password: data.get('password'),
+            confirm_password: data.get('confirm_password'),
         });
 
     };
@@ -58,7 +62,7 @@ export default function SignUp() {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -85,6 +89,7 @@ export default function SignUp() {
                                 <TextField
                                     required
                                     fullWidth
+                                    type = 'email'
                                     id="email"
                                     label="Email Address"
                                     name="email"
@@ -97,7 +102,7 @@ export default function SignUp() {
                                     fullWidth
                                     id="ph_no"
                                     label="Phone Number"
-                                    name="ph_number"
+                                    name="ph_no"
                                     autoComplete="phone_number"
                                 />
                             </Grid>
@@ -110,6 +115,17 @@ export default function SignUp() {
                                     type="password"
                                     id="password"
                                     autoComplete="new-password"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    name="confirm_password"
+                                    label="Confirm Password"
+                                    type="password"
+                                    id="confirm_password"
+                                    autoComplete="confirm-password"
                                 />
                             </Grid>
                             <Grid item xs={12}>
