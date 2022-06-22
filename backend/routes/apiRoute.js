@@ -7,6 +7,6 @@ const authRouter = require("./routers/authRouter")
 // TODO: Add remaining endpoints
 router.use("/gyms", gymRouter);
 router.use("/courses", courseRouter);
-router.use("/users", authRouter)
+router.use("/user", authRouter)
 
 module.exports = router;

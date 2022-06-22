@@ -50,4 +50,21 @@ export default class ApiCalls {
       },
     });
   };
+
+
+  // User stuff
+  public static userTryLogin = async (email: string, password: string) => {
+    return await axios.post("/user/signin", {
+      email,
+      password,
+    });
+  }
+  public static userSignup = async (email: string, fullname: string, password: string, phone: string) => {
+    return await axios.post("/user/signup", {
+      email,
+      password,
+      fullname,
+      phone,
+    });
+  }
 }
