@@ -9,11 +9,23 @@ import ResultsPage from "./components/ResultsPage";
 import CheckoutPage from "./components/CheckoutPage";
 import UserSubscriptionsPage from "./components/UserSubscriptionsPage";
 import SignUpPage from "./components/SignUpPage"
-import EmailConfirmationPage from "./components/EmailConfirmationPage"
+import SignInPage from "./components/SignInPage"
+
+// EXP: use Montserrat font
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+const THEME = createTheme({
+  typography: {
+   "fontFamily": `"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif`,
+   "fontSize": 13,
+   "fontWeightLight": 300,
+   "fontWeightRegular": 400,
+   "fontWeightMedium": 500
+  }
+});
 
 const App: FC = () => {
   return (
-    <>
+    <ThemeProvider theme={THEME}>
       <Navbar />
 
       <Container maxWidth="lg" style={{ padding: "3em" }}>
@@ -26,8 +38,7 @@ const App: FC = () => {
             <Route path="/course/:id" element={<CourseViewPage />} />
             <Route path="/user/tickets" element={<UserSubscriptionsPage />} />
             <Route path="/user/signup" element={<SignUpPage />} />
-            <Route path="/user/confirmation" element={<EmailConfirmationPage />} />
-            <Route path="/user/login" element={<>TODO</>} />
+            <Route path="/user/signin" element={<SignInPage />} />
             <Route path="/results" element={<ResultsPage />} />
             <Route path="/buy/:id" element={<CheckoutPage />} />
             <Route
@@ -44,7 +55,7 @@ const App: FC = () => {
           </Routes>
         </BrowserRouter>
       </Container>
-    </>
+    </ThemeProvider>
   );
 };
 
