@@ -8,31 +8,19 @@ import { Container } from "@mui/system";
 import ResultsPage from "./components/ResultsPage";
 import CheckoutPage from "./components/CheckoutPage";
 import UserSubscriptionsPage from "./components/UserSubscriptionsPage";
-import SignUpPage from "./components/SignUpPage"
-import SignInPage from "./components/SignInPage"
+import SignUpPage from "./components/SignUpPage";
+import SignInPage from "./components/SignInPage";
 
 // EXP: use Montserrat font
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 const THEME = createTheme({
   typography: {
-   "fontFamily": `"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif`,
-   "fontSize": 13,
-   "fontWeightLight": 300,
-   "fontWeightRegular": 400,
-   "fontWeightMedium": 500
-  }
-});
-
-// EXP: use Montserrat font
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-const THEME = createTheme({
-  typography: {
-   "fontFamily": `"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif`,
-   "fontSize": 13,
-   "fontWeightLight": 300,
-   "fontWeightRegular": 400,
-   "fontWeightMedium": 500
-  }
+    fontFamily: `"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif`,
+    fontSize: 13,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+  },
 });
 
 const App: FC = () => {
