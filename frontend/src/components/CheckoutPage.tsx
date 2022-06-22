@@ -1,9 +1,7 @@
-import { Grid, Table, TableBody, TableRow, TableCell, Typography } from "@mui/material";
-import { FC, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Grid, Typography } from "@mui/material";
+import { FC, useState } from "react";
 
-import { Item, Option, PurchaseOption } from "../models/allModels";
-import Button from "@mui/material/Button";
+import { Item, PurchaseOption } from "../models/allModels";
 import PurchaseGrid from "./widgets/PurchaseGrid";
 import PurchaseCart, { CartItem } from "./widgets/PurchaseCart";
 
@@ -22,15 +20,14 @@ const CheckoutPage: FC = () => {
     bgColor: "",
   });
   
-  const [cart, setCart] = useState<CartItem[]>([]);
-  useEffect(() => {
-    /*TODOApiCalls.getAllGyms()
-      .then((res) => setResults(res.data))
-      .catch((err) => console.log(err.message));
-      */
-  }, []);
-
-  /* Grid related stubs: */
+  const [cart, setCart] = useState<CartItem[]>([ {
+    name: "Base Ticket",
+    description: "Includes registration, max. 4 entrances/week",
+    price: 28,
+    base: true,
+    _id: "1"
+  } as CartItem ]);
+  // TODO: all of the below will go into the useEffect hook
   let items: PurchaseOption[] = [
     {
       _id: "1",
@@ -48,7 +45,8 @@ const CheckoutPage: FC = () => {
       bgColor: "#CD9400",
       fgColor: "#fff"
     } as PurchaseOption,
-  ]
+  ];
+
   let optionals: PurchaseOption[] = [
     {
       _id: "1",
@@ -80,7 +78,8 @@ const CheckoutPage: FC = () => {
     <Grid container spacing={3} style={{
       padding: "3em",
       borderRadius: "20px",
-      backgroundColor: "#ccc"
+      backgroundColor: "#eee",
+      marginTop: "3em"
     }}>
       <Grid item xs={12}>
         <span style={{float: "right"}}>
