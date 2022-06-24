@@ -24,3 +24,5 @@ GymVault is an online platform to help gym owners and potential gym clients conn
 `MONGODB_CONNECTION_STRING=mongodb+srv://mongoDBadmin:pg8B3Jk4SguSs0lP@gymvault.15i2jjh.mongodb.net/gymvaultDB`
 `JWT_SECRET=mksejklfw38yhio336`
 `JWT_EXPIRATION=2h`
+`GMAIL_GYMVAULT_ACCOUNT_USERNAME=gymvault.noreply@gmail.com`
+`GMAIL_GYMVAULT_ACCOUNT_PASSWORD=dC!E9M[YU]_Jwdd!d>8x`
