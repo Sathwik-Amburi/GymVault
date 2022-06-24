@@ -5,7 +5,6 @@ import Navbar from "./components/widgets/Navbar";
 import GymViewPage from "./components/GymDetails";
 import CourseViewPage from "./components/courseDetails";
 import { Container } from "@mui/system";
-import { Typography } from "@mui/material";
 import ResultsPage from "./components/ResultsPage";
 import CheckoutPage from "./components/CheckoutPage";
 import UserSubscriptionsPage from "./components/UserSubscriptionsPage";
@@ -16,6 +15,8 @@ import PageNotFound from "./components/PageNotFound";
 
 // EXP: use Montserrat font
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CourseResultsPage from "./components/CourseResultsPage";
+import EmailConfirmedPage from "./components/EmailConfirmedPage";
 const THEME = createTheme({
   typography: {
     fontFamily: `"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif`,
@@ -45,26 +46,18 @@ const App: FC = () => {
               path="/user/confirmation"
               element={<EmailConfirmationPage />}
             />
+            <Route
+              path="/user/email-verified"
+              element={<EmailConfirmedPage />}
+            />
             <Route path="/user/signin" element={<SignInPage />} />
-            <Route path="/results" element={<ResultsPage />} />
+            <Route
+              path="/results/courses/search"
+              element={<CourseResultsPage />}
+            />
+            <Route path="/results/gyms/search" element={<ResultsPage />} />
             <Route path="/buy/:id" element={<CheckoutPage />} />
             <Route path="/*" element={<PageNotFound />} />
-            {/*<Route*/}
-            {/*  path="/*"*/}
-            {/*  element={*/}
-            {/*    <>*/}
-            {/*      <br />*/}
-            {/*      <br />*/}
-            {/*      <br />*/}
-            {/*      <Typography variant="h4">*/}
-            {/*        404 - Gym not found*/}
-            {/*      </Typography>*/}
-            {/*      We don't know what you were looking for, but we know it's not here.*/}
-            {/*      <br />*/}
-            {/*      <a href="/">Go home</a>*/}
-            {/*    </>*/}
-            {/*  }*/}
-            {/*/>*/}
           </Routes>
         </BrowserRouter>
       </Container>
