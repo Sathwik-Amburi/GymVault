@@ -11,18 +11,18 @@ import {
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
-import { Filter, FilterTypes, Gym } from "../models/allModels";
+import { Course, Filter, FilterTypes } from "../models/allModels";
 import { styled } from "@mui/material/styles";
-import ResultCard from "./ResultCard";
 import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import apiCalls from "../api/apiCalls";
+import CourseResultCard from "./CourseResultCard";
 
-const ResultsPage: FC = () => {
+const CourseResultsPage: FC = () => {
   const queries = new URLSearchParams(window.location.search);
   const maxPrice = 1000;
-  const [results, setResults] = useState<Gym[]>();
+  const [results, setResults] = useState<Course[]>();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [priceRange, setPriceRange] = useState<number[]>([0, maxPrice]);
   const [activeFilters, setActiveFilters] = useState<Filter[]>();
@@ -31,7 +31,7 @@ const ResultsPage: FC = () => {
     const name = queries.get("name");
     const city = queries.get("city");
     if (city) {
-      ApiCalls.getAllGymsByCityOrName(city, name)
+      ApiCalls.getAllCoursesByCityOrName(city, name)
         .then((res) => {
           setResults(res.data.response);
         })
@@ -177,7 +177,7 @@ const ResultsPage: FC = () => {
         {results &&
           results.map((item, index) => (
             <Grid item xs={2} sm={4} md={4} key={index}>
-              <ResultCard gym={item} />
+              <CourseResultCard course={item} />
             </Grid>
           ))}
       </Grid>
@@ -223,4 +223,4 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-export default ResultsPage;
+export default CourseResultsPage;

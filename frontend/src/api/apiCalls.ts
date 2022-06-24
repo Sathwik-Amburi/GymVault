@@ -37,6 +37,18 @@ export default class ApiCalls {
     );
   };
 
+  public static getResults = async (
+    type: string,
+    name: string,
+    city: string
+  ) => {
+    return await axios.get(`/${type}/search?name=${name}&city=${city}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
   public static getGym = async (id: string) => {
     return await axios.get(`/gyms/get/${id}`, {
       headers: {
@@ -44,6 +56,7 @@ export default class ApiCalls {
       },
     });
   };
+
   public static getAllCourses = async () => {
     return await axios.get("/gyms/get-all-courses", {
       headers: {
@@ -51,6 +64,29 @@ export default class ApiCalls {
       },
     });
   };
+
+  public static getAllGymsByCityOrName = async (
+    city: string,
+    name: string | null
+  ) => {
+    return await axios.get(`/gyms/filter?city=${city}&name=${name}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
+  public static getAllCoursesByCityOrName = async (
+    city: string,
+    name: string | null
+  ) => {
+    return await axios.get(`/courses/filter?city=${city}&name=${name}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
   public static getCourse = async (id: string) => {
     return await axios.get(`/courses/get/${id}`, {
       headers: {
@@ -67,20 +103,24 @@ export default class ApiCalls {
     });
   };
 
-
   // User stuff
   public static userTryLogin = async (email: string, password: string) => {
     return await axios.post("/user/signin", {
       email,
       password,
     });
-  }
-  public static userSignup = async (email: string, fullname: string, password: string, phone: string) => {
+  };
+  public static userSignup = async (
+    email: string,
+    fullname: string,
+    password: string,
+    phone: string
+  ) => {
     return await axios.post("/user/signup", {
       email,
       password,
       fullname,
       phone,
     });
-  }
+  };
 }

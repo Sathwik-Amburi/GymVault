@@ -3,11 +3,10 @@ import {
   Paper,
   Grid,
   Typography,
-  Chip,
   Avatar,
   CardHeader,
 } from "@mui/material";
-import { Box, Container, padding } from "@mui/system";
+import { Box } from "@mui/system";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
 import { Course } from "../models/allModels";
@@ -30,14 +29,13 @@ const CourseViewPage: FC = () => {
     let fid = id != null ? id : ""; // empty id will gracefully fail anyway
     ApiCalls.getCourse(fid)
       .then((res) => {
-        console.log(res.data);
         setCourse(res.data.response);
       })
       .catch((err) => {
         console.log(err);
         alert("TODO: The course you're seeing does not exist in the database");
       });
-  }, []);
+  }, [id]);
 
   /* MOCK - need own schema */
   let reviews = [
@@ -56,14 +54,13 @@ const CourseViewPage: FC = () => {
     <>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
-          <h1>Yoga Course</h1>
+          <h1>{course.name}</h1>
           <Lightbox />
         </Grid>
         <Grid item xs={12} md={6}>
           <h2>About this course:</h2>
-          {/*<h1>{course.name}</h1>*/}
           <hr />
-          <p>Course description (needs mongo schema)</p>
+          <p>{course.description}</p>
           <br />
           <p>Tel: +49 {course.phoneNumber}</p>
           <p>Address (needs mongo schema)</p>
@@ -129,19 +126,19 @@ const CourseViewPage: FC = () => {
       <br />
       <Box padding={3}>
         <Button
-          variant={reviewSort == "newest" ? "contained" : undefined}
+          variant={reviewSort === "newest" ? "contained" : undefined}
           onClick={() => setReviewSort("newest")}
         >
           Most Recent
         </Button>
         <Button
-          variant={reviewSort == "best" ? "contained" : undefined}
+          variant={reviewSort === "best" ? "contained" : undefined}
           onClick={() => setReviewSort("best")}
         >
           Most Positive
         </Button>
         <Button
-          variant={reviewSort == "worst" ? "contained" : undefined}
+          variant={reviewSort === "worst" ? "contained" : undefined}
           onClick={() => setReviewSort("worst")}
         >
           Most Critical

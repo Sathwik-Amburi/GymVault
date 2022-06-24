@@ -4,24 +4,24 @@ import image from "../images/progym.jpg";
 import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PaymentIcon from "@mui/icons-material/Payment";
-import { Gym, Subscription } from "../models/allModels";
+import { Course, Gym, Subscription } from "../models/allModels";
 import { useNavigate } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
 
 interface ResultCardProps {
-  gym: Gym;
+  course: Course;
 }
 
-const ResultCard: FC<ResultCardProps> = ({ gym }) => {
+const ResultCard: FC<ResultCardProps> = ({ course }) => {
   const navigate = useNavigate();
   const handleCardClick = () => {
-    navigate(`/gym/${gym._id}`);
+    navigate(`/course/${course._id}`);
   };
 
   const [subscriptions, setSubscriptions] = useState<Subscription[]>();
 
   const getAllResultSubscriptions = async () => {
-    ApiCalls.getSubscriptionsByGymId(gym._id)
+    ApiCalls.getSubscriptionsByGymId(course._id)
       .then((res) => {
         setSubscriptions(res.data.response);
       })
@@ -51,7 +51,7 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
                 component="div"
                 style={{ marginRight: "4px" }}
               >
-                {gym.name}
+                {course.name}
               </Typography>
               <StarIcon fontSize="small" sx={{ color: "#faec2d" }} />
               <Typography>4.0</Typography>
@@ -63,7 +63,7 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
                 style={{ marginRight: "4px" }}
               />
               <Typography variant="body2" color="text.secondary">
-                {gym.address}
+                {course.description}
               </Typography>
             </Grid>
             <Grid container direction={"row"} alignItems="center">
@@ -72,8 +72,11 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
                 sx={{ color: "#black" }}
                 style={{ marginRight: "4px" }}
               />
-              <Typography variant="body2" color="ActiveCaption">
+              {/* <Typography variant="body2" color="ActiveCaption">
                 {subscriptions && subscriptions[0].price} EUR/Month
+              </Typography> */}
+              <Typography variant="body2" color="ActiveCaption">
+                azdazd EUR/Month
               </Typography>
             </Grid>
           </CardContent>

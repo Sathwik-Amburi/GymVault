@@ -35,8 +35,8 @@ export default function SearchType({ type }: any) {
       }, 2000);
     } else {
       navigate(
-        `/${
-          type == "gyms" ? "gyms" : "courses"
+        `/results/${
+          type === "gyms" ? "gyms" : "courses"
         }/search?name=${name}&city=${city}`
       );
     }
@@ -63,7 +63,7 @@ export default function SearchType({ type }: any) {
             onChange={handleNameChange}
             style={{ marginRight: "3px" }}
             fullWidth
-            label={type == "gyms" ? "Gym Name" : "Course"}
+            label={type === "gyms" ? "Gym Name" : "Course Name"}
             id="fullWidth"
           />
         </div>
