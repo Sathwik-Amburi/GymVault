@@ -64,7 +64,6 @@ const UserSchema = new mongoose.Schema({
   },
   stripe_account_id: {
     type: String,
-    unique: true,
   },
 });
 

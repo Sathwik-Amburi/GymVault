@@ -46,13 +46,14 @@ const registerUser = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   const { userId, uniqueString } = req.params;
-  const dev_url = "http://localhost:3000/email-verified";
 
   const checkVerifiedUser = await authService.verifyEmail(userId, uniqueString);
+
   if (checkVerifiedUser.error) {
     return res.status(403).json({ error: checkVerifiedUser.error });
   }
-  res.redirect(dev_url);
+
+  res.redirect("http://localhost:3000/user/email-verified");
 };
 
 module.exports = { login, registerUser, verifyEmail };
