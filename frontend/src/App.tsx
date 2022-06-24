@@ -43,7 +43,7 @@ const App: FC = () => {
             <Route path="/user/tickets" element={<UserSubscriptionsPage />} />
             <Route path="/user/signup" element={<SignUpPage />} />
             <Route
-              path="/user/confirmation"
+              path="/user/confirmation/:email"
               element={<EmailConfirmationPage />}
             />
             <Route
