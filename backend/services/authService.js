@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
 const { v4: uuidv4 } = require("uuid");
+const sendMail = require("../googleCloud/gmail");
 
 const dev_url = "http://localhost:8000/api";
 
@@ -31,7 +32,7 @@ class authService {
 
     const newUser = await user.save();
 
-    // sendVerificationEmail(newUser._id, newUser.email);
+    sendVerificationEmail(newUser._id, newUser.email);
 
     const token = jwt.sign(
       {
@@ -47,14 +48,14 @@ class authService {
     return { token, user: newUser.firstName };
   };
 
-  verifyEmail = async (user_id, uniqueString) => {
+  verifyEmail = async (user_id, unique_string) => {
     const checkUserVerification = await userVerificationModel.findOne({
       userId: user_id,
     });
 
     if (checkUserVerification) {
       const { expiresOn } = checkUserVerification;
-      const hashedUniqueString = checkUserVerification.unique_string;
+      const hashedUniqueString = checkUserVerification.uniqueString;
 
       if (new Date(expiresOn) < new Date()) {
         await userVerificationModel
@@ -68,7 +69,7 @@ class authService {
         };
       } else {
         const validateUniqueString = bcrypt.compareSync(
-          uniqueString,
+          unique_string,
           hashedUniqueString
         );
 
@@ -101,45 +102,33 @@ class authService {
 const sendVerificationEmail = async (user_id, email) => {
   const uniqueString = uuidv4() + user_id;
 
-  var sesMailOptions = {
-    Source: "noreply@gymvault.com",
-    Destination: { ToAddresses: [email] },
-    Message: {
-      Subject: {
-        Data: "GymVault- Please verify you email address",
-      },
-      Body: {
-        Html: {
-          Data: `<p>Please verify your email to confirm your signup to GymVault by clicking the following link
-          </p><p><b>This link expires in 6 hours</b>.</p><p>
-         <a href=${
-           dev_url +
-           "/authentication/verifyEmail/" +
-           user_id +
-           "/" +
-           uniqueString
-         }>${
-            dev_url +
-            "/authentication/verifyEmail/" +
-            user_id +
-            "/" +
-            uniqueString
-          }</a></p>`,
-        },
-      },
-    },
+  const options = {
+    to: email,
+    subject: "GymVault - Please verify you email address",
+    html: `<p>Please verify your email to confirm your signup to GymVault by clicking the following link
+    </p><p><b>This link expires in 6 hours</b>.</p><p>
+   <a href=${
+     dev_url + "/authentication/verifyEmail/" + user_id + "/" + uniqueString
+   }>${
+      dev_url + "/authentication/verifyEmail/" + user_id + "/" + uniqueString
+    }</a></p>`,
+    textEncoding: "base64",
   };
+
   const saltRounds = 10;
   const encryptedUniqueString = bcrypt.hashSync(uniqueString, saltRounds);
-  await userVerificationModel
-    .save({
-      userId: user_id,
-      uniqueString: encryptedUniqueString,
-      expiresOn: moment(Date.now() + 21600000).format(),
-    })
-    .then
-    //send the verification email
-    ();
+
+  const newUserVerificationModel = new userVerificationModel({
+    userId: user_id,
+    uniqueString: encryptedUniqueString,
+    expiresOn: moment(Date.now() + 21600000).format(),
+  });
+
+  newUserVerificationModel.save().then(() => {
+    sendMail(options).catch((error) => {
+      console.log("Error while sending verification email", error.message);
+    });
+  })();
 };
 
 module.exports = new authService();

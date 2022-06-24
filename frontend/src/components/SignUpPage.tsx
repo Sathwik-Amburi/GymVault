@@ -28,6 +28,7 @@ const SignUpPage: FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const email = data.get("email");
     ApiCalls.registerUser(
       data.get("firstName"),
       data.get("lastName"),
@@ -36,7 +37,7 @@ const SignUpPage: FC = () => {
       data.get("password")
     )
       .then(() => {
-        navigate("/user/confirmation");
+        navigate(`/user/confirmation/${email}`);
       })
       .catch((error) => {
         if (error.response.data.error.type === "DUPLICATE_EMAIL") {

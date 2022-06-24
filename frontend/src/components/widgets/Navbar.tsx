@@ -6,7 +6,20 @@ import Link from "@mui/material/Link";
 import { Avatar, Button } from "@mui/material";
 
 const Navbar: FC = () => {
-  const [user, setUser] = useState<string>("");
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+  };
+
   return (
     <AppBar position="static" color="default" elevation={0}>
       <Toolbar sx={{ flexWrap: "wrap" }}>
@@ -21,18 +34,52 @@ const Navbar: FC = () => {
         >
           GymVault
         </Link>
-        { !user && ( <Button color="inherit" variant="outlined" style={{ marginRight: 16 }} href="/user/signin">
-          Log in
-        </Button> ) }
-        { !user && ( <Button color="primary" variant="outlined" style={{ marginRight: 16 }} href="/user/signup">
-          Sign up
-        </Button> ) }
+        {!isAuthenticated && (
+          <>
+            <Button
+              color="inherit"
+              variant="outlined"
+              style={{ marginRight: 16 }}
+              href="/user/signin"
+            >
+              Log in
+            </Button>
+            <Button
+              color="primary"
+              variant="outlined"
+              style={{ marginRight: 16 }}
+              href="/user/signup"
+            >
+              Sign up
+            </Button>
+          </>
+        )}
 
-        { user && ( <Button color="inherit" variant="outlined" style={{ marginRight: 16 }}>
-          My Tickets
-        </Button> ) }
-        { user && ( <Avatar alt="User" src="/avatar.jpg" style={{ marginRight: 16 }} sx={{bgcolor: "teal" }} /> ) }
-
+        {isAuthenticated && (
+          <>
+            <Button
+              color="inherit"
+              variant="outlined"
+              style={{ marginRight: 16 }}
+            >
+              My Tickets
+            </Button>
+            <Button
+              color="inherit"
+              variant="outlined"
+              style={{ marginRight: 16 }}
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+            <Avatar
+              alt="User"
+              src="/avatar.jpg"
+              style={{ marginRight: 16 }}
+              sx={{ bgcolor: "teal" }}
+            />
+          </>
+        )}
       </Toolbar>
     </AppBar>
   );

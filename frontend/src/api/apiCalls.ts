@@ -8,7 +8,7 @@ export default class ApiCalls {
     email: any,
     password: any
   ) => {
-    return await axios.post("/authentication/register", {
+    return await axios.post("/authentication/signup", {
       firstName,
       lastName,
       phoneNumber,

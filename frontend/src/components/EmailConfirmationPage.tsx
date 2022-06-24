@@ -5,7 +5,10 @@ const EmailConfirmationPage: FC = () => {
   const { email } = useParams();
   return (
     <div>
-      <h1> Please check your email to verify your account !</h1>
+      <h1>
+        We have sent you an email at {email}. Please check your email to verify
+        your account !
+      </h1>
     </div>
   );
 };
