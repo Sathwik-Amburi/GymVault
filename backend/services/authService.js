@@ -128,7 +128,7 @@ const sendVerificationEmail = async (user_id, email) => {
     sendMail(options).catch((error) => {
       console.log("Error while sending verification email", error.message);
     });
-  })();
+  });
 };
 
 module.exports = new authService();
