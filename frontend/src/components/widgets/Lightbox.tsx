@@ -1,13 +1,13 @@
 import { Grid, Paper } from "@mui/material";
 import { FC, useState } from "react";
 
-type Props = {
-  rating: number;
+type LbProps = {
+  states: string[];
 };
 
-const Lightbox: FC = () => {
-  let [viewing, setViewing] = useState("#ddd");
-  let totalStates = ["#5cc", "#9cc", "#fcc"];
+const Lightbox: FC<LbProps> = (props) => {
+  let totalStates = props.states;
+  let [viewing, setViewing] = useState(totalStates[0]);
 
   return (
     <Grid container spacing={2}>
@@ -16,24 +16,29 @@ const Lightbox: FC = () => {
           style={{
             padding: "10em",
             textAlign: "center",
-            backgroundColor: viewing,
+            backgroundImage: `url(${viewing}`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center center"
           }}
         >
-          Image Lightbox
+          
         </Paper>
       </Grid>
       {totalStates.map((state) => {
         return (
-          <Grid item xs={4} onClick={() => setViewing(state)}>
+          <Grid item onClick={() => setViewing(state)} style={{ flex: "1 1 auto", maxWidth: "800px" }}>
             <Paper
               style={{
                 padding: "3em",
                 textAlign: "center",
-                backgroundColor: state,
+                backgroundImage: `url(${state}`,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center center",
+                opacity: (state !== viewing ? 0.5 : 1)
               }}
-            >
-              Image Lightbox
-            </Paper>
+            ></Paper>
           </Grid>
         );
       })}

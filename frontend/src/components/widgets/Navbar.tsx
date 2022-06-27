@@ -64,6 +64,7 @@ const Navbar: FC = () => {
         {isAuthenticated && (
           <>
             <Button
+              href="/user/tickets"
               color="inherit"
               variant="outlined"
               style={{ marginRight: 16 }}
@@ -78,13 +79,21 @@ const Navbar: FC = () => {
             >
               Logout
             </Button>
-            <Avatar
+            {/* <Avatar
               alt="User"
               src="/avatar.jpg"
               style={{ marginRight: 16 }}
               sx={{ bgcolor: "teal" }}
               onClick={handleAvatarClick}
-            />
+            /> */}
+            <Link href="/user/profile">
+              <Avatar
+                alt="Firstname Lastname"
+                src="/avatar.jpg"
+                style={{ marginRight: 16 }}
+                sx={{ bgcolor: "teal" }}
+              />
+            </Link>
           </>
         )}
       </Toolbar>

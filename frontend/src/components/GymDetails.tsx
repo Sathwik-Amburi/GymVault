@@ -6,6 +6,7 @@ import {
   Chip,
   Avatar,
   CardHeader,
+  Link
 } from "@mui/material";
 import { Box, Container, padding } from "@mui/system";
 import { FC, useEffect, useState } from "react";
@@ -14,6 +15,7 @@ import { Gym } from "../models/allModels";
 import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
 import { useParams } from "react-router-dom";
+import image from "../images/progym.jpg";
 
 const GymViewPage: FC = () => {
   const { id } = useParams();
@@ -78,7 +80,7 @@ const GymViewPage: FC = () => {
     <>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
-          <Lightbox />
+          <Lightbox states={["https://www.climbing.com/wp-content/uploads/2016/10/7_gn-copyjpg.jpg", image]} />
         </Grid>
 
         <Grid item xs={12} md={6}>
@@ -105,13 +107,20 @@ const GymViewPage: FC = () => {
             <Typography variant="h6">Offered Courses</Typography>
             <br />
             {courses.map((course) => {
-              return <Chip label={course} style={{ margin: "0.3em" }} />;
+              return (
+                <Link href="/course/{course}">
+                  <Chip label={course} style={{ margin: "0.3em" }} />
+                </Link>
+              );
             })}
             <br />
             <br />
             <hr />
             <br />
             <Typography variant="h6">Amenities</Typography>
+            <Typography variant="body2">
+              May vary depending on course or subscription plan
+            </Typography>
             <br />
             {amenities.map((amenity) => {
               return (
