@@ -72,12 +72,14 @@ const Navbar: FC = () => {
             >
               Logout
             </Button>
-            <Avatar
-              alt="User"
-              src="/avatar.jpg"
-              style={{ marginRight: 16 }}
-              sx={{ bgcolor: "teal" }}
-            />
+            <Link href="/user">
+              <Avatar
+                alt="Firstname Lastname"
+                src="/avatar.jpg"
+                style={{ marginRight: 16 }}
+                sx={{ bgcolor: "teal" }}
+              />
+            </Link>
           </>
         )}
       </Toolbar>
