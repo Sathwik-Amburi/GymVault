@@ -14,6 +14,7 @@ import { Gym } from "../models/allModels";
 import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
 import { useParams } from "react-router-dom";
+import image from "../images/progym.jpg";
 
 const GymViewPage: FC = () => {
   const { id } = useParams();
@@ -78,7 +79,7 @@ const GymViewPage: FC = () => {
     <>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
-          <Lightbox />
+          <Lightbox states={["https://www.climbing.com/wp-content/uploads/2016/10/7_gn-copyjpg.jpg", image]} />
         </Grid>
 
         <Grid item xs={12} md={6}>
