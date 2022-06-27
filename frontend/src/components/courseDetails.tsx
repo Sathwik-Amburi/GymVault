@@ -13,9 +13,10 @@ import { Course } from "../models/allModels";
 import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
 import image from "../images/progym.jpg";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const CourseViewPage: FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [reviewSort, setReviewSort] = useState("newest");
   const [course, setCourse] = useState<Course>({
@@ -38,6 +39,10 @@ const CourseViewPage: FC = () => {
       });
   }, [id]);
 
+  const handleBuySubscriptionClick = () => {
+    navigate(`/buy/${course._id}`);
+  };
+
   /* MOCK - need own schema */
   let reviews = [
     {
@@ -55,7 +60,12 @@ const CourseViewPage: FC = () => {
     <>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
-          <Lightbox states={["https://www.climbing.com/wp-content/uploads/2016/10/7_gn-copyjpg.jpg", image]} />
+          <Lightbox
+            states={[
+              "https://www.climbing.com/wp-content/uploads/2016/10/7_gn-copyjpg.jpg",
+              image,
+            ]}
+          />
         </Grid>
         <Grid item xs={12} md={6}>
           <h1>{course.name}</h1>
@@ -69,7 +79,7 @@ const CourseViewPage: FC = () => {
             <Button
               variant="contained"
               color="success"
-              href={"/buy/" + course._id}
+              onClick={handleBuySubscriptionClick}
             >
               Buy Subscription
             </Button>
