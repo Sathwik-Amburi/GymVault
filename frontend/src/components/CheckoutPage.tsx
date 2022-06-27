@@ -1,11 +1,46 @@
 import { Grid, Typography } from "@mui/material";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
-import { Item, PurchaseOption } from "../models/allModels";
+import { Course, Gym, Item, PurchaseOption } from "../models/allModels";
 import PurchaseGrid from "./widgets/PurchaseGrid";
 import PurchaseCart, { CartItem } from "./widgets/PurchaseCart";
+import ApiCalls from "../api/apiCalls";
+import { useParams } from "react-router-dom";
 
 const CheckoutPage: FC = () => {
+  function setGym(gym: Gym) {
+    let item = {
+      _id: "1",
+      gymName: gym.name,
+      courseName: "Fixed Subscription",
+      type: "gym",
+      address: gym.address,
+      description: gym.description,
+      price: -1,
+      options: [],
+  
+      fgColor: "",
+      bgColor: "",
+    } as Item;
+    setItem(item);
+  }
+  function setCourse(course: Course) {
+    let item = {
+      _id: course._id,
+      gymName: "ZHS Hochschulsport",
+      courseName: course.name,
+      type: "course",
+      address: course.address, // TODO: shouldn't this be "course.gym.address"???
+      description: course.description,
+      price: -1,
+      options: [],
+  
+      fgColor: "",
+      bgColor: "",
+    } as Item;
+    setItem(item);
+  }
+
   const [item, setItem] = useState<Item>({
     _id: "1",
     gymName: "ZHS Hochschulsport",
@@ -13,12 +48,31 @@ const CheckoutPage: FC = () => {
     type: "course",
     "address": "Connollystraße 32, Munich",
     description: "A basic course variating over Hatha Yoga, and meditation practices. Unlike the more static and strengthening Hatha yoga style, a Vinyasa class is very dynamic.  The physical exercises, the so-called asanas, are not practised individually, but are strung together in flowing movements. The class is very calm and relaxed, and the students are able to focus on the breath and the body.",
-    price: 100,
+    price: -1,
     options: [],
 
     fgColor: "",
     bgColor: "",
   });
+
+  const { id } = useParams<{id: string}>();
+
+  useEffect(() => {
+    ApiCalls.getCourse(id!)
+      .then((res) => {
+        setCourse(res.data.response);
+      })
+      .catch((err) => {
+        ApiCalls.getGym(id!)
+          .then((res) => {
+            setGym(res.data.response);
+          })
+          .catch((err) => {
+            alert("TODO: Neither a gym nor a course with this ID exists");
+            // navigate to 404?
+          });
+      });
+  }, []);
   
   const [cart, setCart] = useState<CartItem[]>([ {
     name: "Base Ticket",

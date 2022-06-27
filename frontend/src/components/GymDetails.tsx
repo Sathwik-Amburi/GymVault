@@ -6,6 +6,7 @@ import {
   Chip,
   Avatar,
   CardHeader,
+  Link
 } from "@mui/material";
 import { Box, Container, padding } from "@mui/system";
 import { FC, useEffect, useState } from "react";
@@ -106,13 +107,20 @@ const GymViewPage: FC = () => {
             <Typography variant="h6">Offered Courses</Typography>
             <br />
             {courses.map((course) => {
-              return <Chip label={course} style={{ margin: "0.3em" }} />;
+              return (
+                <Link href="/course/{course}">
+                  <Chip label={course} style={{ margin: "0.3em" }} />
+                </Link>
+              );
             })}
             <br />
             <br />
             <hr />
             <br />
             <Typography variant="h6">Amenities</Typography>
+            <Typography variant="body2">
+              May vary depending on course or subscription plan
+            </Typography>
             <br />
             {amenities.map((amenity) => {
               return (

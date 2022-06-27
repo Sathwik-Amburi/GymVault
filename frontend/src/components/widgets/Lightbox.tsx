@@ -36,7 +36,7 @@ const Lightbox: FC<LbProps> = (props) => {
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center center",
-                opacity: (state != viewing ? 0.5 : 1)
+                opacity: (state !== viewing ? 0.5 : 1)
               }}
             ></Paper>
           </Grid>
