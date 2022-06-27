@@ -166,19 +166,19 @@ const GymViewPage: FC = () => {
       <br />
       <Box padding={3}>
         <Button
-          variant={reviewSort == "newest" ? "contained" : undefined}
+          variant={reviewSort === "newest" ? "contained" : undefined}
           onClick={() => setReviewSort("newest")}
         >
           Most Recent
         </Button>
         <Button
-          variant={reviewSort == "best" ? "contained" : undefined}
+          variant={reviewSort === "best" ? "contained" : undefined}
           onClick={() => setReviewSort("best")}
         >
           Most Positive
         </Button>
         <Button
-          variant={reviewSort == "worst" ? "contained" : undefined}
+          variant={reviewSort === "worst" ? "contained" : undefined}
           onClick={() => setReviewSort("worst")}
         >
           Most Critical
@@ -203,9 +203,6 @@ const GymViewPage: FC = () => {
           })}
         </Grid>
       </Grid>
-      <Box padding={10} style={{ textAlign: "center" }}>
-        TODO: shall we add a "dumb" Related Gyms view here in the future?
-      </Box>
     </>
   );
 };

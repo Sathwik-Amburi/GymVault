@@ -9,6 +9,52 @@ const sendMail = require("../googleCloud/gmail");
 const dev_url = "http://localhost:8000/api";
 
 class authService {
+  loginUser = async (email, password) => {
+    const match = await userModel.findOne({ email });
+
+    if (match) {
+      if (!match.emailVerified) {
+        return {
+          error: {
+            type: "EMAIL_NOT_VERIFIED",
+            message: "Email not verified. Please check your inbox",
+          },
+        };
+      }
+
+      if (await bcrypt.compare(password, match.password)) {
+        const token = jwt.sign(
+          {
+            id: match.id,
+            email: match.email,
+            name: match.name,
+            role: match.role,
+          },
+          process.env.JWT_SECRET,
+          { expiresIn: process.env.JWT_EXPIRATION }
+        );
+        return {
+          token,
+          message: "Logged in",
+        };
+      } else {
+        return {
+          error: {
+            type: "INVALID_CREDENTIALS",
+            message: "Invalid Credentials",
+          },
+        };
+      }
+    } else {
+      return {
+        error: {
+          type: "EMAIL_NOT_FOUND",
+          message: "Account does not exist",
+        },
+      };
+    }
+  };
+
   registerUser = async (firstName, lastName, phoneNumber, email, password) => {
     const checkExistingEmail = await userModel.findOne({ email });
 
