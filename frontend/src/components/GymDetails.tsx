@@ -194,9 +194,6 @@ const GymViewPage: FC = () => {
           })}
         </Grid>
       </Grid>
-      <Box padding={10} style={{ textAlign: "center" }}>
-        TODO: shall we add a "dumb" Related Gyms view here in the future?
-      </Box>
     </>
   );
 };

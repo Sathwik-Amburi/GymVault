@@ -16,7 +16,7 @@ export interface Course {
   _id: string;
 }
 
-export interface Item { 
+export interface Item {
   gymName: string;
   courseName: string;
   type: string;
@@ -69,13 +69,18 @@ export interface PriceRangeFilter {
   maxPrice: number;
 }
 
-
 export interface PurchaseOption {
   name: string;
   description: string;
-  
   price: number;
   bgColor: string;
   fgColor: string;
   _id: string;
+}
+
+export interface UserProfileDetails {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string;
 }

@@ -5,6 +5,8 @@ import axios from "axios";
 import { API_URL } from "./config/config";
 import App from "./App";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { store } from "./store";
+import { Provider } from "react-redux";
 
 axios.defaults.baseURL = API_URL;
 
@@ -13,6 +15,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>
 );

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import FrontPage from "./components/FrontPage";
 import Navbar from "./components/widgets/Navbar";
 import GymViewPage from "./components/GymDetails";
@@ -9,7 +9,7 @@ import ResultsPage from "./components/ResultsPage";
 import CheckoutPage from "./components/CheckoutPage";
 import UserSubscriptionsPage from "./components/UserSubscriptionsPage";
 import SignUpPage from "./components/SignUpPage";
-import SignInPage from "./components/SignInPage";
+import LoginPage from "./components/LoginPage";
 import EmailConfirmationPage from "./components/EmailConfirmationPage";
 import PageNotFound from "./components/PageNotFound";
 
@@ -17,6 +17,10 @@ import PageNotFound from "./components/PageNotFound";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CourseResultsPage from "./components/CourseResultsPage";
 import EmailConfirmedPage from "./components/EmailConfirmedPage";
+import UserProfile from "./components/UserProfile";
+import { useSelector } from "react-redux";
+import { RootState } from "./store";
+
 const THEME = createTheme({
   typography: {
     fontFamily: `"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif`,
@@ -27,13 +31,24 @@ const THEME = createTheme({
   },
 });
 
+const PrivateRoute: FC<any> = ({ children }) => {
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.authentication.isAuthenticated
+  );
+
+  return isAuthenticated ? (
+    children
+  ) : (
+    <Navigate to={{ pathname: "/user/login" }}></Navigate>
+  );
+};
+
 const App: FC = () => {
   return (
-    <ThemeProvider theme={THEME}>
-      <Navbar />
-
-      <Container maxWidth="lg" style={{ padding: "3em" }}>
-        <BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider theme={THEME}>
+        <Navbar />
+        <Container maxWidth="lg" style={{ padding: "3em" }}>
           <Routes>
             <Route path="/" element={<FrontPage />} />
             <Route path="/gym/add" element={<>TODO</>} />
@@ -50,18 +65,26 @@ const App: FC = () => {
               path="/user/email-verified"
               element={<EmailConfirmedPage />}
             />
-            <Route path="/user/signin" element={<SignInPage />} />
+            <Route path="/user/login" element={<LoginPage />} />
             <Route
               path="/results/courses/search"
               element={<CourseResultsPage />}
             />
             <Route path="/results/gyms/search" element={<ResultsPage />} />
             <Route path="/buy/:id" element={<CheckoutPage />} />
+            <Route
+              path="/user/profile"
+              element={
+                <PrivateRoute>
+                  <UserProfile />
+                </PrivateRoute>
+              }
+            />
             <Route path="/*" element={<PageNotFound />} />
           </Routes>
-        </BrowserRouter>
-      </Container>
-    </ThemeProvider>
+        </Container>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 };
 

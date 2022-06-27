@@ -4,20 +4,26 @@ import Toolbar from "@mui/material/Toolbar";
 
 import Link from "@mui/material/Link";
 import { Avatar, Button } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { setIsAuthenticated } from "../../store/slices/authenticationSlice";
+import { useNavigate } from "react-router-dom";
 
 const Navbar: FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.authentication.isAuthenticated
+  );
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setIsAuthenticated(false);
+    dispatch(setIsAuthenticated(false));
+    navigate("/");
+  };
+
+  const handleAvatarClick = () => {
+    navigate("/user/profile");
   };
 
   return (
@@ -40,7 +46,7 @@ const Navbar: FC = () => {
               color="inherit"
               variant="outlined"
               style={{ marginRight: 16 }}
-              href="/user/signin"
+              href="/user/login"
             >
               Log in
             </Button>
@@ -77,6 +83,7 @@ const Navbar: FC = () => {
               src="/avatar.jpg"
               style={{ marginRight: 16 }}
               sx={{ bgcolor: "teal" }}
+              onClick={handleAvatarClick}
             />
           </>
         )}
