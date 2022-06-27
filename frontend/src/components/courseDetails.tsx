@@ -55,11 +55,10 @@ const CourseViewPage: FC = () => {
     <>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
-          <h1>{course.name}</h1>
           <Lightbox states={["https://www.climbing.com/wp-content/uploads/2016/10/7_gn-copyjpg.jpg", image]} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <h2>About this course:</h2>
+          <h1>{course.name}</h1>
           <hr />
           <p>{course.description}</p>
           <br />
@@ -104,22 +103,6 @@ const CourseViewPage: FC = () => {
             </Paper>
           </Paper>
         </Grid>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <h2>About this course:</h2>
-        <hr />
-        <p>{course.description}</p>
-        <br />
-
-        <div style={{ textAlign: "right" }}>
-          <Button
-            variant="contained"
-            color="success"
-            href={"/buy/" + course._id}
-          >
-            Buy Subscription
-          </Button>
-        </div>
       </Grid>
       <br />
       <br />
