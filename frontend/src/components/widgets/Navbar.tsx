@@ -22,12 +22,32 @@ const Navbar: FC = () => {
     navigate("/");
   };
 
+  const handleLoginClick = () => {
+    navigate("/user/login");
+  };
+
+  const handleSignUpClick = () => {
+    navigate("/user/signup");
+  };
+
+  const handleLogoClick = () => {
+    navigate("/");
+  };
+
+  const handleTicketsClick = () => {
+    navigate("/user/tickets");
+  };
+
+  const handleAvatarClick = () => {
+    navigate("/user/profile");
+  };
+
   return (
     <AppBar position="static" color="default" elevation={0}>
       <Toolbar sx={{ flexWrap: "wrap" }}>
         <img src="/favicon.ico" alt="Gym Sport" style={{ height: "32px" }} />
         <Link
-          href="/"
+          onClick={handleLogoClick}
           variant="h6"
           color="inherit"
           noWrap
@@ -42,7 +62,7 @@ const Navbar: FC = () => {
               color="inherit"
               variant="outlined"
               style={{ marginRight: 16 }}
-              href="/user/login"
+              onClick={handleLoginClick}
             >
               Log in
             </Button>
@@ -50,7 +70,7 @@ const Navbar: FC = () => {
               color="primary"
               variant="outlined"
               style={{ marginRight: 16 }}
-              href="/user/signup"
+              onClick={handleSignUpClick}
             >
               Sign up
             </Button>
@@ -60,7 +80,7 @@ const Navbar: FC = () => {
         {isAuthenticated && (
           <>
             <Button
-              href="/user/tickets"
+              onClick={handleTicketsClick}
               color="inherit"
               variant="outlined"
               style={{ marginRight: 16 }}
@@ -75,14 +95,13 @@ const Navbar: FC = () => {
             >
               Logout
             </Button>
-            <Link href="/user/profile">
-              <Avatar
-                alt="Firstname Lastname"
-                src="/avatar.jpg"
-                style={{ marginRight: 16 }}
-                sx={{ bgcolor: "teal" }}
-              />
-            </Link>
+            <Avatar
+              onClick={handleAvatarClick}
+              alt="Firstname Lastname"
+              src="/avatar.jpg"
+              style={{ marginRight: 16 }}
+              sx={{ bgcolor: "teal" }}
+            />
           </>
         )}
       </Toolbar>

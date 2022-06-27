@@ -6,18 +6,19 @@ import {
   Chip,
   Avatar,
   CardHeader,
-  Link
+  Link,
 } from "@mui/material";
-import { Box, Container, padding } from "@mui/system";
+import { Box } from "@mui/system";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
 import { Gym } from "../models/allModels";
 import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import image from "../images/progym.jpg";
 
 const GymViewPage: FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [reviewSort, setReviewSort] = useState("newest");
   const [gym, setGym] = useState<Gym>({
@@ -42,6 +43,10 @@ const GymViewPage: FC = () => {
         alert("TODO: The gym you're seeing does not exist in the database");
       });
   }, []);
+
+  const handleBuySubscriptionClick = () => {
+    navigate(`/buy/${gym._id}`);
+  };
 
   /* MOCK - need own schema */
   let reviews = [
@@ -80,7 +85,12 @@ const GymViewPage: FC = () => {
     <>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
-          <Lightbox states={["https://www.climbing.com/wp-content/uploads/2016/10/7_gn-copyjpg.jpg", image]} />
+          <Lightbox
+            states={[
+              "https://www.climbing.com/wp-content/uploads/2016/10/7_gn-copyjpg.jpg",
+              image,
+            ]}
+          />
         </Grid>
 
         <Grid item xs={12} md={6}>
@@ -95,7 +105,7 @@ const GymViewPage: FC = () => {
             <Button
               variant="contained"
               color="success"
-              href={"/buy/" + gym._id}
+              onClick={handleBuySubscriptionClick}
             >
               Buy Subscription
             </Button>
