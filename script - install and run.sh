@@ -1,3 +1,4 @@
+#!/bin/bash
 cd ./backend
 npm i
 npm start & cd ../frontend
