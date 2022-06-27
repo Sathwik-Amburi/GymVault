@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 
@@ -20,10 +20,6 @@ const Navbar: FC = () => {
     localStorage.removeItem("token");
     dispatch(setIsAuthenticated(false));
     navigate("/");
-  };
-
-  const handleAvatarClick = () => {
-    navigate("/user/profile");
   };
 
   return (
@@ -79,13 +75,6 @@ const Navbar: FC = () => {
             >
               Logout
             </Button>
-            {/* <Avatar
-              alt="User"
-              src="/avatar.jpg"
-              style={{ marginRight: 16 }}
-              sx={{ bgcolor: "teal" }}
-              onClick={handleAvatarClick}
-            /> */}
             <Link href="/user/profile">
               <Avatar
                 alt="Firstname Lastname"
