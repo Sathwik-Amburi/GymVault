@@ -58,6 +58,7 @@ const Navbar: FC = () => {
         {isAuthenticated && (
           <>
             <Button
+              href="/user/tickets"
               color="inherit"
               variant="outlined"
               style={{ marginRight: 16 }}
