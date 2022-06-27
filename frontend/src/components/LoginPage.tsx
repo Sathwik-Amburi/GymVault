@@ -11,12 +11,15 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ApiCalls from "../api/apiCalls";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { ValidationState } from "./SignUpPage";
+import { useDispatch } from "react-redux";
+import { setIsAuthenticated } from "../store/slices/authenticationSlice";
 
 const theme = createTheme();
 
-const SignInPage: FC = () => {
+const LoginPage: FC = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [registrationValidation, setRegistrationValidation] =
@@ -30,16 +33,21 @@ const SignInPage: FC = () => {
     const data = new FormData(event.currentTarget);
     let email = data.get("email")!.toString();
     let password = data.get("password")!.toString();
-    let user = ApiCalls.userTryLogin(email, password)
+    ApiCalls.userLogin(email, password)
       .then((res) => {
         localStorage.setItem("token", res.data.token);
+        dispatch(setIsAuthenticated(true));
         navigate("/");
       })
       .catch((error) => {
-        if (error.response.data.error === "Invalid Credentials") {
+        if (
+          error.response.data.error.type === "INVALID_CREDENTIALS" ||
+          error.response.data.error.type === "EMAIL_NOT_VERIFIED" ||
+          error.response.data.error.type === "EMAIL_NOT_FOUND"
+        ) {
           setRegistrationValidation({
             status: "error",
-            message: "Email or password is invalid.",
+            message: error.response.data.error.message,
           });
         }
       });
@@ -118,4 +126,4 @@ const SignInPage: FC = () => {
     </ThemeProvider>
   );
 };
-export default SignInPage;
+export default LoginPage;

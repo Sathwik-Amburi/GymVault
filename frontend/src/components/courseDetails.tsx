@@ -147,9 +147,6 @@ const CourseViewPage: FC = () => {
           })}
         </Grid>
       </Grid>
-      <Box padding={10} style={{ textAlign: "center" }}>
-        TODO: shall we add a "dumb" Related Courses view here in the future?
-      </Box>
     </>
   );
 };

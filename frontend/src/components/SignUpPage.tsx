@@ -174,7 +174,7 @@ const SignUpPage: FC = () => {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/user/signin" variant="body2">
+                <Link href="/user/login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>

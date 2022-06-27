@@ -1,4 +1,5 @@
 import axios from "axios";
+import { UserProfileDetails } from "../models/allModels";
 
 export default class ApiCalls {
   public static registerUser = async (
@@ -103,24 +104,19 @@ export default class ApiCalls {
     });
   };
 
-  // User stuff
-  public static userTryLogin = async (email: string, password: string) => {
-    return await axios.post("/user/signin", {
+  public static userLogin = async (email: string, password: string) => {
+    return await axios.post("/authentication/login", {
       email,
       password,
     });
   };
-  public static userSignup = async (
-    email: string,
-    fullname: string,
-    password: string,
-    phone: string
-  ) => {
-    return await axios.post("/user/signup", {
-      email,
-      password,
-      fullname,
-      phone,
+
+  public static getUserProfile = async (token: string | null) => {
+    return await axios.get<UserProfileDetails>("/user/profile", {
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": (token ??= ""),
+      },
     });
   };
 }
