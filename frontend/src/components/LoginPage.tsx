@@ -14,7 +14,7 @@ import ApiCalls from "../api/apiCalls";
 import { useNavigate } from "react-router-dom";
 import { ValidationState } from "./SignUpPage";
 import { useDispatch } from "react-redux";
-import { setIsAuthenticated } from "../store/slices/authenticationSlice";
+import { setAuthentication } from "../store/slices/authenticationSlice";
 
 const theme = createTheme();
 
@@ -36,7 +36,10 @@ const LoginPage: FC = () => {
     ApiCalls.userLogin(email, password)
       .then((res) => {
         localStorage.setItem("token", res.data.token);
-        dispatch(setIsAuthenticated(true));
+        localStorage.setItem("role", res.data.role);
+        dispatch(
+          setAuthentication({ isAuthenticated: true, role: res.data.role })
+        );
         navigate("/");
       })
       .catch((error) => {

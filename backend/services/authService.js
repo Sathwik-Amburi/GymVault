@@ -36,6 +36,7 @@ class authService {
         return {
           token,
           message: "Logged in",
+          role: match.role
         };
       } else {
         return {
@@ -124,8 +125,6 @@ class authService {
 
     const newUser = await user.save();
 
-    // YOU STOPPED HERE Love :D
-
     const token = jwt.sign(
       {
         id: newUser.id,
@@ -137,7 +136,7 @@ class authService {
       process.env.JWT_SECRET,
       { expiresIn: "30d" }
     );
-    return { token, user: newUser.firstName };
+    return { token, user: newUser.firstName, role: user.role };
   };
 
   verifyEmail = async (user_id, unique_string) => {

@@ -6,7 +6,7 @@ import Link from "@mui/material/Link";
 import { Avatar, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { setIsAuthenticated } from "../../store/slices/authenticationSlice";
+import { setAuthentication } from "../../store/slices/authenticationSlice";
 import { useNavigate } from "react-router-dom";
 
 const Navbar: FC = () => {
@@ -15,10 +15,12 @@ const Navbar: FC = () => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.authentication.isAuthenticated
   );
+  const role = useSelector((state: RootState) => state.authentication.role);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    dispatch(setIsAuthenticated(false));
+    localStorage.removeItem("role");
+    dispatch(setAuthentication({ isAuthenticated: false, role: "" }));
     navigate("/");
   };
 
@@ -38,8 +40,16 @@ const Navbar: FC = () => {
     navigate("/user/tickets");
   };
 
+  const handleDashboardClick = () => {
+    navigate("/user/owner-profile");
+  };
+
   const handleAvatarClick = () => {
-    navigate("/user/profile");
+    if (role === "gym_owner") {
+      navigate("/user/owner-profile");
+    } else {
+      navigate("/user/profile");
+    }
   };
 
   return (
@@ -79,14 +89,25 @@ const Navbar: FC = () => {
 
         {isAuthenticated && (
           <>
-            <Button
-              onClick={handleTicketsClick}
-              color="inherit"
-              variant="outlined"
-              style={{ marginRight: 16 }}
-            >
-              My Tickets
-            </Button>
+            {role === "gym_owner" ? (
+              <Button
+                onClick={handleDashboardClick}
+                color="inherit"
+                variant="outlined"
+                style={{ marginRight: 16 }}
+              >
+                My Dashboard
+              </Button>
+            ) : (
+              <Button
+                onClick={handleTicketsClick}
+                color="inherit"
+                variant="outlined"
+                style={{ marginRight: 16 }}
+              >
+                My Tickets
+              </Button>
+            )}
             <Button
               color="inherit"
               variant="outlined"
