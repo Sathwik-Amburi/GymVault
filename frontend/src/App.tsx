@@ -20,6 +20,9 @@ import EmailConfirmedPage from "./components/EmailConfirmedPage";
 import UserProfile from "./components/UserProfile";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
+import NotAuthorizedPage from "./components/NotAuthorizedPage";
+import RoleWrapper from "./components/RoleWrapper";
+import OwnerProfile from "./components/OwnerProfile";
 
 const THEME = createTheme({
   typography: {
@@ -39,7 +42,7 @@ const PrivateRoute: FC<any> = ({ children }) => {
   return isAuthenticated ? (
     children
   ) : (
-    <Navigate to={{ pathname: "/user/login" }}></Navigate>
+    <Navigate to={{ pathname: "/user/login" }} />
   );
 };
 
@@ -55,7 +58,14 @@ const App: FC = () => {
             <Route path="/gym/:id" element={<GymViewPage />} />
             <Route path="/gym/:id/reviews" element={<>TODO</>} />
             <Route path="/course/:id" element={<CourseViewPage />} />
-            <Route path="/user/tickets" element={<UserSubscriptionsPage />} />
+            <Route
+              path="/user/tickets"
+              element={
+                <PrivateRoute>
+                  <UserSubscriptionsPage />
+                </PrivateRoute>
+              }
+            />
             <Route path="/user/signup" element={<SignUpPage />} />
             <Route
               path="/user/confirmation/:email"
@@ -80,6 +90,15 @@ const App: FC = () => {
                 </PrivateRoute>
               }
             />
+            <Route
+              path="/user/owner-profile"
+              element={
+                <RoleWrapper allowedRoles={["gym_owner"]}>
+                  <OwnerProfile />
+                </RoleWrapper>
+              }
+            />
+            <Route path="/user/unauthorized" element={<NotAuthorizedPage />} />
             <Route path="/*" element={<PageNotFound />} />
           </Routes>
         </Container>

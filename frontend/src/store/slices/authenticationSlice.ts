@@ -2,21 +2,24 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface AuthenticationState {
   isAuthenticated: boolean;
+  role: string;
 }
 
 const initialState: AuthenticationState = {
   isAuthenticated: Boolean(localStorage.getItem("token")),
+  role: localStorage.getItem("role") as string,
 };
 
 export const authenticationSlice = createSlice({
   name: "authentication",
   initialState,
   reducers: {
-    setIsAuthenticated: (state, action: PayloadAction<boolean>) => {
-      state.isAuthenticated = action.payload;
+    setAuthentication: (state, action: PayloadAction<AuthenticationState>) => {
+      state.isAuthenticated = action.payload.isAuthenticated;
+      state.role = action.payload.role;
     },
   },
 });
 
-export const { setIsAuthenticated } = authenticationSlice.actions;
+export const { setAuthentication } = authenticationSlice.actions;
 export default authenticationSlice.reducer;
