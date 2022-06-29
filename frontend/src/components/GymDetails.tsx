@@ -16,10 +16,12 @@ import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
 import { useNavigate, useParams } from "react-router-dom";
 import image from "../images/progym.jpg";
+import RecentReviews from "./widgets/RecentReviews";
 
 const GymViewPage: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [reviews, setReviews] = useState<any[]>([]);
   const [reviewSort, setReviewSort] = useState("newest");
   const [gym, setGym] = useState<Gym>({
     name: "",
@@ -44,22 +46,27 @@ const GymViewPage: FC = () => {
       });
   }, []);
 
+  useEffect(() => {
+    let fid = id != null ? id : ""; // empty id will gracefully fail anyway
+    ApiCalls.getReviewsById(fid)
+        .then((res) => {
+          console.log(res.data);
+          setReviews(res.data.response);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("TODO: The review you're seeing does not exist in the database");
+        });
+  }, []);
+
   const handleBuySubscriptionClick = () => {
     navigate(`/buy/${gym._id}`);
   };
 
-  /* MOCK - need own schema */
-  let reviews = [
-    {
-      fullname: "Carter",
-      rating: 4,
-      comment:
-        "This is a great gym. I come here almost daily to workout, and find the atmosphere very calming and relaxing.",
-      gym: "0",
-      user: "0",
-      _id: "0",
-    },
-  ];
+  // /* MOCK - need own schema */
+  // let reviews = [
+  //     ...reviewsbyId
+  // ];
   let courses = [
     "Cardio",
     "Strength",
@@ -145,31 +152,7 @@ const GymViewPage: FC = () => {
           </Paper>
         </Grid>
         <Grid item md={5} xs={12}>
-          <Paper style={{ padding: "2em", backgroundColor: "#eee" }}>
-            <Typography variant="h6">Reviews</Typography>
-            <br />
-            <Paper style={{ padding: "1em" }}>
-              <StarWidget rating={4.1} />
-              <small>150 people reviewed this gym!</small>
-            </Paper>
-            <br />
-            <Typography variant="h6">Recent Activity</Typography>
-            <br />
-
-            <Paper style={{ padding: "1em" }}>
-              <CardHeader
-                avatar={<Avatar src="todo" />}
-                title="Carter"
-                subheader={
-                  <>
-                    Rated
-                    <StarWidget rating={4.1} />
-                    yesterday
-                  </>
-                }
-              />
-            </Paper>
-          </Paper>
+          <RecentReviews rating={4} />
         </Grid>
       </Grid>
       <br />
@@ -201,13 +184,14 @@ const GymViewPage: FC = () => {
               <Paper style={{ padding: "1em" }} elevation={3}>
                 <CardHeader
                   avatar={<Avatar src="todo" />}
-                  title={review.fullname}
-                  subheader={<>May 5th, 2020</>}
+                  title={review.username}
+                  subheader={review.dateAdded}
                 />
                 <div style={{ textAlign: "center" }}>
                   <StarWidget rating={review.rating} />
                 </div>
-                <p>{review.comment}</p>
+                <p><b>{review.title}</b></p>
+                <p>{review.description}</p>
               </Paper>
             );
           })}

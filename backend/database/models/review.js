@@ -6,6 +6,11 @@ const ReviewSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
+    username:{
+        type:String,
+        ref: "User",
+        required: true
+    },
     gymId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Gym",
@@ -28,6 +33,11 @@ const ReviewSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    dateAdded: {
+        type: Date,
+        required: true,
+        default: Date.now
+    }
 
 });
 
