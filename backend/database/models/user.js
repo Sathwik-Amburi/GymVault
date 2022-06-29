@@ -50,8 +50,7 @@ const UserSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: Number,
-    required: true,
-    unique: true,
+    required: false,
   },
   emailVerified: {
     type: Boolean,
