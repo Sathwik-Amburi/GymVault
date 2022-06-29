@@ -21,6 +21,7 @@ import RecentReviews from "./widgets/RecentReviews";
 const GymViewPage: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [reviewsbyId, setReviews] = useState([]);
   const [reviewSort, setReviewSort] = useState("newest");
   const [gym, setGym] = useState<Gym>({
     name: "",
@@ -45,6 +46,19 @@ const GymViewPage: FC = () => {
       });
   }, []);
 
+  useEffect(() => {
+    let fid = id != null ? id : ""; // empty id will gracefully fail anyway
+    ApiCalls.getReviewsById(fid)
+        .then((res) => {
+          console.log(res.data);
+          setReviews(res.data.response);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("TODO: The gym you're seeing does not exist in the database");
+        });
+  }, []);
+
   const handleBuySubscriptionClick = () => {
     navigate(`/buy/${gym._id}`);
   };
@@ -52,14 +66,16 @@ const GymViewPage: FC = () => {
   /* MOCK - need own schema */
   let reviews = [
     {
-      fullname: "Carter",
+      username: "Carter",
       rating: 4,
-      comment:
+      title: "Great Gym",
+      description:
         "This is a great gym. I come here almost daily to workout, and find the atmosphere very calming and relaxing.",
       gym: "0",
       user: "0",
       _id: "0",
     },
+      ...reviewsbyId
   ];
   let courses = [
     "Cardio",
@@ -178,13 +194,14 @@ const GymViewPage: FC = () => {
               <Paper style={{ padding: "1em" }} elevation={3}>
                 <CardHeader
                   avatar={<Avatar src="todo" />}
-                  title={review.fullname}
+                  title={review.username}
                   subheader={<>May 5th, 2020</>}
                 />
                 <div style={{ textAlign: "center" }}>
                   <StarWidget rating={review.rating} />
                 </div>
-                <p>{review.comment}</p>
+                <p><b>{review.title}</b></p>
+                <p>{review.description}</p>
               </Paper>
             );
           })}

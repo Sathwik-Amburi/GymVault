@@ -96,6 +96,14 @@ export default class ApiCalls {
     });
   };
 
+  public static getReviewsById = async (id: string) => {
+    return await axios.get(`/reviews/get/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
   public static getSubscriptionsByGymId = async (gymId: string) => {
     return await axios.get(`/gyms/subscriptions/get-subscriptions/${gymId}`, {
       headers: {
