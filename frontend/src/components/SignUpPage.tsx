@@ -13,6 +13,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ApiCalls from "../api/apiCalls";
 import { useNavigate } from "react-router";
 import CloseIcon from "@mui/icons-material/Close";
+import { useDispatch } from "react-redux";
+import { setAuthentication } from "../store/slices/authenticationSlice";
 import {
   Dialog,
   DialogContent,
@@ -20,7 +22,10 @@ import {
   IconButton,
   styled,
 } from "@mui/material";
-
+import style from '../css/google.module.css'
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from "axios";
+import {NavLink} from "react-router-dom";
 const theme = createTheme();
 
 export interface ValidationState {
@@ -30,6 +35,7 @@ export interface ValidationState {
 
 const SignUpPage: FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -60,6 +66,20 @@ const SignUpPage: FC = () => {
     useState<ValidationState>({
       status: "",
       message: "",
+    });
+
+    const googleSignUp = useGoogleLogin({
+      onSuccess: async (tokenResponse) => {
+        let response = await axios.post("oauth/google", { token: tokenResponse, flow: 'auth' })
+        if (response.status === 200) {
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("role", "user");
+          dispatch(
+            setAuthentication({ isAuthenticated: true, role: "user" })
+          );
+          navigate("/");
+        }
+      },
     });
 
   return (
@@ -126,7 +146,6 @@ const SignUpPage: FC = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
                   fullWidth
                   id="phoneNumber"
                   label="Phone Number"
@@ -205,11 +224,14 @@ const SignUpPage: FC = () => {
             >
               Sign Up
             </Button>
+
+            <button  type="button" onClick={() => googleSignUp()} className={style.google}>Google Sign Up</button>
+
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/user/login" variant="body2">
+                <NavLink to="/user/login" style={{ color: 'blue' }}>
                   Already have an account? Sign in
-                </Link>
+                </NavLink>
               </Grid>
             </Grid>
           </Box>

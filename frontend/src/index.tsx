@@ -7,6 +7,8 @@ import App from "./App";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { store } from "./store";
 import { Provider } from "react-redux";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 
 axios.defaults.baseURL = API_URL;
 
@@ -16,7 +18,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <GoogleOAuthProvider clientId="195046756501-pg2ktn9ociknvjsltlhi27c9b39hq7qb.apps.googleusercontent.com">
+        <App />
+      </GoogleOAuthProvider>
     </Provider>
   </React.StrictMode>
 );

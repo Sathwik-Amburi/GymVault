@@ -11,10 +11,14 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ApiCalls from "../api/apiCalls";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { ValidationState } from "./SignUpPage";
 import { useDispatch } from "react-redux";
 import { setAuthentication } from "../store/slices/authenticationSlice";
+import style from '../css/google.module.css'
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from "axios";
+
 
 const theme = createTheme();
 
@@ -55,6 +59,20 @@ const LoginPage: FC = () => {
         }
       });
   };
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      let response = await axios.post("oauth/google", { token: tokenResponse, flow: 'auth' })
+      if (response.status === 200) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("role", "user");
+        dispatch(
+          setAuthentication({ isAuthenticated: true, role: "user" })
+        );
+        navigate("/");
+      }
+    },
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -115,12 +133,13 @@ const LoginPage: FC = () => {
             >
               Sign In
             </Button>
+            <button  type="button" onClick={() => googleLogin()} className={style.google}>Google Login</button>
             <Grid container>
               <Grid item xs></Grid>
               <Grid item>
-                <Link href="/user/signup" variant="body2">
+                <NavLink to="/user/signup" style={{ color: 'blue' }}>
                   {"Don't have an account? Sign Up"}
-                </Link>
+                </NavLink>
               </Grid>
             </Grid>
           </Box>
