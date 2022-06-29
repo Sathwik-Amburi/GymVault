@@ -61,7 +61,7 @@ const Navbar: FC = () => {
           variant="h6"
           color="inherit"
           noWrap
-          style={{ fontWeight: "bold", textDecoration: "none" }}
+          style={{ fontWeight: "bold", textDecoration: "none",  cursor: "pointer"}}
           sx={{ flexGrow: 1, paddingLeft: "1em" }}
         >
           GymVault
@@ -120,7 +120,7 @@ const Navbar: FC = () => {
               onClick={handleAvatarClick}
               alt="Firstname Lastname"
               src="/avatar.jpg"
-              style={{ marginRight: 16 }}
+              style={{ marginRight: 16,  cursor: "pointer" }}
               sx={{ bgcolor: "teal" }}
             />
           </>
