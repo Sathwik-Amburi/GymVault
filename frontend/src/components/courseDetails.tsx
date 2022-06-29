@@ -18,7 +18,7 @@ import { useParams, useNavigate } from "react-router-dom";
 const CourseViewPage: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [reviewsbyId, setReviews] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [reviewSort, setReviewSort] = useState("newest");
   let Gym = {
     name: "",
@@ -67,10 +67,10 @@ const CourseViewPage: FC = () => {
     navigate(`/buy/${course._id}`);
   };
 
-  /* MOCK - need own schema */
-  let reviews = [
-    ...reviewsbyId
-  ];
+  // /* MOCK - need own schema */
+  // let reviews = [
+  //   ...reviewsbyId
+  // ];
   return (
     <>
       <Grid container spacing={6}>

@@ -21,7 +21,7 @@ import RecentReviews from "./widgets/RecentReviews";
 const GymViewPage: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [reviewsbyId, setReviews] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [reviewSort, setReviewSort] = useState("newest");
   const [gym, setGym] = useState<Gym>({
     name: "",
@@ -63,10 +63,10 @@ const GymViewPage: FC = () => {
     navigate(`/buy/${gym._id}`);
   };
 
-  /* MOCK - need own schema */
-  let reviews = [
-      ...reviewsbyId
-  ];
+  // /* MOCK - need own schema */
+  // let reviews = [
+  //     ...reviewsbyId
+  // ];
   let courses = [
     "Cardio",
     "Strength",
