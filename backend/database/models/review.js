@@ -33,6 +33,11 @@ const ReviewSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    dateAdded: {
+        type: Date,
+        required: true,
+        default: Date.now
+    }
 
 });
 

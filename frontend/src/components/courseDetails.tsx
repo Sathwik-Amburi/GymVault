@@ -18,6 +18,7 @@ import { useParams, useNavigate } from "react-router-dom";
 const CourseViewPage: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [reviewsbyId, setReviews] = useState([]);
   const [reviewSort, setReviewSort] = useState("newest");
   let Gym = {
     name: "",
@@ -49,6 +50,19 @@ const CourseViewPage: FC = () => {
       });
   }, [id]);
 
+  useEffect(() => {
+    let fid = id != null ? id : ""; // empty id will gracefully fail anyway
+    ApiCalls.getReviewsById(fid)
+        .then((res) => {
+          console.log(res.data);
+          setReviews(res.data.response);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("TODO: The review you're seeing does not exist in the database");
+        });
+  }, []);
+
   const handleBuySubscriptionClick = () => {
     navigate(`/buy/${course._id}`);
   };
@@ -56,16 +70,18 @@ const CourseViewPage: FC = () => {
   /* MOCK - need own schema */
   let reviews = [
     {
-      fullname: "Carter",
+      username: "Carter",
       rating: 4,
-      comment:
-        "This is a great course. I find the atmosphere very calming and relaxing.",
-      course: "0",
+      title: "Great Gym",
+      description:
+          "This is a great course. I find the atmosphere very calming and relaxing.",
+      gym: "0",
       user: "0",
       _id: "0",
+      dateAdded: Date.now()
     },
+    ...reviewsbyId
   ];
-
   return (
     <>
       <Grid container spacing={6}>
@@ -152,17 +168,18 @@ const CourseViewPage: FC = () => {
         <Grid item md={3} xs={12}>
           {reviews.map((review) => {
             return (
-              <Paper style={{ padding: "1em" }} elevation={3}>
-                <CardHeader
-                  avatar={<Avatar src="todo" />}
-                  title={review.fullname}
-                  subheader={<>May 5th, 2020</>}
-                />
-                <div style={{ textAlign: "center" }}>
-                  <StarWidget rating={review.rating} />
-                </div>
-                <p>{review.comment}</p>
-              </Paper>
+                <Paper style={{ padding: "1em" }} elevation={3}>
+                  <CardHeader
+                      avatar={<Avatar src="todo" />}
+                      title={review.username}
+                      subheader={review.dateAdded}
+                  />
+                  <div style={{ textAlign: "center" }}>
+                    <StarWidget rating={review.rating} />
+                  </div>
+                  <p><b>{review.title}</b></p>
+                  <p>{review.description}</p>
+                </Paper>
             );
           })}
         </Grid>

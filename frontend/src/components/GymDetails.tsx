@@ -55,7 +55,7 @@ const GymViewPage: FC = () => {
         })
         .catch((err) => {
           console.log(err);
-          alert("TODO: The gym you're seeing does not exist in the database");
+          alert("TODO: The review you're seeing does not exist in the database");
         });
   }, []);
 
@@ -74,6 +74,7 @@ const GymViewPage: FC = () => {
       gym: "0",
       user: "0",
       _id: "0",
+      dateAdded: Date.now()
     },
       ...reviewsbyId
   ];
@@ -195,7 +196,7 @@ const GymViewPage: FC = () => {
                 <CardHeader
                   avatar={<Avatar src="todo" />}
                   title={review.username}
-                  subheader={<>May 5th, 2020</>}
+                  subheader={review.dateAdded}
                 />
                 <div style={{ textAlign: "center" }}>
                   <StarWidget rating={review.rating} />
