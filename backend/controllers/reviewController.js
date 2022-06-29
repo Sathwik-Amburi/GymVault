@@ -2,9 +2,9 @@ const reviewService = require("../services/reviewService");
 
 const getAllReviews = async (req, res) => {
     try {
-        const gyms = await reviewService.getAllReviews();
+        const reviews = await reviewService.getAllReviews();
 
-        res.status(200).json(gyms);
+        res.status(200).json(reviews);
     } catch (error) {
         console.log(`Error while fetching all reviews`, error.message);
         res.status(400).json({ error: "Error while fetching all reviews" });
