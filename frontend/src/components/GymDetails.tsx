@@ -16,6 +16,7 @@ import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
 import { useNavigate, useParams } from "react-router-dom";
 import image from "../images/progym.jpg";
+import RecentReviews from "./widgets/RecentReviews";
 
 const GymViewPage: FC = () => {
   const navigate = useNavigate();
@@ -145,31 +146,7 @@ const GymViewPage: FC = () => {
           </Paper>
         </Grid>
         <Grid item md={5} xs={12}>
-          <Paper style={{ padding: "2em", backgroundColor: "#eee" }}>
-            <Typography variant="h6">Reviews</Typography>
-            <br />
-            <Paper style={{ padding: "1em" }}>
-              <StarWidget rating={4.1} />
-              <small>150 people reviewed this gym!</small>
-            </Paper>
-            <br />
-            <Typography variant="h6">Recent Activity</Typography>
-            <br />
-
-            <Paper style={{ padding: "1em" }}>
-              <CardHeader
-                avatar={<Avatar src="todo" />}
-                title="Carter"
-                subheader={
-                  <>
-                    Rated
-                    <StarWidget rating={4.1} />
-                    yesterday
-                  </>
-                }
-              />
-            </Paper>
-          </Paper>
+          <RecentReviews rating={4} />
         </Grid>
       </Grid>
       <br />

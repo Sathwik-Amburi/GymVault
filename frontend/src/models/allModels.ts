@@ -10,6 +10,7 @@ export interface Gym {
 
 export interface Course {
   name: string;
+  gym: Gym;
   description: string;
   phoneNumber: number;
   address: string;

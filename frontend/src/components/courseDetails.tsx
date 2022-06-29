@@ -19,8 +19,18 @@ const CourseViewPage: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [reviewSort, setReviewSort] = useState("newest");
+  let Gym = {
+    name: "",
+    phoneNumber: "",
+    _id: "0",
+    city: "Berlin",
+    address: "",
+    description: "",
+    amenities: [],
+  };
   const [course, setCourse] = useState<Course>({
     name: "Yoga Course",
+    gym: Gym,
     description: "",
     phoneNumber: 1760000000,
     address: "",
