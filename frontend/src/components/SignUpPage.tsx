@@ -25,7 +25,7 @@ import {
 import style from '../css/google.module.css'
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from "axios";
-
+import {NavLink} from "react-router-dom";
 const theme = createTheme();
 
 export interface ValidationState {
@@ -229,9 +229,9 @@ const SignUpPage: FC = () => {
 
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/user/login" variant="body2">
+                <NavLink to="/user/login" style={{ color: 'blue' }}>
                   Already have an account? Sign in
-                </Link>
+                </NavLink>
               </Grid>
             </Grid>
           </Box>

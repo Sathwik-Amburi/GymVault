@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ApiCalls from "../api/apiCalls";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { ValidationState } from "./SignUpPage";
 import { useDispatch } from "react-redux";
 import { setAuthentication } from "../store/slices/authenticationSlice";
@@ -137,9 +137,9 @@ const LoginPage: FC = () => {
             <Grid container>
               <Grid item xs></Grid>
               <Grid item>
-                <Link href="/user/signup" variant="body2">
+                <NavLink to="/user/signup" style={{ color: 'blue' }}>
                   {"Don't have an account? Sign Up"}
-                </Link>
+                </NavLink>
               </Grid>
             </Grid>
           </Box>
