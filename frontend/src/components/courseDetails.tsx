@@ -18,7 +18,7 @@ import { useParams, useNavigate } from "react-router-dom";
 const CourseViewPage: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [reviewsbyId, setReviews] = useState([]);
+  const [reviewsbyId, setReviews] = useState<any[]>([]);
   const [reviewSort, setReviewSort] = useState("newest");
   let Gym = {
     name: "",
@@ -69,17 +69,6 @@ const CourseViewPage: FC = () => {
 
   /* MOCK - need own schema */
   let reviews = [
-    {
-      username: "Carter",
-      rating: 4,
-      title: "Great Gym",
-      description:
-          "This is a great course. I find the atmosphere very calming and relaxing.",
-      gym: "0",
-      user: "0",
-      _id: "0",
-      dateAdded: Date.now()
-    },
     ...reviewsbyId
   ];
   return (
