@@ -23,6 +23,7 @@ import { RootState } from "./store";
 import NotAuthorizedPage from "./components/NotAuthorizedPage";
 import RoleWrapper from "./components/RoleWrapper";
 import OwnerProfile from "./components/OwnerProfile";
+import Terms from "./components/Terms";
 
 const THEME = createTheme({
   typography: {
@@ -54,6 +55,7 @@ const App: FC = () => {
         <Container maxWidth="lg" style={{ padding: "3em" }}>
           <Routes>
             <Route path="/" element={<FrontPage />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="/gym/add" element={<>TODO</>} />
             <Route path="/gym/:id" element={<GymViewPage />} />
             <Route path="/gym/:id/reviews" element={<>TODO</>} />
@@ -80,6 +82,7 @@ const App: FC = () => {
               path="/results/courses/search"
               element={<CourseResultsPage />}
             />
+
             <Route path="/results/gyms/search" element={<ResultsPage />} />
             <Route path="/buy/:id" element={<CheckoutPage />} />
             <Route
