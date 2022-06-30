@@ -4,8 +4,10 @@ import { FC, useEffect, useState } from "react";
 import { Item, Option } from "../models/allModels";
 import PurchaseCart from "./widgets/PurchaseCart";
 import PurchaseGrid from "./widgets/PurchaseCart";
+import SecretDisplay from "./widgets/SecretDisplay";
 
 const UserSubscriptionsPage: FC = () => {
+  const [shownSecret, setShownSecret] = useState("");
   const [activeItems, setActiveItems] = useState<Item[]>([
     {
       _id: "1",
@@ -77,9 +79,7 @@ const UserSubscriptionsPage: FC = () => {
             borderRadius: "20px",
             backgroundColor: "#ccc"
           }}
-          onClick={() => {
-            alert("TODO: animate to show secret instead of cards?")
-          }}>
+          onClick={() => setShownSecret((item._id === shownSecret ? "" : item._id))}>
             <Grid item xs={12}>
               <span style={{float: "right"}}>
                 <Typography variant="h5">
@@ -93,7 +93,7 @@ const UserSubscriptionsPage: FC = () => {
               <hr />
             </Grid>
     
-            <Grid item md={6} xs={12}>
+            <Grid item md={6} xs={12} style={{ display: (shownSecret === item._id) ? "none" : "block" }}>
               { /* ....... */ }
               <Grid item md={6} xs={12}
                 style={{
@@ -177,8 +177,10 @@ const UserSubscriptionsPage: FC = () => {
                   </tr>
                 </table>
               </div>
-              
             </Grid>
+            
+            { /* Secret display */ }
+            <SecretDisplay id={item._id} shown={shownSecret} code="ASDFG-HJKLA" />
             <Grid item md={6} xs={12} style={{ paddingLeft: "2em" }}>
               <Typography variant="h5" style={{fontWeight: "bold" }}>{item.courseName}</Typography>
               <hr />
