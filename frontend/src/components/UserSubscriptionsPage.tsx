@@ -1,13 +1,10 @@
-import { Grid, Paper, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
-import { Item, Option } from "../models/allModels";
-import PurchaseCart from "./widgets/PurchaseCart";
-import PurchaseGrid from "./widgets/PurchaseCart";
-import SecretDisplay from "./widgets/SecretDisplay";
+import { Item } from "../models/allModels";
+import SubscriptionEntry from "./widgets/SubscriptionEntry";
 
 const UserSubscriptionsPage: FC = () => {
-  const [shownSecret, setShownSecret] = useState("");
   const [activeItems, setActiveItems] = useState<Item[]>([
     {
       _id: "1",
@@ -73,132 +70,17 @@ const UserSubscriptionsPage: FC = () => {
 
       { activeItems.map((item) => {
         return (
-          <Grid container style={{
-            padding: "3em",
-            marginTop: "3em",
-            borderRadius: "20px",
-            backgroundColor: "#ccc"
-          }}
-          onClick={() => setShownSecret((item._id === shownSecret ? "" : item._id))}>
-            <Grid item xs={12}>
-              <span style={{float: "right"}}>
-                <Typography variant="h5">
-                  <span style={{fontWeight: "800", color: "#999"}}>
-                    {item.type}
-                  </span>
-                </Typography>
-              </span>
-              <Typography variant="h4" style={{fontWeight: "bold" }}>{item.gymName}</Typography>
-              <span>{item.address}</span>
-              <hr />
-            </Grid>
-    
-            <Grid item md={6} xs={12} style={{ display: (shownSecret === item._id) ? "none" : "block" }}>
-              { /* ....... */ }
-              <Grid item md={6} xs={12}
-                style={{
-                  borderRadius: "12px",
-                  display: "flex",
-                }}
-              >
-                <Paper style={{
-                  backgroundColor:  "#f00",
-                  color: "#fff",
-                  borderRadius: "12px",
-                  padding: "1.5em",
-                  margin: "1em"
-                }} onClick={() => {}}>
-                  <div style={{ minHeight: "100px"  }}>
-                    <span style={{ fontWeight: "bold" }}>
-                      VIP Ticket
-                    </span>
-                    <br /><br />
-                    <span>
-                      Option Description
-                    </span>
-                  </div>
-                </Paper>
-
-                <Paper style={{
-                  backgroundColor:  "#005",
-                  color:            "#fff",
-                  borderRadius:     "12px",
-                  padding:          "1.5em",
-                  margin:           "1em"
-                }} onClick={() => {}}>
-                  <div style={{ minHeight: "100px"  }}>
-                    <span style={{ fontWeight: "bold" }}>
-                      Equipment Rental
-                    </span>
-                    <br /><br />
-                    <span>
-                      Option Description
-                    </span>
-                  </div>
-                </Paper>
-                
-              </Grid>
-              { /* ....... */ }
-              <div>
-                <table style={{border: "none", width: "100%"}}>
-                  <tr>
-                    <td>                  
-                      <Typography variant="body1">
-                        From
-                      </Typography>
-                    </td>
-                    <td>
-                      <Typography variant="h6">
-                        01.01.1970
-                      </Typography>
-                    </td>
-                    <td style={{textAlign: "right"}}>
-                      <Typography variant="h6" style={{ fontWeight: "bold" }}>
-                        €150
-                      </Typography> 
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>                  
-                      <Typography variant="body1">
-                        To
-                      </Typography>
-                    </td>
-                    <td>
-                      <Typography variant="h6">
-                        01.01.1970
-                      </Typography>
-                    </td>
-                    <td style={{textAlign: "right"}}>
-                      <Typography variant="body1">
-                        Total paid
-                      </Typography>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </Grid>
-            
-            { /* Secret display */ }
-            <SecretDisplay id={item._id} shown={shownSecret} code="ASDFG-HJKLA" />
-            <Grid item md={6} xs={12} style={{ paddingLeft: "2em" }}>
-              <Typography variant="h5" style={{fontWeight: "bold" }}>{item.courseName}</Typography>
-              <hr />
-              <Typography variant="body2">{item.description}</Typography>
-            </Grid>
-          </Grid>
+          <SubscriptionEntry id={item._id} item={item} expired={false} />
         );
       }) }
 
       <Grid container style={{
         backgroundColor: "#393939",
-        color: "#C2C6CC",
         padding: "3em",
         marginTop: "3em",
         width: "100%",
-        
       }}>
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{ color: "#C2C6CC" }}>
           <Typography variant="h6" style={{fontWeight: "bold" }}>
             Expired Subscriptions
           </Typography>
@@ -206,17 +88,12 @@ const UserSubscriptionsPage: FC = () => {
             In memoriam
           </Typography>
         </Grid>
-        <Grid container spacing={3} style={{
-          padding: "3em",
-          marginTop: "3em",
-          borderRadius: "20px",
-          backgroundColor: "#ccc"
-        }}>
-          <Grid item xs={12}>
-            todo
-          </Grid>
+        { pastItems.map((item) => {
+          return (
+            <SubscriptionEntry id={item._id} item={item} expired={true} />
+          );
+        })}
           
-        </Grid>
       </Grid>
     </>
   );
