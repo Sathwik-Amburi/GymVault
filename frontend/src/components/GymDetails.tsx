@@ -44,20 +44,29 @@ const GymViewPage: FC = () => {
         console.log(err);
         alert("TODO: The gym you're seeing does not exist in the database");
       });
-  }, []);
 
-  useEffect(() => {
-    let fid = id != null ? id : ""; // empty id will gracefully fail anyway
     ApiCalls.getReviewsById(fid)
-        .then((res) => {
-          console.log(res.data);
-          setReviews(res.data.response);
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("TODO: The review you're seeing does not exist in the database");
-        });
-  }, []);
+      .then((res) => {
+        console.log(res.data);
+        setReviews(res.data.response);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("TODO: The review you're seeing does not exist in the database");
+      });
+
+
+    ApiCalls.getCoursesByGymId(fid)
+      .then((res) => {
+        console.log(res.data);
+        setCourses(res.data.response);
+      }
+      ).catch((err) => {
+        console.log(err);
+        alert("TODO: The course you're seeing does not exist in the database");
+      });
+
+  }, [id]);
 
   const handleBuySubscriptionClick = () => {
     navigate(`/buy/${gym._id}`);
@@ -67,7 +76,7 @@ const GymViewPage: FC = () => {
   // let reviews = [
   //     ...reviewsbyId
   // ];
-  let courses = [
+  let [courses, setCourses] = useState<any[]>([
     "Cardio",
     "Strength",
     "Yoga",
@@ -77,7 +86,7 @@ const GymViewPage: FC = () => {
     "Dance",
     "Swimming",
     "Climbing",
-  ];
+  ]);
 
   // format: [name: string, included in base price: boolean]
   let amenities = [

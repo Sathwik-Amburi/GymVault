@@ -13,7 +13,7 @@ import { Course } from "../models/allModels";
 import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
 import image from "../images/progym.jpg";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 const CourseViewPage: FC = () => {
   const navigate = useNavigate();
@@ -48,10 +48,7 @@ const CourseViewPage: FC = () => {
         console.log(err);
         alert("TODO: The course you're seeing does not exist in the database");
       });
-  }, [id]);
 
-  useEffect(() => {
-    let fid = id != null ? id : ""; // empty id will gracefully fail anyway
     ApiCalls.getReviewsById(fid)
         .then((res) => {
           console.log(res.data);
@@ -61,7 +58,7 @@ const CourseViewPage: FC = () => {
           console.log(err);
           alert("TODO: The review you're seeing does not exist in the database");
         });
-  }, []);
+  }, [id]);
 
   const handleBuySubscriptionClick = () => {
     navigate(`/buy/${course._id}`);
@@ -87,8 +84,12 @@ const CourseViewPage: FC = () => {
           <hr />
           <p>{course.description}</p>
           <br />
+          { course.gym != null && <>
+            <p> <Link to={`/gym/${course.gym._id}`}>{course.gym.name}</Link></p>
+            <p> { course.gym.address }</p>   
+          </>}
+          <br />
           <p>Tel: +49 {course.phoneNumber}</p>
-          <p>Address (needs mongo schema)</p>
 
           <div style={{ textAlign: "right" }}>
             <Button
