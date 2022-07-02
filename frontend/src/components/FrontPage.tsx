@@ -68,10 +68,9 @@ export default function FrontPage() {
         <div
           style={{ whiteSpace: "pre-wrap", color: "grey", fontStyle: "italic" }}
         >
-          GymVault is an online platform to help gym owners and potential gym
-          clients connect faster, easier, and hassle free by allowing clientsto
-          browse the large gyms catalog, choose the gym that matches their exact
-          needs and pay only for what they use, all fully digitally.
+          We help gym owners and clients <b>connect faster, easier, and hassle-free</b>.
+          Browse our large gym and course catalog, choose the one that matches your exact
+          needs, and pay only for what you use. All fully digitally.
         </div>
       </Container>
       <Container maxWidth="md" component="main">
@@ -81,8 +80,13 @@ export default function FrontPage() {
             flexDirection: "row",
             justifyContent: "center",
             marginBottom: "50px",
+            alignItems: "center",
           }}
         >
+          <span style={{ marginRight: "1em", color: "grey" }}>
+            Look for
+          </span>
+
           <ToggleButtonGroup
             // value={alignment}
             exclusive
@@ -90,20 +94,22 @@ export default function FrontPage() {
             aria-label="text alignment"
           >
             <ToggleButton
+              size="small"
               onClick={toggle}
               style={gymButton}
               value="left"
               aria-label="left aligned"
             >
-              Find Gyms
+              Gyms
             </ToggleButton>
             <ToggleButton
+              size="small"
               onClick={toggle}
               style={courseButton}
               value="right"
               aria-label="right aligned"
             >
-              Find Courses
+              Courses
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
