@@ -29,6 +29,7 @@ class authService {
             email: match.email,
             name: match.name,
             role: match.role,
+            stripe_account_id: match.stripe_account_id || null
           },
           process.env.JWT_SECRET,
           { expiresIn: process.env.JWT_EXPIRATION }
