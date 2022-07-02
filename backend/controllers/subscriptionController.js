@@ -23,7 +23,7 @@ const getSubscriptionsByUserId = async (req, res) => {
 
 const getSubscriptionsByGymId = async (req, res) => {
     const { gymId } = req.params;
-    const subscriptions = await gymService.getSubscriptionsByGymId(gymId);
+    const subscriptions = await subscriptionService.getSubscriptionsByGymId(gymId);
     if (subscriptions) {
       res
         .status(200)
