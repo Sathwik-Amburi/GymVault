@@ -8,6 +8,9 @@ import ApiCalls from "../api/apiCalls";
 import { useParams } from "react-router-dom";
 
 const CheckoutPage: FC = () => {
+  const { id, stripeCallback } = useParams<{ id: string, stripeCallback: string }>();
+  const editable = (stripeCallback === null);
+
   function setGym(gym: Gym) {
     let item = {
       _id: "1",
@@ -55,8 +58,6 @@ const CheckoutPage: FC = () => {
     bgColor: "",
   });
 
-  const { id } = useParams<{id: string}>();
-
   useEffect(() => {
     ApiCalls.getCourse(id!)
       .then((res) => {
@@ -74,13 +75,14 @@ const CheckoutPage: FC = () => {
       });
   }, []);
   
-  const [cart, setCart] = useState<CartItem[]>([ {
+  let [cart, setCart] = useState<CartItem[]>([ {
     name: "Base Ticket",
     description: "Includes registration, max. 4 entrances/week",
     price: 28,
     base: true,
     _id: "1"
   } as CartItem ]);
+
   // TODO: all of the below will go into the useEffect hook
   let items: PurchaseOption[] = [
     {
@@ -149,7 +151,13 @@ const CheckoutPage: FC = () => {
       </Grid>
 
       <Grid item md={6} xs={12}>
-        <PurchaseGrid bases={items} optionals={optionals} cart={cart} setCart={setCart} />
+        <PurchaseGrid 
+          bases={items} 
+          optionals={optionals} 
+          cart={cart} 
+          setCart={setCart} 
+          editable={editable}
+        />
       </Grid>
       <Grid item md={6} xs={12}>
         <Typography variant="h4" style={{fontWeight: "bold" }}>{item.courseName}</Typography>
