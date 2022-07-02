@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Button, Grid, Link, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
 
@@ -6,6 +6,7 @@ import { Item } from "../models/allModels";
 import SubscriptionEntry from "./widgets/SubscriptionEntry";
 
 const UserSubscriptionsPage: FC = () => {
+  const showNewSubscriptionHeader = false; // TODO implement somehow (e.g. url query?)
   const [activeItems, setActiveItems] = useState<Item[]>([
     {
       _id: "1",
@@ -97,18 +98,37 @@ const UserSubscriptionsPage: FC = () => {
       <div style={{
         height: "2em"
       }}></div>
-      <Typography variant="h6" style={{fontWeight: "bold", color: "#00763D"}}>
-      Your booking was successful.
-      </Typography>
-      <Typography style={{ color: "#00763D", marginBottom: "3em" }}>
-        Below you can see your subscription. Click on it to copy your access identifier, and print the tickets if needed:
-      </Typography>
+      { (showNewSubscriptionHeader) ? ( <>
+        <Typography variant="h6" style={{fontWeight: "bold", color: "#00763D"}}>
+        Your booking was successful.
+        </Typography>
+        <Typography style={{ color: "#00763D", marginBottom: "3em" }}>
+          Below you can see your subscription. Click on it to copy your access identifier, and print the tickets if needed:
+        </Typography>
+      </>) : ( <>
+        <Typography variant="h6" style={{fontWeight: "bold", color: "#555"}}>
+        Your subscriptions
+        </Typography>
+        <Typography style={{ color: "#555", marginBottom: "3em" }}>
+          Below you can see your subscriptions. Click on them to copy your access identifier, and print the tickets if needed:
+        </Typography>
+      </>)}
 
-      { activeItems.map((item) => {
-        return (
-          <SubscriptionEntry id={item._id} item={item} expired={false} />
-        );
-      }) }
+      { (activeItems.length > 0) ?
+        activeItems.map((item) => {
+          return (
+            <SubscriptionEntry id={item._id} item={item} expired={false} />
+          );
+        }) : ( <>
+          <Typography variant="h6" style={{fontWeight: "bold", textAlign: "center", marginTop: "6em"}}>
+          No active subscriptions. 
+            <Button variant="outlined" color="primary" style={{marginLeft: "1em"}} href="/">
+              Get one?
+            </Button>
+          </Typography>
+        </> )
+      }
+        
 
       { (pastItems.length > 0) ? (
         <Grid container style={{
