@@ -143,4 +143,12 @@ export default class ApiCalls {
       },
     });
   };
+
+  public static checkPurchase = async (stripeId: string) => {
+    return await axios.get(`/purchase/${stripeId}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
 }

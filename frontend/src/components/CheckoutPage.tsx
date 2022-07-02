@@ -5,11 +5,12 @@ import { Course, Gym, Item, PurchaseOption } from "../models/allModels";
 import PurchaseGrid from "./widgets/PurchaseGrid";
 import PurchaseCart, { CartItem } from "./widgets/PurchaseCart";
 import ApiCalls from "../api/apiCalls";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const CheckoutPage: FC = () => {
   const { id, stripeCallback } = useParams<{ id: string, stripeCallback: string }>();
-  const editable = (stripeCallback === null);
+  const editable = (stripeCallback === undefined);
+  const navigate = useNavigate();
 
   function setGym(gym: Gym) {
     let item = {
@@ -73,6 +74,19 @@ const CheckoutPage: FC = () => {
             // navigate to 404?
           });
       });
+      
+      // Check if confirmation is needed
+      if(stripeCallback !== undefined) {
+        // TODO: call APIs to check validity of ("confirm") purchase, and redirect if valid
+        ApiCalls.checkPurchase(stripeCallback)
+          .then((res) => {
+            navigate("/user/tickets?highlight=" + id);
+          })
+          .catch((err) => {
+            alert("TODO: Error checking purchase");
+          }
+        );
+      }
   }, []);
   
   let [cart, setCart] = useState<CartItem[]>([ {
@@ -171,7 +185,7 @@ const CheckoutPage: FC = () => {
           Order Summary
         </Typography>
         <hr className="mini-hr" />
-        <PurchaseCart cart={cart} setCart={setCart} />
+        <PurchaseCart cart={cart} setCart={setCart} allowCheckout={editable} />
       </Grid>
     </Grid>
   );

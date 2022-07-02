@@ -1,12 +1,14 @@
 import { Button, Grid, Link, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
 
 import { Item } from "../models/allModels";
 import SubscriptionEntry from "./widgets/SubscriptionEntry";
 
 const UserSubscriptionsPage: FC = () => {
-  const showNewSubscriptionHeader = false; // TODO implement somehow (e.g. url query?)
+  const [urlQuery, setUrlQuery] = useSearchParams();
+  const newSubscription = urlQuery.get("highlight") != null;
   const [activeItems, setActiveItems] = useState<Item[]>([
     {
       _id: "1",
@@ -98,7 +100,7 @@ const UserSubscriptionsPage: FC = () => {
       <div style={{
         height: "2em"
       }}></div>
-      { (showNewSubscriptionHeader) ? ( <>
+      { (newSubscription !== null) ? ( <>
         <Typography variant="h6" style={{fontWeight: "bold", color: "#00763D"}}>
         Your booking was successful.
         </Typography>

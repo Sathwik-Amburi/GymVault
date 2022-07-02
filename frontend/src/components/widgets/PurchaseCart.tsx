@@ -1,4 +1,4 @@
-import { Grid, Table, TableBody, TableRow, TableCell, Typography, Paper, Button, tableCellClasses } from "@mui/material";
+import { Grid, Table, TableBody, TableRow, TableCell, Typography, Paper, Button, tableCellClasses, CircularProgress } from "@mui/material";
 import { fontSize } from "@mui/system";
 import { FC, useEffect, useState } from "react";
 import { Item, Option } from "../../models/allModels";
@@ -14,6 +14,7 @@ export interface CartItem {
 interface CartProps {
   cart: CartItem[],
   setCart: (cart: CartItem[]) => void,
+  allowCheckout: boolean,
 }
 
 const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
@@ -61,17 +62,29 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
           <TableCell>
             <Typography variant="body1">
               Total due
-              <div style={{float: "right"}}>
-                <Button variant="contained" color="success" onClick={() => {
-                  alert('stripe!');
-                }}
-                href="/user/tickets">
-                  Secure Checkout
-                </Button>
-              </div>
+              { props.allowCheckout ? (
+                <div style={{float: "right"}}>
+                  <Button variant="contained" color="success" onClick={() => {
+                    alert('stripe!');
+                  }}
+                  href={`/buy/${props.cart.map(item => item._id).join(",")}/confirm/SOME_STRIPE_ID`}>
+                    Secure Checkout
+                  </Button>
+                </div>
+              ) : null }
             </Typography>
           </TableCell>
         </TableRow>
+        { !props.allowCheckout ? (
+          <TableRow>
+            <TableCell>
+              <CircularProgress size={18} style={{marginRight: "1em"}} color="secondary" />
+              <Typography variant="body1" style={{ display: "inline-block" }}>  
+                Checkout in progress...
+              </Typography>
+            </TableCell>
+          </TableRow>
+        ) : null }
       </TableBody>
     </Table>
   );
