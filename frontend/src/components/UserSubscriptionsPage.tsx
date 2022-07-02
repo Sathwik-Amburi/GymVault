@@ -1,5 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
+import ApiCalls from "../api/apiCalls";
 
 import { Item } from "../models/allModels";
 import SubscriptionEntry from "./widgets/SubscriptionEntry";
@@ -50,10 +51,45 @@ const UserSubscriptionsPage: FC = () => {
   ]);
 
   useEffect(() => {
-    /*TODOApiCalls.getAllGyms()
-      .then((res) => setResults(res.data))
-      .catch((err) => console.log(err.message));
-      */
+    const user = localStorage.getItem("token");
+    if(user) {
+      console.log(user);
+      ApiCalls.getSubscriptionsByUserId(user).then((res) => {
+        console.log(res);
+        let activeItems: Item[] = res.data.response.map((item: any) => {
+          // TODO check if it's present
+          return {
+            _id: item._id,
+            gymName: item.gymName,
+            courseName: item.courseName,
+            type: item.type,
+            "address": item.address,
+            description: item.description,
+            price: item.price,
+            options: item.options,
+            fgColor: item.fgColor,
+            bgColor: item.bgColor,
+          } as Item;
+        });
+        let pastItems: Item[] = res.data.response.map((item: any) => {
+          // TODO check if it's past
+          return {
+            _id: item._id,
+            gymName: item.gymName,
+            courseName: item.courseName,
+            type: item.type,
+            "address": item.address,
+            description: item.description,
+            price: item.price,
+            options: item.options,
+            fgColor: item.fgColor,
+            bgColor: item.bgColor,
+          } as Item;
+        });
+        setActiveItems(activeItems);
+        setPastItems(pastItems);
+      });
+    }
   }, []);
 
   return (
@@ -74,27 +110,29 @@ const UserSubscriptionsPage: FC = () => {
         );
       }) }
 
-      <Grid container style={{
-        backgroundColor: "#393939",
-        padding: "3em",
-        marginTop: "3em",
-        width: "100%",
-      }}>
-        <Grid item xs={12} style={{ color: "#C2C6CC" }}>
-          <Typography variant="h6" style={{fontWeight: "bold" }}>
-            Expired Subscriptions
-          </Typography>
-          <Typography variant="body1">
-            In memoriam
-          </Typography>
+      { (pastItems.length > 0) ? (
+        <Grid container style={{
+          backgroundColor: "#393939",
+          padding: "3em",
+          marginTop: "3em",
+          width: "100%",
+        }}>
+          <Grid item xs={12} style={{ color: "#C2C6CC" }}>
+            <Typography variant="h6" style={{fontWeight: "bold" }}>
+              Expired Subscriptions
+            </Typography>
+            <Typography variant="body1">
+              In memoriam
+            </Typography>
+          </Grid>
+          { pastItems.map((item) => {
+            return (
+              <SubscriptionEntry id={item._id} item={item} expired={true} />
+            );
+          })}
+            
         </Grid>
-        { pastItems.map((item) => {
-          return (
-            <SubscriptionEntry id={item._id} item={item} expired={true} />
-          );
-        })}
-          
-      </Grid>
+      ) : null }
     </>
   );
 };
