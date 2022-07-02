@@ -86,6 +86,7 @@ const App: FC = () => {
 
             <Route path="/results/gyms/search" element={<ResultsPage />} />
             <Route path="/buy/:id" element={<CheckoutPage />} />
+            <Route path="/buy/:id/confirm/:stripeCallback" element={<CheckoutPage />} />
             <Route
               path="/user/profile"
               element={
