@@ -24,6 +24,7 @@ import NotAuthorizedPage from "./components/NotAuthorizedPage";
 import RoleWrapper from "./components/RoleWrapper";
 import OwnerProfile from "./components/OwnerProfile";
 import Terms from "./components/Terms";
+import CreateGym from "./components/CreateGym";
 
 const THEME = createTheme({
   typography: {
@@ -56,7 +57,7 @@ const App: FC = () => {
           <Routes>
             <Route path="/" element={<FrontPage />} />
             <Route path="/terms" element={<Terms />} />
-            <Route path="/gym/add" element={<>TODO</>} />
+            <Route path="/gym/add" element={<CreateGym/>} />
             <Route path="/gym/:id" element={<GymViewPage />} />
             <Route path="/gym/:id/reviews" element={<>TODO</>} />
             <Route path="/course/:id" element={<CourseViewPage />} />

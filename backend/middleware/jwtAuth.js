@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const validateJwtToken = (req, res, next) => {
-  const token = req.headers["x-access-token"];
+  const token = req.header("x-access-token");
   if (!token) {
     return res
       .status(403)
