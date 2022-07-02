@@ -66,6 +66,14 @@ export default class ApiCalls {
     });
   };
 
+  public static getCoursesByGymId = async (gymId: string) => {
+    return await axios.get(`/gyms/get/${gymId}/courses`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
   public static getAllGymsByCityOrName = async (
     city: string,
     name: string | null

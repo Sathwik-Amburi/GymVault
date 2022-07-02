@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const gymController = require("../../controllers/gymController");
+const courseController = require("../../controllers/courseController");
 const subscriptionController = require("../../controllers/subscriptionController");
 
 router.get("/get-all-gyms", gymController.getAllGyms);
@@ -17,5 +18,6 @@ router.get(
   subscriptionController.getSubscriptionsByUserId
 );
 router.get("/get/:id", gymController.getGym);
+router.get("/get/:id/courses", courseController.getCoursesByGymId);
 
 module.exports = router;

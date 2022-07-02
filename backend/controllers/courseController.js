@@ -22,6 +22,16 @@ const getCourse = async (req, res) => {
   }
 };
 
+const getCoursesByGymId = async (req, res) => {
+  const { id } = req.params;
+  const courses = await courseService.getCoursesByGymId(id);
+  if (courses) {
+    res.status(200).json({ message: `Courses found`, response: courses });
+  } else {
+    res.status(404).json({ message: `Courses not found` });
+  }
+}
+
 const addCourse = async (req, res) => {
   try {
     const course = new courseModel(req.body);
@@ -56,4 +66,4 @@ const filterCourses = async (req, res) => {
   }
 };
 
-module.exports = { getAllCourses, getCourse, addCourse, filterCourses };
+module.exports = { getAllCourses, getCourse, getCoursesByGymId, addCourse, filterCourses };

@@ -19,6 +19,15 @@ class CourseService {
     }
   };
 
+  getCoursesByGymId = async (gymId) => {
+    try {
+      const courses = await courseModel.find({ gymId: gymId });
+      return courses;
+    } catch (error) {
+      console.log("Error while fetching courses by gymId", error.message);
+    }
+  }
+
   addCourse = async (course) => {
     try {
       await course.save();
