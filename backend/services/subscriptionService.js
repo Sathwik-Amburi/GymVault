@@ -17,6 +17,14 @@ class SubscriptionService {
             console.log("Error while fetching subscription", error.message);
         }
     }
+    getSubscriptionsByGymId = async (gymId) => {
+        try {
+            const subscriptions = await subscriptionModel.find({ gymId: gymId });
+            return subscriptions;
+        } catch (error) {
+            console.log("Error while fetching subscriptions", error.message);
+        }
+    }
     addSubscription = async (subscription) => {
         try {
             await subscription.save();
