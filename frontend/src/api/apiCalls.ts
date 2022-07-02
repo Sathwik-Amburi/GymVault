@@ -112,6 +112,14 @@ export default class ApiCalls {
     });
   };
 
+  public static getSubscriptionsByUserId = async (userId: string) => {
+    return await axios.get(`/gyms/subscriptions/by-user/${userId}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
   public static userLogin = async (email: string, password: string) => {
     return await axios.post("/authentication/login", {
       email,

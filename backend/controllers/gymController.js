@@ -88,24 +88,11 @@ const addSubscription = async (req, res) => {
   }
 };
 
-const getSubscriptionsByGymId = async (req, res) => {
-  const { gymId } = req.params;
-  const subscriptions = await gymService.getSubscriptionsByGymId(gymId);
-  if (subscriptions) {
-    res
-      .status(200)
-      .json({ message: `Subscriptions found`, response: subscriptions });
-  } else {
-    res.status(404).json({ message: `Subscriptions` });
-  }
-};
-
 module.exports = {
   getAllGyms,
   getGym,
   addGym,
   filterGyms,
   filterGymsByPriceRange,
-  addSubscription,
-  getSubscriptionsByGymId,
+  addSubscription
 };
