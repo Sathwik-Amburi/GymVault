@@ -12,6 +12,19 @@ const getAllGyms = async (req, res) => {
   }
 };
 
+const getAllAvailableGymCities = async (req, res) => {
+  try {
+    const availableCities = await gymService.getAllAvailableGymCities();
+
+    res.status(200).json(availableCities);
+  } catch (error) {
+    console.log(`Error while fetching all availabe cities`, error.message);
+    res
+      .status(400)
+      .json({ error: "Error while fetching all available cities" });
+  }
+};
+
 const getGym = async (req, res) => {
   const { id } = req.params;
   const gym = await gymService.getGym(id);
@@ -90,9 +103,10 @@ const addSubscription = async (req, res) => {
 
 module.exports = {
   getAllGyms,
+  getAllAvailableGymCities,
   getGym,
   addGym,
   filterGyms,
   filterGymsByPriceRange,
-  addSubscription
+  addSubscription,
 };

@@ -1,7 +1,6 @@
 const gymModel = require("../database/models/gym");
 const Subscription = require("../database/models/subscription");
 
-// TODO: Add remaining service functions
 class GymService {
   getAllGyms = async () => {
     try {
@@ -9,6 +8,18 @@ class GymService {
       return gyms;
     } catch (error) {
       console.log("Error while fetching all gyms in service", error.message);
+    }
+  };
+
+  getAllAvailableGymCities = async () => {
+    try {
+      const availableCities = await gymModel.distinct("city");
+      return availableCities;
+    } catch (error) {
+      console.log(
+        "Error while fetching all available cities in service",
+        error.message
+      );
     }
   };
 

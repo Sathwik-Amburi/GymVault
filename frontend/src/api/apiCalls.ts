@@ -72,13 +72,21 @@ export default class ApiCalls {
         "Content-Type": "application/json",
       },
     });
-  }
+  };
 
   public static getAllGymsByCityOrName = async (
     city: string,
     name: string | null
   ) => {
     return await axios.get(`/gyms/filter?city=${city}&name=${name}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
+  public static getAllAvailableGymCities = async () => {
+    return await axios.get<string[]>("/gyms/cities", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -150,5 +158,5 @@ export default class ApiCalls {
         "Content-Type": "application/json",
       },
     });
-  }
+  };
 }
