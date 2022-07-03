@@ -1,18 +1,32 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { allCities } from "../config/cities";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import ApiCalls from "../api/apiCalls";
+
+interface City {
+  label: string;
+}
 
 export default function SearchType({ type }: any) {
-  let [name, setName] = React.useState<string>("");
-  let [city, setCity] = React.useState<string>("");
-  let [error, setError] = React.useState<string>("");
+  let [name, setName] = useState<string>("");
+  let [city, setCity] = useState<string>("");
+  let [error, setError] = useState<string>("");
+  const [cities, setCities] = useState<City[]>([]);
 
-  const cities = allCities.map((city) => {
-    return { label: city };
-  });
+  useEffect(() => {
+    ApiCalls.getAllAvailableGymCities()
+      .then((res) => {
+        setCities(
+          res.data.map((city) => {
+            return { label: city };
+          })
+        );
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
   let navigate = useNavigate();
 
