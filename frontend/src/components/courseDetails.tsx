@@ -59,7 +59,6 @@ const CourseViewPage: FC = () => {
         })
         .catch((err) => {
           console.log(err);
-          alert("TODO: The review you're seeing does not exist in the database");
         });
   }, []);
 
