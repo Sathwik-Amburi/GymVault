@@ -1,27 +1,26 @@
-import React, { useState } from "react";
-import StarIcon from '@mui/icons-material/Star';
-const StarRating = () => {
-    const [rating, setRating] = useState(0);
-    const [hover, setHover] = useState(0);
-    return (
-        <div className="star-rating">
-            {[...Array(5)].map((star, index) => {
-                index += 1;
-                return (
-                    <button
-                        type="button"
-                        key={index}
-                        className={index <= (hover || rating) ? "on" : "off"}
-                        onClick={() => setRating(index)}
-                        onMouseEnter={() => setHover(index)}
-                        onMouseLeave={() => setHover(rating)}
-                    >
-                        <span className="star"><StarIcon/></span>
-                    </button>
-                );
-            })}
-        </div>
-    );
-};
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Rating from '@mui/material/Rating';
+import Typography from '@mui/material/Typography';
 
-export default StarRating;
+export default function StarRating() {
+    const [value, setValue] = React.useState<number | null>(0);
+
+    return (
+        <Box
+            sx={{
+                '& > legend': { mt: 2 },
+            }}
+        >
+            <Typography component="legend">Rate this Subscription!</Typography>
+            <Rating
+                name="rating"
+                size = "large"
+                value={value}
+                onChange={(event, newValue) => {
+                    setValue(newValue);
+                }}
+            />
+        </Box>
+    );
+}
