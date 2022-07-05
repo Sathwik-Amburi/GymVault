@@ -1,12 +1,12 @@
 
 import { Grid, Paper, Typography } from "@mui/material";
 import { FC, useState } from "react";
-import { Item } from "../../models/allModels";
+import { Item, Subscription } from "../../models/allModels";
 import SecretDisplay from "./SecretDisplay";
 import SubscriptionSummary from "./SubscriptionSummary";
 
 type SsProps = {
-  id: string;
+  subscription: Subscription;
   item: Item;
   expired: boolean;
 };
@@ -30,22 +30,26 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
           <span style={{float: "right"}}>
             <Typography variant="h5">
               <span style={{fontWeight: "800", color: "#999"}}>
-                {props.item.type}
+                {props.subscription.type}
               </span>
             </Typography>
           </span>
-          <Typography variant="h4" style={{fontWeight: "bold" }}>{props.item.gymName}</Typography>
+          <Typography variant="h4" style={{fontWeight: "bold" }}>{props.item.courseName !== "" ? props.item.courseName : props.item.gymName}</Typography>
           <span>{props.item.address}</span>
           <hr />
         </Grid>
 
-        <SubscriptionSummary id={props.item._id} shown={shownSecret} />
+        <SubscriptionSummary item={props.item} subscription={props.subscription} shown={shownSecret} />
         
         { /* Secret display */ }
-        <SecretDisplay id={props.item._id} shown={shownSecret} code="ASDFG-HJKLA" />
+        <SecretDisplay id={`${props.subscription.userId}${props.subscription._id}`} shown={shownSecret} code="ASDFG-HJKLA" />
         <Grid item md={6} xs={12} style={{ paddingLeft: "2em" }}>
-          <Typography variant="h5" style={{fontWeight: "bold" }}>{props.item.courseName}</Typography>
-          <hr />
+          { props.item.courseName !== "" ? (
+            <>
+              <Typography variant="h5" style={{fontWeight: "bold" }}>{props.item.courseName}</Typography>
+              <hr />
+            </>
+          ) : null }
           <Typography variant="body2">{props.item.description}</Typography>
         </Grid>
       </Grid>

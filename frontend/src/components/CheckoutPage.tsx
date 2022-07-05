@@ -78,7 +78,8 @@ const CheckoutPage: FC = () => {
       // Check if confirmation is needed
       if(stripeCallback !== undefined) {
         // TODO: call APIs to check validity of ("confirm") purchase, and redirect if valid
-        ApiCalls.checkPurchase(stripeCallback)
+        let uid = String(localStorage.getItem("token"));
+        ApiCalls.checkOrPurchase("629e3728de4e8b7edbf31c2d", uid, stripeCallback)
           .then((res) => {
             navigate("/user/tickets?highlight=" + id);
           })
@@ -87,7 +88,7 @@ const CheckoutPage: FC = () => {
           }
         );
       }
-  }, []);
+  }, [id, navigate, stripeCallback]);
   
   let [cart, setCart] = useState<CartItem[]>([ {
     name: "Base Ticket",

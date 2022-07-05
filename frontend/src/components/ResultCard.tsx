@@ -73,7 +73,7 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
                 style={{ marginRight: "4px" }}
               />
               <Typography variant="body2" color="ActiveCaption">
-                {subscriptions && subscriptions[0].price} EUR/Month
+                {/* subscriptions && subscriptions[0].price */} EUR/Month
               </Typography>
             </Grid>
           </CardContent>

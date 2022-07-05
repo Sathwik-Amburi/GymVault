@@ -3,95 +3,121 @@ import { FC, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
 
-import { Item } from "../models/allModels";
+import { Course, Item, Subscription } from "../models/allModels";
 import SubscriptionEntry from "./widgets/SubscriptionEntry";
 
 const UserSubscriptionsPage: FC = () => {
   const [urlQuery, setUrlQuery] = useSearchParams();
   const newSubscription = urlQuery.get("highlight") != null;
-  const [activeItems, setActiveItems] = useState<Item[]>([
-    {
+  const [activeItems, setActiveItems] = useState<[Item,Subscription][]>([
+    [
+      {
       _id: "1",
       gymName: "ZHS Hochschulsport",
       courseName: "Yoga for Beginners",
-      type: "course",
-      "address": "Connollystraße 32, Munich",
+      type: "COURSE_TICKET",
+      address: "Connollystraße 32, Munich",
       description: "A basic course variating over Hatha Yoga, and meditation practices. Unlike the more static and strengthening Hatha yoga style, a Vinyasa class is very dynamic.  The physical exercises, the so-called asanas, are not practised individually, but are strung together in flowing movements. The class is very calm and relaxed, and the students are able to focus on the breath and the body.",
       price: -1,
       options: [],
   
       fgColor: "",
       bgColor: "",
-    },
-    {
-      _id: "2",
-      gymName: "ZHS Hochschulsport",
-      courseName: "Yoga for Beginners",
-      type: "course",
-      "address": "Connollystraße 32, Munich",
-      description: "A basic course variating over Hatha Yoga, and meditation practices. Unlike the more static and strengthening Hatha yoga style, a Vinyasa class is very dynamic.  The physical exercises, the so-called asanas, are not practised individually, but are strung together in flowing movements. The class is very calm and relaxed, and the students are able to focus on the breath and the body.",
-      price: -1,
-      options: [],
-  
-      fgColor: "",
-      bgColor: "",
-    },
+      } as Item,
+      {
+        userId: "1",
+        gymId: "1",
+        name: "Yoga for Beginners",
+        type: "COURSE_TICKET",
+        price: -1,
+        options: [],
+        purchaseDate: "2020-01-01",
+        expireDate: "2020-01-01",
+        ticketSecret: "ASDFG-HJKLA",
+        _id: "1",
+
+      } as Subscription
+    ],
+    [
+      {
+        _id: "2",
+        gymName: "ZHS Hochschulsport",
+        courseName: "Yoga for Beginners",
+        type: "COURSE_TICKET",
+        "address": "Connollystraße 32, Munich",
+        description: "A basic course variating over Hatha Yoga, and meditation practices. Unlike the more static and strengthening Hatha yoga style, a Vinyasa class is very dynamic.  The physical exercises, the so-called asanas, are not practised individually, but are strung together in flowing movements. The class is very calm and relaxed, and the students are able to focus on the breath and the body.",
+        price: -1,
+        options: [],
+    
+        fgColor: "",
+        bgColor: "",
+      } as Item,
+      {
+        userId: "1",
+        gymId: "1",
+        name: "Yoga for Beginners",
+        type: "COURSE_TICKET",
+        options: [],
+        price: -1,
+        purchaseDate: "2020-01-01",
+        expireDate: "2020-01-01",
+        ticketSecret: "ASDFG-HJKLA",
+        _id: "2",
+      } as Subscription
+    ]
   ]);
-  const [pastItems, setPastItems] = useState<Item[]>([
-    {
-      _id: "3",
-      gymName: "ZHS Hochschulsport",
-      courseName: "Yoga for Beginners",
-      type: "course",
-      "address": "Connollystraße 32, Munich",
-      description: "A basic course variating over Hatha Yoga, and meditation practices. Unlike the more static and strengthening Hatha yoga style, a Vinyasa class is very dynamic.  The physical exercises, the so-called asanas, are not practised individually, but are strung together in flowing movements. The class is very calm and relaxed, and the students are able to focus on the breath and the body.",
-      price: -1,
-      options: [],
-  
-      fgColor: "",
-      bgColor: "",
-    },
-  ]);
+  const [pastItems, setPastItems] = useState<[Item,Subscription][]>([]);
 
   useEffect(() => {
-    const user = localStorage.getItem("token");
-    if(user) {
-      console.log(user);
-      ApiCalls.getSubscriptionsByUserId(user).then((res) => {
+    const token = localStorage.getItem("token");
+    if(token) {
+      ApiCalls.getSubscriptions(token).then((res) => {
         console.log(res);
-        let activeItems: Item[] = res.data.response.map((item: any) => {
+        let activeItems: [Item,Subscription][] = [];
+        let pastItems: [Item,Subscription][] = [];
+
+        res.data.response.forEach((obj: any) => {
           // TODO check if it's present
-          return {
-            _id: item._id,
-            gymName: item.gymName,
-            courseName: item.courseName,
-            type: item.type,
-            "address": item.address,
-            description: item.description,
-            price: item.price,
-            options: item.options,
-            fgColor: item.fgColor,
-            bgColor: item.bgColor,
+          let item: Item = {
+            _id: obj._id,
+            gymName: obj.gym.name,
+            courseName: (obj.course != null) ? obj.course.name : "",
+            type: obj.type,
+            address: obj.gym.address,
+            description: (obj.course != null) ? obj.course.description : obj.gym.description,
+            price: obj.price,
+            options: obj.options,
+            fgColor: obj.fgColor,
+            bgColor: obj.bgColor,
           } as Item;
+          let subscription: Subscription = {
+            userId: obj.userId,
+            gymId: obj.gym._id,
+            // TODO: where's courseId??
+            name: (obj.course != null) ? obj.course.name : obj.gym.name,
+            type: obj.type,
+            options: obj.options,
+            price: obj.price,
+            purchaseDate: obj.purchaseDate,
+            expireDate: obj.expireDate,
+            ticketSecret: "ASDFG-HJKLA",
+            _id: obj._id,
+          };
+          if(obj.expireDate > new Date()) {
+            activeItems.push([item, subscription]);
+          } else {
+            pastItems.push([item, subscription]);
+          }
         });
-        let pastItems: Item[] = res.data.response.map((item: any) => {
-          // TODO check if it's past
-          return {
-            _id: item._id,
-            gymName: item.gymName,
-            courseName: item.courseName,
-            type: item.type,
-            "address": item.address,
-            description: item.description,
-            price: item.price,
-            options: item.options,
-            fgColor: item.fgColor,
-            bgColor: item.bgColor,
-          } as Item;
-        });
+        
         setActiveItems(activeItems);
         setPastItems(pastItems);
+      }).catch((err) => {
+        alert(err);
+        console.log(err);
       });
+    } else {
+      alert("You are not logged in");
     }
   }, []);
 
@@ -100,7 +126,7 @@ const UserSubscriptionsPage: FC = () => {
       <div style={{
         height: "2em"
       }}></div>
-      { (newSubscription !== null) ? ( <>
+      { newSubscription ? ( <>
         <Typography variant="h6" style={{fontWeight: "bold", color: "#00763D"}}>
         Your booking was successful.
         </Typography>
@@ -119,7 +145,7 @@ const UserSubscriptionsPage: FC = () => {
       { (activeItems.length > 0) ?
         activeItems.map((item) => {
           return (
-            <SubscriptionEntry id={item._id} item={item} expired={false} />
+            <><SubscriptionEntry item={item[0]} subscription={item[1]} expired={false} /></>
           );
         }) : ( <>
           <Typography variant="h6" style={{fontWeight: "bold", textAlign: "center", marginTop: "6em"}}>
@@ -147,9 +173,11 @@ const UserSubscriptionsPage: FC = () => {
               In memoriam
             </Typography>
           </Grid>
-          { pastItems.map((item) => {
+          { pastItems.map((i: [Item, Subscription]) => {
+            let item = i[0];
+            let subscription = i[1];
             return (
-              <SubscriptionEntry id={item._id} item={item} expired={true} />
+              <SubscriptionEntry item={item} subscription={subscription} expired={true}/>
             );
           })}
             
