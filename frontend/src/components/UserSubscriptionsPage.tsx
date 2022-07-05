@@ -4,68 +4,14 @@ import { useSearchParams } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
 
 import { Course, Item, Subscription } from "../models/allModels";
+import ChonkySpinner from "./widgets/ChonkySpinner";
 import SubscriptionEntry from "./widgets/SubscriptionEntry";
 
 const UserSubscriptionsPage: FC = () => {
-  const [urlQuery, setUrlQuery] = useSearchParams();
+  const [urlQuery, _] = useSearchParams();
   const newSubscription = urlQuery.get("highlight") != null;
-  const [activeItems, setActiveItems] = useState<[Item,Subscription][]>([
-    [
-      {
-      _id: "1",
-      gymName: "ZHS Hochschulsport",
-      courseName: "Yoga for Beginners",
-      type: "COURSE_TICKET",
-      address: "Connollystraße 32, Munich",
-      description: "A basic course variating over Hatha Yoga, and meditation practices. Unlike the more static and strengthening Hatha yoga style, a Vinyasa class is very dynamic.  The physical exercises, the so-called asanas, are not practised individually, but are strung together in flowing movements. The class is very calm and relaxed, and the students are able to focus on the breath and the body.",
-      price: -1,
-      options: [],
-  
-      fgColor: "",
-      bgColor: "",
-      } as Item,
-      {
-        userId: "1",
-        gymId: "1",
-        name: "Yoga for Beginners",
-        type: "COURSE_TICKET",
-        price: -1,
-        options: [],
-        purchaseDate: "2020-01-01",
-        expireDate: "2020-01-01",
-        ticketSecret: "ASDFG-HJKLA",
-        _id: "1",
-
-      } as Subscription
-    ],
-    [
-      {
-        _id: "2",
-        gymName: "ZHS Hochschulsport",
-        courseName: "Yoga for Beginners",
-        type: "COURSE_TICKET",
-        "address": "Connollystraße 32, Munich",
-        description: "A basic course variating over Hatha Yoga, and meditation practices. Unlike the more static and strengthening Hatha yoga style, a Vinyasa class is very dynamic.  The physical exercises, the so-called asanas, are not practised individually, but are strung together in flowing movements. The class is very calm and relaxed, and the students are able to focus on the breath and the body.",
-        price: -1,
-        options: [],
-    
-        fgColor: "",
-        bgColor: "",
-      } as Item,
-      {
-        userId: "1",
-        gymId: "1",
-        name: "Yoga for Beginners",
-        type: "COURSE_TICKET",
-        options: [],
-        price: -1,
-        purchaseDate: "2020-01-01",
-        expireDate: "2020-01-01",
-        ticketSecret: "ASDFG-HJKLA",
-        _id: "2",
-      } as Subscription
-    ]
-  ]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [activeItems, setActiveItems] = useState<[Item,Subscription][]>([]);
   const [pastItems, setPastItems] = useState<[Item,Subscription][]>([]);
 
   useEffect(() => {
@@ -112,6 +58,7 @@ const UserSubscriptionsPage: FC = () => {
         
         setActiveItems(activeItems);
         setPastItems(pastItems);
+        setLoading(false);
       }).catch((err) => {
         alert(err);
         console.log(err);
@@ -142,47 +89,51 @@ const UserSubscriptionsPage: FC = () => {
         </Typography>
       </>)}
 
-      { (activeItems.length > 0) ?
-        activeItems.map((item) => {
-          return (
-            <><SubscriptionEntry item={item[0]} subscription={item[1]} expired={false} /></>
-          );
-        }) : ( <>
-          <Typography variant="h6" style={{fontWeight: "bold", textAlign: "center", marginTop: "6em"}}>
-          No active subscriptions. 
-            <Button variant="outlined" color="primary" style={{marginLeft: "1em"}} href="/">
-              Get one?
-            </Button>
-          </Typography>
-        </> )
-      }
-        
 
-      { (pastItems.length > 0) ? (
-        <Grid container style={{
-          backgroundColor: "#393939",
-          padding: "3em",
-          marginTop: "3em",
-          width: "100%",
-        }}>
-          <Grid item xs={12} style={{ color: "#C2C6CC" }}>
-            <Typography variant="h6" style={{fontWeight: "bold" }}>
-              Expired Subscriptions
-            </Typography>
-            <Typography variant="body1">
-              In memoriam
-            </Typography>
-          </Grid>
-          { pastItems.map((i: [Item, Subscription]) => {
-            let item = i[0];
-            let subscription = i[1];
+      <ChonkySpinner loading={loading}>
+
+        { (activeItems.length > 0) ?
+          activeItems.map((item) => {
             return (
-              <SubscriptionEntry item={item} subscription={subscription} expired={true}/>
+              <><SubscriptionEntry item={item[0]} subscription={item[1]} expired={false} /></>
             );
-          })}
-            
-        </Grid>
-      ) : null }
+          }) : ( <>
+            <Typography variant="h6" style={{fontWeight: "bold", textAlign: "center", marginTop: "6em"}}>
+            No active subscriptions. 
+              <Button variant="outlined" color="primary" style={{marginLeft: "1em"}} href="/">
+                Get one?
+              </Button>
+            </Typography>
+          </> )
+        }
+          
+
+        { (pastItems.length > 0) ? (
+          <Grid container style={{
+            backgroundColor: "#393939",
+            padding: "3em",
+            marginTop: "3em",
+            width: "100%",
+          }}>
+            <Grid item xs={12} style={{ color: "#C2C6CC" }}>
+              <Typography variant="h6" style={{fontWeight: "bold" }}>
+                Expired Subscriptions
+              </Typography>
+              <Typography variant="body1">
+                In memoriam
+              </Typography>
+            </Grid>
+            { pastItems.map((i: [Item, Subscription]) => {
+              let item = i[0];
+              let subscription = i[1];
+              return (
+                <SubscriptionEntry item={item} subscription={subscription} expired={true}/>
+              );
+            })}
+              
+          </Grid>
+        ) : null }
+      </ChonkySpinner>
     </>
   );
 };
