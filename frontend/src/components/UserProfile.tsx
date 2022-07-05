@@ -30,6 +30,7 @@ const UserProfile: FC = () => {
           email = {profile?.email}
           phNo = {profile?.phoneNumber}
       />
+      <h1>My Subscriptions</h1>
         <TicketCard
             type = "course"
             gymName = "The Olympian Gym"
