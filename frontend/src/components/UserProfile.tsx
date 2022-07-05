@@ -3,6 +3,7 @@ import ApiCalls from "../api/apiCalls";
 import { UserProfileDetails } from "../models/allModels";
 import UserCard from "./widgets/userCard/UserCard"
 import TicketCard from "./widgets/ticketCard/TicketCard";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 const UserProfile: FC = () => {
   const [profile, setProfile] = useState<UserProfileDetails>();
   const token = localStorage.getItem("token");
@@ -12,9 +13,7 @@ const UserProfile: FC = () => {
       .then((res) => {
         setProfile(res.data);
       })
-      .catch((err) => {
-        console.log(err.message);
-      });
+      .catch((err) => UnifiedErrorHandler.handle(err, "TODO: The user you're seeing does not exist in the database"));
   }, []);
 
   return (

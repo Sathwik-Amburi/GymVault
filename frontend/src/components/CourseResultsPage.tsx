@@ -19,6 +19,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import apiCalls from "../api/apiCalls";
 import CourseResultCard from "./CourseResultCard";
 import ChonkySpinner from "./widgets/ChonkySpinner";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const CourseResultsPage: FC = () => {
   const queries = new URLSearchParams(window.location.search);
@@ -37,10 +38,7 @@ const CourseResultsPage: FC = () => {
         .then((res) => {
           setResults(res.data.response);
           setLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get courses"));
     }
   }, []);
 
@@ -66,8 +64,7 @@ const CourseResultsPage: FC = () => {
           ]);
         }
         setLoading(false);
-      })
-      .catch((err) => console.log(err.message));
+      }).catch((err) => UnifiedErrorHandler.handle(err, "Filtering error"));
     setOpenModal(false);
   };
 
@@ -81,8 +78,7 @@ const CourseResultsPage: FC = () => {
     );
     setActiveFilters(updatedActiveFilters);
     ApiCalls.getAllGyms()
-      .then((res) => setResults(res.data))
-      .catch((err) => console.log(err.message));
+      .then((res) => setResults(res.data)).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get all gyms"));
   };
 
   return (

@@ -18,6 +18,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import image from "../images/progym.jpg";
 import RecentReviews from "./widgets/RecentReviews";
 import ChonkySpinner from "./widgets/ChonkySpinner";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const GymViewPage: FC = () => {
   const navigate = useNavigate();
@@ -42,19 +43,13 @@ const GymViewPage: FC = () => {
         setGym(res.data.response);
         setLoading(false);
       })
-      .catch((err) => {
-        console.log(err);
-        alert("TODO: The gym you're seeing does not exist in the database");
-      });
+      .catch((err) => UnifiedErrorHandler.handle(err, "TODO: The gym you're seeing does not exist in the database"));
 
     ApiCalls.getReviewsById(fid)
       .then((res) => {
         setReviews(res.data.response);
       })
-      .catch((err) => {
-        console.log(err);
-        alert("TODO: The review you're seeing does not exist in the database");
-      });
+      .catch((err) => UnifiedErrorHandler.handle(err, "TODO: The review you're seeing does not exist in the database"));
 
     // TODO fix!
     ApiCalls.getCoursesByGymId(fid)
@@ -62,10 +57,7 @@ const GymViewPage: FC = () => {
         console.log(res.data);
         setCourses(res.data.response);
       }
-      ).catch((err) => {
-        console.log(err);
-        alert("TODO: The course you're seeing does not exist in the database");
-      });
+      ).catch((err) => UnifiedErrorHandler.handle(err, "TODO: The course you're seeing does not exist in the database"));
 
   }, [id]);
 

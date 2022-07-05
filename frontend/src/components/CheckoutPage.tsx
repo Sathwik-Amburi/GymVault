@@ -7,6 +7,7 @@ import PurchaseCart, { CartItem } from "./widgets/PurchaseCart";
 import ApiCalls from "../api/apiCalls";
 import { useNavigate, useParams } from "react-router-dom";
 import ChonkySpinner from "./widgets/ChonkySpinner";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const CheckoutPage: FC = () => {
   const { id, stripeCallback } = useParams<{ id: string, stripeCallback: string }>();
@@ -71,17 +72,13 @@ const CheckoutPage: FC = () => {
         setGym(res.data.response.gym);
         setCourse(res.data.response);
         setLoading(false);
-      })
-      .catch((err) => {
+      }).catch((err) => {
         ApiCalls.getGym(id!)
           .then((res) => {
             setGym(res.data.response);
             setLoading(false);
-          })
-          .catch((err) => {
-            alert("TODO: Neither a gym nor a course with this ID exists");
+          }).catch((err) => UnifiedErrorHandler.handle(err, "TODO: Neither a gym nor a course with this ID exists"));
             // navigate to 404?
-          });
       });
       
       // /confirm route taken
@@ -91,11 +88,7 @@ const CheckoutPage: FC = () => {
         ApiCalls.checkOrPurchase(id!, uid, stripeCallback)
           .then((res) => {
             navigate("/user/tickets?highlight=" + id);
-          })
-          .catch((err) => {
-            alert("TODO (display): Error checking purchase");
-          }
-        );
+          }).catch((err) => UnifiedErrorHandler.handle(err, "TODO (display): Error checking purchase"));
       }
   }, [id, navigate, stripeCallback]);
   

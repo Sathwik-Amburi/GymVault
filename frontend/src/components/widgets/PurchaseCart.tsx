@@ -23,9 +23,7 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
   const [selectedOption, setSelectedOption] = useState<string[]>([]);
 
   useEffect(() => {
-    /*TODOApiCalls.getAllGyms()
-      .then((res) => setResults(res.data))
-      .catch((err) => console.log(err.message));
+    /*TODO
       */
   }, []);
   let defaultBg = "#999";

@@ -15,6 +15,7 @@ import Lightbox from "./widgets/Lightbox";
 import image from "../images/progym.jpg";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import ChonkySpinner from "./widgets/ChonkySpinner";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const CourseViewPage: FC = () => {
   const navigate = useNavigate();
@@ -46,20 +47,13 @@ const CourseViewPage: FC = () => {
       .then((res) => {
         setCourse(res.data.response);
         setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("TODO: The course you're seeing does not exist in the database");
-      });
+      }).catch((err) => UnifiedErrorHandler.handle(err, "TODO: The course you're seeing does not exist in the database"));
 
     ApiCalls.getReviewsById(fid)
         .then((res) => {
           console.log(res.data);
           setReviews(res.data.response);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        }).catch((err) => UnifiedErrorHandler.handle(err, "The review does not exist in the database"));
   }, [id]);
 
   const handleBuySubscriptionClick = () => {

@@ -6,6 +6,7 @@ import ApiCalls from "../api/apiCalls";
 import { Course, Item, Subscription } from "../models/allModels";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import SubscriptionEntry from "./widgets/SubscriptionEntry";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const UserSubscriptionsPage: FC = () => {
   const [urlQuery, _] = useSearchParams();
@@ -59,10 +60,7 @@ const UserSubscriptionsPage: FC = () => {
         setActiveItems(activeItems);
         setPastItems(pastItems);
         setLoading(false);
-      }).catch((err) => {
-        alert(err);
-        console.log(err);
-      });
+      }).catch((err) => UnifiedErrorHandler.handle(err, "TODO: The subscription you're seeing does not exist in the database"));
     } else {
       alert("You are not logged in");
     }

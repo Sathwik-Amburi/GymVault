@@ -19,6 +19,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import apiCalls from "../api/apiCalls";
 import ChonkySpinner from "./widgets/ChonkySpinner";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const ResultsPage: FC = () => {
   const queries = new URLSearchParams(window.location.search);
@@ -37,10 +38,7 @@ const ResultsPage: FC = () => {
         .then((res) => {
           setResults(res.data.response);
           setLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms"));
     }
   }, []);
 
@@ -66,8 +64,7 @@ const ResultsPage: FC = () => {
           ]);
         }
         setLoading(false);
-      })
-      .catch((err) => console.log(err.message));
+      }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms by price range"));
     setOpenModal(false);
   };
 
@@ -82,7 +79,7 @@ const ResultsPage: FC = () => {
     setActiveFilters(updatedActiveFilters);
     ApiCalls.getAllGyms()
       .then((res) => setResults(res.data))
-      .catch((err) => console.log(err.message));
+      .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get updated gyms"));
   };
 
   return (

@@ -5,6 +5,7 @@ import { allCities } from "../config/cities";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 interface City {
   label: string;
@@ -24,8 +25,7 @@ export default function SearchType({ type }: any) {
             return { label: city };
           })
         );
-      })
-      .catch((error) => console.log(error));
+      }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gym cities"));
   }, []);
 
   let navigate = useNavigate();
