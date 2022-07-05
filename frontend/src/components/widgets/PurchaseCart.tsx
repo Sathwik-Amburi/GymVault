@@ -12,6 +12,7 @@ export interface CartItem {
 };
 
 interface CartProps {
+  baseId: string,
   cart: CartItem[],
   setCart: (cart: CartItem[]) => void,
   allowCheckout: boolean,
@@ -67,7 +68,7 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
                   <Button variant="contained" color="success" onClick={() => {
                     alert('stripe!');
                   }}
-                  href={`/buy/${props.cart.map(item => item._id).join(",")}/confirm/SOME_STRIPE_ID`}>
+                  href={`/buy/${props.baseId}/confirm/SOME_STRIPE_ID`}>
                     Secure Checkout
                   </Button>
                 </div>

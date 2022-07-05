@@ -73,7 +73,7 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
               </td>
               <td style={{textAlign: "right"}}>
                 <Typography variant="h6" style={{ fontWeight: "bold" }}>
-                  €150
+                  €{props.subscription.price}
                 </Typography> 
               </td>
             </tr>

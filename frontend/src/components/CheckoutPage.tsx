@@ -9,6 +9,9 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const CheckoutPage: FC = () => {
   const { id, stripeCallback } = useParams<{ id: string, stripeCallback: string }>();
+  if (!id) {
+    alert("No ID provided! This should NOT happen");
+  }
   const editable = (stripeCallback === undefined);
   const navigate = useNavigate();
 
@@ -75,16 +78,16 @@ const CheckoutPage: FC = () => {
           });
       });
       
-      // Check if confirmation is needed
+      // /confirm route taken
       if(stripeCallback !== undefined) {
         // TODO: call APIs to check validity of ("confirm") purchase, and redirect if valid
         let uid = String(localStorage.getItem("token"));
-        ApiCalls.checkOrPurchase("629e3728de4e8b7edbf31c2d", uid, stripeCallback)
+        ApiCalls.checkOrPurchase(id!, uid, stripeCallback)
           .then((res) => {
             navigate("/user/tickets?highlight=" + id);
           })
           .catch((err) => {
-            alert("TODO: Error checking purchase");
+            alert("TODO (display): Error checking purchase");
           }
         );
       }
@@ -186,7 +189,7 @@ const CheckoutPage: FC = () => {
           Order Summary
         </Typography>
         <hr className="mini-hr" />
-        <PurchaseCart cart={cart} setCart={setCart} allowCheckout={editable} />
+        <PurchaseCart baseId={id! } cart={cart} setCart={setCart} allowCheckout={editable} />
       </Grid>
     </Grid>
   );

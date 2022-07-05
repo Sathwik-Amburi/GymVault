@@ -76,10 +76,13 @@ class SubscriptionService {
             
             if(entity != null && uid != null) {
                 let type = "DAY_PASS"; // TODO infer from request, entity
+                let purchaseDate = new Date();
+                let expirationDate = new Date();
+                expirationDate.setDate(purchaseDate.getDate() + 1);
                 const offset = 
-                    (type == "DAY_PASS") ? 1 :
+                    (type == "DAY_PASS")   ? 1 :
                     (type == "MONTH_PASS") ? 30 :
-                    (type == "YEAR_PASS") ? 365 :
+                    (type == "YEAR_PASS")  ? 365 :
                     0; // TODO: not 0 but course duration
                 const subscription = new subscriptionModel({
                     gymId: ("gymId" in entity) ? entity.gymId : entity._id,
@@ -88,8 +91,8 @@ class SubscriptionService {
                     type: type,
                     price: 1234,
                     options: [],
-                    purchaseDate: new Date(),
-                    expireDate: new Date() + offset * 24 * 60 * 60 * 1000,
+                    purchaseDate: purchaseDate,
+                    expireDate: expirationDate,
                     ticketSecret: "TODO",
                     courseId: (typeof entity === "Course") ? courseOrGymId : null,
                     userId: uid
