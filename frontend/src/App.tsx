@@ -3,7 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import FrontPage from "./components/FrontPage";
 import Navbar from "./components/widgets/Navbar";
 import GymViewPage from "./components/GymDetails";
-import CourseViewPage from "./components/courseDetails";
+import CourseViewPage from "./components/CourseDetails";
 import { Container } from "@mui/system";
 import ResultsPage from "./components/ResultsPage";
 import CheckoutPage from "./components/CheckoutPage";

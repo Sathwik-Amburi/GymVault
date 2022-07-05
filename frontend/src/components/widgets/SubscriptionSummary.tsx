@@ -61,7 +61,7 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
         <div>
           <table style={{border: "none", width: "100%"}}>
             <tr>
-              <td>                  
+              <td>            
                 <Typography variant="body1">
                   From
                 </Typography>

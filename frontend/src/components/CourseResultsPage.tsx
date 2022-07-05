@@ -65,9 +65,9 @@ const CourseResultsPage: FC = () => {
             },
           ]);
         }
+        setLoading(false);
       })
       .catch((err) => console.log(err.message));
-    setLoading(false);
     setOpenModal(false);
   };
 

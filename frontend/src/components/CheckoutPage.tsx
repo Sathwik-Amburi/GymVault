@@ -6,6 +6,7 @@ import PurchaseGrid from "./widgets/PurchaseGrid";
 import PurchaseCart, { CartItem } from "./widgets/PurchaseCart";
 import ApiCalls from "../api/apiCalls";
 import { useNavigate, useParams } from "react-router-dom";
+import ChonkySpinner from "./widgets/ChonkySpinner";
 
 const CheckoutPage: FC = () => {
   const { id, stripeCallback } = useParams<{ id: string, stripeCallback: string }>();
@@ -14,6 +15,7 @@ const CheckoutPage: FC = () => {
   }
   const editable = (stripeCallback === undefined);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(true);
 
   function setGym(gym: Gym) {
     let item = {
@@ -32,9 +34,9 @@ const CheckoutPage: FC = () => {
     setItem(item);
   }
   function setCourse(course: Course) {
-    let item = {
+    let newItem = {
       _id: course._id,
-      gymName: "ZHS Hochschulsport",
+      gymName: item.gymName,
       courseName: course.name,
       type: "course",
       address: course.address, // TODO: shouldn't this be "course.gym.address"???
@@ -45,7 +47,7 @@ const CheckoutPage: FC = () => {
       fgColor: "",
       bgColor: "",
     } as Item;
-    setItem(item);
+    setItem(newItem);
   }
 
   const [item, setItem] = useState<Item>({
@@ -65,12 +67,16 @@ const CheckoutPage: FC = () => {
   useEffect(() => {
     ApiCalls.getCourse(id!)
       .then((res) => {
+        console.log(res);
+        setGym(res.data.response.gym);
         setCourse(res.data.response);
+        setLoading(false);
       })
       .catch((err) => {
         ApiCalls.getGym(id!)
           .then((res) => {
             setGym(res.data.response);
+            setLoading(false);
           })
           .catch((err) => {
             alert("TODO: Neither a gym nor a course with this ID exists");
@@ -149,49 +155,51 @@ const CheckoutPage: FC = () => {
   ];
 
   return (
-    <Grid container spacing={3} style={{
-      padding: "3em",
-      borderRadius: "20px",
-      backgroundColor: "#eee",
-      marginTop: "3em"
-    }}>
-      <Grid item xs={12}>
-        <span style={{float: "right"}}>
-          <Typography variant="h5">
-            <span style={{fontWeight: "800", color: "#999"}}>
-              {item.type}
-            </span>
-          </Typography>
-        </span>
-        <Typography variant="h3" style={{fontWeight: "bold" }}>{item.gymName}</Typography>
-        <span>{item.address}</span>
-        <hr />
-      </Grid>
+    <ChonkySpinner loading={loading}>
+      <Grid container spacing={3} style={{
+        padding: "3em",
+        borderRadius: "20px",
+        backgroundColor: "#eee",
+        marginTop: "3em"
+      }}>
+        <Grid item xs={12}>
+          <span style={{float: "right"}}>
+            <Typography variant="h5">
+              <span style={{fontWeight: "800", color: "#999"}}>
+                {item.type}
+              </span>
+            </Typography>
+          </span>
+          <Typography variant="h3" style={{fontWeight: "bold" }}>{item.gymName}</Typography>
+          <span>{item.address}</span>
+          <hr />
+        </Grid>
 
-      <Grid item md={6} xs={12}>
-        <PurchaseGrid 
-          bases={items} 
-          optionals={optionals} 
-          cart={cart} 
-          setCart={setCart} 
-          editable={editable}
-        />
+        <Grid item md={6} xs={12}>
+          <PurchaseGrid 
+            bases={items} 
+            optionals={optionals} 
+            cart={cart} 
+            setCart={setCart} 
+            editable={editable}
+          />
+        </Grid>
+        <Grid item md={6} xs={12}>
+          <Typography variant="h4" style={{fontWeight: "bold" }}>{item.courseName}</Typography>
+          <hr />
+          <Typography variant="body1">{item.description}</Typography>
+          <br /><br /><br />
+          <Typography
+            variant="h6"
+            style={{fontWeight: "bold" }}
+          >
+            Order Summary
+          </Typography>
+          <hr className="mini-hr" />
+          <PurchaseCart baseId={id! } cart={cart} setCart={setCart} allowCheckout={editable} />
+        </Grid>
       </Grid>
-      <Grid item md={6} xs={12}>
-        <Typography variant="h4" style={{fontWeight: "bold" }}>{item.courseName}</Typography>
-        <hr />
-        <Typography variant="body1">{item.description}</Typography>
-        <br /><br /><br />
-        <Typography
-          variant="h6"
-          style={{fontWeight: "bold" }}
-        >
-          Order Summary
-        </Typography>
-        <hr className="mini-hr" />
-        <PurchaseCart baseId={id! } cart={cart} setCart={setCart} allowCheckout={editable} />
-      </Grid>
-    </Grid>
+    </ChonkySpinner>
   );
 };
 

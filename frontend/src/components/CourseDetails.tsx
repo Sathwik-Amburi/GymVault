@@ -14,26 +14,28 @@ import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
 import image from "../images/progym.jpg";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import ChonkySpinner from "./widgets/ChonkySpinner";
 
 const CourseViewPage: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [loading, setLoading] = useState<boolean>(true);
   const [reviews, setReviews] = useState<any[]>([]);
   const [reviewSort, setReviewSort] = useState("newest");
   let Gym = {
     name: "",
     phoneNumber: "",
     _id: "0",
-    city: "Berlin",
+    city: "",
     address: "",
     description: "",
     amenities: [],
   };
   const [course, setCourse] = useState<Course>({
-    name: "Yoga Course",
+    name: "",
     gym: Gym,
     description: "",
-    phoneNumber: 1760000000,
+    phoneNumber: 0,
     address: "",
     _id: "0",
   });
@@ -43,6 +45,7 @@ const CourseViewPage: FC = () => {
     ApiCalls.getCourse(fid)
       .then((res) => {
         setCourse(res.data.response);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -68,7 +71,7 @@ const CourseViewPage: FC = () => {
   //   ...reviewsbyId
   // ];
   return (
-    <>
+    <ChonkySpinner loading={loading}>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
           <Lightbox
@@ -173,7 +176,7 @@ const CourseViewPage: FC = () => {
           })}
         </Grid>
       </Grid>
-    </>
+    </ChonkySpinner>
   );
 };
 
