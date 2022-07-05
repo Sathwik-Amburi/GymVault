@@ -14,10 +14,6 @@ router.get(
   "/subscriptions/get-subscriptions/:gymId",
   subscriptionController.getSubscriptionsByGymId
 );
-router.get(
-  "/subscriptions/by-user/:userId",
-  subscriptionController.getSubscriptionsByUserId
-);
 router.get("/get/:id", gymController.getGym);
 router.get("/get/:id/courses", courseController.getCoursesByGymId);
 
