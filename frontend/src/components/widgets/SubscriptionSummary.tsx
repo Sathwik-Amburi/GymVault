@@ -2,8 +2,6 @@
 import { Grid, Paper, Typography } from "@mui/material";
 import React, { FC, useState } from "react";
 import { Item, Subscription } from "../../models/allModels";
-import StarRating from "./reviewComponent/StarRating";
-import ReviewButton from "./reviewComponent/ReviewButton";
 
 type SsProps = {
   shown: boolean;
