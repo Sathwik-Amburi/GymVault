@@ -14,16 +14,18 @@ const ReviewSchema = new mongoose.Schema({
     gymId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Gym",
-        required: true,
+        default: null
+        // required: true,
     },
     courseId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "Course",
+        default: null
     },
     rating: {
         type: Number,
         // validation for the rating
-        required: true
+        required: true,
     },
     title: {
         type: String,

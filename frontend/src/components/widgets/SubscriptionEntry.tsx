@@ -1,14 +1,16 @@
 
 import { Grid, Paper, Typography } from "@mui/material";
-import { FC, useState } from "react";
-import { Item, Subscription } from "../../models/allModels";
+import React, { FC, useState } from "react";
+import { Item, Subscription,UserProfileDetails } from "../../models/allModels";
 import SecretDisplay from "./SecretDisplay";
 import SubscriptionSummary from "./SubscriptionSummary";
+import ReviewButton from "./reviewComponent/ReviewButton";
 
 type SsProps = {
   subscription: Subscription;
   item: Item;
   expired: boolean;
+  user: any;
 };
 
 const SubscriptionEntry: FC<SsProps> = (props) => {
@@ -57,6 +59,7 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
             </>
           ) : null }
           <Typography variant="body2">{props.item.description}</Typography>
+            <ReviewButton userId = {props.subscription.userId} gymId = {props.subscription.gymId} username = {props.user.firstName} />
         </Grid>
       </Grid>
   );

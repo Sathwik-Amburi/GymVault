@@ -1,6 +1,6 @@
 
 import { Grid, Paper, Typography } from "@mui/material";
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
 import { Item, Subscription } from "../../models/allModels";
 
 type SsProps = {

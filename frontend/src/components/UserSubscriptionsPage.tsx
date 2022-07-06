@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
 
-import { Course, Item, Subscription } from "../models/allModels";
+import {Course, Item, Subscription, UserProfileDetails} from "../models/allModels";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import SubscriptionEntry from "./widgets/SubscriptionEntry";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
@@ -14,9 +14,19 @@ const UserSubscriptionsPage: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [activeItems, setActiveItems] = useState<[Item,Subscription][]>([]);
   const [pastItems, setPastItems] = useState<[Item,Subscription][]>([]);
+  const [user, setProfile] = useState<UserProfileDetails>();
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    ApiCalls.getUserProfile(token)
+        .then((res) => {
+          setProfile(res.data);
+        })
+        .catch((err) => UnifiedErrorHandler.handle(err, "TODO: The user you're seeing does not exist in the database"));
+  }, []);
+
+
+  useEffect(() => {
     if(token) {
       ApiCalls.getSubscriptions(token).then((res) => {
         console.log(res);
@@ -94,7 +104,7 @@ const UserSubscriptionsPage: FC = () => {
           { (activeItems.length > 0) ?
             activeItems.map((item) => {
               return (
-                <><SubscriptionEntry item={item[0]} subscription={item[1]} expired={false} /></>
+                <><SubscriptionEntry item={item[0]} subscription={item[1]} expired={false} user={user}  /></>
               );
             }) : ( <>
               <Container maxWidth="lg" style={{ padding: "5em", textAlign: "center" }}>
@@ -133,7 +143,7 @@ const UserSubscriptionsPage: FC = () => {
                 let item = i[0];
                 let subscription = i[1];
                 return (
-                  <SubscriptionEntry item={item} subscription={subscription} expired={true}/>
+                  <SubscriptionEntry item={item} subscription={subscription} expired={true} user={user}/>
                 );
               })}
                 

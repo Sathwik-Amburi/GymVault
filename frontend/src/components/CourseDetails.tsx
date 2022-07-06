@@ -17,6 +17,8 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
+const moment = require("moment");
+
 const CourseViewPage: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -175,17 +177,17 @@ const CourseViewPage: FC = () => {
           Most Critical
         </Button>
       </Box>
-      <Grid container spacing={3}>
-        <Grid item md={3} xs={12}>
+      <Grid>
+        <Grid>
           {reviews.map((review) => {
             return (
                 <Paper style={{ padding: "1em" }} elevation={3}>
                   <CardHeader
                       avatar={<Avatar src="todo" />}
                       title={review.username}
-                      subheader={review.dateAdded}
+                      subheader={moment(review.dateAdded).format("MMM Do YYYY")}
                   />
-                  <div style={{ textAlign: "center" }}>
+                  <div>
                     <StarWidget rating={review.rating} />
                   </div>
                   <p><b>{review.title}</b></p>
