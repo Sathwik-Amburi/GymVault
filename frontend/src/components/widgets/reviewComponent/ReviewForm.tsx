@@ -8,7 +8,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ApiCalls from "../../../api/apiCalls";
 import {useNavigate} from "react-router";
-
+import Alert from '@mui/material/Alert';
 const theme = createTheme();
 
 export default function ReviewForm(props:any) {
@@ -28,6 +28,8 @@ export default function ReviewForm(props:any) {
             data.get("title"),
             data.get("description")
         )
+        alert("Review added successfully!")
+
     };
 
     return (
