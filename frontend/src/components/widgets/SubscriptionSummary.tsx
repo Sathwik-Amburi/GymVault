@@ -7,6 +7,7 @@ type SsProps = {
   shown: boolean;
   item: Item;
   subscription: Subscription;
+  expired: boolean;
 };
 
 const SubscriptionSummary: FC<SsProps> = (props) => {
@@ -60,40 +61,42 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
         { /* ....... */ }
         <div>
           <table style={{border: "none", width: "100%"}}>
-            <tr>
-              <td>            
-                <Typography variant="body1">
-                  {props.subscription.expireDate!.toString() > new Date().toString() ? "From " : "Purchased on "}
-                </Typography>
-              </td>
-              <td>
-                <Typography variant="h6">
-                  { new Date(props.subscription.purchaseDate!).toLocaleDateString() }
-                </Typography>
-              </td>
-              <td style={{textAlign: "right"}}>
-                <Typography variant="h6" style={{ fontWeight: "bold" }}>
-                  €{props.subscription.price}
-                </Typography> 
-              </td>
-            </tr>
-            <tr>
-              <td>                  
-                <Typography variant="body1">
-                  {props.subscription.expireDate!.toString() > new Date().toString() ? "To " : "Expired on "}
-                </Typography>
-              </td>
-              <td>
-                <Typography variant="h6">
-                  { new Date(props.subscription.expireDate!).toLocaleDateString() }
-                </Typography>
-              </td>
-              <td style={{textAlign: "right"}}>
-                <Typography variant="body1">
-                  Total paid
-                </Typography>
-              </td>
-            </tr>
+            <tbody>
+              <tr>
+                <td>            
+                  <Typography variant="body1">
+                    { !props.expired ? "From " : "Purchased on "}
+                  </Typography>
+                </td>
+                <td>
+                  <Typography variant="h6">
+                    { new Date(props.subscription.purchaseDate!).toLocaleDateString() }
+                  </Typography>
+                </td>
+                <td style={{textAlign: "right"}}>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>
+                    €{props.subscription.price}
+                  </Typography> 
+                </td>
+              </tr>
+              <tr>
+                <td>                  
+                  <Typography variant="body1">
+                    { !props.expired ? "To " : "Expired on "}
+                  </Typography>
+                </td>
+                <td>
+                  <Typography variant="h6">
+                    { new Date(props.subscription.expireDate!).toLocaleDateString() }
+                  </Typography>
+                </td>
+                <td style={{textAlign: "right"}}>
+                  <Typography variant="body1">
+                    Total paid
+                  </Typography>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </Grid>

@@ -104,18 +104,26 @@ const CheckoutPage: FC = () => {
   let items: PurchaseOption[] = [
     {
       _id: "1",
-      name: "Base Ticket",
-      description: "Includes registration, max. 4 entrances/week",
+      name: "Daily Entrance",
+      description: "Fixed duration, base-tier ticket",
       price: 28,
-      bgColor: "#555",
+      bgColor: "#030",
       fgColor: "#fff"
     } as PurchaseOption,
     {
       _id: "2",
-      name: "VIP Ticket 👑️",
-      description: "24h entry (auto scan), premium equipment",
-      price: 99,
-      bgColor: "#CD9400",
+      name: "Monthly Ticket",
+      description: "Fixed duration, base-tier ticket",
+      price: 28,
+      bgColor: "#060",
+      fgColor: "#fff"
+    } as PurchaseOption,
+    {
+      _id: "3",
+      name: "Yearly Subscription",
+      description: "Fixed duration, base-tier ticket",
+      price: 28,
+      bgColor: "#090",
       fgColor: "#fff"
     } as PurchaseOption,
   ];
@@ -127,6 +135,14 @@ const CheckoutPage: FC = () => {
       description: "Rent mat and accessories during course sessions",
       price: 16,
       bgColor: "#555",
+      fgColor: "#fff"
+    } as PurchaseOption,
+    {
+      _id: "4",
+      name: "VIP Subscription 👑️",
+      description: "24h entry (auto scan), premium equipment",
+      price: 99,
+      bgColor: "#CD9400",
       fgColor: "#fff"
     } as PurchaseOption,
     {
@@ -144,7 +160,7 @@ const CheckoutPage: FC = () => {
       price: 0,
       bgColor: "#fff",
       fgColor: "#57f"
-    } as PurchaseOption
+    } as PurchaseOption,
   ];
 
   return (

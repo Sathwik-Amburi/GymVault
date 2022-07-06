@@ -60,7 +60,8 @@ const UserSubscriptionsPage: FC = () => {
             ticketSecret: "ASDFG-HJKLA",
             _id: obj._id,
           };
-          if(obj.expireDate > new Date()) {
+          if(new Date(obj.expireDate) > new Date()) {
+            console.log(obj.expireDate + " > " + new Date().toISOString());
             activeItems.push([item, subscription]);
           } else {
             pastItems.push([item, subscription]);
@@ -107,7 +108,7 @@ const UserSubscriptionsPage: FC = () => {
                 <><SubscriptionEntry item={item[0]} subscription={item[1]} expired={false} user={user}  /></>
               );
             }) : ( <>
-              <Container maxWidth="lg" style={{ padding: "5em", textAlign: "center" }}>
+              <Container maxWidth="lg" style={{ padding: "2em", textAlign: "center" }}>
                 <Typography variant="h5" style={{marginTop: "6em"}}>
                   No active subscriptions :( 
                 </Typography>
@@ -131,7 +132,7 @@ const UserSubscriptionsPage: FC = () => {
         }}>
           <Container maxWidth="lg" style={{ padding: "3em" }}>
             <Grid container >
-              <Grid item xs={12} style={{ color: "#C2Cc6CC" }}>
+              <Grid item xs={12} style={{ color: "white" }}>
                 <Typography variant="h6" style={{fontWeight: "bold" }}>
                   Expired Subscriptions
                 </Typography>

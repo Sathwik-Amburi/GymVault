@@ -47,7 +47,7 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
           <hr />
         </Grid>
 
-        <SubscriptionSummary item={props.item} subscription={props.subscription} shown={shownSecret} />
+        <SubscriptionSummary item={props.item} subscription={props.subscription} shown={shownSecret} expired={props.expired} />
         
         { /* Secret display */ }
         <SecretDisplay id={`${props.subscription.userId}${props.subscription._id}`} shown={shownSecret} code={props.subscription.ticketSecret} />
