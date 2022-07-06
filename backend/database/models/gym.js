@@ -1,6 +1,17 @@
 const mongoose = require("mongoose");
 
-// TODO: Add remaining fields, Add remaining Schemas
+const subscriptionOffer = new mongoose.Schema({
+  subscriptionType: {
+    type: String,
+    enum: ["DAY_PASS", "MONTHLY_PASS", "YEARLY_PASS"],
+    required: true,
+  },
+  subscriptionPrice: {
+    type: Number,
+    required: true,
+  },
+});
+
 const GymSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -9,10 +20,8 @@ const GymSchema = new mongoose.Schema({
   email: {
     type: String,
     trim: true,
-    default: '',
-    // need to add validation for email
-    // validate: [validateLocalStrategyProperty, 'Please fill in your email'],
-    match: [/.+\@.+\..+/, 'Please fill a valid email address'],
+    default: "",
+    match: [/.+\@.+\..+/, "Please fill a valid email address"],
   },
   city: {
     type: String,
@@ -37,7 +46,11 @@ const GymSchema = new mongoose.Schema({
   },
   websiteURL: {
     type: String,
-  }
+  },
+  subscriptionOffers: {
+    type: [subscriptionOffer],
+    required: true,
+  },
 });
 
 const Gym = mongoose.model("Gym", GymSchema);
