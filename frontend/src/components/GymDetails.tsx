@@ -54,7 +54,6 @@ const GymViewPage: FC = () => {
     // TODO fix!
     ApiCalls.getCoursesByGymId(fid)
       .then((res) => {
-        console.log(res.data);
         setCourses(res.data.response);
       }
       ).catch((err) => UnifiedErrorHandler.handle(err, "TODO: The course you're seeing does not exist in the database"));
@@ -81,24 +80,12 @@ const GymViewPage: FC = () => {
     "Climbing",
   ]);
 
-  // format: [name: string, included in base price: boolean]
-  let amenities = [
-    ["Sauna", false],
-    ["Pool", false],
-    ["Wi-Fi", true],
-    ["Parking", true],
-    ["Wheelchair Access", true],
-  ];
-
   return (
     <ChonkySpinner loading={loading}>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
           <Lightbox
-            states={[
-              "https://www.climbing.com/wp-content/uploads/2016/10/7_gn-copyjpg.jpg",
-              image,
-            ]}
+            states={gym.images}
           />
         </Grid>
 
@@ -141,13 +128,13 @@ const GymViewPage: FC = () => {
               May vary depending on course or subscription plan
             </Typography>
             <br />
-            {amenities.map((amenity) => {
+            {gym.amenities.map((amenity) => {
               return (
                 <Chip
-                  label={amenity[0]}
+                  label={amenity}
                   style={{ margin: "0.3em" }}
-                  color={amenity[1] ? undefined : "warning"}
-                  variant={amenity[1] ? undefined : "outlined"}
+                  color="secondary"
+                  variant="outlined"
                 />
               );
             })}
