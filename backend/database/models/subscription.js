@@ -11,6 +11,10 @@ const SubscriptionSchema = new mongoose.Schema({
     ref: "Gym",
     required: true,
   },
+  courseId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Course"
+  },
   name: {
     type: String,
   },

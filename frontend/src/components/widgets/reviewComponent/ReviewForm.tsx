@@ -24,6 +24,7 @@ export default function ReviewForm(props:any) {
             data.get("userId"),
             data.get("username"),
             data.get("gymId"),
+            data.get("courseId"),
             data.get("rating"),
             data.get("title"),
             data.get("description")
@@ -58,17 +59,17 @@ export default function ReviewForm(props:any) {
                                 hidden
                                 />
                             <input
-                                value = {props.gymId}
+                                value = {props.gymId || null}
                                 name = 'gymId'
                                 id = 'gymId'
                                 hidden
                             />
-                            {/*<input*/}
-                            {/*    value = {props.courseId || null}*/}
-                            {/*    name = "courseId"*/}
-                            {/*    id = "courseId"*/}
-                            {/*    hidden*/}
-                            {/*/>*/}
+                            <input
+                                value = {props.courseId || null}
+                                name = "courseId"
+                                id = "courseId"
+                                hidden
+                            />
                             <input
                                 value = {props.rating || 3}
                                 name = 'rating'
