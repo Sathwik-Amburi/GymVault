@@ -1,4 +1,4 @@
-import { Button, Grid, Link, Typography } from "@mui/material";
+import { Button, Container, Grid, Link, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
@@ -68,70 +68,79 @@ const UserSubscriptionsPage: FC = () => {
 
   return (
     <>
-      <div style={{
-        height: "2em"
-      }}></div>
-      { newSubscription ? ( <>
-        <Typography variant="h6" style={{fontWeight: "bold", color: "#00763D"}}>
-        Your booking was successful.
-        </Typography>
-        <Typography style={{ color: "#00763D", marginBottom: "3em" }}>
-          Below you can see your subscription. Click on it to copy your access identifier, and print the tickets if needed:
-        </Typography>
-      </>) : ( <>
-        <Typography variant="h6" style={{fontWeight: "bold", color: "#555"}}>
-        Your subscriptions
-        </Typography>
-        <Typography style={{ color: "#555", marginBottom: "3em" }}>
-          Below you can see your subscriptions. Click on them to copy your access identifier, and print the tickets if needed:
-        </Typography>
-      </>)}
+      <Container maxWidth="lg" style={{ padding: "3em" }}>
+        <div style={{
+          height: "2em"
+        }}></div>
+        { newSubscription ? ( <>
+          <Typography variant="h6" style={{fontWeight: "bold", color: "#00763D"}}>
+          Your booking was successful.
+          </Typography>
+          <Typography style={{ color: "#00763D", marginBottom: "3em" }}>
+            Below you can see your subscription. Click on it to copy your access identifier, and print the tickets if needed:
+          </Typography>
+        </>) : ( <>
+          <Typography variant="h6" style={{fontWeight: "bold", color: "#555"}}>
+          Active Subscriptions
+          </Typography>
+          <Typography style={{ color: "#555", marginBottom: "3em" }}>
+            Below you can see your subscriptions. Click on them to copy your access identifier, and print the tickets if needed:
+          </Typography>
+        </>)}
 
 
-      <ChonkySpinner loading={loading}>
+        <ChonkySpinner loading={loading}>
 
-        { (activeItems.length > 0) ?
-          activeItems.map((item) => {
-            return (
-              <><SubscriptionEntry item={item[0]} subscription={item[1]} expired={false} /></>
-            );
-          }) : ( <>
-            <Typography variant="h6" style={{fontWeight: "bold", textAlign: "center", marginTop: "6em"}}>
-            No active subscriptions. 
-              <Button variant="outlined" color="primary" style={{marginLeft: "1em"}} href="/">
-                Get one?
-              </Button>
-            </Typography>
-          </> )
-        }
-          
-
-        { (pastItems.length > 0) ? (
-          <Grid container style={{
-            backgroundColor: "#393939",
-            padding: "3em",
-            marginTop: "3em",
-            width: "100%",
-          }}>
-            <Grid item xs={12} style={{ color: "#C2C6CC" }}>
-              <Typography variant="h6" style={{fontWeight: "bold" }}>
-                Expired Subscriptions
-              </Typography>
-              <Typography variant="body1">
-                In memoriam
-              </Typography>
-            </Grid>
-            { pastItems.map((i: [Item, Subscription]) => {
-              let item = i[0];
-              let subscription = i[1];
+          { (activeItems.length > 0) ?
+            activeItems.map((item) => {
               return (
-                <SubscriptionEntry item={item} subscription={subscription} expired={true}/>
+                <><SubscriptionEntry item={item[0]} subscription={item[1]} expired={false} /></>
               );
-            })}
-              
-          </Grid>
-        ) : null }
-      </ChonkySpinner>
+            }) : ( <>
+              <Container maxWidth="lg" style={{ padding: "5em", textAlign: "center" }}>
+                <Typography variant="h5" style={{marginTop: "6em"}}>
+                  No active subscriptions :( 
+                </Typography>
+                <br />
+                <Button variant="outlined" color="primary" style={{marginLeft: "1em"}} href="/">
+                  Get one?
+                </Button>
+              </Container>
+            </> )
+          }
+            
+        </ChonkySpinner>
+      </Container>
+      { (pastItems.length > 0) ? (
+        <Container style={{ 
+          padding: "3em",
+          margin: "3em 0 0 0",
+          maxWidth: "30000%",
+          backgroundColor: "#555",
+          width: "100%",
+        }}>
+          <Container maxWidth="lg" style={{ padding: "3em" }}>
+            <Grid container >
+              <Grid item xs={12} style={{ color: "#C2Cc6CC" }}>
+                <Typography variant="h6" style={{fontWeight: "bold" }}>
+                  Expired Subscriptions
+                </Typography>
+                <Typography variant="body1">
+                  In memoriam
+                </Typography>
+              </Grid>
+              { pastItems.map((i: [Item, Subscription]) => {
+                let item = i[0];
+                let subscription = i[1];
+                return (
+                  <SubscriptionEntry item={item} subscription={subscription} expired={true}/>
+                );
+              })}
+                
+            </Grid>
+          </Container>
+        </Container>
+      ) : null }
     </>
   );
 };
