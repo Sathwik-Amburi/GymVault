@@ -63,7 +63,7 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
             <tr>
               <td>            
                 <Typography variant="body1">
-                  From
+                  {props.subscription.expireDate!.toString() > new Date().toString() ? "From " : "Purchased on "}
                 </Typography>
               </td>
               <td>
@@ -80,7 +80,7 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
             <tr>
               <td>                  
                 <Typography variant="body1">
-                  To
+                  {props.subscription.expireDate!.toString() > new Date().toString() ? "To " : "Expired on "}
                 </Typography>
               </td>
               <td>

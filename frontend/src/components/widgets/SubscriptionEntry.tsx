@@ -22,7 +22,7 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
         padding: "3em",
         marginTop: "3em",
         borderRadius: "20px",
-        backgroundColor: ( props.expired ? "#555" : "#ccc" ),
+        backgroundColor: ( props.expired ? "#393939" : "#ccc" ),
         color: ( props.expired ? "#fff" : "#000" ),
       }}
       onClick={() => setShownSecret(!shownSecret)}>
@@ -30,7 +30,13 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
           <span style={{float: "right"}}>
             <Typography variant="h5">
               <span style={{fontWeight: "800", color: "#999"}}>
-                {props.subscription.type}
+                {
+                  (props.subscription.type === "DAY_PASS") ? "daily ticket" : 
+                  (props.subscription.type === "MONTHLY_PASS") ? "monthly pass" :
+                  (props.subscription.type === "YEARLY_PASS") ? "yearly pass" :
+                  (props.subscription.type === "COURSE_TICKET") ? "course" : 
+                  "generic ticket"
+                }
               </span>
             </Typography>
           </span>
@@ -42,7 +48,7 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
         <SubscriptionSummary item={props.item} subscription={props.subscription} shown={shownSecret} />
         
         { /* Secret display */ }
-        <SecretDisplay id={`${props.subscription.userId}${props.subscription._id}`} shown={shownSecret} code="ASDFG-HJKLA" />
+        <SecretDisplay id={`${props.subscription.userId}${props.subscription._id}`} shown={shownSecret} code={props.subscription.ticketSecret} />
         <Grid item md={6} xs={12} style={{ paddingLeft: "2em" }}>
           { props.item.courseName !== "" ? (
             <>
