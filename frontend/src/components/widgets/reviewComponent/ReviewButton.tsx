@@ -6,8 +6,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import StarRating from "./StarRating";
+import ReviewForm from "./ReviewForm";
 
-export default function ReviewButton() {
+export default function ReviewButton(props: any) {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -17,10 +19,14 @@ export default function ReviewButton() {
     const handleClose = () => {
         setOpen(false);
     };
+    const handleSubmit = () =>{
+        setOpen(false)
+    }
 
     return (
         <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <StarRating />
+            <Button variant="contained" onClick={handleClickOpen}>
                 Write a Review!
             </Button>
             <Dialog open={open} onClose={handleClose}>
@@ -29,29 +35,10 @@ export default function ReviewButton() {
                     <DialogContentText>
                         Please share your feedback about the subscription and help others!
                     </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="title"
-                        label="Title"
-                        type="text"
-                        variant="standard"
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="description"
-                        label="Description"
-                        type="text"
-                        fullWidth
-                        variant="filled"
-                        multiline
-                        rows={4}
-                    />
+                    <ReviewForm userId = {props.userId} gymId = {props.gymId} courseId = {props.courseId}  username = {props.username} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose}>Submit</Button>
+                    <Button onClick={handleClose}>Close</Button>
                 </DialogActions>
             </Dialog>
         </div>
