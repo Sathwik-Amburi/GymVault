@@ -120,6 +120,17 @@ export default class ApiCalls {
     });
   };
 
+  public static addReview = async (userId:any, username:any,gymId: any,rating: any = null,title:any,description:any) =>{
+    return await axios.post("/reviews/add-review", {
+      userId,
+      username,
+      gymId,
+      rating,
+      title,
+      description
+    });
+  }
+
   public static getSubscriptionsByGymId = async (gymId: string) => {
     return await axios.get(`/gyms/subscriptions/get-subscriptions/${gymId}`, {
       headers: {
