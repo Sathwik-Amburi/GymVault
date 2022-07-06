@@ -37,7 +37,11 @@ const GymSchema = new mongoose.Schema({
   },
   websiteURL: {
     type: String,
-  }
+  },
+  images: {
+    type: [String],
+    default: [],
+  },
 });
 
 const Gym = mongoose.model("Gym", GymSchema);

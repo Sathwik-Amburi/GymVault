@@ -5,6 +5,7 @@ export interface Gym {
   city: string;
   address: string;
   amenities: [string, number][]; // [name, price]
+  images?: string[];
   _id: string;
 }
 
@@ -14,6 +15,7 @@ export interface Course {
   description: string;
   phoneNumber: number;
   address: string;
+  images?: string[];
   _id: string;
 }
 

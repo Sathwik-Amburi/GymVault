@@ -14,6 +14,10 @@ const CourseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  images: {
+    type: [String],
+    default: [],
+  },
 });
 
 const Course = mongoose.model("Course", CourseSchema);
