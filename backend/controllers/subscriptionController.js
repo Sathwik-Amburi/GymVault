@@ -11,8 +11,7 @@ const getSubscriptionById = async (req, res) => {
 }
 
 const getSubscriptionsByUserId = async (req, res) => {
-    const { id } = req.params;
-    const subscriptions = await subscriptionService.getSubscriptionsByUserId(id);
+    const subscriptions = await subscriptionService.getSubscriptionsByUserId(req.user.id);
     if (subscriptions) {
         res.status(200).json({ message: `Subscriptions found`, response: subscriptions });
     } else {
@@ -31,6 +30,18 @@ const getSubscriptionsByGymId = async (req, res) => {
     } else {
       res.status(404).json({ message: `Subscriptions` });
     }
-  };
+};
 
-module.exports = { getSubscriptionById, getSubscriptionsByUserId, getSubscriptionsByGymId };
+const checkOrPurchase = async (req, res) => {
+    const { courseOrGymId, stripeToken } = req.params;
+    const subscription = await subscriptionService.checkOrPurchase(req.user.id, courseOrGymId, stripeToken);
+    if (subscription) {
+        res.status(200)
+           .json({ message: `Subscription purchased`, response: subscription });
+    } else {
+        res.status(404).json({ message: `Subscription not purchased` });
+    }
+}
+
+
+module.exports = { getSubscriptionById, getSubscriptionsByUserId, getSubscriptionsByGymId, checkOrPurchase };

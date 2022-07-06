@@ -1,4 +1,6 @@
 const courseModel = require("../database/models/course");
+const ObjectId = require('mongoose').Types.ObjectId; 
+
 
 class CourseService {
   getAllCourses = async () => {
@@ -21,7 +23,7 @@ class CourseService {
 
   getCoursesByGymId = async (gymId) => {
     try {
-      const courses = await courseModel.find({ gymId: gymId });
+      const courses = await courseModel.find({ gymId: ObjectId(gymId) });
       return courses;
     } catch (error) {
       console.log("Error while fetching courses by gymId", error.message);

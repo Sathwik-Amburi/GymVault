@@ -20,6 +20,21 @@ class ReviewService {
         }
 
     };
+    addReview = async (userId,username,gymId,courseId = null,rating,title,description) => {
+
+        const review = new reviewModel({
+            userId,
+            username,
+            gymId,
+            courseId,
+            rating,
+            title,
+            description,
+
+        });
+        const newReview = await review.save()
+
+    };
 }
 
 module.exports = new ReviewService();

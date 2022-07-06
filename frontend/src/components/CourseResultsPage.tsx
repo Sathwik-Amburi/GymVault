@@ -18,10 +18,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import apiCalls from "../api/apiCalls";
 import CourseResultCard from "./CourseResultCard";
+import ChonkySpinner from "./widgets/ChonkySpinner";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const CourseResultsPage: FC = () => {
   const queries = new URLSearchParams(window.location.search);
   const maxPrice = 1000;
+  const [loading, setLoading] = useState<boolean>(true);
   const [results, setResults] = useState<Course[]>();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [priceRange, setPriceRange] = useState<number[]>([0, maxPrice]);
@@ -34,10 +37,8 @@ const CourseResultsPage: FC = () => {
       ApiCalls.getAllCoursesByCityOrName(city, name)
         .then((res) => {
           setResults(res.data.response);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+          setLoading(false);
+        }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get courses"));
     }
   }, []);
 
@@ -45,6 +46,7 @@ const CourseResultsPage: FC = () => {
   const handleCloseModal = () => setOpenModal(false);
 
   const handleFilter = () => {
+    setLoading(true);
     apiCalls
       .getGymsByPriceRange(priceRange)
       .then((res) => {
@@ -61,8 +63,8 @@ const CourseResultsPage: FC = () => {
             },
           ]);
         }
-      })
-      .catch((err) => console.log(err.message));
+        setLoading(false);
+      }).catch((err) => UnifiedErrorHandler.handle(err, "Filtering error"));
     setOpenModal(false);
   };
 
@@ -76,8 +78,7 @@ const CourseResultsPage: FC = () => {
     );
     setActiveFilters(updatedActiveFilters);
     ApiCalls.getAllGyms()
-      .then((res) => setResults(res.data))
-      .catch((err) => console.log(err.message));
+      .then((res) => setResults(res.data)).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get all gyms"));
   };
 
   return (
@@ -169,18 +170,20 @@ const CourseResultsPage: FC = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
-        {results &&
-          results.map((item, index) => (
-            <Grid item xs={2} sm={4} md={4} key={index}>
-              <CourseResultCard course={item} />
-            </Grid>
-          ))}
-      </Grid>
+      <ChonkySpinner loading={loading}>
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 4, sm: 8, md: 12 }}
+        >
+          {results &&
+            results.map((item, index) => (
+              <Grid item xs={2} sm={4} md={4} key={index}>
+                <CourseResultCard course={item} />
+              </Grid>
+            ))}
+        </Grid>
+      </ChonkySpinner>
     </>
   );
 };

@@ -7,6 +7,7 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import { Course, Gym, Subscription } from "../models/allModels";
 import { useNavigate } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 interface ResultCardProps {
   course: Course;
@@ -24,10 +25,7 @@ const ResultCard: FC<ResultCardProps> = ({ course }) => {
     ApiCalls.getSubscriptionsByGymId(course._id)
       .then((res) => {
         setSubscriptions(res.data.response);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+      }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get subscriptions for this gym"));
   };
 
   useEffect(() => {

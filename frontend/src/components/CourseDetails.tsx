@@ -14,26 +14,29 @@ import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
 import image from "../images/progym.jpg";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import ChonkySpinner from "./widgets/ChonkySpinner";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const CourseViewPage: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [loading, setLoading] = useState<boolean>(true);
   const [reviews, setReviews] = useState<any[]>([]);
   const [reviewSort, setReviewSort] = useState("newest");
   let Gym = {
     name: "",
     phoneNumber: "",
     _id: "0",
-    city: "Berlin",
+    city: "",
     address: "",
     description: "",
     amenities: [],
   };
   const [course, setCourse] = useState<Course>({
-    name: "Yoga Course",
+    name: "",
     gym: Gym,
     description: "",
-    phoneNumber: 1760000000,
+    phoneNumber: 0,
     address: "",
     _id: "0",
   });
@@ -43,21 +46,14 @@ const CourseViewPage: FC = () => {
     ApiCalls.getCourse(fid)
       .then((res) => {
         setCourse(res.data.response);
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("TODO: The course you're seeing does not exist in the database");
-      });
+        setLoading(false);
+      }).catch((err) => UnifiedErrorHandler.handle(err, "TODO: The course you're seeing does not exist in the database"));
 
     ApiCalls.getReviewsById(fid)
         .then((res) => {
           console.log(res.data);
           setReviews(res.data.response);
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("TODO: The review you're seeing does not exist in the database");
-        });
+        }).catch((err) => UnifiedErrorHandler.handle(err, "The review does not exist in the database"));
   }, [id]);
 
   const handleBuySubscriptionClick = () => {
@@ -69,7 +65,7 @@ const CourseViewPage: FC = () => {
   //   ...reviewsbyId
   // ];
   return (
-    <>
+    <ChonkySpinner loading={loading}>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
           <Lightbox
@@ -174,7 +170,7 @@ const CourseViewPage: FC = () => {
           })}
         </Grid>
       </Grid>
-    </>
+    </ChonkySpinner>
   );
 };
 

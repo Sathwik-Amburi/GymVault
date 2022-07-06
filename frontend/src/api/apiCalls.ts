@@ -128,14 +128,6 @@ export default class ApiCalls {
     });
   };
 
-  public static getSubscriptionsByUserId = async (userId: string) => {
-    return await axios.get(`/gyms/subscriptions/by-user/${userId}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  };
-
   public static userLogin = async (email: string, password: string) => {
     return await axios.post("/authentication/login", {
       email,
@@ -152,10 +144,20 @@ export default class ApiCalls {
     });
   };
 
-  public static checkPurchase = async (stripeId: string) => {
-    return await axios.get(`/purchase/${stripeId}`, {
+  public static checkOrPurchase = async (entity: string, token: string, stripeId: string) => {
+    return await axios.get(`/stripe/purchase/${entity}/${stripeId}`, {
       headers: {
         "Content-Type": "application/json",
+        "x-access-token": token,
+      },
+    });
+  }
+
+  public static getSubscriptions = async (token: string) => {
+    return await axios.get(`/user/subscriptions`, {
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
       },
     });
   };

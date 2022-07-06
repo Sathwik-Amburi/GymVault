@@ -1,10 +1,12 @@
 
 import { Grid, Paper, Typography } from "@mui/material";
 import { FC, useState } from "react";
+import { Item, Subscription } from "../../models/allModels";
 
 type SsProps = {
   shown: boolean;
-  id: string;
+  item: Item;
+  subscription: Subscription;
 };
 
 const SubscriptionSummary: FC<SsProps> = (props) => {
@@ -59,19 +61,19 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
         <div>
           <table style={{border: "none", width: "100%"}}>
             <tr>
-              <td>                  
+              <td>            
                 <Typography variant="body1">
                   From
                 </Typography>
               </td>
               <td>
                 <Typography variant="h6">
-                  01.01.1970
+                  { new Date(props.subscription.purchaseDate!).toLocaleDateString() }
                 </Typography>
               </td>
               <td style={{textAlign: "right"}}>
                 <Typography variant="h6" style={{ fontWeight: "bold" }}>
-                  €150
+                  €{props.subscription.price}
                 </Typography> 
               </td>
             </tr>
@@ -83,7 +85,7 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
               </td>
               <td>
                 <Typography variant="h6">
-                  01.01.1970
+                  { new Date(props.subscription.expireDate!).toLocaleDateString() }
                 </Typography>
               </td>
               <td style={{textAlign: "right"}}>

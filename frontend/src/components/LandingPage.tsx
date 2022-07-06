@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
 import { Gym } from "../models/allModels";
 import { Link } from "react-router-dom";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const LandingPage: FC = () => {
   const [gyms, setGyms] = useState<Gym[]>([
@@ -13,11 +14,7 @@ const LandingPage: FC = () => {
       .then((res) => {
         console.log(res.data);
         setGyms(res.data);
-      })
-      .catch((err) => {
-        // do some error handling later, log error for now
-        console.log(err.message);
-      });
+      }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms"));
   }, []);
 
   return (

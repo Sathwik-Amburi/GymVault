@@ -43,6 +43,7 @@ export enum SubscriptionTypes {
   DAY_PASS = "DAY_PASS",
   MONTHLY_PASS = "MONTHLY_PASS",
   YEARLY_PASS = "YEARLY_PASS",
+  COURSE_TICKET = "COURSE_TICKET",
 }
 
 export interface Subscription {
@@ -55,6 +56,7 @@ export interface Subscription {
   purchaseDate?: string;
   expireDate?: string;
   ticketSecret?: string;
+  _id: string;
 }
 
 export enum FilterTypes {

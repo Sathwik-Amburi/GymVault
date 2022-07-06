@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
 import { UserProfileDetails } from "../models/allModels";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 
 const OwnerProfile: FC = () => {
@@ -16,10 +17,7 @@ const OwnerProfile: FC = () => {
     ApiCalls.getUserProfile(token)
       .then((res) => {
         setProfile(res.data);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+      }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get user profile"));
   }, []);
 
   const handleClick = async () => {

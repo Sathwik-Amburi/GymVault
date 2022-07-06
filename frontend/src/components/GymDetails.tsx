@@ -17,10 +17,13 @@ import Lightbox from "./widgets/Lightbox";
 import { useNavigate, useParams } from "react-router-dom";
 import image from "../images/progym.jpg";
 import RecentReviews from "./widgets/RecentReviews";
+import ChonkySpinner from "./widgets/ChonkySpinner";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const GymViewPage: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [loading, setLoading] = useState<boolean>(true);
   const [reviews, setReviews] = useState<any[]>([]);
   const [reviewSort, setReviewSort] = useState("newest");
   const [gym, setGym] = useState<Gym>({
@@ -37,34 +40,24 @@ const GymViewPage: FC = () => {
     let fid = id != null ? id : ""; // empty id will gracefully fail anyway
     ApiCalls.getGym(fid)
       .then((res) => {
-        console.log(res.data);
         setGym(res.data.response);
+        setLoading(false);
       })
-      .catch((err) => {
-        console.log(err);
-        alert("TODO: The gym you're seeing does not exist in the database");
-      });
+      .catch((err) => UnifiedErrorHandler.handle(err, "TODO: The gym you're seeing does not exist in the database"));
 
     ApiCalls.getReviewsById(fid)
       .then((res) => {
-        console.log(res.data);
         setReviews(res.data.response);
       })
-      .catch((err) => {
-        console.log(err);
-        alert("TODO: The review you're seeing does not exist in the database");
-      });
+      .catch((err) => UnifiedErrorHandler.handle(err, "TODO: The review you're seeing does not exist in the database"));
 
-
+    // TODO fix!
     ApiCalls.getCoursesByGymId(fid)
       .then((res) => {
         console.log(res.data);
         setCourses(res.data.response);
       }
-      ).catch((err) => {
-        console.log(err);
-        alert("TODO: The course you're seeing does not exist in the database");
-      });
+      ).catch((err) => UnifiedErrorHandler.handle(err, "TODO: The course you're seeing does not exist in the database"));
 
   }, [id]);
 
@@ -98,7 +91,7 @@ const GymViewPage: FC = () => {
   ];
 
   return (
-    <>
+    <ChonkySpinner loading={loading}>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
           <Lightbox
@@ -206,7 +199,7 @@ const GymViewPage: FC = () => {
           })}
         </Grid>
       </Grid>
-    </>
+    </ChonkySpinner>
   );
 };
 
