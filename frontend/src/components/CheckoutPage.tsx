@@ -69,7 +69,7 @@ const CheckoutPage: FC = () => {
     ApiCalls.getCourse(id!)
       .then((res) => {
         console.log(res);
-        setGym(res.data.response.gym);
+        // setGym(res.data.response.gym);
         setCourse(res.data.response);
         setLoading(false);
       }).catch((err) => {

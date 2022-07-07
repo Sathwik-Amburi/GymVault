@@ -20,10 +20,12 @@ export interface SubscriptionOffers {
 export interface Course {
   name: string;
   gym: Gym;
+  gymId: Gym;
   description: string;
   phoneNumber: number;
   address: string;
   images?: string[];
+  subscriptionOffers: SubscriptionOffers[];
   _id: string;
 }
 
@@ -51,6 +53,7 @@ export interface Option {
 
 export enum SubscriptionTypes {
   DAY_PASS = "DAY_PASS",
+  SESSION_PASS = "SESSION_PASS",
   MONTHLY_PASS = "MONTHLY_PASS",
   YEARLY_PASS = "YEARLY_PASS",
   COURSE_TICKET = "COURSE_TICKET",

@@ -23,19 +23,26 @@ class ReviewService {
 
   getCourseOrGymRating = async (id) => {
     try {
-      return [];
-      // wait for clarification
-      //   const allRatings = await reviewModel
-      //     .find({
-      //       $or: [{ gymId: id }, { courseId: id }],
-      //     })
-      //     .select({ rating: 1, _id: 0 });
-      //   if(allRatings.length > 0){
-      //     const rating = allRatings.
-      //   }
-      //   return reviews;
+      const allRatings = await reviewModel
+        .find({
+          $or: [{ gymId: id }, { courseId: id }],
+        })
+        .select({ rating: 1, _id: 0 });
+
+      if (allRatings.length > 0) {
+        const rating =
+          allRatings
+            .map((item) => {
+              return item.rating;
+            })
+            .reduce((prev, next) => {
+              return prev + next;
+            }) / allRatings.length;
+        return rating;
+      }
+      return null;
     } catch (error) {
-      console.log("Error while fetching gym reviews", error.message);
+      console.log("Error while fetching rating", error.message);
     }
   };
 

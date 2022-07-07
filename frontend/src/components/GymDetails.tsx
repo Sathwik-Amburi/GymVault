@@ -114,7 +114,7 @@ const GymViewPage: FC = () => {
           <hr />
           <p>{gym.description}</p>
           <br />
-          <p>Tel: +49 {gym.phoneNumber}</p>
+          <p>Tel: +{gym.phoneNumber}</p>
           <p>{gym.address}</p>
 
           <div style={{ textAlign: "right" }}>

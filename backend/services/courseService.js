@@ -1,6 +1,5 @@
 const courseModel = require("../database/models/course");
-const ObjectId = require('mongoose').Types.ObjectId; 
-
+const ObjectId = require("mongoose").Types.ObjectId;
 
 class CourseService {
   getAllCourses = async () => {
@@ -28,7 +27,7 @@ class CourseService {
     } catch (error) {
       console.log("Error while fetching courses by gymId", error.message);
     }
-  }
+  };
 
   addCourse = async (course) => {
     try {
@@ -50,6 +49,30 @@ class CourseService {
       return matchingCourses;
     } catch (error) {
       console.log("Error while filtering courses", error.message);
+    }
+  };
+
+  filterCoursesByPriceRange = async (priceRange, city) => {
+    try {
+      const courses = await courseModel.find({
+        subscriptionOffers: {
+          $elemMatch: {
+            subscriptionType: "MONTHLY_PASS",
+            subscriptionPrice: {
+              $gte: priceRange[0],
+              $lte: priceRange[1],
+            },
+          },
+        },
+        city: city,
+      });
+
+      return { courses };
+    } catch (error) {
+      console.log(
+        "Error while filtering courses by price range",
+        error.message
+      );
     }
   };
 }

@@ -30,7 +30,7 @@ const getCoursesByGymId = async (req, res) => {
   } else {
     res.status(404).json({ message: `Courses not found` });
   }
-}
+};
 
 const addCourse = async (req, res) => {
   try {
@@ -66,4 +66,29 @@ const filterCourses = async (req, res) => {
   }
 };
 
-module.exports = { getAllCourses, getCourse, getCoursesByGymId, addCourse, filterCourses };
+const filterCoursesByPriceRange = async (req, res) => {
+  const { priceRange, city } = req.body;
+
+  const results = await courseService.filterCoursesByPriceRange(
+    priceRange,
+    city
+  );
+
+  if (results.courses.length > 0) {
+    res.status(200).json({
+      message: `${results.courses.length} results found`,
+      response: results,
+    });
+  } else {
+    res.status(200).json({ message: `No results found` });
+  }
+};
+
+module.exports = {
+  getAllCourses,
+  getCourse,
+  getCoursesByGymId,
+  addCourse,
+  filterCourses,
+  filterCoursesByPriceRange,
+};

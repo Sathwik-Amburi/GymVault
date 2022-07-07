@@ -40,9 +40,11 @@ const CourseViewPage: FC = () => {
   const [course, setCourse] = useState<Course>({
     name: "",
     gym: Gym,
+    gymId: Gym,
     description: "",
     phoneNumber: 0,
     address: "",
+    subscriptionOffers: [],
     _id: "0",
   });
 

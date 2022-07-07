@@ -30,17 +30,17 @@ const CourseResultsPage: FC = () => {
   const [priceRange, setPriceRange] = useState<number[]>([0, maxPrice]);
   const [activeFilters, setActiveFilters] = useState<Filter[]>();
 
+  const city = queries.get("city");
+  const name = queries.get("name");
+
   useEffect(() => {
-    const name = queries.get("name");
-    const city = queries.get("city");
-    if (city) {
+    city &&
       ApiCalls.getAllCoursesByCityOrName(city, name)
         .then((res) => {
           setResults(res.data.response);
           setLoading(false);
         })
         .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get courses"));
-    }
   }, []);
 
   const handleOpenModal = () => setOpenModal(true);
@@ -48,13 +48,15 @@ const CourseResultsPage: FC = () => {
 
   const handleFilter = () => {
     setLoading(true);
-    apiCalls
-      .getGymsByPriceRange(priceRange)
-      .then((res) => {
-        if (res.data.message === "No results found") {
-          setResults([]);
-        } else {
-          setResults(res.data.response.gyms);
+    city &&
+      apiCalls
+        .getCoursesByPriceRange(priceRange, city)
+        .then((res) => {
+          if (res.data.message === "No results found") {
+            setResults([]);
+          } else {
+            setResults(res.data.response.courses);
+          }
           setActiveFilters([
             {
               type: FilterTypes.PRICE_RANGE,
@@ -63,10 +65,9 @@ const CourseResultsPage: FC = () => {
               maxPrice: priceRange[1],
             },
           ]);
-        }
-        setLoading(false);
-      })
-      .catch((err) => UnifiedErrorHandler.handle(err, "Filtering error"));
+          setLoading(false);
+        })
+        .catch((err) => UnifiedErrorHandler.handle(err, "Filtering error"));
     setOpenModal(false);
   };
 
@@ -79,9 +80,12 @@ const CourseResultsPage: FC = () => {
       (item) => item.type !== filterType
     );
     setActiveFilters(updatedActiveFilters);
-    ApiCalls.getAllGyms()
-      .then((res) => setResults(res.data))
-      .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get all gyms"));
+    city &&
+      ApiCalls.getAllCoursesByCityOrName(city, name)
+        .then((res) => setResults(res.data.response))
+        .catch((err) =>
+          UnifiedErrorHandler.handle(err, "Cannot get updated courses")
+        );
   };
 
   return (
@@ -89,7 +93,7 @@ const CourseResultsPage: FC = () => {
       <Grid>
         <Grid>
           <Typography fontSize={"2em"}>
-            {results ? results.length : 0} Results found
+            {results ? results.length : 0} Courses found in {city}
           </Typography>
         </Grid>
         <Grid

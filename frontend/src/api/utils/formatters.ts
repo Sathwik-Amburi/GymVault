@@ -1,6 +1,8 @@
 import { SubscriptionTypes } from "../../models/allModels";
 
-export const toCleanSubscriptionTypeFormat = (subscriptionType: SubscriptionTypes): string => {
+export const toCleanSubscriptionTypeFormat = (
+  subscriptionType: SubscriptionTypes
+): string => {
   switch (subscriptionType) {
     case SubscriptionTypes.DAY_PASS:
       return "Day Pass";
@@ -9,7 +11,28 @@ export const toCleanSubscriptionTypeFormat = (subscriptionType: SubscriptionType
     case SubscriptionTypes.YEARLY_PASS:
       return "Yearly Pass";
     case SubscriptionTypes.COURSE_TICKET:
-      return "Yearly Pass";
+      return "Course Ticket";
+    case SubscriptionTypes.SESSION_PASS:
+      return "Session Pass";
+    default:
+      return "";
+  }
+};
+
+export const toCleanSubscriptionRange = (
+  subscriptionType: SubscriptionTypes
+): string => {
+  switch (subscriptionType) {
+    case SubscriptionTypes.DAY_PASS:
+      return "Day";
+    case SubscriptionTypes.MONTHLY_PASS:
+      return "Month";
+    case SubscriptionTypes.YEARLY_PASS:
+      return "Year";
+    case SubscriptionTypes.COURSE_TICKET:
+      return "Session";
+    case SubscriptionTypes.SESSION_PASS:
+      return "Session";
     default:
       return "";
   }

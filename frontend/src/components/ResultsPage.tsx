@@ -30,10 +30,10 @@ const ResultsPage: FC = () => {
   const [priceRange, setPriceRange] = useState<number[]>([0, maxPrice]);
   const [activeFilters, setActiveFilters] = useState<Filter[]>();
 
-  useEffect(() => {
-    const name = queries.get("name");
-    const city = queries.get("city");
+  const city = queries.get("city");
+  const name = queries.get("name");
 
+  useEffect(() => {
     city &&
       ApiCalls.getAllGymsByCityOrName(city, name)
         .then((res) => {
@@ -48,7 +48,6 @@ const ResultsPage: FC = () => {
 
   const handleFilter = () => {
     setLoading(true);
-    const city = queries.get("city");
     city &&
       apiCalls
         .getGymsByPriceRange(priceRange, city)
@@ -57,15 +56,15 @@ const ResultsPage: FC = () => {
             setResults([]);
           } else {
             setResults(res.data.response.gyms);
-            setActiveFilters([
-              {
-                type: FilterTypes.PRICE_RANGE,
-                name: "Price range between",
-                minPrice: priceRange[0],
-                maxPrice: priceRange[1],
-              },
-            ]);
           }
+          setActiveFilters([
+            {
+              type: FilterTypes.PRICE_RANGE,
+              name: "Price range between",
+              minPrice: priceRange[0],
+              maxPrice: priceRange[1],
+            },
+          ]);
           setLoading(false);
         })
         .catch((err) =>
@@ -82,8 +81,6 @@ const ResultsPage: FC = () => {
     const updatedActiveFilters = activeFilters?.filter(
       (item) => item.type !== filterType
     );
-    const name = queries.get("name");
-    const city = queries.get("city");
 
     setActiveFilters(updatedActiveFilters);
     city &&
@@ -99,7 +96,7 @@ const ResultsPage: FC = () => {
       <Grid>
         <Grid>
           <Typography fontSize={"2em"}>
-            {results ? results.length : 0} Results found
+            {results ? results.length : 0} Gyms found in {city}
           </Typography>
         </Grid>
         <Grid

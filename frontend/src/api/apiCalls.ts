@@ -41,6 +41,21 @@ export default class ApiCalls {
     );
   };
 
+  public static getCoursesByPriceRange = async (
+    priceRange: number[],
+    city?: string
+  ) => {
+    return await axios.post(
+      "/courses/filter/price-range",
+      { priceRange, city },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  };
+
   public static getGymOrCourseRating = async (id: string) => {
     return await axios.get(`/reviews/rating/${id}`, {
       headers: {
@@ -96,19 +111,19 @@ export default class ApiCalls {
     });
   };
 
-  public static getAllAvailableSearchCities = async (type: string) => {
-    return await axios.get<string[]>(`/gyms/cities/${type}`, {
+  public static getAllCoursesByCityOrName = async (
+    city: string,
+    name: string | null
+  ) => {
+    return await axios.get(`/courses/filter?city=${city}&name=${name}`, {
       headers: {
         "Content-Type": "application/json",
       },
     });
   };
 
-  public static getAllCoursesByCityOrName = async (
-    city: string,
-    name: string | null
-  ) => {
-    return await axios.get(`/courses/filter?city=${city}&name=${name}`, {
+  public static getAllAvailableSearchCities = async (type: string) => {
+    return await axios.get<string[]>(`/gyms/cities/${type}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -131,7 +146,15 @@ export default class ApiCalls {
     });
   };
 
-  public static addReview = async (userId:any, username: any,gymId: any,courseId:any,rating: any,title:any,description:any) =>{
+  public static addReview = async (
+    userId: any,
+    username: any,
+    gymId: any,
+    courseId: any,
+    rating: any,
+    title: any,
+    description: any
+  ) => {
     return await axios.post("/reviews/add-review", {
       userId,
       username,
@@ -139,9 +162,9 @@ export default class ApiCalls {
       courseId,
       rating,
       title,
-      description
+      description,
     });
-  }
+  };
 
   public static getSubscriptionsByGymId = async (gymId: string) => {
     return await axios.get(`/gyms/subscriptions/get-subscriptions/${gymId}`, {

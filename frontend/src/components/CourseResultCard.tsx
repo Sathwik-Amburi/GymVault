@@ -8,6 +8,11 @@ import { Course, Gym, Subscription } from "../models/allModels";
 import { useNavigate } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
+import {
+  toCleanSubscriptionRange,
+  toCleanSubscriptionTypeFormat,
+} from "../api/utils/formatters";
+import { StoreMallDirectoryTwoTone } from "@mui/icons-material";
 
 interface ResultCardProps {
   course: Course;
@@ -15,22 +20,10 @@ interface ResultCardProps {
 
 const ResultCard: FC<ResultCardProps> = ({ course }) => {
   const navigate = useNavigate();
+
   const handleCardClick = () => {
     navigate(`/course/${course._id}`);
   };
-
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>();
-
-  const getAllResultSubscriptions = async () => {
-    ApiCalls.getSubscriptionsByGymId(course._id)
-      .then((res) => {
-        setSubscriptions(res.data.response);
-      }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get subscriptions for this gym"));
-  };
-
-  useEffect(() => {
-    getAllResultSubscriptions();
-  }, []);
 
   return (
     <>
@@ -55,27 +48,46 @@ const ResultCard: FC<ResultCardProps> = ({ course }) => {
               <Typography>4.0</Typography>
             </Grid>
             <Grid container direction={"row"} alignItems="center">
+              <StoreMallDirectoryTwoTone
+                fontSize="small"
+                sx={{ color: "#black" }}
+                style={{ marginRight: "4px" }}
+              />
+              <Typography variant="body2" color="text.secondary">
+                {course.gymId.name}
+              </Typography>
+            </Grid>
+            <Grid container direction={"row"} alignItems="center">
               <LocationOnIcon
                 fontSize="small"
                 sx={{ color: "#black" }}
                 style={{ marginRight: "4px" }}
               />
               <Typography variant="body2" color="text.secondary">
-                {course.description}
+                {course.gymId.address}
               </Typography>
             </Grid>
-            <Grid container direction={"row"} alignItems="center">
+            <Grid container direction={"row"} alignItems="start">
               <PaymentIcon
                 fontSize="small"
                 sx={{ color: "#black" }}
                 style={{ marginRight: "4px" }}
               />
-              {/* <Typography variant="body2" color="ActiveCaption">
-                {subscriptions && subscriptions[0].price} EUR/Month
-              </Typography> */}
-              <Typography variant="body2" color="ActiveCaption">
-                azdazd EUR/Month
-              </Typography>
+              <div>
+                {course.subscriptionOffers.map((item) => {
+                  return (
+                    <div style={{ fontSize: "12px" }}>
+                      <span>
+                        {toCleanSubscriptionTypeFormat(item.subscriptionType)}:{" "}
+                      </span>
+                      <span style={{ fontWeight: "bold" }}>
+                        {item.subscriptionPrice} EUR/
+                        {toCleanSubscriptionRange(item.subscriptionType)}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </Grid>
           </CardContent>
         </Card>

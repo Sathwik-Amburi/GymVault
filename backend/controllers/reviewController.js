@@ -45,11 +45,12 @@ const addReview = async (req, res) => {
 };
 
 const getCourseOrGymRating = async (req, res) => {
-  const { id } = req.params;
-  const rating = await reviewService.getCourseOrGymRating(id);
-  if (rating) {
+  try {
+    const { id } = req.params;
+    const rating = await reviewService.getCourseOrGymRating(id);
+
     res.status(200).json({ message: `rating found`, response: rating });
-  } else {
+  } catch (error) {
     res.status(404).json({ message: `rating not found` });
   }
 };
