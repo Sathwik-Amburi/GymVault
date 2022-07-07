@@ -88,4 +88,5 @@ export interface UserProfileDetails {
   lastName: string;
   phoneNumber: string;
   email: string;
+  payouts_enabled: boolean
 }
