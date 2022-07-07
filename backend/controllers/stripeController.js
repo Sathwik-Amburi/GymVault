@@ -71,12 +71,45 @@ const getBalances = async (req, res) => {
         const balances = await stripe.balance.retrieve({
             stripeAccount: user.stripe_account_id
         })
-        res.json({balances})
+        res.json({ balances })
     } catch (error) {
         console.log(error)
     }
 }
 
 
+const getSessionId = async (req, res) => {
+    console.log(req.body)
+    const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
 
-module.exports = { createStripeConnectAccount, setStripeConnectedStatus, managePayoutSettings, getBalances }
+        line_items: [
+            {
+                price_data: {
+                    currency: "eur",
+                    unit_amount: req.body.price, // in eur cents
+                    product_data: {
+                        name: req.body.name,
+                    },
+                },
+                quantity: 1,
+            },
+        ],
+
+        mode: 'payment',
+        success_url: 'http://localhost:3000',
+        cancel_url: 'http://localhost:3000/404',
+        payment_intent_data: {
+            application_fee_amount: req.body.price * 0.25, // we get 25% cut
+            transfer_data: {
+                destination: 'acct_1LIkW64YPJAWepwl',
+            },
+        },
+    });
+    
+    res.json({ link: session.url })
+}
+
+
+
+module.exports = { createStripeConnectAccount, setStripeConnectedStatus, managePayoutSettings, getBalances, getSessionId }
