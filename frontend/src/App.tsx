@@ -25,6 +25,7 @@ import RoleWrapper from "./components/RoleWrapper";
 import OwnerProfile from "./components/OwnerProfile";
 import Terms from "./components/Terms";
 import CreateGym from "./components/CreateGym";
+import StripeCallback from "./components/StripeCallback";
 
 const THEME = createTheme({
   typography: {
@@ -53,60 +54,73 @@ const App: FC = () => {
     <BrowserRouter>
       <ThemeProvider theme={THEME}>
         <Navbar />
-        <Container maxWidth="lg" style={{ padding: "3em" }}>
-          <Routes>
-            <Route path="/" element={<FrontPage />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/gym/add" element={<CreateGym/>} />
-            <Route path="/gym/:id" element={<GymViewPage />} />
-            <Route path="/gym/:id/reviews" element={<>TODO</>} />
-            <Route path="/course/:id" element={<CourseViewPage />} />
-            <Route
-              path="/user/tickets"
-              element={
-                <PrivateRoute>
-                  <UserSubscriptionsPage />
-                </PrivateRoute>
-              }
-            />
-            <Route path="/user/signup" element={<SignUpPage />} />
-            <Route
-              path="/user/confirmation/:email"
-              element={<EmailConfirmationPage />}
-            />
-            <Route
-              path="/user/email-verified"
-              element={<EmailConfirmedPage />}
-            />
-            <Route path="/user/login" element={<LoginPage />} />
-            <Route
-              path="/results/courses/search"
-              element={<CourseResultsPage />}
-            />
+        <Routes>
+          {/* Route without outer container*/}
+          <Route
+            path="/user/tickets"
+            element={
+              <PrivateRoute>
+                <UserSubscriptionsPage />
+              </PrivateRoute>
+            }
+          />
+          { /* All other routes */}
+          <Route path="/*" element={(<>
+            <Container maxWidth="lg" style={{ padding: "3em" }}>
+              <Routes>
+                <Route path="/" element={<FrontPage />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/gym/add" element={<CreateGym />} />
+                <Route path="/gym/:id" element={<GymViewPage />} />
+                <Route path="/course/:id" element={<CourseViewPage />} />
+                <Route path="/user/signup" element={<SignUpPage />} />
+                <Route
+                  path="/user/confirmation/:email"
+                  element={<EmailConfirmationPage />}
+                />
+                <Route
+                  path="/user/email-verified"
+                  element={<EmailConfirmedPage />}
+                />
+                <Route path="/user/login" element={<LoginPage />} />
+                <Route
+                  path="/results/courses/search"
+                  element={<CourseResultsPage />}
+                />
 
-            <Route path="/results/gyms/search" element={<ResultsPage />} />
-            <Route path="/buy/:id" element={<CheckoutPage />} />
-            <Route path="/buy/:id/confirm/:stripeCallback" element={<CheckoutPage />} />
-            <Route
-              path="/user/profile"
-              element={
-                <PrivateRoute>
-                  <UserProfile />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/user/owner-profile"
-              element={
-                <RoleWrapper allowedRoles={["gym_owner"]}>
-                  <OwnerProfile />
-                </RoleWrapper>
-              }
-            />
-            <Route path="/user/unauthorized" element={<NotAuthorizedPage />} />
-            <Route path="/*" element={<PageNotFound />} />
-          </Routes>
-        </Container>
+                <Route path="/results/gyms/search" element={<ResultsPage />} />
+                <Route path="/buy/:id" element={<CheckoutPage />} />
+                <Route path="/buy/:id/confirm/:stripeCallback" element={<CheckoutPage />} />
+                <Route
+                  path="/user/profile"
+                  element={
+                    <PrivateRoute>
+                      <UserProfile />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/stripe/connect/callback"
+                  element={
+                    <RoleWrapper allowedRoles={["gym_owner"]}>
+                      <StripeCallback />
+                    </RoleWrapper>
+                  }
+                />
+                <Route
+                  path="/user/owner-profile"
+                  element={
+                    <RoleWrapper allowedRoles={["gym_owner"]}>
+                      <OwnerProfile />
+                    </RoleWrapper>
+                  }
+                />
+                <Route path="/user/unauthorized" element={<NotAuthorizedPage />} />
+                <Route path="/*" element={<PageNotFound />} />
+              </Routes>
+            </Container>
+          </>)} />
+        </Routes>
       </ThemeProvider>
     </BrowserRouter>
   );

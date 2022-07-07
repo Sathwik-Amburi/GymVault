@@ -2,12 +2,14 @@ import { Grid, Paper } from "@mui/material";
 import { FC, useState } from "react";
 
 type LbProps = {
-  states: string[];
+  states?: string[];
 };
 
 const Lightbox: FC<LbProps> = (props) => {
   let totalStates = props.states;
-  let [viewing, setViewing] = useState(totalStates[0]);
+  if(totalStates == undefined)
+    totalStates = [];
+  let [viewing, setViewing] = useState<string>((totalStates !== undefined && totalStates.length > 0) ? totalStates[0] : "");
 
   return (
     <Grid container spacing={2}>

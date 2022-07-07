@@ -20,6 +20,8 @@ import RecentReviews from "./widgets/RecentReviews";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
+const moment = require("moment");
+
 const GymViewPage: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -67,7 +69,6 @@ const GymViewPage: FC = () => {
     // TODO fix!
     ApiCalls.getCoursesByGymId(fid)
       .then((res) => {
-        console.log(res.data);
         setCourses(res.data.response);
       })
       .catch((err) =>
@@ -81,6 +82,7 @@ const GymViewPage: FC = () => {
   const handleBuySubscriptionClick = () => {
     navigate(`/buy/${gym._id}`);
   };
+
 
   // /* MOCK - need own schema */
   // let reviews = [
@@ -98,24 +100,12 @@ const GymViewPage: FC = () => {
     "Climbing",
   ]);
 
-  // format: [name: string, included in base price: boolean]
-  let amenities = [
-    ["Sauna", false],
-    ["Pool", false],
-    ["Wi-Fi", true],
-    ["Parking", true],
-    ["Wheelchair Access", true],
-  ];
-
   return (
     <ChonkySpinner loading={loading}>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
           <Lightbox
-            states={[
-              "https://www.climbing.com/wp-content/uploads/2016/10/7_gn-copyjpg.jpg",
-              image,
-            ]}
+            states={gym.images}
           />
         </Grid>
 
@@ -158,13 +148,13 @@ const GymViewPage: FC = () => {
               May vary depending on course or subscription plan
             </Typography>
             <br />
-            {amenities.map((amenity) => {
+            {gym.amenities.map((amenity) => {
               return (
                 <Chip
-                  label={amenity[0]}
+                  label={amenity}
                   style={{ margin: "0.3em" }}
-                  color={amenity[1] ? undefined : "warning"}
-                  variant={amenity[1] ? undefined : "outlined"}
+                  color="secondary"
+                  variant="outlined"
                 />
               );
             })}
@@ -196,17 +186,17 @@ const GymViewPage: FC = () => {
           Most Critical
         </Button>
       </Box>
-      <Grid container spacing={3}>
-        <Grid item md={3} xs={12}>
+      <Grid>
+        <Grid>
           {reviews.map((review) => {
             return (
               <Paper style={{ padding: "1em" }} elevation={3}>
                 <CardHeader
                   avatar={<Avatar src="todo" />}
                   title={review.username}
-                  subheader={review.dateAdded}
+                  subheader={moment(review.dateAdded).format("MMM Do YYYY")}
                 />
-                <div style={{ textAlign: "center" }}>
+                <div>
                   <StarWidget rating={review.rating} />
                 </div>
                 <p>

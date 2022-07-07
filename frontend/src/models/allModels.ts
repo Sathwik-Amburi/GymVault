@@ -8,6 +8,7 @@ export interface Gym {
   amenities: [string, number][]; // [name, price]
   websiteURL: string;
   subscriptionOffers: SubscriptionOffers[];
+  images?: string[];
   _id: string;
 }
 
@@ -22,6 +23,7 @@ export interface Course {
   description: string;
   phoneNumber: number;
   address: string;
+  images?: string[];
   _id: string;
 }
 
@@ -94,4 +96,5 @@ export interface UserProfileDetails {
   lastName: string;
   phoneNumber: string;
   email: string;
+  payouts_enabled: boolean;
 }

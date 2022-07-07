@@ -17,7 +17,7 @@ const ChonkySpinner: FC<Props> = (props) => {
                     alignItems: "center", 
                     padding: "20%", gap: "20%" 
                 }}>
-                <CircularProgress size={100} />
+                <CircularProgress size={100} color="secondary" />
             </Grid>
             <div style={{ display: props.loading ? "none" : "block" }}> 
                 { props.children }

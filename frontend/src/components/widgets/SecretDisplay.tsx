@@ -4,7 +4,7 @@ import { FC, useState } from "react";
 
 type SdProps = {
   shown: boolean;
-  code: string;
+  code?: string;
   id: string;
 };
 

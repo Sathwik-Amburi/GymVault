@@ -13,7 +13,7 @@ class ReviewService {
   getReviewsById = async (Id) => {
     try {
       const gymReviews = await reviewModel.find({
-        $or: [{ gymId: Id }, { courseId: Id }],
+        $or: [{ gymId: Id }, { courseId: Id }, { userId: Id }],
       });
       return gymReviews;
     } catch (error) {

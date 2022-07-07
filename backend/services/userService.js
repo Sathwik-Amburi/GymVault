@@ -16,6 +16,7 @@ class UserService {
       lastName: user.lastName,
       email: user.email,
       phoneNumber: user.phoneNumber,
+      payouts_enabled: user.payouts_enabled
     };
   };
 }
