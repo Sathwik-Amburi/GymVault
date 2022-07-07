@@ -56,12 +56,12 @@ const OwnerHomePage: FC = () => {
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
                     <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center", margin: "15px 40px", padding: "9px 15px", backgroundColor: "#f5f5f5", borderRadius: "25px" }}>
                         <div style={{ color: "green", fontSize: "20px" }}> <i style={{ fontSize: "30px" }} className="fa-solid fa-sack-dollar"></i> Available Balance </div>
-                        {availableBalances.map((item) => <div style={{ color: "green", fontSize: "25px" }}> <b>{item.amount} {item.currency.toUpperCase()}</b></div> )}
+                        {availableBalances.map((item) => <div style={{ color: "green", fontSize: "25px" }}> <b>{item.amount/100} {item.currency.toUpperCase()}</b></div> )}
                     </div>
 
                     <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center", margin: "15px 40px", padding: "9px 15px", backgroundColor: "#f5f5f5", borderRadius: "25px" }}>
                         <div style={{ color: "green", fontSize: "20px" }}> <i style={{ fontSize: "30px" }} className="fas fa-clock"></i> Incoming Balance </div>
-                        {pendingBalances.map((item) => <div style={{ color: "green", fontSize: "25px" }}> <b>{item.amount} {item.currency.toUpperCase()}</b></div> )}
+                        {pendingBalances.map((item) => <div style={{ color: "green", fontSize: "25px" }}> <b>{item.amount/100} {item.currency.toUpperCase()}</b></div> )}
                     </div>
                 </div>
 
