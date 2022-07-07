@@ -79,7 +79,7 @@ const getBalances = async (req, res) => {
 
 
 const getSessionId = async (req, res) => {
-    console.log(req.body)
+    console.log(req.body.price * 0.25)
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
 
@@ -87,7 +87,7 @@ const getSessionId = async (req, res) => {
             {
                 price_data: {
                     currency: "eur",
-                    unit_amount: req.body.price, // in eur cents
+                    unit_amount: req.body.price * 100, // in eur cents
                     product_data: {
                         name: req.body.name,
                     },
@@ -100,7 +100,7 @@ const getSessionId = async (req, res) => {
         success_url: 'http://localhost:3000',
         cancel_url: 'http://localhost:3000/404',
         payment_intent_data: {
-            application_fee_amount: req.body.price * 0.25, // we get 25% cut
+            application_fee_amount:  Math.ceil(req.body.price * 0.25) * 100, // we get 25% cut and round up to nearest int in eur cent
             transfer_data: {
                 destination: 'acct_1LIkW64YPJAWepwl',
             },
