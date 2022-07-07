@@ -23,7 +23,7 @@ import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const ResultsPage: FC = () => {
   const queries = new URLSearchParams(window.location.search);
-  const maxPrice = 1000;
+  const maxPrice = 500;
   const [loading, setLoading] = useState<boolean>(true);
   const [results, setResults] = useState<Gym[]>();
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -33,13 +33,14 @@ const ResultsPage: FC = () => {
   useEffect(() => {
     const name = queries.get("name");
     const city = queries.get("city");
-    if (city) {
+
+    city &&
       ApiCalls.getAllGymsByCityOrName(city, name)
         .then((res) => {
           setResults(res.data.response);
           setLoading(false);
-        }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms"));
-    }
+        })
+        .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms"));
   }, []);
 
   const handleOpenModal = () => setOpenModal(true);
@@ -47,24 +48,29 @@ const ResultsPage: FC = () => {
 
   const handleFilter = () => {
     setLoading(true);
-    apiCalls
-      .getGymsByPriceRange(priceRange)
-      .then((res) => {
-        if (res.data.message === "No results found") {
-          setResults([]);
-        } else {
-          setResults(res.data.response.gyms);
-          setActiveFilters([
-            {
-              type: FilterTypes.PRICE_RANGE,
-              name: "Price range between",
-              minPrice: priceRange[0],
-              maxPrice: priceRange[1],
-            },
-          ]);
-        }
-        setLoading(false);
-      }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms by price range"));
+    const city = queries.get("city");
+    city &&
+      apiCalls
+        .getGymsByPriceRange(priceRange, city)
+        .then((res) => {
+          if (res.data.message === "No results found") {
+            setResults([]);
+          } else {
+            setResults(res.data.response.gyms);
+            setActiveFilters([
+              {
+                type: FilterTypes.PRICE_RANGE,
+                name: "Price range between",
+                minPrice: priceRange[0],
+                maxPrice: priceRange[1],
+              },
+            ]);
+          }
+          setLoading(false);
+        })
+        .catch((err) =>
+          UnifiedErrorHandler.handle(err, "Cannot get gyms by price range")
+        );
     setOpenModal(false);
   };
 
@@ -76,10 +82,16 @@ const ResultsPage: FC = () => {
     const updatedActiveFilters = activeFilters?.filter(
       (item) => item.type !== filterType
     );
+    const name = queries.get("name");
+    const city = queries.get("city");
+
     setActiveFilters(updatedActiveFilters);
-    ApiCalls.getAllGyms()
-      .then((res) => setResults(res.data))
-      .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get updated gyms"));
+    city &&
+      ApiCalls.getAllGymsByCityOrName(city, name)
+        .then((res) => setResults(res.data.response))
+        .catch((err) =>
+          UnifiedErrorHandler.handle(err, "Cannot get updated gyms")
+        );
   };
 
   return (
@@ -140,7 +152,7 @@ const ResultsPage: FC = () => {
               </BootstrapDialogTitle>
               <DialogContent dividers sx={{ width: 500 }}>
                 <Typography gutterBottom>
-                  Price range (€): between {priceRange[0]} and {priceRange[1]}{" "}
+                  Monthly Pass (€): between {priceRange[0]} and {priceRange[1]}{" "}
                   EUR
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -156,7 +168,7 @@ const ResultsPage: FC = () => {
                       }}
                       marks={[
                         { value: 0, label: "0 €" },
-                        { value: 1000, label: "1000 €" },
+                        { value: maxPrice, label: `${maxPrice} €` },
                       ]}
                     />
                   </Box>

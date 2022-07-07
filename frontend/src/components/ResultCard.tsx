@@ -1,11 +1,12 @@
 import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import image from "../images/progym.jpg";
 import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PaymentIcon from "@mui/icons-material/Payment";
-import { Gym, Subscription } from "../models/allModels";
+import { Gym } from "../models/allModels";
 import { useNavigate } from "react-router-dom";
+import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
@@ -19,17 +20,10 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
     navigate(`/gym/${gym._id}`);
   };
 
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>();
-
-  const getAllResultSubscriptions = async () => {
-    ApiCalls.getSubscriptionsByGymId(gym._id)
-      .then((res) => {
-        setSubscriptions(res.data.response);
-      }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get subscriptions for this gym"));
-  };
-
   useEffect(() => {
-    getAllResultSubscriptions();
+    ApiCalls.getGymOrCourseRating(gym._id)
+      .then((res) => {})
+      .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms"));
   }, []);
 
   return (
@@ -70,9 +64,14 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
                 sx={{ color: "#black" }}
                 style={{ marginRight: "4px" }}
               />
-              <Typography variant="body2" color="ActiveCaption">
-                {/* subscriptions && subscriptions[0].price */} EUR/Month
-              </Typography>
+              {gym.subscriptionOffers.map((item) => {
+                return (
+                  <Typography variant="body2" color="ActiveCaption">
+                    {toCleanSubscriptionTypeFormat(item.subscriptionType)}:{" "}
+                    {item.subscriptionPrice} EUR/Month
+                  </Typography>
+                );
+              })}
             </Grid>
           </CardContent>
         </Card>

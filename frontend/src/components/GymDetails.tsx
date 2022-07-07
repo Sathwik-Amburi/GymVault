@@ -28,12 +28,15 @@ const GymViewPage: FC = () => {
   const [reviewSort, setReviewSort] = useState("newest");
   const [gym, setGym] = useState<Gym>({
     name: "",
-    phoneNumber: "",
-    _id: "0",
-    city: "Berlin",
-    address: "",
     description: "",
+    phoneNumber: "",
+    address: "",
+    city: "",
     amenities: [],
+    websiteURL: "",
+    subscriptionOffers: [],
+    email: "",
+    _id: "",
   });
 
   useEffect(() => {
@@ -43,22 +46,36 @@ const GymViewPage: FC = () => {
         setGym(res.data.response);
         setLoading(false);
       })
-      .catch((err) => UnifiedErrorHandler.handle(err, "TODO: The gym you're seeing does not exist in the database"));
+      .catch((err) =>
+        UnifiedErrorHandler.handle(
+          err,
+          "TODO: The gym you're seeing does not exist in the database"
+        )
+      );
 
     ApiCalls.getReviewsById(fid)
       .then((res) => {
         setReviews(res.data.response);
       })
-      .catch((err) => UnifiedErrorHandler.handle(err, "TODO: The review you're seeing does not exist in the database"));
+      .catch((err) =>
+        UnifiedErrorHandler.handle(
+          err,
+          "TODO: The review you're seeing does not exist in the database"
+        )
+      );
 
     // TODO fix!
     ApiCalls.getCoursesByGymId(fid)
       .then((res) => {
         console.log(res.data);
         setCourses(res.data.response);
-      }
-      ).catch((err) => UnifiedErrorHandler.handle(err, "TODO: The course you're seeing does not exist in the database"));
-
+      })
+      .catch((err) =>
+        UnifiedErrorHandler.handle(
+          err,
+          "TODO: The course you're seeing does not exist in the database"
+        )
+      );
   }, [id]);
 
   const handleBuySubscriptionClick = () => {
@@ -192,7 +209,9 @@ const GymViewPage: FC = () => {
                 <div style={{ textAlign: "center" }}>
                   <StarWidget rating={review.rating} />
                 </div>
-                <p><b>{review.title}</b></p>
+                <p>
+                  <b>{review.title}</b>
+                </p>
                 <p>{review.description}</p>
               </Paper>
             );

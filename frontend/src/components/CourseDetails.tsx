@@ -25,12 +25,15 @@ const CourseViewPage: FC = () => {
   const [reviewSort, setReviewSort] = useState("newest");
   let Gym = {
     name: "",
-    phoneNumber: "",
-    _id: "0",
-    city: "",
-    address: "",
     description: "",
+    phoneNumber: "",
+    address: "",
+    city: "",
     amenities: [],
+    websiteURL: "",
+    subscriptionOffers: [],
+    email: "",
+    _id: "",
   };
   const [course, setCourse] = useState<Course>({
     name: "",
@@ -47,13 +50,25 @@ const CourseViewPage: FC = () => {
       .then((res) => {
         setCourse(res.data.response);
         setLoading(false);
-      }).catch((err) => UnifiedErrorHandler.handle(err, "TODO: The course you're seeing does not exist in the database"));
+      })
+      .catch((err) =>
+        UnifiedErrorHandler.handle(
+          err,
+          "TODO: The course you're seeing does not exist in the database"
+        )
+      );
 
     ApiCalls.getReviewsById(fid)
-        .then((res) => {
-          console.log(res.data);
-          setReviews(res.data.response);
-        }).catch((err) => UnifiedErrorHandler.handle(err, "The review does not exist in the database"));
+      .then((res) => {
+        console.log(res.data);
+        setReviews(res.data.response);
+      })
+      .catch((err) =>
+        UnifiedErrorHandler.handle(
+          err,
+          "The review does not exist in the database"
+        )
+      );
   }, [id]);
 
   const handleBuySubscriptionClick = () => {
@@ -80,10 +95,15 @@ const CourseViewPage: FC = () => {
           <hr />
           <p>{course.description}</p>
           <br />
-          { course.gym != null && <>
-            <p> <Link to={`/gym/${course.gym._id}`}>{course.gym.name}</Link></p>
-            <p> { course.gym.address }</p>   
-          </>}
+          {course.gym != null && (
+            <>
+              <p>
+                {" "}
+                <Link to={`/gym/${course.gym._id}`}>{course.gym.name}</Link>
+              </p>
+              <p> {course.gym.address}</p>
+            </>
+          )}
           <br />
           <p>Tel: +49 {course.phoneNumber}</p>
 
@@ -154,18 +174,20 @@ const CourseViewPage: FC = () => {
         <Grid item md={3} xs={12}>
           {reviews.map((review) => {
             return (
-                <Paper style={{ padding: "1em" }} elevation={3}>
-                  <CardHeader
-                      avatar={<Avatar src="todo" />}
-                      title={review.username}
-                      subheader={review.dateAdded}
-                  />
-                  <div style={{ textAlign: "center" }}>
-                    <StarWidget rating={review.rating} />
-                  </div>
-                  <p><b>{review.title}</b></p>
-                  <p>{review.description}</p>
-                </Paper>
+              <Paper style={{ padding: "1em" }} elevation={3}>
+                <CardHeader
+                  avatar={<Avatar src="todo" />}
+                  title={review.username}
+                  subheader={review.dateAdded}
+                />
+                <div style={{ textAlign: "center" }}>
+                  <StarWidget rating={review.rating} />
+                </div>
+                <p>
+                  <b>{review.title}</b>
+                </p>
+                <p>{review.description}</p>
+              </Paper>
             );
           })}
         </Grid>

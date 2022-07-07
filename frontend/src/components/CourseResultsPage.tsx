@@ -23,7 +23,7 @@ import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const CourseResultsPage: FC = () => {
   const queries = new URLSearchParams(window.location.search);
-  const maxPrice = 1000;
+  const maxPrice = 500;
   const [loading, setLoading] = useState<boolean>(true);
   const [results, setResults] = useState<Course[]>();
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -38,7 +38,8 @@ const CourseResultsPage: FC = () => {
         .then((res) => {
           setResults(res.data.response);
           setLoading(false);
-        }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get courses"));
+        })
+        .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get courses"));
     }
   }, []);
 
@@ -64,7 +65,8 @@ const CourseResultsPage: FC = () => {
           ]);
         }
         setLoading(false);
-      }).catch((err) => UnifiedErrorHandler.handle(err, "Filtering error"));
+      })
+      .catch((err) => UnifiedErrorHandler.handle(err, "Filtering error"));
     setOpenModal(false);
   };
 
@@ -78,7 +80,8 @@ const CourseResultsPage: FC = () => {
     );
     setActiveFilters(updatedActiveFilters);
     ApiCalls.getAllGyms()
-      .then((res) => setResults(res.data)).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get all gyms"));
+      .then((res) => setResults(res.data))
+      .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get all gyms"));
   };
 
   return (
@@ -155,7 +158,7 @@ const CourseResultsPage: FC = () => {
                       }}
                       marks={[
                         { value: 0, label: "0 €" },
-                        { value: 1000, label: "1000 €" },
+                        { value: maxPrice, label: `${maxPrice} €` },
                       ]}
                     />
                   </Box>

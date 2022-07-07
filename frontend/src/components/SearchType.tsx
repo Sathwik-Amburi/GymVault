@@ -18,15 +18,16 @@ export default function SearchType({ type }: any) {
   const [cities, setCities] = useState<City[]>([]);
 
   useEffect(() => {
-    ApiCalls.getAllAvailableGymCities()
+    ApiCalls.getAllAvailableSearchCities(type)
       .then((res) => {
         setCities(
           res.data.map((city) => {
             return { label: city };
           })
         );
-      }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gym cities"));
-  }, []);
+      })
+      .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gym cities"));
+  }, [type]);
 
   let navigate = useNavigate();
 

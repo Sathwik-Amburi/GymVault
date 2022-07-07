@@ -1,11 +1,19 @@
 export interface Gym {
   name: string;
+  email: string;
   description: string;
   phoneNumber: string;
   city: string;
   address: string;
   amenities: [string, number][]; // [name, price]
+  websiteURL: string;
+  subscriptionOffers: SubscriptionOffers[];
   _id: string;
+}
+
+export interface SubscriptionOffers {
+  subscriptionType: SubscriptionTypes.DAY_PASS;
+  subscriptionPrice: number;
 }
 
 export interface Course {
