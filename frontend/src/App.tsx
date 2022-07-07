@@ -25,6 +25,7 @@ import RoleWrapper from "./components/RoleWrapper";
 import OwnerProfile from "./components/OwnerProfile";
 import Terms from "./components/Terms";
 import CreateGym from "./components/CreateGym";
+import StripeCallback from "./components/StripeCallback";
 
 const THEME = createTheme({
   typography: {
@@ -64,12 +65,12 @@ const App: FC = () => {
             }
           />
           { /* All other routes */}
-          <Route path="/*" element={( <>
+          <Route path="/*" element={(<>
             <Container maxWidth="lg" style={{ padding: "3em" }}>
               <Routes>
                 <Route path="/" element={<FrontPage />} />
                 <Route path="/terms" element={<Terms />} />
-                <Route path="/gym/add" element={<CreateGym/>} />
+                <Route path="/gym/add" element={<CreateGym />} />
                 <Route path="/gym/:id" element={<GymViewPage />} />
                 <Route path="/course/:id" element={<CourseViewPage />} />
                 <Route path="/user/signup" element={<SignUpPage />} />
@@ -96,6 +97,14 @@ const App: FC = () => {
                     <PrivateRoute>
                       <UserProfile />
                     </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/stripe/connect/callback"
+                  element={
+                    <RoleWrapper allowedRoles={["gym_owner"]}>
+                      <StripeCallback />
+                    </RoleWrapper>
                   }
                 />
                 <Route

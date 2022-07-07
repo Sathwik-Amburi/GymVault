@@ -64,6 +64,10 @@ const UserSchema = new mongoose.Schema({
   stripe_account_id: {
     type: String,
   },
+  payouts_enabled:{
+    type: Boolean,
+    default: false
+  }
 });
 
 const User = mongoose.model("User", UserSchema);
