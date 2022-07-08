@@ -37,3 +37,21 @@ export const toCleanSubscriptionRange = (
       return "";
   }
 };
+
+export const getCourseSpelling = (resultLength: number | undefined): string => {
+  switch (resultLength) {
+    case 1:
+      return "course ";
+    default:
+      return "courses ";
+  }
+};
+
+export const getGymSpelling = (resultLength: number | undefined): string => {
+  switch (resultLength) {
+    case 1:
+      return "gym ";
+    default:
+      return "gyms ";
+  }
+};

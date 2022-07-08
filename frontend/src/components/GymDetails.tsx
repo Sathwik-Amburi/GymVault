@@ -28,6 +28,7 @@ const GymViewPage: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [reviews, setReviews] = useState<any[]>([]);
   const [reviewSort, setReviewSort] = useState("newest");
+  const [courses, setCourses] = useState<any[]>([]);
   const [gym, setGym] = useState<Gym>({
     name: "",
     description: "",
@@ -66,7 +67,6 @@ const GymViewPage: FC = () => {
         )
       );
 
-    // TODO fix!
     ApiCalls.getCoursesByGymId(fid)
       .then((res) => {
         setCourses(res.data.response);
@@ -83,30 +83,15 @@ const GymViewPage: FC = () => {
     navigate(`/buy/${gym._id}`);
   };
 
-
-  // /* MOCK - need own schema */
-  // let reviews = [
-  //     ...reviewsbyId
-  // ];
-  let [courses, setCourses] = useState<any[]>([
-    "Cardio",
-    "Strength",
-    "Yoga",
-    "Pilates",
-    "Boxing",
-    "Zumba",
-    "Dance",
-    "Swimming",
-    "Climbing",
-  ]);
+  const handleCourseChipClick = (courseId: string) => {
+    navigate(`/course/${courseId}`);
+  };
 
   return (
     <ChonkySpinner loading={loading}>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
-          <Lightbox
-            states={gym.images}
-          />
+          <Lightbox states={gym.images} />
         </Grid>
 
         <Grid item xs={12} md={6}>
@@ -132,13 +117,22 @@ const GymViewPage: FC = () => {
           <Paper style={{ padding: "2em", backgroundColor: "#eee" }}>
             <Typography variant="h6">Offered Courses</Typography>
             <br />
-            {courses.map((course) => {
-              return (
-                <Link href="/course/{course}">
-                  <Chip label={course} style={{ margin: "0.3em" }} />
-                </Link>
-              );
-            })}
+            {courses.length > 0 ? (
+              courses.map((item) => {
+                return (
+                  <Chip
+                    label={item.name}
+                    style={{ margin: "0.3em" }}
+                    onClick={() => handleCourseChipClick(item._id)}
+                  />
+                );
+              })
+            ) : (
+              <Typography variant="caption" style={{ fontStyle: "italic" }}>
+                This gym does not offer any courses yet
+              </Typography>
+            )}
+
             <br />
             <br />
             <hr />
