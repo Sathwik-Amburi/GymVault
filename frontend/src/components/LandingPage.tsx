@@ -6,7 +6,18 @@ import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const LandingPage: FC = () => {
   const [gyms, setGyms] = useState<Gym[]>([
-    { name: "", description: "", phoneNumber: "", address: "", city: "", amenities:  [], _id: "" },
+    {
+      name: "",
+      description: "",
+      phoneNumber: "",
+      address: "",
+      city: "",
+      amenities: [],
+      websiteURL: "",
+      subscriptionOffers: [],
+      email: "",
+      _id: "",
+    },
   ]);
 
   useEffect(() => {
@@ -14,7 +25,8 @@ const LandingPage: FC = () => {
       .then((res) => {
         console.log(res.data);
         setGyms(res.data);
-      }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms"));
+      })
+      .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms"));
   }, []);
 
   return (

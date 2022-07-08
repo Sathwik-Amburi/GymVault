@@ -5,7 +5,7 @@ const courseController = require("../../controllers/courseController");
 const subscriptionController = require("../../controllers/subscriptionController");
 
 router.get("/get-all-gyms", gymController.getAllGyms);
-router.get("/cities", gymController.getAllAvailableGymCities);
+router.get("/cities/:type", gymController.getAllAvailableSearchCities);
 router.post("/add-gym", gymController.addGym);
 router.get("/filter", gymController.filterGyms);
 router.post("/filter/price-range", gymController.filterGymsByPriceRange);

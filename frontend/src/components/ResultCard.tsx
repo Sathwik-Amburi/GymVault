@@ -4,8 +4,12 @@ import image from "../images/progym.jpg";
 import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PaymentIcon from "@mui/icons-material/Payment";
-import { Gym, Subscription } from "../models/allModels";
+import { Gym } from "../models/allModels";
 import { useNavigate } from "react-router-dom";
+import {
+  toCleanSubscriptionTypeFormat,
+  toCleanSubscriptionRange,
+} from "../api/utils/formatters";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
@@ -18,18 +22,12 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
   const handleCardClick = () => {
     navigate(`/gym/${gym._id}`);
   };
-
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>();
-
-  const getAllResultSubscriptions = async () => {
-    ApiCalls.getSubscriptionsByGymId(gym._id)
-      .then((res) => {
-        setSubscriptions(res.data.response);
-      }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get subscriptions for this gym"));
-  };
+  const [rating, setRating] = useState<number | null>(null);
 
   useEffect(() => {
-    getAllResultSubscriptions();
+    ApiCalls.getGymOrCourseRating(gym._id)
+      .then((res) => setRating(res.data.response))
+      .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gym rating"));
   }, []);
 
   return (
@@ -52,7 +50,11 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
                 {gym.name}
               </Typography>
               <StarIcon fontSize="small" sx={{ color: "#faec2d" }} />
-              <Typography>4.0</Typography>
+              {rating ? (
+                <Typography>{rating.toFixed(1)}</Typography>
+              ) : (
+                <Typography variant="caption">no rating yet</Typography>
+              )}
             </Grid>
             <Grid container direction={"row"} alignItems="center">
               <LocationOnIcon
@@ -64,15 +66,27 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
                 {gym.address}
               </Typography>
             </Grid>
-            <Grid container direction={"row"} alignItems="center">
+            <Grid container direction={"row"} alignItems="start">
               <PaymentIcon
                 fontSize="small"
                 sx={{ color: "#black" }}
                 style={{ marginRight: "4px" }}
               />
-              <Typography variant="body2" color="ActiveCaption">
-                {/* subscriptions && subscriptions[0].price */} EUR/Month
-              </Typography>
+              <div>
+                {gym.subscriptionOffers.map((item) => {
+                  return (
+                    <div style={{ fontSize: "12px" }}>
+                      <span>
+                        {toCleanSubscriptionTypeFormat(item.subscriptionType)}:{" "}
+                      </span>
+                      <span style={{ fontWeight: "bold" }}>
+                        {item.subscriptionPrice} EUR/
+                        {toCleanSubscriptionRange(item.subscriptionType)}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </Grid>
           </CardContent>
         </Card>

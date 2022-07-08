@@ -1,4 +1,5 @@
 const gymModel = require("../database/models/gym");
+const courseModel = require("../database/models/course");
 const Subscription = require("../database/models/subscription");
 
 class GymService {
@@ -13,11 +14,32 @@ class GymService {
 
   getAllAvailableGymCities = async () => {
     try {
-      const availableCities = await gymModel.distinct("city");
-      return availableCities;
+      const availableGymCities = await gymModel.distinct("city");
+      return availableGymCities;
     } catch (error) {
       console.log(
-        "Error while fetching all available cities in service",
+        "Error while fetching all available gym cities in service",
+        error.message
+      );
+    }
+  };
+
+  getAllAvailableCourseCities = async () => {
+    try {
+      const rawIds = await courseModel.find({}).select({ gymId: 1, _id: 0 });
+      const allCourseGymIds = rawIds.map((item) => {
+        return item.gymId.toString();
+      });
+      const availableCourseCities = await gymModel
+        .find()
+        .where("_id")
+        .in(allCourseGymIds)
+        .distinct("city");
+
+      return availableCourseCities;
+    } catch (error) {
+      console.log(
+        "Error while fetching all available course cities in service",
         error.message
       );
     }
@@ -52,20 +74,22 @@ class GymService {
     }
   };
 
-  filterGymsByPriceRange = async (priceRange) => {
+  filterGymsByPriceRange = async (priceRange, city) => {
     try {
-      const subscriptions = await Subscription.find({
-        price: { $gte: priceRange[0], $lte: priceRange[1] },
+      const gyms = await gymModel.find({
+        subscriptionOffers: {
+          $elemMatch: {
+            subscriptionType: "MONTHLY_PASS",
+            subscriptionPrice: {
+              $gte: priceRange[0],
+              $lte: priceRange[1],
+            },
+          },
+        },
+        city: city,
       });
 
-      const gyms = await gymModel.find({
-        _id: {
-          $in: subscriptions.map((item) => {
-            return item.gymId;
-          }),
-        },
-      });
-      return { gyms, subscriptions };
+      return { gyms };
     } catch (error) {
       console.log("Error while filtering gyms", error.message);
     }

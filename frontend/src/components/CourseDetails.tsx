@@ -27,19 +27,24 @@ const CourseViewPage: FC = () => {
   const [reviewSort, setReviewSort] = useState("newest");
   let Gym = {
     name: "",
-    phoneNumber: "",
-    _id: "0",
-    city: "",
-    address: "",
     description: "",
+    phoneNumber: "",
+    address: "",
+    city: "",
     amenities: [],
+    websiteURL: "",
+    subscriptionOffers: [],
+    email: "",
+    _id: "",
   };
   const [course, setCourse] = useState<Course>({
     name: "",
     gym: Gym,
+    gymId: Gym,
     description: "",
     phoneNumber: 0,
     address: "",
+    subscriptionOffers: [],
     _id: "0",
   });
 
@@ -53,9 +58,24 @@ const CourseViewPage: FC = () => {
             newCourse.gym = res.data.response;
             setCourse(newCourse);
             setLoading(false);
-          }).catch((err) => UnifiedErrorHandler.handle(err, "Error fetching gym"));
-      }).catch((err) => UnifiedErrorHandler.handle(err, "Error fetching course"));
-    
+          })
+          .catch((err) =>
+            UnifiedErrorHandler.handle(err, "Error fetching gym")
+          );
+      })
+      .catch((err) => UnifiedErrorHandler.handle(err, "Error fetching course"));
+
+    ApiCalls.getReviewsById(fid)
+      .then((res) => {
+        console.log(res.data);
+        setReviews(res.data.response);
+      })
+      .catch((err) =>
+        UnifiedErrorHandler.handle(
+          err,
+          "The review does not exist in the database"
+        )
+      );
   }, [id]);
 
   const handleBuySubscriptionClick = () => {
@@ -70,16 +90,17 @@ const CourseViewPage: FC = () => {
     <ChonkySpinner loading={loading}>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
-          <Lightbox
-            states={course.images}
-          />
+          <Lightbox states={course.images} />
         </Grid>
         <Grid item xs={12} md={6}>
           <h1>{course.name}</h1>
           <hr />
           <p>{course.description}</p>
           <div style={{ textAlign: "right" }}>
-            <Typography variant="h6" style={{ display: "inline", marginRight: "2em" }}>
+            <Typography
+              variant="h6"
+              style={{ display: "inline", marginRight: "2em" }}
+            >
               Starts from <b>69 €</b>
             </Typography>
             <Button
@@ -90,31 +111,44 @@ const CourseViewPage: FC = () => {
               Buy Subscription
             </Button>
           </div>
-          
+
           <br />
         </Grid>
         <Grid item md={6} xs={12}>
-          <Typography variant="h5" style={{ marginBottom: "1em", fontWeight: "bold" }}>
+          <Typography
+            variant="h5"
+            style={{ marginBottom: "1em", fontWeight: "bold" }}
+          >
             Organizer
           </Typography>
           <hr />
           <br />
           <Card elevation={2} style={{ padding: "2em" }}>
-            <Typography variant="h5" style={{ fontWeight: "bold" }} color="secondary">
-              <Link to={`/gym/${course.gym._id}`} style={{ textDecoration: "none", color: "inherit" }}>
+            <Typography
+              variant="h5"
+              style={{ fontWeight: "bold" }}
+              color="secondary"
+            >
+              <Link
+                to={`/gym/${course.gym._id}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
                 {course.gym.name}
               </Link>
             </Typography>
-            <i> { course.gym.address }</i> <br />
+            <i> {course.gym.address}</i> <br />
             <hr className="mini-hr" />
-            <i>
-              {course.gym.description}
-            </i>
-            <br /><br /><br />
-
-            <b> +{ course.gym.phoneNumber }</b>
+            <i>{course.gym.description}</i>
+            <br />
+            <br />
+            <br />
+            <b> +{course.gym.phoneNumber}</b>
             <div style={{ textAlign: "right" }}>
-              <Button href="tel:+49123456789" variant="contained" color="secondary">
+              <Button
+                href="tel:+49123456789"
+                variant="contained"
+                color="secondary"
+              >
                 <i className="fas fa-phone" style={{ marginRight: "1em" }} />
                 Call
               </Button>
@@ -122,7 +156,10 @@ const CourseViewPage: FC = () => {
           </Card>
         </Grid>
         <Grid item md={6} xs={12}>
-          <Typography variant="h5" style={{ marginBottom: "1em", fontWeight: "bold" }}>
+          <Typography
+            variant="h5"
+            style={{ marginBottom: "1em", fontWeight: "bold" }}
+          >
             Reviews
           </Typography>
           <hr />
@@ -181,18 +218,20 @@ const CourseViewPage: FC = () => {
         <Grid>
           {reviews.map((review) => {
             return (
-                <Paper style={{ padding: "1em" }} elevation={3}>
-                  <CardHeader
-                      avatar={<Avatar src="todo" />}
-                      title={review.username}
-                      subheader={moment(review.dateAdded).format("MMM Do YYYY")}
-                  />
-                  <div>
-                    <StarWidget rating={review.rating} />
-                  </div>
-                  <p><b>{review.title}</b></p>
-                  <p>{review.description}</p>
-                </Paper>
+              <Paper style={{ padding: "1em" }} elevation={3}>
+                <CardHeader
+                  avatar={<Avatar src="todo" />}
+                  title={review.username}
+                  subheader={moment(review.dateAdded).format("MMM Do YYYY")}
+                />
+                <div>
+                  <StarWidget rating={review.rating} />
+                </div>
+                <p>
+                  <b>{review.title}</b>
+                </p>
+                <p>{review.description}</p>
+              </Paper>
             );
           })}
         </Grid>

@@ -1,21 +1,31 @@
 export interface Gym {
   name: string;
+  email: string;
   description: string;
   phoneNumber: string;
   city: string;
   address: string;
   amenities: [string, number][]; // [name, price]
+  websiteURL: string;
+  subscriptionOffers: SubscriptionOffers[];
   images?: string[];
   _id: string;
+}
+
+export interface SubscriptionOffers {
+  subscriptionType: SubscriptionTypes.DAY_PASS;
+  subscriptionPrice: number;
 }
 
 export interface Course {
   name: string;
   gym: Gym;
+  gymId: Gym;
   description: string;
   phoneNumber: number;
   address: string;
   images?: string[];
+  subscriptionOffers: SubscriptionOffers[];
   _id: string;
 }
 
@@ -43,6 +53,7 @@ export interface Option {
 
 export enum SubscriptionTypes {
   DAY_PASS = "DAY_PASS",
+  SESSION_PASS = "SESSION_PASS",
   MONTHLY_PASS = "MONTHLY_PASS",
   YEARLY_PASS = "YEARLY_PASS",
   COURSE_TICKET = "COURSE_TICKET",
@@ -88,5 +99,5 @@ export interface UserProfileDetails {
   lastName: string;
   phoneNumber: string;
   email: string;
-  payouts_enabled: boolean
+  payouts_enabled: boolean;
 }

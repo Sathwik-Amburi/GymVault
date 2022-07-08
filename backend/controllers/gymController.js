@@ -12,13 +12,19 @@ const getAllGyms = async (req, res) => {
   }
 };
 
-const getAllAvailableGymCities = async (req, res) => {
+const getAllAvailableSearchCities = async (req, res) => {
   try {
-    const availableCities = await gymService.getAllAvailableGymCities();
+    const { type } = req.params;
+    let availablesCities = [];
+    if (type === "gyms") {
+      availableCities = await gymService.getAllAvailableGymCities();
+    } else {
+      availableCities = await gymService.getAllAvailableCourseCities();
+    }
 
     res.status(200).json(availableCities);
   } catch (error) {
-    console.log(`Error while fetching all availabe cities`, error.message);
+    console.log(`Error while fetching all available cities`, error.message);
     res
       .status(400)
       .json({ error: "Error while fetching all available cities" });
@@ -68,9 +74,9 @@ const filterGyms = async (req, res) => {
 };
 
 const filterGymsByPriceRange = async (req, res) => {
-  const { priceRange } = req.body;
+  const { priceRange, city } = req.body;
 
-  const results = await gymService.filterGymsByPriceRange(priceRange);
+  const results = await gymService.filterGymsByPriceRange(priceRange, city);
 
   if (results.gyms.length > 0) {
     res.status(200).json({
@@ -103,7 +109,7 @@ const addSubscription = async (req, res) => {
 
 module.exports = {
   getAllGyms,
-  getAllAvailableGymCities,
+  getAllAvailableSearchCities,
   getGym,
   addGym,
   filterGyms,

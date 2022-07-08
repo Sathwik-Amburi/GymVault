@@ -1,10 +1,22 @@
 const mongoose = require("mongoose");
 
-// TODO: Add remaining fields, Add remaining Schemas
+const subscriptionOffer = new mongoose.Schema({
+  subscriptionType: {
+    type: String,
+    enum: ["SESSION_PASS", "MONTHLY_PASS", "YEARLY_PASS"],
+    required: true,
+  },
+  subscriptionPrice: {
+    type: Number,
+    required: true,
+  },
+});
+
 const CourseSchema = new mongoose.Schema({
   gymId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Gym", required: true
+    ref: "Gym",
+    required: true,
   },
   name: {
     type: String,
@@ -17,6 +29,10 @@ const CourseSchema = new mongoose.Schema({
   images: {
     type: [String],
     default: [],
+  },
+  subscriptionOffers: {
+    type: [subscriptionOffer],
+    required: true,
   },
 });
 
