@@ -8,15 +8,18 @@ const createStripeConnectAccount = async (req, res) => {
         return res.status(403).send("unauthorized")
     }
 
+    let user = await userModel.findById(req.user.id)
+    let stripe_account_id = user.stripe_account_id
+
     // stripe account id can be created once per gym owner
     let stripeAccount = null
-    if (!req.user.stripe_account_id || req.user.stripe_account_id == null || req.user.stripe_account_id == undefined) {
+    if (!stripe_account_id || stripe_account_id == null || stripe_account_id == undefined) {
         const account = await stripe.accounts.create({ type: 'express' });
         const owner = await userModel.findByIdAndUpdate(req.user.id, { stripe_account_id: account.id }, { new: true })
         stripeAccount = owner.stripe_account_id
     }
     else {
-        stripeAccount = req.user.stripe_account_id
+        stripeAccount = stripe_account_id
     }
 
     // now create a stripe connect onboarding link using the unique account id
@@ -79,7 +82,11 @@ const getBalances = async (req, res) => {
 
 
 const getSessionId = async (req, res) => {
-    console.log(req.body.price * 0.25)
+
+    // temporary: just gets ANY gym owner's stripe account id to forward payments to
+    const user = await userModel.find({role: "gym_owner"}).limit(1).exec();
+    const stripe_account_id = user[0].stripe_account_id
+
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
 
@@ -102,7 +109,7 @@ const getSessionId = async (req, res) => {
         payment_intent_data: {
             application_fee_amount:  Math.ceil(req.body.price * 0.25) * 100, // we get 25% cut and round up to nearest int in eur cent
             transfer_data: {
-                destination: 'acct_1LIkW64YPJAWepwl',
+                destination: stripe_account_id,
             },
         },
     });
