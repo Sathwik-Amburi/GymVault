@@ -6,7 +6,6 @@ import {
   Chip,
   Avatar,
   CardHeader,
-  Link,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { FC, useEffect, useState } from "react";
@@ -15,7 +14,6 @@ import { Gym } from "../models/allModels";
 import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
 import { useNavigate, useParams } from "react-router-dom";
-import image from "../images/progym.jpg";
 import RecentReviews from "./widgets/RecentReviews";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";

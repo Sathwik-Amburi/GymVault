@@ -1,7 +1,7 @@
 import { Grid, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
-import { Course, Gym, Item, PurchaseOption } from "../models/allModels";
+import { Course, Gym, Item, PurchaseOption, SubscriptionOffers } from "../models/allModels";
 import PurchaseGrid from "./widgets/PurchaseGrid";
 import PurchaseCart, { CartItem } from "./widgets/PurchaseCart";
 import ApiCalls from "../api/apiCalls";
@@ -20,7 +20,44 @@ const CheckoutPage: FC = () => {
   const editable = stripeCallback === undefined;
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
+  const [basePurchases, setBasePurchases] = useState<PurchaseOption[]>([]);
 
+  function setSubscriptionBases(subscriptionOffers: SubscriptionOffers[]) {
+    if (subscriptionOffers !== undefined && subscriptionOffers.length > 0) {
+      let items: PurchaseOption[] = [];
+      if(subscriptionOffers.length > 0)
+        items.push({
+          _id: "1",
+          name: "Daily Entrance",
+          description: "Fixed duration, base-tier ticket",
+          price: subscriptionOffers[0].subscriptionPrice,
+          bgColor: "#030",
+          fgColor: "#fff"
+        } as PurchaseOption);
+
+      if(subscriptionOffers.length > 1)
+        items.push({
+          _id: "2",
+          name: "Monthly Ticket",
+          description: "Fixed duration, base-tier ticket",
+          price: subscriptionOffers[1].subscriptionPrice,
+          bgColor: "#060",
+          fgColor: "#fff"
+        } as PurchaseOption);
+      
+      if(subscriptionOffers.length > 2)
+        items.push({
+          _id: "3",
+          name: "Yearly Subscription",
+          description: "Fixed duration, base-tier ticket",
+          price: subscriptionOffers[2].subscriptionPrice,
+          bgColor: "#090",
+          fgColor: "#fff"
+        } as PurchaseOption);
+
+      setBasePurchases(items);
+    }
+  }
   function setGym(gym: Gym) {
     let item = {
       _id: "1",
@@ -70,79 +107,47 @@ const CheckoutPage: FC = () => {
   });
 
   useEffect(() => {
+    // TODO: rewrite the other way around (get the gym first, then the course if it exists)
     ApiCalls.getCourse(id!)
       .then((res) => {
         setCourse(res.data.response);
+        setSubscriptionBases(res.data.response.subscriptionOffers);
+        let response = res.data.response;
+        let course = item;
+        ApiCalls.getGym(res.data.response.gymId)
+          .then((res) => {
+            console.log(res);
+            setGym(res.data.response);
+            setCourse(response);
+            //setSubscriptionBases(res.data.response.subscriptionOffers);
+          }).catch((err) => UnifiedErrorHandler.handle(err, "Could not load gym for course"));
+
         setLoading(false);
       })
       .catch((err) => {
         ApiCalls.getGym(id!)
           .then((res) => {
+            console.log(res.data.response);
             setGym(res.data.response);
+            setSubscriptionBases(res.data.response.subscriptionOffers);
+
             setLoading(false);
-          })
-          .catch((err) =>
-            UnifiedErrorHandler.handle(
-              err,
-              "TODO: Neither a gym nor a course with this ID exists"
-            )
-          );
+          }).catch((err) => UnifiedErrorHandler.handle(err, "Neither a gym nor a course with this ID exists"));
+            // navigate to 404?
       });
-
-    // /confirm route taken
-    if (stripeCallback !== undefined) {
-      // TODO: call APIs to check validity of ("confirm") purchase, and redirect if valid
-      let uid = String(localStorage.getItem("token"));
-      ApiCalls.checkOrPurchase(id!, uid, stripeCallback)
-        .then((res) => {
-          navigate("/user/tickets?highlight=" + id);
-        })
-        .catch((err) =>
-          UnifiedErrorHandler.handle(
-            err,
-            "TODO (display): Error checking purchase"
-          )
-        );
-    }
+      
+      // /confirm route taken
+      if(stripeCallback !== undefined) {
+        // TODO: call APIs to check validity of ("confirm") purchase, and redirect if valid
+        let uid = String(localStorage.getItem("token"));
+        ApiCalls.checkOrPurchase(id!, uid, stripeCallback)
+          .then((res) => {
+            navigate("/user/tickets?highlight=" + id);
+          }).catch((err) => UnifiedErrorHandler.handle(err, "(display): Error checking purchase"));
+      }
   }, [id, navigate, stripeCallback]);
-
-  let [cart, setCart] = useState<CartItem[]>([
-    {
-      name: "Base Ticket",
-      description: "Includes registration, max. 4 entrances/week",
-      price: 28,
-      base: true,
-      _id: "1",
-    } as CartItem,
-  ]);
-
-  // TODO: all of the below will go into the useEffect hook
-  let items: PurchaseOption[] = [
-    {
-      _id: "1",
-      name: "Daily Entrance",
-      description: "Fixed duration, base-tier ticket",
-      price: 28,
-      bgColor: "#030",
-      fgColor: "#fff",
-    } as PurchaseOption,
-    {
-      _id: "2",
-      name: "Monthly Ticket",
-      description: "Fixed duration, base-tier ticket",
-      price: 28,
-      bgColor: "#060",
-      fgColor: "#fff",
-    } as PurchaseOption,
-    {
-      _id: "3",
-      name: "Yearly Subscription",
-      description: "Fixed duration, base-tier ticket",
-      price: 28,
-      bgColor: "#090",
-      fgColor: "#fff",
-    } as PurchaseOption,
-  ];
+  
+  let [cart, setCart] = useState<CartItem[]>([]);
 
   let optionals: PurchaseOption[] = [
     {
@@ -207,11 +212,11 @@ const CheckoutPage: FC = () => {
         </Grid>
 
         <Grid item md={6} xs={12}>
-          <PurchaseGrid
-            bases={items}
-            optionals={optionals}
-            cart={cart}
-            setCart={setCart}
+          <PurchaseGrid 
+            bases={basePurchases} 
+            optionals={optionals} 
+            cart={cart} 
+            setCart={setCart} 
             editable={editable}
           />
         </Grid>
