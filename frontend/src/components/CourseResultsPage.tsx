@@ -20,6 +20,7 @@ import apiCalls from "../api/apiCalls";
 import CourseResultCard from "./CourseResultCard";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
+import { getCourseSpelling } from "../api/utils/formatters";
 
 const CourseResultsPage: FC = () => {
   const queries = new URLSearchParams(window.location.search);
@@ -93,7 +94,8 @@ const CourseResultsPage: FC = () => {
       <Grid>
         <Grid>
           <Typography fontSize={"2em"}>
-            {results ? results.length : 0} Courses found in {city}
+            {results ? results.length : 0} {getCourseSpelling(results?.length)}
+            found in {city}
           </Typography>
         </Grid>
         <Grid

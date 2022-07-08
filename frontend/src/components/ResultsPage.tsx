@@ -20,6 +20,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import apiCalls from "../api/apiCalls";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
+import { getGymSpelling } from "../api/utils/formatters";
 
 const ResultsPage: FC = () => {
   const queries = new URLSearchParams(window.location.search);
@@ -96,7 +97,8 @@ const ResultsPage: FC = () => {
       <Grid>
         <Grid>
           <Typography fontSize={"2em"}>
-            {results ? results.length : 0} Gyms found in {city}
+            {results ? results.length : 0} {getGymSpelling(results?.length)}
+            found in {city}
           </Typography>
         </Grid>
         <Grid

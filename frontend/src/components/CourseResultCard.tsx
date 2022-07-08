@@ -20,6 +20,15 @@ interface ResultCardProps {
 
 const ResultCard: FC<ResultCardProps> = ({ course }) => {
   const navigate = useNavigate();
+  const [rating, setRating] = useState<number | null>(null);
+
+  useEffect(() => {
+    ApiCalls.getGymOrCourseRating(course._id)
+      .then((res) => setRating(res.data.response))
+      .catch((err) =>
+        UnifiedErrorHandler.handle(err, "Cannot get course rating")
+      );
+  }, []);
 
   const handleCardClick = () => {
     navigate(`/course/${course._id}`);
@@ -45,7 +54,11 @@ const ResultCard: FC<ResultCardProps> = ({ course }) => {
                 {course.name}
               </Typography>
               <StarIcon fontSize="small" sx={{ color: "#faec2d" }} />
-              <Typography>4.0</Typography>
+              {rating ? (
+                <Typography>{rating.toFixed(1)}</Typography>
+              ) : (
+                <Typography variant="caption">no rating yet</Typography>
+              )}
             </Grid>
             <Grid container direction={"row"} alignItems="center">
               <StoreMallDirectoryTwoTone
