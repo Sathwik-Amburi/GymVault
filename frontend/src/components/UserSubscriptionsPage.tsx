@@ -57,7 +57,7 @@ const UserSubscriptionsPage: FC = () => {
             price: obj.price,
             purchaseDate: obj.purchaseDate,
             expireDate: obj.expireDate,
-            ticketSecret: "ASDFG-HJKLA",
+            ticketSecret: obj.ticketSecret,
             _id: obj._id,
           };
           if(new Date(obj.expireDate) > new Date()) {

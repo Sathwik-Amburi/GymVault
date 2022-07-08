@@ -21,12 +21,6 @@ const SecretDisplay: FC<SdProps> = (props) => {
         <Typography display="inline" variant="h5">
           {props.code}
         </Typography>
-        <span style={{ margin: "0.5em" }}>
-          // 
-        </span>
-        <Typography display="inline" variant="h6">
-          John Doe 
-        </Typography>
         <br /><br />
         <Typography variant="body2">
           Do not share this code with anyone.
