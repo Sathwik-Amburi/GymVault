@@ -22,9 +22,9 @@ const getReviewsById = async (req, res) => {
   }
 };
 
-const getReviewsByUserId =  async (req, res) => {
+const getReviewByUserId =  async (req, res) => {
   const { userid,id } = req.params;
-  const userReview = await reviewService.getReviewsByUserId(userid,id);
+  const userReview = await reviewService.getReviewByUserId(userid,id);
   if (userReview) {
     res.status(200).json({ message: `Review found`, response: userReview });
   } else {
@@ -71,5 +71,5 @@ module.exports = {
   getReviewsById,
   addReview,
   getCourseOrGymRating,
-  getReviewsByUserId
+  getReviewByUserId
 };

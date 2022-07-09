@@ -21,24 +21,33 @@ const theme = createTheme();
 export default function ReviewButton(props: any) {
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState<number | null>(0);
-    const [reviews, setReviews] = useState<any[]>([]);
+    const [rating, setReview] = useState<any>(0);
+    let reviewAdded = false
+    let userId = props.userId
+    let Id = props.gymId || props.courseId
 
-    useEffect(() => {
-        ApiCalls.getReviewsById(props.userId)
+    try {
+        ApiCalls.getReviewByUserId(userId,Id)
             .then((res) => {
-                console.log(res.data);
-                setReviews(res.data.response);
-            })
-            .catch((err) =>
-                UnifiedErrorHandler.handle(
-                    err,
-                    "The review does not exist in the database"
-                ));
-    });
+                setReview(res.data.response);
+            }
+            );
+    }
+    catch(e){
+        //do nothing
 
-    const review = reviews.filter(function (r){
-        return r.gymId = props.gymId
-    })
+    }
+
+
+if (rating ===0){
+    let reviewAdded = false
+}
+else{
+    reviewAdded = true
+}
+
+
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -68,24 +77,34 @@ export default function ReviewButton(props: any) {
 
     return (
         <div>
-            <Box
-                sx={{
-                    '& > legend': { mt: 2 },
-                }}
-            >
-                <Typography component="legend" style={{display: "inline-block"}}>Rate this: </Typography>
-                <Rating
-                    name="rating"
-                    size = "large"
-                    value={value}
-                    onChange={(event, newValue) => {
-                        setValue(newValue);
+            {!reviewAdded &&            <>
+                <Box
+                    sx={{
+                        '& > legend': { mt: 2 },
                     }}
-                />
-            </Box>
-            <Button variant="contained" onClick={handleClickOpen}>
-                Write a review!
-            </Button>
+                >
+                    <Typography component="legend" style={{display: "inline-block"}}>Rate this: </Typography>
+                    <Rating
+                        name="rating"
+                        size = "large"
+                        value={value}
+                        onChange={(event, newValue) => {
+                            setValue(newValue);
+                        }}
+                    />
+                </Box>
+                <Button variant="contained" onClick={handleClickOpen}>
+                    Write a review!
+                </Button>
+            </>}
+            {reviewAdded &&
+                <>
+                    <hr />
+                    <Typography component="legend" style={{display: "inline-block"}}>You have rated this subscription: </Typography>
+                    <Rating name="read-only" value={rating} size = "large" readOnly />
+                </>
+            }
+
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Review</DialogTitle>
                 <DialogContent>
@@ -129,7 +148,7 @@ export default function ReviewButton(props: any) {
                                             hidden
                                         />
                                         <input
-                                            value = {props.rating || 3}
+                                            value = {value || 3}
                                             name = 'rating'
                                             id = 'rating'
                                             hidden

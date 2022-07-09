@@ -21,14 +21,17 @@ class ReviewService {
     }
   };
 
-  getReviewsByUserId = async (userId,Id) =>{
+  getReviewByUserId = async (userId,Id) =>{
     try {
-      const reviewByUser = await reviewModel.find({
+      const reviewByUser = await reviewModel.findOne({
         $and: [
             {userId: userId},
             {$or:[{ gymId: Id }, {courseId: Id}]}
         ],
       });
+      if (reviewByUser){
+        return reviewByUser.rating
+      }
       return reviewByUser;
     } catch (error) {
       console.log("Error while fetching user review", error.message);
