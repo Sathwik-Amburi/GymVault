@@ -1,7 +1,7 @@
 import { Grid, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
-import { Course, Gym, Item, PurchaseOption, SubscriptionOffers } from "../models/allModels";
+import { Course, Gym, Item, Option, PurchaseOption, SubscriptionOffers } from "../models/allModels";
 import PurchaseGrid from "./widgets/PurchaseGrid";
 import PurchaseCart, { CartItem } from "./widgets/PurchaseCart";
 import ApiCalls from "../api/apiCalls";
@@ -68,8 +68,8 @@ const CheckoutPage: FC = () => {
       type: "gym",
       address: gym.address,
       description: gym.description,
-      price: -1,
-      optionals: [],
+      price: -1, // TODO: this "price" here can be dropped from the schema i think?
+      optionals: gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
 
       fgColor: "",
       bgColor: "",
@@ -86,7 +86,7 @@ const CheckoutPage: FC = () => {
       address: gym.address,
       description: course.description,
       price: -1, // TODO: this "price" here can be dropped from the schema i think?
-      optionals: [],
+      optionals: gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
 
       fgColor: "",
       bgColor: "",
@@ -148,7 +148,7 @@ const CheckoutPage: FC = () => {
       }
   }, [id, navigate, stripeCallback]);
 
-  let optionals: PurchaseOption[] = [
+  /*let optionals: PurchaseOption[] = [
     {
       _id: "1",
       name: "Equipment Rental",
@@ -181,7 +181,35 @@ const CheckoutPage: FC = () => {
       bgColor: "#fff",
       fgColor: "#57f",
     } as PurchaseOption,
-  ];
+  ];*/
+  function optionToPurchase(option: Option, colorHash: string): PurchaseOption {
+    // technically, custom ones would be saved in the backend too, but that's way overkill
+    let colorSchemas: [string, string][] = [
+      ["#555", "#fff"],
+      ["#CD9400", "#fff"],
+      ["#f00", "#fff"],
+      ["#fff", "#57f"],
+    ];
+
+    // copied from: https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+    function simpleHash(str: string): number {
+      var hash = 0, i, chr;
+      if (str.length === 0) return hash;
+      for (i = 0; i < str.length; i++) {
+        chr   = str.charCodeAt(i);
+        hash  = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+      }
+      return hash;
+    };
+
+    let h = simpleHash(colorHash);
+    return {
+      ...option,
+      bgColor: colorSchemas[h % colorSchemas.length][0],
+      fgColor: colorSchemas[h % colorSchemas.length][1],
+    } as PurchaseOption;
+  }
 
   return (
     <ChonkySpinner loading={loading}>
@@ -213,7 +241,7 @@ const CheckoutPage: FC = () => {
         <Grid item md={6} xs={12}>
           <PurchaseGrid 
             bases={basePurchases} 
-            optionals={optionals} 
+            optionals={item.optionals}
             cart={cart} 
             setCart={setCart} 
             editable={editable}
