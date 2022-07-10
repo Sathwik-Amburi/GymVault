@@ -21,6 +21,7 @@ const CheckoutPage: FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [basePurchases, setBasePurchases] = useState<PurchaseOption[]>([]);
+  let [cart, setCart] = useState<CartItem[]>([]);
 
   function setSubscriptionBases(subscriptionOffers: SubscriptionOffers[]) {
     if (subscriptionOffers !== undefined && subscriptionOffers.length > 0) {
@@ -56,6 +57,7 @@ const CheckoutPage: FC = () => {
         } as PurchaseOption);
 
       setBasePurchases(items);
+      setCart([{ ...items[0], base: true } as CartItem]);
     }
   }
   function setGym(gym: Gym) {
@@ -74,15 +76,16 @@ const CheckoutPage: FC = () => {
     } as Item;
     setItem(item);
   }
-  function setCourse(course: Course) {
+  function setCourse(course: Course, gym: Gym) {
+    // values left to "item.xxx" are recycled from setGym
     let newItem = {
       _id: course._id,
-      gymName: item.gymName,
+      gymName: gym.name,
       courseName: course.name,
       type: "course",
-      address: course.address, // TODO: shouldn't this be "course.gym.address"???
+      address: gym.address,
       description: course.description,
-      price: -1,
+      price: -1, // TODO: this "price" here can be dropped from the schema i think?
       options: [],
 
       fgColor: "",
@@ -93,12 +96,11 @@ const CheckoutPage: FC = () => {
 
   const [item, setItem] = useState<Item>({
     _id: "1",
-    gymName: "ZHS Hochschulsport",
-    courseName: "Yoga for Beginners",
-    type: "course",
-    address: "Connollystraße 32, Munich",
-    description:
-      "A basic course variating over Hatha Yoga, and meditation practices. Unlike the more static and strengthening Hatha yoga style, a Vinyasa class is very dynamic.  The physical exercises, the so-called asanas, are not practised individually, but are strung together in flowing movements. The class is very calm and relaxed, and the students are able to focus on the breath and the body.",
+    gymName: "",
+    courseName: "",
+    type: "",
+    address: "",
+    description: "",
     price: -1,
     options: [],
 
@@ -110,21 +112,20 @@ const CheckoutPage: FC = () => {
     // TODO: rewrite the other way around (get the gym first, then the course if it exists)
     ApiCalls.getCourse(id!)
       .then((res) => {
-        setCourse(res.data.response);
         setSubscriptionBases(res.data.response.subscriptionOffers);
-        let response = res.data.response;
-        let course = item;
+        let courseResponse = res.data.response;
         ApiCalls.getGym(res.data.response.gymId)
           .then((res) => {
             console.log(res);
             setGym(res.data.response);
-            setCourse(response);
-            //setSubscriptionBases(res.data.response.subscriptionOffers);
+            setCourse(courseResponse, res.data.response);
+            setSubscriptionBases(res.data.response.subscriptionOffers);
           }).catch((err) => UnifiedErrorHandler.handle(err, "Could not load gym for course"));
 
         setLoading(false);
       })
       .catch((err) => {
+        // it's not a course, so see if a corresponding gym exists
         ApiCalls.getGym(id!)
           .then((res) => {
             console.log(res.data.response);
@@ -146,8 +147,6 @@ const CheckoutPage: FC = () => {
           }).catch((err) => UnifiedErrorHandler.handle(err, "(display): Error checking purchase"));
       }
   }, [id, navigate, stripeCallback]);
-  
-  let [cart, setCart] = useState<CartItem[]>([]);
 
   let optionals: PurchaseOption[] = [
     {
