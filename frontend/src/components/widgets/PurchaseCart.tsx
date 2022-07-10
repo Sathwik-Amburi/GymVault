@@ -24,7 +24,7 @@ interface CartProps {
 const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
   const [selected, setSelected] = useState<String>("1");
   const [selectedOption, setSelectedOption] = useState<string[]>([]);
-  const { id } = useParams()
+  const { id } = useParams() // gym/course id
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
