@@ -26,7 +26,7 @@ const SubscriptionSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  options: {
+  optionals: {
     type: [String],
   },
   purchaseDate: {

@@ -12,6 +12,7 @@ const LandingPage: FC = () => {
       phoneNumber: "",
       address: "",
       city: "",
+      optionals: [],
       amenities: [],
       websiteURL: "",
       subscriptionOffers: [],

@@ -90,7 +90,7 @@ class SubscriptionService {
                     name: entity.name,
                     type: type,
                     price: 1234,
-                    options: [],
+                    optionals: [],
                     purchaseDate: purchaseDate,
                     expireDate: expirationDate,
                     ticketSecret: "TODO",

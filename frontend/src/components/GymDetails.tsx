@@ -33,6 +33,7 @@ const GymViewPage: FC = () => {
     phoneNumber: "",
     address: "",
     city: "",
+    optionals: [],
     amenities: [],
     websiteURL: "",
     subscriptionOffers: [],

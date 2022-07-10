@@ -69,7 +69,7 @@ const CheckoutPage: FC = () => {
       address: gym.address,
       description: gym.description,
       price: -1,
-      options: [],
+      optionals: [],
 
       fgColor: "",
       bgColor: "",
@@ -86,7 +86,7 @@ const CheckoutPage: FC = () => {
       address: gym.address,
       description: course.description,
       price: -1, // TODO: this "price" here can be dropped from the schema i think?
-      options: [],
+      optionals: [],
 
       fgColor: "",
       bgColor: "",
@@ -102,7 +102,7 @@ const CheckoutPage: FC = () => {
     address: "",
     description: "",
     price: -1,
-    options: [],
+    optionals: [],
 
     fgColor: "",
     bgColor: "",

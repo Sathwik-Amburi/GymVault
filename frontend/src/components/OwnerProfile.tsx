@@ -15,7 +15,7 @@ const OwnerProfile: FC = () => {
       .then((res) => {
         setProfile(res.data);
       }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get user profile"));
-  }, []);
+  }, [token]);
 
 
 
