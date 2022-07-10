@@ -14,8 +14,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
-import {useEffect, useState} from "react";
-import UnifiedErrorHandler from "../utilities/UnifiedErrorHandler";
+import { useState} from "react";
 
 const theme = createTheme();
 export default function ReviewButton(props: any) {
@@ -32,21 +31,11 @@ export default function ReviewButton(props: any) {
                 setReview(res.data.response);
             }
             );
-    }
-    catch(e){
+    } catch(e){
         //do nothing
-
     }
 
-
-if (rating ===0){
-    let reviewAdded = false
-}
-else{
-    reviewAdded = true
-}
-
-
+    reviewAdded = (rating !== 0);
 
     const handleClickOpen = () => {
         setOpen(true);
