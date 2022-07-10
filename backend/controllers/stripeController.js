@@ -81,13 +81,16 @@ const getBalances = async (req, res) => {
 }
 
 
-const getSessionId = async (req, res) => {
+const createCheckoutSession = async (req, res) => {
 
-    console.log(`ID is ${req.body.id}`)
     // temporary: just gets ANY gym owner's stripe account id to forward payments to
-    const user = await userModel.find({role: "gym_owner"}).limit(1).exec();
-    const stripe_account_id = user[0].stripe_account_id
+    const gym_owner = await userModel.find({ role: "gym_owner" }).limit(1).exec();
+    const stripe_account_id = gym_owner[0].stripe_account_id
 
+    const product = 'gym'
+    // const product = req.body.product
+
+    // create stripe checkout session for purchasing the product
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
 
@@ -105,10 +108,10 @@ const getSessionId = async (req, res) => {
         ],
 
         mode: 'payment',
-        success_url: 'http://localhost:3000',
+        success_url: `http://localhost:3000/stripe/checkout/callback/${product}/${req.body.id}`, // pass gym/course id and other attributes
         cancel_url: 'http://localhost:3000/404',
         payment_intent_data: {
-            application_fee_amount:  Math.ceil(req.body.price * 0.25) * 100, // we get 25% cut and round up to nearest int in eur cent
+            application_fee_amount: Math.ceil(req.body.price * 0.25) * 100, // we get 25% cut and round up to nearest int in eur cent
             transfer_data: {
                 destination: stripe_account_id,
             },
@@ -116,13 +119,45 @@ const getSessionId = async (req, res) => {
     });
 
 
-    // save stripe payment session into user's model (with payment_status: false)
-    await userModel.findOneAndUpdate({stripe_account_id}, {stripe_session: session})
+    // save stripe payment session into user's model (with payment_status: unpaid)
+    await userModel.findByIdAndUpdate(req.user.id, { stripe_session: session })
 
-    
     res.json({ link: session.url })
 }
 
 
+const getPaymentStatus = async (req, res) => {
 
-module.exports = { createStripeConnectAccount, setStripeConnectedStatus, managePayoutSettings, getBalances, getSessionId }
+    // the user who made this request
+    const user = await userModel.findById(req.user.id)
+
+    // user is not in a stripe checkout session
+    if (!user.stripe_session || user.stripe_session == undefined || user.stripe_session == null) {
+        return res.status(400).json({ message: "something went wrong" })
+    }
+
+    // get user's stripe checkout session
+    const session = await stripe.checkout.sessions.retrieve(user.stripe_session.id)
+    // the session exists and belongs to the user
+    if (session.payment_status === 'paid') {
+        await user.update({ stripe_session: null }) // delete checkout session so that it is not reused
+        return res.json({ paid: true })
+    }
+
+    else { // user is attempting to use stripe checkout callback before payment
+        return res.json({ paid: false })
+    }
+
+
+}
+
+
+
+module.exports = {
+    createStripeConnectAccount,
+    setStripeConnectedStatus,
+    managePayoutSettings,
+    getBalances,
+    createCheckoutSession,
+    getPaymentStatus
+}

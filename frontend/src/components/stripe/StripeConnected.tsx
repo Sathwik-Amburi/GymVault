@@ -5,7 +5,7 @@ import { FC, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
 
-const OwnerHomePage: FC = () => {
+const StripeConnect: FC = () => {
 
     const [loading, setLoading] = useState<boolean>(false)
     const [availableBalances, setAvailableBalances] = useState<Array<any>>([])
@@ -73,4 +73,4 @@ const OwnerHomePage: FC = () => {
     );
 }
 
-export default OwnerHomePage
+export default StripeConnect

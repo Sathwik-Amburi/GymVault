@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import NotAuthorizedPage from './NotAuthorizedPage';
 
 function StripeCallback() {
 
@@ -18,7 +17,7 @@ function StripeCallback() {
             response.data.payouts_enabled ? navigate("/gym/add") : navigate("/user/owner-profile")
         } catch (error) {
             // 403 error, normal user not allowed here
-            <NotAuthorizedPage />
+            navigate('/user/unauthorized')
         }
     }
 

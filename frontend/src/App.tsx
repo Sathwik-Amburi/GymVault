@@ -25,7 +25,8 @@ import RoleWrapper from "./components/RoleWrapper";
 import OwnerProfile from "./components/OwnerProfile";
 import Terms from "./components/Terms";
 import CreateGym from "./components/CreateGym";
-import StripeCallback from "./components/StripeCallback";
+import StripeConnectCallback from "./components/stripe/StripeConnectCallback";
+import StripeGymCallback from "./components/stripe/StripeGymCheckoutCallback";
 
 const THEME = createTheme({
   typography: {
@@ -103,10 +104,16 @@ const App: FC = () => {
                   path="/stripe/connect/callback"
                   element={
                     <RoleWrapper allowedRoles={["gym_owner"]}>
-                      <StripeCallback />
+                      <StripeConnectCallback />
                     </RoleWrapper>
                   }
                 />
+
+                <Route
+                  path="/stripe/checkout/callback/gym/:gym_id"
+                  element={<PrivateRoute><StripeGymCallback /></PrivateRoute>}
+                />
+                
                 <Route
                   path="/user/owner-profile"
                   element={
