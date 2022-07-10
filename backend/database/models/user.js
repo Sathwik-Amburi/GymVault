@@ -67,6 +67,11 @@ const UserSchema = new mongoose.Schema({
   payouts_enabled:{
     type: Boolean,
     default: false
+  },
+  stripe_session: {
+    type: Object,
+    required: false,
+    default: null
   }
 });
 
