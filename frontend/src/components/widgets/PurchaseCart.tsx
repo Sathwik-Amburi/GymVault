@@ -16,6 +16,7 @@ interface CartProps {
   baseId: string,
   cart: CartItem[],
   setCart: (cart: CartItem[]) => void,
+  setEditable: (editable: boolean) => void,
   allowCheckout: boolean,
 }
 
@@ -24,7 +25,8 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const stripeHandlePayment = async () => {
-    setLoading(true)
+    setLoading(true);
+    props.setEditable(false);
     let cart: CartItem[] = props.cart
     let price = 0;
     let name = ''

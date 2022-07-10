@@ -36,7 +36,6 @@ export interface Item {
   type: string;
   address: string;
   description: string;
-  price: number;
   optionals: PurchaseOption[];
 
   fgColor: string;

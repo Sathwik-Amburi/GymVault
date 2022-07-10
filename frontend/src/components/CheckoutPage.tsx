@@ -17,7 +17,7 @@ const CheckoutPage: FC = () => {
   if (!id) {
     alert("No ID provided! This should NOT happen");
   }
-  const editable = stripeCallback === undefined;
+  const [editable, setEditable] = useState(stripeCallback === undefined);
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [basePurchases, setBasePurchases] = useState<PurchaseOption[]>([]);
@@ -85,7 +85,6 @@ const CheckoutPage: FC = () => {
       type: "course",
       address: gym.address,
       description: course.description,
-      price: -1, // TODO: this "price" here can be dropped from the schema i think?
       optionals: gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
 
       fgColor: "",
@@ -101,7 +100,6 @@ const CheckoutPage: FC = () => {
     type: "",
     address: "",
     description: "",
-    price: -1,
     optionals: [],
 
     fgColor: "",
@@ -265,6 +263,7 @@ const CheckoutPage: FC = () => {
             cart={cart}
             setCart={setCart}
             allowCheckout={editable}
+            setEditable={setEditable}
           />
         </Grid>
       </Grid>
