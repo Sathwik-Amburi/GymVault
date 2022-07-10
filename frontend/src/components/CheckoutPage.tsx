@@ -145,41 +145,7 @@ const CheckoutPage: FC = () => {
           }).catch((err) => UnifiedErrorHandler.handle(err, "(display): Error checking purchase"));
       }
   }, [id, navigate, stripeCallback]);
-
-  /*let optionals: PurchaseOption[] = [
-    {
-      _id: "1",
-      name: "Equipment Rental",
-      description: "Rent mat and accessories during course sessions",
-      price: 16,
-      bgColor: "#555",
-      fgColor: "#fff",
-    } as PurchaseOption,
-    {
-      _id: "4",
-      name: "VIP Subscription 👑️",
-      description: "24h entry (auto scan), premium equipment",
-      price: 99,
-      bgColor: "#CD9400",
-      fgColor: "#fff",
-    } as PurchaseOption,
-    {
-      _id: "3",
-      name: "Sauna Access",
-      description: "Enter our built-in sauna after your workouts",
-      price: 40,
-      bgColor: "#f00",
-      fgColor: "#fff",
-    } as PurchaseOption,
-    {
-      _id: "2",
-      name: "Special Needs ♿️",
-      description: "Require assistance for disabilities",
-      price: 0,
-      bgColor: "#fff",
-      fgColor: "#57f",
-    } as PurchaseOption,
-  ];*/
+  
   function optionToPurchase(option: Option, colorHash: string): PurchaseOption {
     // technically, custom ones would be saved in the backend too, but that's way overkill
     let colorSchemas: [string, string][] = [
