@@ -3,6 +3,8 @@ import { fontSize } from "@mui/system";
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { Item, Option } from "../../models/allModels";
+import { useParams } from 'react-router-dom';
+
 
 export interface CartItem {
   name: string,
@@ -22,7 +24,7 @@ interface CartProps {
 const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
   const [selected, setSelected] = useState<String>("1");
   const [selectedOption, setSelectedOption] = useState<string[]>([]);
-
+  const { id } = useParams()
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
@@ -42,7 +44,7 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
     })
     name = name.substr(0, name.length - 2)
     const headers = { "x-access-token": String(localStorage.getItem('token')) }
-    let response = await axios.post('/stripe/get-stripe-session', {name, price}, { headers })
+    let response = await axios.post('/stripe/get-stripe-session', {name, price, id}, { headers })
     window.location.href = response.data.link
   }
 

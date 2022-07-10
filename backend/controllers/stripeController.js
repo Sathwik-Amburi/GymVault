@@ -83,6 +83,7 @@ const getBalances = async (req, res) => {
 
 const getSessionId = async (req, res) => {
 
+    console.log(`ID is ${req.body.id}`)
     // temporary: just gets ANY gym owner's stripe account id to forward payments to
     const user = await userModel.find({role: "gym_owner"}).limit(1).exec();
     const stripe_account_id = user[0].stripe_account_id
@@ -113,6 +114,11 @@ const getSessionId = async (req, res) => {
             },
         },
     });
+
+
+    // save stripe payment session into user's model (with payment_status: false)
+    await userModel.findOneAndUpdate({stripe_account_id}, {stripe_session: session})
+
     
     res.json({ link: session.url })
 }
