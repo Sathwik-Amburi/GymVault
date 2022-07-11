@@ -16,6 +16,9 @@ import Lightbox from "./widgets/Lightbox";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
+import PricingList from "./widgets/PricingList";
+import { RatingState } from "./ResultCard";
+import StarIcon from "@mui/icons-material/Star";
 
 const moment = require("moment");
 
@@ -24,6 +27,7 @@ const CourseViewPage: FC = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
   const [reviews, setReviews] = useState<any[]>([]);
+  const [ratingData, setRatingData] = useState<RatingState | null>(null);
   const [reviewSort, setReviewSort] = useState("newest");
   let gym = {
     name: "",
@@ -66,9 +70,14 @@ const CourseViewPage: FC = () => {
       })
       .catch((err) => UnifiedErrorHandler.handle(err, "Error fetching course"));
 
+    ApiCalls.getGymOrCourseRating(fid)
+      .then((res) => setRatingData(res.data.response))
+      .catch((err) =>
+        UnifiedErrorHandler.handle(err, "Cannot get course rating")
+      );
+
     ApiCalls.getReviewsById(fid)
       .then((res) => {
-        console.log(res.data);
         setReviews(res.data.response);
       })
       .catch((err) =>
@@ -94,7 +103,23 @@ const CourseViewPage: FC = () => {
           <Lightbox states={course.images} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <h1>{course.name}</h1>
+          <h1 style={{ display: "inline" }}>{course.name}</h1>
+          <div style={{ display: "inline", alignContent: "center" }}>
+            <StarIcon
+              fontSize="medium"
+              sx={{ color: "#faec2d" }}
+              style={{ marginLeft: "4px" }}
+            />
+            {ratingData ? (
+              <span style={{ fontSize: "20px" }}>
+                {ratingData.rating.toFixed(1)} ({ratingData.ratedBy})
+              </span>
+            ) : (
+              <span style={{ fontSize: "16px", fontStyle: "italic" }}>
+                no rating yet
+              </span>
+            )}
+          </div>
           <hr />
           <p>{course.description}</p>
           <div style={{ textAlign: "right" }}>
@@ -115,7 +140,7 @@ const CourseViewPage: FC = () => {
 
           <br />
         </Grid>
-        <Grid item md={6} xs={12}>
+        <Grid item md={8} xs={12}>
           <Typography
             variant="h5"
             style={{ marginBottom: "1em", fontWeight: "bold" }}
@@ -123,7 +148,7 @@ const CourseViewPage: FC = () => {
             Organizer
           </Typography>
           <hr />
-          <br />
+
           <Card elevation={2} style={{ padding: "2em" }}>
             <Typography
               variant="h5"
@@ -156,39 +181,15 @@ const CourseViewPage: FC = () => {
             </div>
           </Card>
         </Grid>
-        <Grid item md={6} xs={12}>
+        <Grid item md={4} xs={12}>
           <Typography
             variant="h5"
             style={{ marginBottom: "1em", fontWeight: "bold" }}
           >
-            Reviews
+            Pricing
           </Typography>
           <hr />
-          <Paper style={{ padding: "2em", backgroundColor: "#eee" }}>
-            <Typography variant="h6">Reviews</Typography>
-            <br />
-            <Paper style={{ padding: "1em" }}>
-              <StarWidget rating={4.1} />
-              <small>150 people reviewed this Course!</small>
-            </Paper>
-            <br />
-            <Typography variant="h6">Recent Activity</Typography>
-            <br />
-
-            <Paper style={{ padding: "1em" }}>
-              <CardHeader
-                avatar={<Avatar src="todo" />}
-                title="Carter"
-                subheader={
-                  <>
-                    Rated
-                    <StarWidget rating={4.1} />
-                    yesterday
-                  </>
-                }
-              />
-            </Paper>
-          </Paper>
+          <PricingList subscriptionOffers={course.subscriptionOffers} />
         </Grid>
       </Grid>
       <br />

@@ -6,7 +6,7 @@ export interface Gym {
   city: string;
   address: string;
   optionals: Option[];
-  amenities: string[]; // [name, price]
+  amenities: string[];
   websiteURL: string;
   subscriptionOffers: SubscriptionOffers[];
   images?: string[];

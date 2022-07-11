@@ -15,10 +15,9 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { ValidationState } from "./SignUpPage";
 import { useDispatch } from "react-redux";
 import { setAuthentication } from "../store/slices/authenticationSlice";
-import style from '../css/google.module.css'
-import { useGoogleLogin } from '@react-oauth/google';
+import style from "../css/google.module.css";
+import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-
 
 const theme = createTheme();
 
@@ -44,7 +43,11 @@ const LoginPage: FC = () => {
         dispatch(
           setAuthentication({ isAuthenticated: true, role: res.data.role })
         );
-        navigate("/");
+        if (res.data.role === "gym_owner") {
+          navigate("/user/owner-profile");
+        } else {
+          navigate("/");
+        }
       })
       .catch((error) => {
         if (
@@ -62,13 +65,14 @@ const LoginPage: FC = () => {
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      let response = await axios.post("oauth/google", { token: tokenResponse, flow: 'auth' })
+      let response = await axios.post("oauth/google", {
+        token: tokenResponse,
+        flow: "auth",
+      });
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("role", "user");
-        dispatch(
-          setAuthentication({ isAuthenticated: true, role: "user" })
-        );
+        dispatch(setAuthentication({ isAuthenticated: true, role: "user" }));
         navigate("/");
       }
     },
@@ -133,11 +137,17 @@ const LoginPage: FC = () => {
             >
               Sign In
             </Button>
-            <button  type="button" onClick={() => googleLogin()} className={style.google}>Google Login</button>
+            <button
+              type="button"
+              onClick={() => googleLogin()}
+              className={style.google}
+            >
+              Google Login
+            </button>
             <Grid container>
               <Grid item xs></Grid>
               <Grid item>
-                <NavLink to="/user/signup" style={{ color: 'blue' }}>
+                <NavLink to="/user/signup" style={{ color: "blue" }}>
                   {"Don't have an account? Sign Up"}
                 </NavLink>
               </Grid>
