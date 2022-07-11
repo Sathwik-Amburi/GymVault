@@ -36,8 +36,15 @@ const ResultCard: FC<ResultCardProps> = ({ course }) => {
 
   return (
     <>
-      <Grid container onClick={handleCardClick}>
-        <Card sx={{ maxWidth: 345 }}>
+      <Grid container onClick={handleCardClick} style={{ cursor: "grab" }}>
+        <Card
+          sx={{
+            maxWidth: 345,
+            ":hover": {
+              boxShadow: 20,
+            },
+          }}
+        >
           <CardMedia
             component="img"
             alt="gym picture"

@@ -88,6 +88,21 @@ const filterGymsByPriceRange = async (req, res) => {
   }
 };
 
+const filterGymsByPriceRanges = async (req, res) => {
+  const { priceRanges, city } = req.body;
+
+  const results = await gymService.filterGymsByPriceRanges(priceRanges, city);
+
+  if (results.gyms.length > 0) {
+    res.status(200).json({
+      message: `${results.gyms.length} results found`,
+      response: results,
+    });
+  } else {
+    res.status(200).json({ message: `No results found` });
+  }
+};
+
 const addSubscription = async (req, res) => {
   const { gymId } = req.body;
   try {
@@ -114,5 +129,6 @@ module.exports = {
   addGym,
   filterGyms,
   filterGymsByPriceRange,
+  filterGymsByPriceRanges,
   addSubscription,
 };

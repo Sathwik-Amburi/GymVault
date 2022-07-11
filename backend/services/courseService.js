@@ -75,6 +75,48 @@ class CourseService {
       );
     }
   };
+
+  filterCoursesByPriceRanges = async (priceRanges, city, name) => {
+    try {
+      const filters = priceRanges.map((item) => {
+        return {
+          $elemMatch: {
+            subscriptionType: item.type,
+            subscriptionPrice: {
+              $gte: item.minPrice,
+              $lte: item.maxPrice,
+            },
+          },
+        };
+      });
+
+      if (filters.length > 0) {
+        const onlyCourses = await courseModel
+          .find({
+            subscriptionOffers: {
+              $all: filters,
+            },
+          })
+          .populate({ path: "gymId" });
+
+        const courses = onlyCourses.filter((course) => {
+          return course.gymId.city == city;
+        });
+        return { courses };
+      } else {
+        const onlyCourses = await courseModel
+          .find({})
+          .populate({ path: "gymId" });
+
+        const courses = onlyCourses.filter((course) => {
+          return course.gymId.city == city;
+        });
+        return { courses };
+      }
+    } catch (error) {
+      console.log("Error while filtering courses", error.message);
+    }
+  };
 }
 
 module.exports = new CourseService();

@@ -194,46 +194,39 @@ const CourseViewPage: FC = () => {
       <br />
       <br />
       <br />
-      <Box padding={3}>
-        <Button
-          variant={reviewSort === "newest" ? "contained" : undefined}
-          onClick={() => setReviewSort("newest")}
-        >
-          Most Recent
-        </Button>
-        <Button
-          variant={reviewSort === "best" ? "contained" : undefined}
-          onClick={() => setReviewSort("best")}
-        >
-          Most Positive
-        </Button>
-        <Button
-          variant={reviewSort === "worst" ? "contained" : undefined}
-          onClick={() => setReviewSort("worst")}
-        >
-          Most Critical
-        </Button>
-      </Box>
+      <Typography
+        variant="h5"
+        style={{ marginBottom: "1em", fontWeight: "bold" }}
+      >
+        Reviews
+      </Typography>
+      <hr />
       <Grid>
         <Grid>
-          {reviews.map((review) => {
-            return (
-              <Paper style={{ padding: "1em" }} elevation={3}>
-                <CardHeader
-                  avatar={<Avatar src="todo" />}
-                  title={review.username}
-                  subheader={moment(review.dateAdded).format("MMM Do YYYY")}
-                />
-                <div>
-                  <StarWidget rating={review.rating} />
-                </div>
-                <p>
-                  <b>{review.title}</b>
-                </p>
-                <p>{review.description}</p>
-              </Paper>
-            );
-          })}
+          {reviews.length > 0 ? (
+            reviews.map((review) => {
+              return (
+                <Paper style={{ padding: "1em" }} elevation={3}>
+                  <CardHeader
+                    avatar={<Avatar src="todo" />}
+                    title={review.username}
+                    subheader={moment(review.dateAdded).format("MMM Do YYYY")}
+                  />
+                  <div>
+                    <StarWidget rating={review.rating} />
+                  </div>
+                  <p>
+                    <b>{review.title}</b>
+                  </p>
+                  <p>{review.description}</p>
+                </Paper>
+              );
+            })
+          ) : (
+            <Typography variant="subtitle1" style={{ fontStyle: "italic" }}>
+              This course does not have any reviews yet
+            </Typography>
+          )}
         </Grid>
       </Grid>
     </ChonkySpinner>
