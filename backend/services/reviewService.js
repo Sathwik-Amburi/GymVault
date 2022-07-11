@@ -21,26 +21,19 @@ class ReviewService {
     }
   };
 
-  getReviewByUserId = async (userId,Id) =>{
+  getReviewByUserId = async (userId, Id) => {
     try {
       const reviewByUser = await reviewModel.findOne({
-        $and: [
-            {userId: userId},
-            {$or:[{ gymId: Id }, {courseId: Id}]}
-        ],
+        $and: [{ userId: userId }, { $or: [{ gymId: Id }, { courseId: Id }] }],
       });
-      if (reviewByUser){
-        return reviewByUser.rating
+      if (reviewByUser) {
+        return reviewByUser.rating;
       }
       return reviewByUser;
     } catch (error) {
       console.log("Error while fetching user review", error.message);
     }
   };
-
-
-
-
 
   getCourseOrGymRating = async (id) => {
     try {
@@ -49,6 +42,7 @@ class ReviewService {
           $or: [{ gymId: id }, { courseId: id }],
         })
         .select({ rating: 1, _id: 0 });
+      const ratedBy = allRatings.length;
 
       if (allRatings.length > 0) {
         const rating =
@@ -59,7 +53,7 @@ class ReviewService {
             .reduce((prev, next) => {
               return prev + next;
             }) / allRatings.length;
-        return rating;
+        return { rating, ratedBy };
       }
       return null;
     } catch (error) {

@@ -3,15 +3,12 @@ import { FC, useEffect, useState } from "react";
 import image from "../images/progym.jpg";
 import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import PaymentIcon from "@mui/icons-material/Payment";
-import { Course, Gym, Subscription } from "../models/allModels";
+import { Course } from "../models/allModels";
 import { useNavigate } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
-import {
-  toCleanSubscriptionRange,
-  toCleanSubscriptionTypeFormat,
-} from "../api/utils/formatters";
+import PriceCheckIcon from "@mui/icons-material/PriceCheck";
+import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
 import { StoreMallDirectoryTwoTone } from "@mui/icons-material";
 
 interface ResultCardProps {
@@ -80,34 +77,48 @@ const ResultCard: FC<ResultCardProps> = ({ course }) => {
             <Grid container direction={"row"} alignItems="center">
               <LocationOnIcon
                 fontSize="small"
-                sx={{ color: "#black" }}
+                sx={{ color: "red" }}
                 style={{ marginRight: "4px" }}
               />
               <Typography variant="body2" color="text.secondary">
                 {course.gymId.address}
               </Typography>
             </Grid>
-            <Grid container direction={"row"} alignItems="start">
-              <PaymentIcon
-                fontSize="small"
-                sx={{ color: "#black" }}
-                style={{ marginRight: "4px" }}
-              />
-              <div>
-                {course.subscriptionOffers.map((item, index) => {
-                  return (
-                    <div style={{ fontSize: "12px" }} key={index}>
-                      <span>
-                        {toCleanSubscriptionTypeFormat(item.subscriptionType)}:{" "}
-                      </span>
-                      <span style={{ fontWeight: "bold" }}>
-                        {item.subscriptionPrice} EUR/
-                        {toCleanSubscriptionRange(item.subscriptionType)}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+            <Grid>
+              {course.subscriptionOffers.map((item, index) => {
+                return (
+                  <div
+                    style={{
+                      fontSize: "12px",
+                      alignItems: "center",
+                      display: "flex",
+                    }}
+                    key={index}
+                  >
+                    <Grid container justifyContent={"space-between"}>
+                      <Grid item style={{ display: "flex" }}>
+                        <PriceCheckIcon
+                          fontSize="small"
+                          color="success"
+                          style={{ marginRight: "4px" }}
+                        />
+                        <Typography variant="body2" color="text.secondary">
+                          {toCleanSubscriptionTypeFormat(item.subscriptionType)}
+                        </Typography>
+                      </Grid>
+                      <Grid item alignSelf={"end"}>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          style={{ fontWeight: "bold" }}
+                        >
+                          {item.subscriptionPrice} EUR
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </div>
+                );
+              })}
             </Grid>
           </CardContent>
         </Card>
