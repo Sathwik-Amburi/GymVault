@@ -25,12 +25,13 @@ const CourseViewPage: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [reviews, setReviews] = useState<any[]>([]);
   const [reviewSort, setReviewSort] = useState("newest");
-  let Gym = {
+  let gym = {
     name: "",
     description: "",
     phoneNumber: "",
     address: "",
     city: "",
+    optionals: [],
     amenities: [],
     websiteURL: "",
     subscriptionOffers: [],
@@ -39,8 +40,8 @@ const CourseViewPage: FC = () => {
   };
   const [course, setCourse] = useState<Course>({
     name: "",
-    gym: Gym,
-    gymId: Gym,
+    gym: gym,
+    gymId: gym,
     description: "",
     phoneNumber: 0,
     address: "",

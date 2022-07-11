@@ -33,7 +33,7 @@ const PurchaseGrid: FC<GridProps> = (props: GridProps) => {
         <hr className="mini-hr" />
       </Grid>
       { props.bases.map((item) => (
-        <Grid item md={6} xs={12}
+        <Grid item md={6} xs={12} key={item._id}
           style={{
             borderRadius: "12px",
             height: "100%",
@@ -123,7 +123,7 @@ const PurchaseGrid: FC<GridProps> = (props: GridProps) => {
         </span>
       )}
       { props.optionals.map((item) => (
-        <Grid item md={6} xs={12}
+        <Grid item md={6} xs={12} key={item._id}
           style={{
             borderRadius: "12px",
             height: "100%",

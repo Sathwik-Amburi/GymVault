@@ -1,8 +1,8 @@
-import { Grid, Table, TableBody, TableRow, TableCell, Typography, Paper, Button, tableCellClasses, CircularProgress } from "@mui/material";
-import { fontSize } from "@mui/system";
+import { Table, TableBody, TableRow, TableCell, Typography, Button, tableCellClasses, CircularProgress } from "@mui/material";
 import axios from "axios";
-import { FC, useEffect, useState } from "react";
-import { Item, Option } from "../../models/allModels";
+import { FC, useState } from "react";
+import { useParams } from 'react-router-dom';
+
 
 export interface CartItem {
   name: string,
@@ -16,23 +16,17 @@ interface CartProps {
   baseId: string,
   cart: CartItem[],
   setCart: (cart: CartItem[]) => void,
+  setEditable: (editable: boolean) => void,
   allowCheckout: boolean,
 }
 
 const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
-  const [selected, setSelected] = useState<String>("1");
-  const [selectedOption, setSelectedOption] = useState<string[]>([]);
-
+  const { id } = useParams() // gym/course id
   const [loading, setLoading] = useState<boolean>(false)
 
-  useEffect(() => {
-    /*TODO
-      */
-  }, []);
-  let defaultBg = "#999";
-
   const stripeHandlePayment = async () => {
-    setLoading(true)
+    setLoading(true);
+    props.setEditable(false);
     let cart: CartItem[] = props.cart
     let price = 0;
     let name = ''
@@ -42,7 +36,7 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
     })
     name = name.substr(0, name.length - 2)
     const headers = { "x-access-token": String(localStorage.getItem('token')) }
-    let response = await axios.post('/stripe/get-stripe-session', {name, price}, { headers })
+    let response = await axios.post('/stripe/get-stripe-session', {name, price, id}, { headers })
     window.location.href = response.data.link
   }
 

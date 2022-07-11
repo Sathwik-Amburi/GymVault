@@ -177,6 +177,14 @@ export default class ApiCalls {
     });
   };
 
+  public static getReviewByUserId = async (userid:string,id:string) =>{
+    return await axios.get(`/reviews/user/${userid}-${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
   public static addReview = async (
     userId: any,
     username: any,

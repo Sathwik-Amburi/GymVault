@@ -1,9 +1,9 @@
-import { Button, Container, Grid, Link, Typography } from "@mui/material";
+import { Button, Container, Grid, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
 
-import {Course, Item, Subscription, UserProfileDetails} from "../models/allModels";
+import { Item, Subscription, UserProfileDetails } from "../models/allModels";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import SubscriptionEntry from "./widgets/SubscriptionEntry";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
@@ -23,7 +23,7 @@ const UserSubscriptionsPage: FC = () => {
           setProfile(res.data);
         })
         .catch((err) => UnifiedErrorHandler.handle(err, "TODO: The user you're seeing does not exist in the database"));
-  }, []);
+  }, [token]);
 
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const UserSubscriptionsPage: FC = () => {
             address: obj.gym.address,
             description: (obj.course != null) ? obj.course.description : obj.gym.description,
             price: obj.price,
-            options: obj.options,
+            optionals: obj.optionals,
             fgColor: obj.fgColor,
             bgColor: obj.bgColor,
           } as Item;
@@ -53,7 +53,7 @@ const UserSubscriptionsPage: FC = () => {
             // TODO: where's courseId??
             name: (obj.course != null) ? obj.course.name : obj.gym.name,
             type: obj.type,
-            options: obj.options,
+            optionals: obj.optionals,
             price: obj.price,
             purchaseDate: obj.purchaseDate,
             expireDate: obj.expireDate,
@@ -75,7 +75,7 @@ const UserSubscriptionsPage: FC = () => {
     } else {
       alert("You are not logged in");
     }
-  }, []);
+  }, [token]);
 
   return (
     <>

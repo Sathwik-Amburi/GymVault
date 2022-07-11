@@ -1,7 +1,7 @@
 import { Grid, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
-import { Course, Gym, Item, PurchaseOption, SubscriptionOffers } from "../models/allModels";
+import { Course, Gym, Item, Option, PurchaseOption, SubscriptionOffers } from "../models/allModels";
 import PurchaseGrid from "./widgets/PurchaseGrid";
 import PurchaseCart, { CartItem } from "./widgets/PurchaseCart";
 import ApiCalls from "../api/apiCalls";
@@ -17,10 +17,11 @@ const CheckoutPage: FC = () => {
   if (!id) {
     alert("No ID provided! This should NOT happen");
   }
-  const editable = stripeCallback === undefined;
+  const [editable, setEditable] = useState(stripeCallback === undefined);
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [basePurchases, setBasePurchases] = useState<PurchaseOption[]>([]);
+  let [cart, setCart] = useState<CartItem[]>([]);
 
   function setSubscriptionBases(subscriptionOffers: SubscriptionOffers[]) {
     if (subscriptionOffers !== undefined && subscriptionOffers.length > 0) {
@@ -56,6 +57,7 @@ const CheckoutPage: FC = () => {
         } as PurchaseOption);
 
       setBasePurchases(items);
+      setCart([{ ...items[0], base: true } as CartItem]);
     }
   }
   function setGym(gym: Gym) {
@@ -66,24 +68,24 @@ const CheckoutPage: FC = () => {
       type: "gym",
       address: gym.address,
       description: gym.description,
-      price: -1,
-      options: [],
+      price: -1, // TODO: this "price" here can be dropped from the schema i think?
+      optionals: gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
 
       fgColor: "",
       bgColor: "",
     } as Item;
     setItem(item);
   }
-  function setCourse(course: Course) {
+  function setCourse(course: Course, gym: Gym) {
+    // values left to "item.xxx" are recycled from setGym
     let newItem = {
       _id: course._id,
-      gymName: item.gymName,
+      gymName: gym.name,
       courseName: course.name,
       type: "course",
-      address: course.address, // TODO: shouldn't this be "course.gym.address"???
+      address: gym.address,
       description: course.description,
-      price: -1,
-      options: [],
+      optionals: gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
 
       fgColor: "",
       bgColor: "",
@@ -93,14 +95,12 @@ const CheckoutPage: FC = () => {
 
   const [item, setItem] = useState<Item>({
     _id: "1",
-    gymName: "ZHS Hochschulsport",
-    courseName: "Yoga for Beginners",
-    type: "course",
-    address: "Connollystraße 32, Munich",
-    description:
-      "A basic course variating over Hatha Yoga, and meditation practices. Unlike the more static and strengthening Hatha yoga style, a Vinyasa class is very dynamic.  The physical exercises, the so-called asanas, are not practised individually, but are strung together in flowing movements. The class is very calm and relaxed, and the students are able to focus on the breath and the body.",
-    price: -1,
-    options: [],
+    gymName: "",
+    courseName: "",
+    type: "",
+    address: "",
+    description: "",
+    optionals: [],
 
     fgColor: "",
     bgColor: "",
@@ -110,21 +110,20 @@ const CheckoutPage: FC = () => {
     // TODO: rewrite the other way around (get the gym first, then the course if it exists)
     ApiCalls.getCourse(id!)
       .then((res) => {
-        setCourse(res.data.response);
         setSubscriptionBases(res.data.response.subscriptionOffers);
-        let response = res.data.response;
-        let course = item;
+        let courseResponse = res.data.response;
         ApiCalls.getGym(res.data.response.gymId)
           .then((res) => {
             console.log(res);
             setGym(res.data.response);
-            setCourse(response);
-            //setSubscriptionBases(res.data.response.subscriptionOffers);
+            setCourse(courseResponse, res.data.response);
+            setSubscriptionBases(res.data.response.subscriptionOffers);
           }).catch((err) => UnifiedErrorHandler.handle(err, "Could not load gym for course"));
 
         setLoading(false);
       })
       .catch((err) => {
+        // it's not a course, so see if a corresponding gym exists
         ApiCalls.getGym(id!)
           .then((res) => {
             console.log(res.data.response);
@@ -147,42 +146,34 @@ const CheckoutPage: FC = () => {
       }
   }, [id, navigate, stripeCallback]);
   
-  let [cart, setCart] = useState<CartItem[]>([]);
+  function optionToPurchase(option: Option, colorHash: string): PurchaseOption {
+    // technically, custom ones would be saved in the backend too, but that's way overkill
+    let colorSchemas: [string, string][] = [
+      ["#555", "#fff"],
+      ["#CD9400", "#fff"],
+      ["#f00", "#fff"],
+      ["#fff", "#57f"],
+    ];
 
-  let optionals: PurchaseOption[] = [
-    {
-      _id: "1",
-      name: "Equipment Rental",
-      description: "Rent mat and accessories during course sessions",
-      price: 16,
-      bgColor: "#555",
-      fgColor: "#fff",
-    } as PurchaseOption,
-    {
-      _id: "4",
-      name: "VIP Subscription 👑️",
-      description: "24h entry (auto scan), premium equipment",
-      price: 99,
-      bgColor: "#CD9400",
-      fgColor: "#fff",
-    } as PurchaseOption,
-    {
-      _id: "3",
-      name: "Sauna Access",
-      description: "Enter our built-in sauna after your workouts",
-      price: 40,
-      bgColor: "#f00",
-      fgColor: "#fff",
-    } as PurchaseOption,
-    {
-      _id: "2",
-      name: "Special Needs ♿️",
-      description: "Require assistance for disabilities",
-      price: 0,
-      bgColor: "#fff",
-      fgColor: "#57f",
-    } as PurchaseOption,
-  ];
+    // copied from: https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+    function simpleHash(str: string): number {
+      var hash = 0, i, chr;
+      if (str.length === 0) return hash;
+      for (i = 0; i < str.length; i++) {
+        chr   = str.charCodeAt(i);
+        hash  = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+      }
+      return hash;
+    };
+
+    let h = simpleHash(colorHash);
+    return {
+      ...option,
+      bgColor: colorSchemas[h % colorSchemas.length][0],
+      fgColor: colorSchemas[h % colorSchemas.length][1],
+    } as PurchaseOption;
+  }
 
   return (
     <ChonkySpinner loading={loading}>
@@ -214,7 +205,7 @@ const CheckoutPage: FC = () => {
         <Grid item md={6} xs={12}>
           <PurchaseGrid 
             bases={basePurchases} 
-            optionals={optionals} 
+            optionals={item.optionals}
             cart={cart} 
             setCart={setCart} 
             editable={editable}
@@ -238,6 +229,7 @@ const CheckoutPage: FC = () => {
             cart={cart}
             setCart={setCart}
             allowCheckout={editable}
+            setEditable={setEditable}
           />
         </Grid>
       </Grid>

@@ -13,13 +13,34 @@ class ReviewService {
   getReviewsById = async (Id) => {
     try {
       const gymReviews = await reviewModel.find({
-        $or: [{ gymId: Id }, { courseId: Id }, { userId: Id }],
+        $or: [{ gymId: Id }, { courseId: Id }],
       });
       return gymReviews;
     } catch (error) {
       console.log("Error while fetching gym reviews", error.message);
     }
   };
+
+  getReviewByUserId = async (userId,Id) =>{
+    try {
+      const reviewByUser = await reviewModel.findOne({
+        $and: [
+            {userId: userId},
+            {$or:[{ gymId: Id }, {courseId: Id}]}
+        ],
+      });
+      if (reviewByUser){
+        return reviewByUser.rating
+      }
+      return reviewByUser;
+    } catch (error) {
+      console.log("Error while fetching user review", error.message);
+    }
+  };
+
+
+
+
 
   getCourseOrGymRating = async (id) => {
     try {

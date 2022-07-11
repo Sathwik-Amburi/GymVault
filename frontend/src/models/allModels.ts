@@ -5,7 +5,8 @@ export interface Gym {
   phoneNumber: string;
   city: string;
   address: string;
-  amenities: [string, number][]; // [name, price]
+  optionals: Option[];
+  amenities: string[]; // [name, price]
   websiteURL: string;
   subscriptionOffers: SubscriptionOffers[];
   images?: string[];
@@ -35,8 +36,7 @@ export interface Item {
   type: string;
   address: string;
   description: string;
-  price: number;
-  options: Option[];
+  optionals: PurchaseOption[];
 
   fgColor: string;
   bgColor: string;
@@ -65,7 +65,7 @@ export interface Subscription {
   name?: string;
   type: SubscriptionTypes;
   price: number;
-  options: string[];
+  optionals: Option[];
   purchaseDate?: string;
   expireDate?: string;
   ticketSecret?: string;

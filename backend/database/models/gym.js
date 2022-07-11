@@ -12,6 +12,21 @@ const subscriptionOffer = new mongoose.Schema({
   },
 });
 
+const Option = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+});
+
 const GymSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -42,6 +57,10 @@ const GymSchema = new mongoose.Schema({
   amenities: {
     type: [String],
     required: true,
+    default: [],
+  },
+  optionals: {
+    type: [Option],
     default: [],
   },
   websiteURL: {

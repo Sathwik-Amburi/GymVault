@@ -18,7 +18,7 @@ const ReviewSchema = new mongoose.Schema({
     // required: true,
   },
   courseId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "Course",
     default: null,
   },
