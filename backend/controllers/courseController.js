@@ -84,6 +84,25 @@ const filterCoursesByPriceRange = async (req, res) => {
   }
 };
 
+const filterCoursesByPriceRanges = async (req, res) => {
+  const { priceRanges, city, name } = req.body;
+
+  const results = await courseService.filterCoursesByPriceRanges(
+    priceRanges,
+    city,
+    name
+  );
+
+  if (results.courses.length > 0) {
+    res.status(200).json({
+      message: `${results.courses.length} results found`,
+      response: results,
+    });
+  } else {
+    res.status(200).json({ message: `No results found` });
+  }
+};
+
 module.exports = {
   getAllCourses,
   getCourse,
@@ -91,4 +110,5 @@ module.exports = {
   addCourse,
   filterCourses,
   filterCoursesByPriceRange,
+  filterCoursesByPriceRanges,
 };

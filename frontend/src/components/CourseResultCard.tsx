@@ -28,7 +28,7 @@ const ResultCard: FC<ResultCardProps> = ({ course }) => {
       .catch((err) =>
         UnifiedErrorHandler.handle(err, "Cannot get course rating")
       );
-  }, []);
+  }, [course]);
 
   const handleCardClick = () => {
     navigate(`/course/${course._id}`);
@@ -36,8 +36,15 @@ const ResultCard: FC<ResultCardProps> = ({ course }) => {
 
   return (
     <>
-      <Grid container onClick={handleCardClick}>
-        <Card sx={{ maxWidth: 345 }}>
+      <Grid container onClick={handleCardClick} style={{ cursor: "grab" }}>
+        <Card
+          sx={{
+            maxWidth: 345,
+            ":hover": {
+              boxShadow: 20,
+            },
+          }}
+        >
           <CardMedia
             component="img"
             alt="gym picture"
@@ -87,9 +94,9 @@ const ResultCard: FC<ResultCardProps> = ({ course }) => {
                 style={{ marginRight: "4px" }}
               />
               <div>
-                {course.subscriptionOffers.map((item) => {
+                {course.subscriptionOffers.map((item, index) => {
                   return (
-                    <div style={{ fontSize: "12px" }}>
+                    <div style={{ fontSize: "12px" }} key={index}>
                       <span>
                         {toCleanSubscriptionTypeFormat(item.subscriptionType)}:{" "}
                       </span>

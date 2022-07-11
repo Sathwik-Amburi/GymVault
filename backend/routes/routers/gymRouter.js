@@ -9,6 +9,7 @@ router.get("/cities/:type", gymController.getAllAvailableSearchCities);
 router.post("/add-gym", gymController.addGym);
 router.get("/filter", gymController.filterGyms);
 router.post("/filter/price-range", gymController.filterGymsByPriceRange);
+router.post("/filter/price-ranges", gymController.filterGymsByPriceRanges);
 router.post("/subscriptions/add-subscription", gymController.addSubscription);
 router.get(
   "/subscriptions/get-subscriptions/:gymId",

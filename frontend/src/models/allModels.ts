@@ -72,14 +72,10 @@ export interface Subscription {
   _id: string;
 }
 
-export enum FilterTypes {
-  PRICE_RANGE = "PRICE_RANGE",
-}
-
 export type Filter = PriceRangeFilter;
 
 export interface PriceRangeFilter {
-  type: FilterTypes.PRICE_RANGE;
+  type: SubscriptionTypes;
   name: string;
   minPrice: number;
   maxPrice: number;

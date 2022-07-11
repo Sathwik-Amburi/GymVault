@@ -28,12 +28,19 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
     ApiCalls.getGymOrCourseRating(gym._id)
       .then((res) => setRating(res.data.response))
       .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gym rating"));
-  }, []);
+  }, [gym]);
 
   return (
     <>
       <Grid container onClick={handleCardClick}>
-        <Card sx={{ maxWidth: 345 }}>
+        <Card
+          sx={{
+            maxWidth: 345,
+            ":hover": {
+              boxShadow: 20,
+            },
+          }}
+        >
           <CardMedia
             component="img"
             alt="gym picture"
@@ -73,9 +80,9 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
                 style={{ marginRight: "4px" }}
               />
               <div>
-                {gym.subscriptionOffers.map((item) => {
+                {gym.subscriptionOffers.map((item, index) => {
                   return (
-                    <div style={{ fontSize: "12px" }}>
+                    <div style={{ fontSize: "12px" }} key={index}>
                       <span>
                         {toCleanSubscriptionTypeFormat(item.subscriptionType)}:{" "}
                       </span>

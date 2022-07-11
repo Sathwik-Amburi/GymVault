@@ -1,35 +1,23 @@
-import {
-  Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  IconButton,
-  Slider,
-  Typography,
-} from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
-import { Filter, FilterTypes, Gym } from "../models/allModels";
-import { styled } from "@mui/material/styles";
 import ResultCard from "./ResultCard";
-import Button from "@mui/material/Button";
-import CloseIcon from "@mui/icons-material/Close";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import apiCalls from "../api/apiCalls";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import { getGymSpelling } from "../api/utils/formatters";
+import ResultsFilter from "./ResultsFilter";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
+import { setGymResults } from "../store/slices/gymResultsSlice";
 
 const ResultsPage: FC = () => {
+  const dispatch = useDispatch();
   const queries = new URLSearchParams(window.location.search);
-  const maxPrice = 500;
+  const gymResults = useSelector(
+    (state: RootState) => state.gymResults.filteredGyms
+  );
+
   const [loading, setLoading] = useState<boolean>(true);
-  const [results, setResults] = useState<Gym[]>();
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [priceRange, setPriceRange] = useState<number[]>([0, maxPrice]);
-  const [activeFilters, setActiveFilters] = useState<Filter[]>();
 
   const city = queries.get("city");
   const name = queries.get("name");
@@ -38,158 +26,32 @@ const ResultsPage: FC = () => {
     city &&
       ApiCalls.getAllGymsByCityOrName(city, name)
         .then((res) => {
-          setResults(res.data.response);
+          dispatch(setGymResults({ filteredGyms: res.data.response }));
           setLoading(false);
         })
         .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms"));
   }, []);
-
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
-
-  const handleFilter = () => {
-    setLoading(true);
-    city &&
-      apiCalls
-        .getGymsByPriceRange(priceRange, city)
-        .then((res) => {
-          if (res.data.message === "No results found") {
-            setResults([]);
-          } else {
-            setResults(res.data.response.gyms);
-          }
-          setActiveFilters([
-            {
-              type: FilterTypes.PRICE_RANGE,
-              name: "Price range between",
-              minPrice: priceRange[0],
-              maxPrice: priceRange[1],
-            },
-          ]);
-          setLoading(false);
-        })
-        .catch((err) =>
-          UnifiedErrorHandler.handle(err, "Cannot get gyms by price range")
-        );
-    setOpenModal(false);
-  };
-
-  const handleSliderChange = (event: Event, newValue: number | number[]) => {
-    setPriceRange(newValue as number[]);
-  };
-
-  const handleCloseFilter = (filterType: FilterTypes) => {
-    const updatedActiveFilters = activeFilters?.filter(
-      (item) => item.type !== filterType
-    );
-
-    setActiveFilters(updatedActiveFilters);
-    city &&
-      ApiCalls.getAllGymsByCityOrName(city, name)
-        .then((res) => setResults(res.data.response))
-        .catch((err) =>
-          UnifiedErrorHandler.handle(err, "Cannot get updated gyms")
-        );
-  };
 
   return (
     <>
       <Grid>
         <Grid>
           <Typography fontSize={"2em"}>
-            {results ? results.length : 0} {getGymSpelling(results?.length)}
+            {gymResults ? gymResults.length : 0}{" "}
+            {getGymSpelling(gymResults?.length)}
             found in {city}
           </Typography>
         </Grid>
-        <Grid
-          container
-          direction="row"
-          style={{ marginBottom: "8px" }}
-          justifyContent="space-between"
-        >
-          <Grid>
-            {activeFilters &&
-              activeFilters.map((item, index) => {
-                return (
-                  <Button
-                    variant="contained"
-                    size="small"
-                    disableElevation
-                    style={{ marginRight: "8px" }}
-                  >
-                    {item.name} {item.minPrice} and {item.maxPrice} EUR
-                    <CloseIcon
-                      fontSize="small"
-                      onClick={() => handleCloseFilter(item.type)}
-                      key={index}
-                    />
-                  </Button>
-                );
-              })}
-          </Grid>
-          <Grid>
-            <Button
-              variant="contained"
-              size="small"
-              disableElevation
-              style={{ marginRight: "8px", float: "right" }}
-              onClick={handleOpenModal}
-            >
-              <FilterAltIcon fontSize="small" /> Filters
-            </Button>
-
-            <BootstrapDialog
-              onClose={handleCloseModal}
-              aria-labelledby="customized-dialog-title"
-              open={openModal}
-            >
-              <BootstrapDialogTitle
-                id="customized-dialog-title"
-                onClose={handleCloseModal}
-              >
-                Filter by
-              </BootstrapDialogTitle>
-              <DialogContent dividers sx={{ width: 500 }}>
-                <Typography gutterBottom>
-                  Monthly Pass (€): between {priceRange[0]} and {priceRange[1]}{" "}
-                  EUR
-                </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  <Box sx={{ width: 300 }}>
-                    <Slider
-                      getAriaLabel={() => "Temperature range"}
-                      max={maxPrice}
-                      value={priceRange}
-                      onChange={handleSliderChange}
-                      valueLabelDisplay="auto"
-                      getAriaValueText={() => {
-                        return `${priceRange} €`;
-                      }}
-                      marks={[
-                        { value: 0, label: "0 €" },
-                        { value: maxPrice, label: `${maxPrice} €` },
-                      ]}
-                    />
-                  </Box>
-                </Typography>
-              </DialogContent>
-              <DialogActions>
-                <Button autoFocus onClick={handleFilter}>
-                  Filter
-                </Button>
-              </DialogActions>
-            </BootstrapDialog>
-          </Grid>
-        </Grid>
       </Grid>
+      <ResultsFilter city={city} name={name} />
       <ChonkySpinner loading={loading}>
         <Grid
           container
           spacing={{ xs: 2, md: 3 }}
           columns={{ xs: 4, sm: 8, md: 12 }}
         >
-          {results &&
-            results.map((item, index) => (
+          {gymResults &&
+            gymResults.map((item, index) => (
               <Grid item xs={2} sm={4} md={4} key={index}>
                 <ResultCard gym={item} />
               </Grid>
@@ -197,44 +59,6 @@ const ResultsPage: FC = () => {
         </Grid>
       </ChonkySpinner>
     </>
-  );
-};
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
-  },
-  "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
-}));
-
-export interface DialogTitleProps {
-  id: string;
-  children?: React.ReactNode;
-  onClose: () => void;
-}
-
-const BootstrapDialogTitle = (props: DialogTitleProps) => {
-  const { children, onClose, ...other } = props;
-
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
   );
 };
 

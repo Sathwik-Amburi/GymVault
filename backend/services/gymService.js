@@ -95,6 +95,39 @@ class GymService {
     }
   };
 
+  filterGymsByPriceRanges = async (priceRanges, city) => {
+    try {
+      const filters = priceRanges.map((item) => {
+        return {
+          $elemMatch: {
+            subscriptionType: item.type,
+            subscriptionPrice: {
+              $gte: item.minPrice,
+              $lte: item.maxPrice,
+            },
+          },
+        };
+      });
+
+      if (filters.length > 0) {
+        const gyms = await gymModel.find({
+          subscriptionOffers: {
+            $all: filters,
+          },
+          city: city,
+        });
+        return { gyms };
+      } else {
+        const gyms = await gymModel.find({
+          city: city,
+        });
+        return { gyms };
+      }
+    } catch (error) {
+      console.log("Error while filtering gyms", error.message);
+    }
+  };
+
   addSubscription = async (subscriptionBody) => {
     try {
       const subscription = new Subscription(subscriptionBody);
