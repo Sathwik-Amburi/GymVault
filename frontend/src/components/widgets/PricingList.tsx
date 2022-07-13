@@ -1,25 +1,14 @@
-import {
-  Button,
-  Paper,
-  Grid,
-  Typography,
-  Chip,
-  CardHeader,
-  Avatar,
-} from "@mui/material";
+import { Paper, Grid } from "@mui/material";
 import PriceCheckIcon from "@mui/icons-material/PriceCheck";
 import { FC } from "react";
-import {
-  toCleanSubscriptionRange,
-  toCleanSubscriptionTypeFormat,
-} from "../../api/utils/formatters";
+import { toCleanSubscriptionTypeFormat } from "../../api/utils/formatters";
 import { SubscriptionOffers } from "../../models/allModels";
 
 interface PricingListProps {
   subscriptionOffers: SubscriptionOffers[];
 }
 
-const RecentReviews: FC<PricingListProps> = ({ subscriptionOffers }) => {
+const PricingList: FC<PricingListProps> = ({ subscriptionOffers }) => {
   return (
     <Grid>
       <Paper style={{ padding: "2em", backgroundColor: "white" }}>
@@ -59,4 +48,4 @@ const RecentReviews: FC<PricingListProps> = ({ subscriptionOffers }) => {
   );
 };
 
-export default RecentReviews;
+export default PricingList;

@@ -33,8 +33,19 @@ export interface Course {
   address: string;
   images?: string[];
   subscriptionOffers: SubscriptionOffers[];
+  sessions: CourseSession[];
   rating: Rating[];
   _id: string;
+}
+
+export interface CourseSession {
+  sessionDay: string;
+  sessionDetails: SessionDetails[];
+}
+
+export interface SessionDetails {
+  sessionTime: string;
+  sessionsInstructor: string;
 }
 
 export interface Item {
