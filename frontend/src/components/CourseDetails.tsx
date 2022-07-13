@@ -17,6 +17,7 @@ import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import PricingList from "./widgets/PricingList";
 import StarIcon from "@mui/icons-material/Star";
+import CourseScheduleTable from "./CourseScheduleTable";
 
 const moment = require("moment");
 
@@ -49,6 +50,7 @@ const CourseViewPage: FC = () => {
     address: "",
     subscriptionOffers: [],
     rating: [],
+    sessions: [],
     _id: "0",
   });
 
@@ -139,7 +141,7 @@ const CourseViewPage: FC = () => {
 
           <br />
         </Grid>
-        <Grid item md={8} xs={12}>
+        <Grid item md={4} xs={12}>
           <Typography
             variant="h5"
             style={{ marginBottom: "1em", fontWeight: "bold" }}
@@ -179,6 +181,16 @@ const CourseViewPage: FC = () => {
               </Button>
             </div>
           </Card>
+        </Grid>
+        <Grid item md={4} xs={12}>
+          <Typography
+            variant="h5"
+            style={{ marginBottom: "1em", fontWeight: "bold" }}
+          >
+            Course Schedule
+          </Typography>
+          <hr />
+          <CourseScheduleTable courseSessions={course.sessions} />
         </Grid>
         <Grid item md={4} xs={12}>
           <Typography
