@@ -20,7 +20,7 @@ function StripeCallback() {
             let response = await axios.get('/stripe/get-payment-status', { headers })
             if (response.data.paid === true) {
                 // TODO: API POST Request to add record in subscriptions table to register user to gym with id: gym_id
-                alert(`subscription to gym id: ${gym_id} saved to db`)
+                return navigate('/user/tickets?highlight=' + gym_id)
 
                 // TODO: Navigate to page where ticket secret is generated
                 navigate('/user/tickets')

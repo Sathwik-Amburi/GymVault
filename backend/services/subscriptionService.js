@@ -54,6 +54,15 @@ class SubscriptionService {
         }
     }
     checkOrPurchase = async (uid, courseOrGymId, stripeToken) => {
+        function randomString() {
+            const len = 10;
+            var result = '';
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            for (var i = 0; i < len; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
         // TODO!!! check validity of purchase via Stripe??
         if(true) {
             // Check if it is a course or gym ID 
@@ -93,7 +102,7 @@ class SubscriptionService {
                     optionals: [],
                     purchaseDate: purchaseDate,
                     expireDate: expirationDate,
-                    ticketSecret: "TODO",
+                    ticketSecret: randomString(),
                     courseId: (typeof entity === "Course") ? courseOrGymId : null,
                     userId: uid
 

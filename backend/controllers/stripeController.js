@@ -108,8 +108,8 @@ const createCheckoutSession = async (req, res) => {
         ],
 
         mode: 'payment',
-        success_url: `http://localhost:3000/buy/${product}/confirm/${req.body.id}`, // pass gym/course id and other attributes
-        cancel_url: 'http://localhost:3000/404',
+        success_url: `http://localhost:3000/stripe/checkout/callback/${product}/${req.body.id}`, // pass gym/course id and other attributes
+        cancel_url: 'http://localhost:3000/buy/${product}/cancelled',
         payment_intent_data: {
             application_fee_amount: Math.ceil(req.body.price * 0.25) * 100, // we get 25% cut and round up to nearest int in eur cent
             transfer_data: {

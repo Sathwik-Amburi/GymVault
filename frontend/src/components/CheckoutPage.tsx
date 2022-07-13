@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Card, Grid, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
 import { Course, Gym, Item, Option, PurchaseOption, SubscriptionOffers } from "../models/allModels";
@@ -10,14 +10,14 @@ import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const CheckoutPage: FC = () => {
-  const { id, stripeCallback } = useParams<{
+  const { id, returnState } = useParams<{
     id: string;
-    stripeCallback: string;
+    returnState: string;
   }>();
   if (!id) {
     alert("No ID provided! This should NOT happen");
   }
-  const [editable, setEditable] = useState(stripeCallback === undefined);
+  const [editable, setEditable] = useState(true);
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [basePurchases, setBasePurchases] = useState<PurchaseOption[]>([]);
@@ -135,7 +135,7 @@ const CheckoutPage: FC = () => {
             // navigate to 404?
       });
       
-      // /confirm route taken
+      /* /confirm route taken
       if(stripeCallback !== undefined) {
         // TODO: call APIs to check validity of ("confirm") purchase, and redirect if valid
         let uid = String(localStorage.getItem("token"));
@@ -143,8 +143,8 @@ const CheckoutPage: FC = () => {
           .then((res) => {
             navigate("/user/tickets?highlight=" + id);
           }).catch((err) => UnifiedErrorHandler.handle(err, "(display): Error checking purchase"));
-      }
-  }, [id, navigate, stripeCallback]);
+      }*/
+  }, [id, navigate, returnState]);
   
   function optionToPurchase(option: Option, colorHash: string): PurchaseOption {
     // technically, custom ones would be saved in the backend too, but that's way overkill
@@ -212,6 +212,23 @@ const CheckoutPage: FC = () => {
           />
         </Grid>
         <Grid item md={6} xs={12}>
+          { returnState == "cancelled" ? 
+            <Card style={{
+              borderRadius: "8px",
+              backgroundColor: "#a00",
+              color: "#fff",
+              padding: "1em",
+              marginTop: "1em",
+              marginBottom: "1em",
+            }}>
+              <Typography variant="body1" style={{ fontWeight: "bold" }}>
+                This order has been cancelled
+              </Typography>
+              <Typography variant="body1">
+                To buy this item, please proceed to the checkout once again
+              </Typography>
+            </Card>
+            : null }
           <Typography variant="h4" style={{ fontWeight: "bold" }}>
             {item.courseName}
           </Typography>
