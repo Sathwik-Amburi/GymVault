@@ -7,17 +7,15 @@ import {
   Avatar,
   CardHeader,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
-import { Gym } from "../models/allModels";
+import { Gym, Rating } from "../models/allModels";
 import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
 import { useNavigate, useParams } from "react-router-dom";
 import PricingList from "./widgets/PricingList";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
-import { RatingState } from "./ResultCard";
 import StarIcon from "@mui/icons-material/Star";
 
 const moment = require("moment");
@@ -27,9 +25,8 @@ const GymViewPage: FC = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
   const [reviews, setReviews] = useState<any[]>([]);
-  const [reviewSort, setReviewSort] = useState("newest");
   const [courses, setCourses] = useState<any[]>([]);
-  const [ratingData, setRatingData] = useState<RatingState | null>(null);
+  const [ratingData, setRatingData] = useState<Rating | null>(null);
   const [gym, setGym] = useState<Gym>({
     name: "",
     description: "",
@@ -42,6 +39,7 @@ const GymViewPage: FC = () => {
     subscriptionOffers: [],
     email: "",
     _id: "",
+    rating: [],
   });
 
   useEffect(() => {
@@ -209,7 +207,10 @@ const GymViewPage: FC = () => {
           {reviews.length > 0 ? (
             reviews.map((review) => {
               return (
-                <Paper style={{ padding: "1em" }} elevation={3}>
+                <Paper
+                  style={{ padding: "1em", marginBottom: "8px" }}
+                  elevation={3}
+                >
                   <CardHeader
                     avatar={<Avatar src="todo" />}
                     title={review.username}

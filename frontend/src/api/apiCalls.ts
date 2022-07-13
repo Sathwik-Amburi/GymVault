@@ -26,21 +26,6 @@ export default class ApiCalls {
     });
   };
 
-  public static getGymsByPriceRange = async (
-    priceRange: number[],
-    city?: string
-  ) => {
-    return await axios.post(
-      "/gyms/filter/price-range",
-      { priceRange, city },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  };
-
   public static getGymsByFilters = async (
     priceRanges: PriceRangeFilter[],
     city?: string
@@ -48,21 +33,6 @@ export default class ApiCalls {
     return await axios.post(
       "/gyms/filter/price-ranges",
       { priceRanges, city },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  };
-
-  public static getCoursesByPriceRange = async (
-    priceRange: number[],
-    city?: string
-  ) => {
-    return await axios.post(
-      "/courses/filter/price-range",
-      { priceRange, city },
       {
         headers: {
           "Content-Type": "application/json",

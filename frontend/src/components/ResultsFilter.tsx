@@ -35,7 +35,7 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
   const dispatch = useDispatch();
   const dailyPassMaxPrice = 50;
   const monthlyPassMaxPrice = 100;
-  const yearlyPassMaxPrice = 500;
+  const yearlyPassMaxPrice = 750;
   const [dailyPasspriceRange, setDailyPassPriceRange] =
     useState<PriceRangeSliderState>({
       minPrice: 0,
@@ -204,6 +204,7 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
   return (
     <>
       <Grid
+        md={10}
         container
         direction="row"
         style={{ marginBottom: "8px" }}

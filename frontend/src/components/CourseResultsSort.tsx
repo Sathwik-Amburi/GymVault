@@ -1,0 +1,116 @@
+import {
+  Box,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
+import { FC, useState } from "react";
+import SwapVertIcon from "@mui/icons-material/SwapVert";
+import { RootState } from "../store";
+import { useDispatch, useSelector } from "react-redux";
+import { Course, SubscriptionTypes } from "../models/allModels";
+import { setCourseResults } from "../store/slices/courseResultsSlice";
+
+const CourseResultsSort: FC = () => {
+  const dispatch = useDispatch();
+  const courses = useSelector(
+    (state: RootState) => state.courseResults.filteredCourses
+  );
+  const [sortBy, setSortBy] = useState<string>("rating_desc");
+
+  const handleSortSelect = (event: SelectChangeEvent) => {
+    setSortBy(event.target.value as string);
+    var sortedCourses = [...courses];
+    switch (event.target.value) {
+      case "rating_desc":
+        sortedCourses.sort(
+          (a, b) =>
+            (b.rating.length !== 0 ? b.rating[0].rating : -Infinity) -
+            (a.rating.length !== 0 ? a.rating[0].rating : -Infinity)
+        );
+        break;
+      case "session_pass_asc":
+        sortedCourses.sort(
+          (a, b) =>
+            getSusbcriptionPrice(a, SubscriptionTypes.SESSION_PASS) -
+            getSusbcriptionPrice(b, SubscriptionTypes.SESSION_PASS)
+        );
+        break;
+      case "monthly_pass_asc":
+        sortedCourses.sort(
+          (a, b) =>
+            getSusbcriptionPrice(a, SubscriptionTypes.MONTHLY_PASS) -
+            getSusbcriptionPrice(b, SubscriptionTypes.MONTHLY_PASS)
+        );
+        break;
+      case "yearly_pass_asc":
+        sortedCourses.sort(
+          (a, b) =>
+            getSusbcriptionPrice(a, SubscriptionTypes.YEARLY_PASS) -
+            getSusbcriptionPrice(b, SubscriptionTypes.YEARLY_PASS)
+        );
+        break;
+      default:
+        break;
+    }
+    dispatch(setCourseResults({ filteredCourses: sortedCourses }));
+  };
+
+  const getSusbcriptionPrice = (
+    course: Course,
+    type: SubscriptionTypes
+  ): number => {
+    var subscription = course.subscriptionOffers.filter((item) => {
+      return item.subscriptionType === type;
+    });
+    if (subscription.length > 0) {
+      return subscription[0].subscriptionPrice;
+    }
+
+    return Infinity;
+  };
+
+  return (
+    <>
+      <Grid
+        md={2}
+        item
+        container
+        direction="row"
+        style={{ marginBottom: "8px" }}
+        justifyContent="space-between"
+      >
+        <Box>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Sort by</InputLabel>
+            <Select
+              IconComponent={SwapVertIcon}
+              size="small"
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={sortBy}
+              label="SortBy"
+              onChange={handleSortSelect}
+            >
+              <MenuItem value={"rating_desc"}>Rating (High to low)</MenuItem>
+              <MenuItem value={"session_pass_asc"}>
+                Session pass (Low to High)
+              </MenuItem>
+              <MenuItem value={"monthly_pass_asc"}>
+                Monthly pass (Low to High)
+              </MenuItem>
+              <MenuItem value={"yearly_pass_asc"}>
+                Yearly pass (Low to High)
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+      </Grid>
+    </>
+  );
+};
+
+export default CourseResultsSort;
