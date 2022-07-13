@@ -10,7 +10,13 @@ export interface Gym {
   websiteURL: string;
   subscriptionOffers: SubscriptionOffers[];
   images?: string[];
+  rating: Rating[];
   _id: string;
+}
+
+export interface Rating {
+  rating: number;
+  ratedBy: number;
 }
 
 export interface SubscriptionOffers {
@@ -27,6 +33,7 @@ export interface Course {
   address: string;
   images?: string[];
   subscriptionOffers: SubscriptionOffers[];
+  rating: Rating[];
   _id: string;
 }
 

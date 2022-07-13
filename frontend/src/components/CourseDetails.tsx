@@ -7,17 +7,15 @@ import {
   CardHeader,
   Card,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
-import { Course } from "../models/allModels";
+import { Course, Rating } from "../models/allModels";
 import StarWidget from "./widgets/StarWidget";
 import Lightbox from "./widgets/Lightbox";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import PricingList from "./widgets/PricingList";
-import { RatingState } from "./ResultCard";
 import StarIcon from "@mui/icons-material/Star";
 
 const moment = require("moment");
@@ -27,8 +25,7 @@ const CourseViewPage: FC = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
   const [reviews, setReviews] = useState<any[]>([]);
-  const [ratingData, setRatingData] = useState<RatingState | null>(null);
-  const [reviewSort, setReviewSort] = useState("newest");
+  const [ratingData, setRatingData] = useState<Rating | null>(null);
   let gym = {
     name: "",
     description: "",
@@ -40,6 +37,7 @@ const CourseViewPage: FC = () => {
     websiteURL: "",
     subscriptionOffers: [],
     email: "",
+    rating: [],
     _id: "",
   };
   const [course, setCourse] = useState<Course>({
@@ -50,6 +48,7 @@ const CourseViewPage: FC = () => {
     phoneNumber: 0,
     address: "",
     subscriptionOffers: [],
+    rating: [],
     _id: "0",
   });
 
@@ -208,7 +207,10 @@ const CourseViewPage: FC = () => {
           {reviews.length > 0 ? (
             reviews.map((review) => {
               return (
-                <Paper style={{ padding: "1em" }} elevation={3}>
+                <Paper
+                  style={{ padding: "1em", marginBottom: "8px" }}
+                  elevation={3}
+                >
                   <CardHeader
                     avatar={<Avatar src="todo" />}
                     title={review.username}

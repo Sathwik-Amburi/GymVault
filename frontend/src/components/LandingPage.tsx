@@ -18,6 +18,7 @@ const LandingPage: FC = () => {
       subscriptionOffers: [],
       email: "",
       _id: "",
+      rating: [],
     },
   ]);
 

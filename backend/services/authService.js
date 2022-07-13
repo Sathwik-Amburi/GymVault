@@ -217,7 +217,7 @@ const sendVerificationEmail = async (user_id, email) => {
 
   newUserVerificationModel.save().then(() => {
     sendMail(options).catch((error) => {
-      console.log("Error while sending verification email", error.message);
+      console.log("Error while sending verification email", error);
     });
   });
 };

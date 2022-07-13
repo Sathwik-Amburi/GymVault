@@ -9,6 +9,7 @@ import CourseResultsFilter from "./CourseResultsFilter";
 import { RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { setCourseResults } from "../store/slices/courseResultsSlice";
+import CourseResultsSort from "./CourseResultsSort";
 
 const CourseResultsPage: FC = () => {
   const dispatch = useDispatch();
@@ -41,7 +42,10 @@ const CourseResultsPage: FC = () => {
             found in {city}
           </Typography>
         </Grid>
-        <CourseResultsFilter city={city} name={name} />
+        <Grid container>
+          <CourseResultsFilter city={city} name={name} />
+          <CourseResultsSort />
+        </Grid>
       </Grid>
       <ChonkySpinner loading={loading}>
         <Grid

@@ -1,5 +1,6 @@
 const courseModel = require("../database/models/course");
 const ObjectId = require("mongoose").Types.ObjectId;
+const reviewModel = require("../database/models/review");
 
 class CourseService {
   getAllCourses = async () => {
@@ -39,6 +40,18 @@ class CourseService {
 
   filterCourses = async (name, city) => {
     try {
+      const allRatings = await reviewModel.aggregate([
+        { $match: { courseId: { $ne: null, $exists: true } } },
+        { $unwind: "$courseId" },
+        {
+          $group: {
+            _id: "$courseId",
+            rating: { $avg: "$rating" },
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
       let courses = await courseModel
         .find({ name: { $regex: String(name), $options: "i" } })
         .populate({ path: "gymId" });
@@ -46,33 +59,27 @@ class CourseService {
       const matchingCourses = courses.filter((course) => {
         return course.gymId.city == city;
       });
-      return matchingCourses;
-    } catch (error) {
-      console.log("Error while filtering courses", error.message);
-    }
-  };
 
-  filterCoursesByPriceRange = async (priceRange, city) => {
-    try {
-      const courses = await courseModel.find({
-        subscriptionOffers: {
-          $elemMatch: {
-            subscriptionType: "MONTHLY_PASS",
-            subscriptionPrice: {
-              $gte: priceRange[0],
-              $lte: priceRange[1],
-            },
-          },
-        },
-        city: city,
+      const coursesWithRatings = matchingCourses.map((item1) => {
+        return {
+          ...item1._doc,
+          rating: allRatings
+            .filter((item2) => {
+              return item1._doc._id.toString() == item2._id.toString();
+            })
+            .map((item3) => {
+              return { rating: item3.rating, ratedBy: item3.count };
+            }),
+        };
       });
 
-      return { courses };
-    } catch (error) {
-      console.log(
-        "Error while filtering courses by price range",
-        error.message
+      return coursesWithRatings.sort(
+        (a, b) =>
+          (b.rating.length !== 0 ? b.rating[0].rating : -Infinity) -
+          (a.rating.length !== 0 ? a.rating[0].rating : -Infinity)
       );
+    } catch (error) {
+      console.log("Error while filtering courses", error.message);
     }
   };
 

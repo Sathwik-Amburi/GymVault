@@ -1,6 +1,7 @@
 const gymModel = require("../database/models/gym");
 const courseModel = require("../database/models/course");
 const Subscription = require("../database/models/subscription");
+const reviewModel = require("../database/models/review");
 
 class GymService {
   getAllGyms = async () => {
@@ -64,32 +65,40 @@ class GymService {
 
   filterGyms = async (name, city) => {
     try {
+      const allRatings = await reviewModel.aggregate([
+        { $unwind: "$gymId" },
+        {
+          $group: {
+            _id: "$gymId",
+            rating: { $avg: "$rating" },
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
       const gyms = await gymModel.find({
         name: { $regex: String(name), $options: "i" },
         city: city,
       });
-      return gyms;
-    } catch (error) {
-      console.log("Error while filtering gyms", error.message);
-    }
-  };
 
-  filterGymsByPriceRange = async (priceRange, city) => {
-    try {
-      const gyms = await gymModel.find({
-        subscriptionOffers: {
-          $elemMatch: {
-            subscriptionType: "MONTHLY_PASS",
-            subscriptionPrice: {
-              $gte: priceRange[0],
-              $lte: priceRange[1],
-            },
-          },
-        },
-        city: city,
+      const gymsWithRatings = gyms.map((item1) => {
+        return {
+          ...item1._doc,
+          rating: allRatings
+            .filter((item2) => {
+              return item1._doc._id.toString() == item2._id.toString();
+            })
+            .map((item3) => {
+              return { rating: item3.rating, ratedBy: item3.count };
+            }),
+        };
       });
 
-      return { gyms };
+      return gymsWithRatings.sort(
+        (a, b) =>
+          (b.rating.length !== 0 ? b.rating[0].rating : -Infinity) -
+          (a.rating.length !== 0 ? a.rating[0].rating : -Infinity)
+      );
     } catch (error) {
       console.log("Error while filtering gyms", error.message);
     }

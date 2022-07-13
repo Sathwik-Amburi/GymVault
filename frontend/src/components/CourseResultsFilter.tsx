@@ -211,6 +211,7 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
   return (
     <>
       <Grid
+        md={10}
         container
         direction="row"
         style={{ marginBottom: "8px" }}
@@ -346,7 +347,7 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
                       { value: 0, label: "0 €" },
                       {
                         value: yearlyPassMaxPrice,
-                        label: `${monthlyPassMaxPrice} €`,
+                        label: `${yearlyPassMaxPrice} €`,
                       },
                     ]}
                   />
