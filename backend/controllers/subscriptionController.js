@@ -33,14 +33,15 @@ const getSubscriptionsByGymId = async (req, res) => {
 };
 
 const checkOrPurchase = async (req, res) => {
-    const { courseOrGymId, stripeToken } = req.params;
-    const subscription = await subscriptionService.checkOrPurchase(req.user.id, courseOrGymId, stripeToken);
-    if (subscription) {
-        res.status(200)
-           .json({ message: `Subscription purchased`, response: subscription });
-    } else {
-        res.status(404).json({ message: `Subscription not purchased` });
-    }
+    res.status(404).json({ message: `Deprecated` });
+    // const { courseOrGymId, stripeToken } = req.params;
+    // const subscription = await subscriptionService.checkOrPurchase(req.user.id, courseOrGymId, stripeToken);
+    // if (subscription) {
+    //     res.status(200)
+    //        .json({ message: `Subscription purchased`, response: subscription });
+    // } else {
+    //     res.status(404).json({ message: `Subscription not purchased` });
+    // }
 }
 
 

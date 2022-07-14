@@ -1,5 +1,6 @@
 const userModel = require("../database/models/user");
 const stripe = require('stripe')(process.env.STRIPE_SK)
+const subscriptionService = require('../services/subscriptionService');
 
 const createStripeConnectAccount = async (req, res) => {
 
@@ -82,6 +83,8 @@ const getBalances = async (req, res) => {
 
 
 const createCheckoutSession = async (req, res) => {
+    console.log(req.body);
+    console.log("-----------------------------------------------------");
 
     // temporary: just gets ANY gym owner's stripe account id to forward payments to
     const gym_owner = await userModel.find({ role: "gym_owner" }).limit(1).exec();
@@ -90,39 +93,60 @@ const createCheckoutSession = async (req, res) => {
     const product = 'gym'
     // const product = req.body.product
 
-    // create stripe checkout session for purchasing the product
-    const session = await stripe.checkout.sessions.create({
-        payment_method_types: ["card"],
-
-        line_items: [
-            {
-                price_data: {
-                    currency: "eur",
-                    unit_amount: req.body.price * 100, // in eur cents
-                    product_data: {
-                        name: req.body.name,
-                    },
-                },
-                quantity: 1,
-            },
-        ],
-
-        mode: 'payment',
-        success_url: `http://localhost:3000/stripe/checkout/callback/${product}/${req.body.id}`, // pass gym/course id and other attributes
-        cancel_url: 'http://localhost:3000/buy/${product}/cancelled',
-        payment_intent_data: {
-            application_fee_amount: Math.ceil(req.body.price * 0.25) * 100, // we get 25% cut and round up to nearest int in eur cent
-            transfer_data: {
-                destination: stripe_account_id,
+    let li = [{
+        price_data: {
+            currency: "eur",
+            unit_amount: req.body.baseItem.price * 100, // in eur cents
+            product_data: {
+                //id: req.body.baseItem._id,
+                name: req.body.baseItem.name,
             },
         },
+        quantity: 1,
+    }];
+    req.body.options.forEach(option => {
+        li.push({
+            price_data: {
+                currency: "eur",
+                unit_amount: option.price * 100, // in eur cents
+                product_data: {
+                    name: option.name,
+                },
+            },
+            quantity: 1,
+        })
     });
+    console.log(li);
 
+    try {
+        let totalPrice = req.body.baseItem.price + req.body.options.reduce((acc, curr) => acc + curr.price, 0);
+        // create stripe checkout session for purchasing the product
+        const sessionData = {
+            payment_method_types: ["card"],
 
-    // save stripe payment session into user's model (with payment_status: unpaid)
-    await userModel.findByIdAndUpdate(req.user.id, { stripe_session: session })
+            line_items: li,
 
-    res.json({ link: session.url })
+            mode: 'payment',
+            success_url: `http://localhost:3000/stripe/checkout/callback/${product}/${req.body.id},${req.body.baseItem._id},${req.body.options.map(option => option._id).join(",")}`,
+            cancel_url: `http://localhost:3000/buy/${product}/cancelled`,
+            payment_intent_data: {
+                application_fee_amount: Math.ceil(totalPrice * 0.25) * 100, // we get 25% cut and round up to nearest int in eur cent
+                transfer_data: {
+                    destination: stripe_account_id,
+                },
+            },
+        };
+        console.log(sessionData);
+        const session = await stripe.checkout.sessions.create(sessionData);
+
+        // save stripe payment session into user's model (with payment_status: unpaid)
+        await userModel.findByIdAndUpdate(req.user.id, { stripe_session: session })
+
+        res.json({ link: session.url })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Stripe error" })
+    }
 }
 
 
@@ -141,7 +165,16 @@ const getPaymentStatus = async (req, res) => {
     // the session exists and belongs to the user
     if (session.payment_status === 'paid') {
         await user.update({ stripe_session: null }) // delete checkout session so that it is not reused
-        return res.json({ paid: true })
+        
+        // TODO: add payment to the database
+        console.log(user);
+        const subscription = await subscriptionService.purchase(user._id, session.line_items);
+        if (subscription) {
+            res.status(200)
+            .json({ paid: true, message: `Subscription purchased`, response: subscription });
+        } else {
+            res.status(404).json({ message: `Subscription not purchased` });
+        }
     }
 
     else { // user is attempting to use stripe checkout callback before payment

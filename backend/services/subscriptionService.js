@@ -53,7 +53,8 @@ class SubscriptionService {
             console.log("Error while adding subscription", error.message);
         }
     }
-    checkOrPurchase = async (uid, courseOrGymId, stripeToken) => {
+
+    purchase = async (uid, courseOrGymId) => {
         function randomString() {
             const len = 10;
             var result = '';
@@ -63,54 +64,52 @@ class SubscriptionService {
             }
             return result;
         }
-        // TODO!!! check validity of purchase via Stripe??
-        if(true) {
-            // Check if it is a course or gym ID 
-            let entity = null;
-            try {
-                entity = await courseService.getCourse(courseOrGymId);
+    
+        // Check if it is a course or gym ID 
+        let entity = null;
+        try {
+            entity = await courseService.getCourse(courseOrGymId);
+            if(entity != null) {
+                // ok
+            } else {
+                entity = await gymService.getGym(courseOrGymId);
                 if(entity != null) {
-                    // ok
+                    // still ok
                 } else {
-                    entity = await gymService.getGym(courseOrGymId);
-                    if(entity != null) {
-                        // still ok
-                    } else {
-                        console.log("Neither gym nor course!");
-                    }
+                    console.log("Neither gym nor course!");
                 }
-            } catch (error) {
-                console.log("Error while checking purchase: ", error);
             }
-            
-            if(entity != null && uid != null) {
-                let type = "DAY_PASS"; // TODO infer from request, entity
-                let purchaseDate = new Date();
-                let expirationDate = new Date();
-                expirationDate.setDate(purchaseDate.getDate() + 1);
-                const offset = 
-                    (type == "DAY_PASS")   ? 1 :
-                    (type == "MONTH_PASS") ? 30 :
-                    (type == "YEAR_PASS")  ? 365 :
-                    0; // TODO: not 0 but course duration
-                const subscription = new subscriptionModel({
-                    gymId: ("gymId" in entity) ? entity.gymId : entity._id,
-                    courseId: ("gymId" in entity) ? entity._id : null,
-                    name: entity.name,
-                    type: type,
-                    price: 1234,
-                    optionals: [],
-                    purchaseDate: purchaseDate,
-                    expireDate: expirationDate,
-                    ticketSecret: randomString(),
-                    courseId: (typeof entity === "Course") ? courseOrGymId : null,
-                    userId: uid
+        } catch (error) {
+            console.log("Error while checking purchase: ", error);
+        }
+        
+        if(entity != null && uid != null) {
+            let type = "DAY_PASS"; // TODO infer from request, entity
+            let purchaseDate = new Date();
+            let expirationDate = new Date();
+            expirationDate.setDate(purchaseDate.getDate() + 1);
+            const offset = 
+                (type == "DAY_PASS")   ? 1 :
+                (type == "MONTH_PASS") ? 30 :
+                (type == "YEAR_PASS")  ? 365 :
+                0; // TODO: not 0 but course duration
+            const subscription = new subscriptionModel({
+                gymId: ("gymId" in entity) ? entity.gymId : entity._id,
+                courseId: ("gymId" in entity) ? entity._id : null,
+                name: entity.name,
+                type: type,
+                price: 1234,
+                optionals: [],
+                purchaseDate: purchaseDate,
+                expireDate: expirationDate,
+                ticketSecret: randomString(),
+                courseId: (typeof entity === "Course") ? courseOrGymId : null,
+                userId: uid
 
 
-                });
-                await subscription.save();
-                return subscription;
-            }
+            });
+            await subscription.save();
+            return subscription;
         }
         return null;
     }

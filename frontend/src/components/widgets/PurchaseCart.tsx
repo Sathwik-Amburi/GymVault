@@ -30,13 +30,14 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
     let cart: CartItem[] = props.cart
     let price = 0;
     let name = ''
-    cart.forEach((item) => {
+    /*cart.forEach((item) => {
       price += item.price
       name = name + ' ' + item.name + ' | '
-    })
-    name = name.substr(0, name.length - 2)
+    })*/
+    let baseItem = cart.find((item) => item.base);
+    let options = cart.filter((item) => !item.base);
     const headers = { "x-access-token": String(localStorage.getItem('token')) }
-    let response = await axios.post('/stripe/get-stripe-session', {name, price, id}, { headers })
+    let response = await axios.post('/stripe/get-stripe-session', {id, baseItem, options}, { headers })
     window.location.href = response.data.link
   }
 

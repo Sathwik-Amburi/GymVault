@@ -1,7 +1,9 @@
+import { CircularProgress, Paper, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import NotAuthorizedPage from '../NotAuthorizedPage';
+import ChonkySpinner from '../widgets/ChonkySpinner';
 
 
 function StripeCallback() {
@@ -21,9 +23,6 @@ function StripeCallback() {
             if (response.data.paid === true) {
                 // TODO: API POST Request to add record in subscriptions table to register user to gym with id: gym_id
                 return navigate('/user/tickets?highlight=' + gym_id)
-
-                // TODO: Navigate to page where ticket secret is generated
-                navigate('/user/tickets')
             }
             else { // payment associated with session is incomplete (payment_status: unpaid)
                 alert("Payment Incomplete")
@@ -40,9 +39,17 @@ function StripeCallback() {
 
     return (
         <>
-            <div>
-                Redirecting . . .
-            </div>
+            <Paper elevation={3} style={{ padding: '1em' }}>
+                <ChonkySpinner loading={true}>
+                    <></>
+                </ChonkySpinner>
+                <Typography variant="h5" style={{ display: 'inline-block' }}>
+                    Processing payment
+                </Typography>
+                <Typography variant="body1">
+                    You will be redirected soon.
+                </Typography>
+            </Paper>
         </>
 
     )
