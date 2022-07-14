@@ -27,15 +27,10 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
   const stripeHandlePayment = async () => {
     setLoading(true);
     props.setEditable(false);
-    let cart: CartItem[] = props.cart
     let price = 0;
     let name = ''
-    /*cart.forEach((item) => {
-      price += item.price
-      name = name + ' ' + item.name + ' | '
-    })*/
-    let baseItem = cart.find((item) => item.base);
-    let options = cart.filter((item) => !item.base);
+    let baseItem = props.cart.find((item) => item.base);
+    let options = props.cart.filter((item) => !item.base);
     const headers = { "x-access-token": String(localStorage.getItem('token')) }
     let response = await axios.post('/stripe/get-stripe-session', {id, baseItem, options}, { headers })
     window.location.href = response.data.link
@@ -68,7 +63,7 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
         <TableRow>
           <TableCell>
             <Typography variant="h5" style={{ fontWeight: "bold" }}>
-              € {props.cart.reduce((acc, curr) => acc + curr.price, 0)}
+              € {props.cart.reduce((acc, curr) => acc + curr.price, 0).toFixed(2)}
             </Typography>
           </TableCell>
           <TableCell>

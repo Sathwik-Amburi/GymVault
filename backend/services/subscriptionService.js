@@ -54,61 +54,58 @@ class SubscriptionService {
         }
     }
 
-    purchase = async (uid, courseOrGymId) => {
+    generateSubscriptionData = async (uid, courseOrGymId, subType, optionals) => {
+        let type =  subType == 1 ? "DAY_PASS" :
+                    subType == 2 ? "MONTHLY_PASS" :
+                    subType == 3 ? "YEARLY_PASS" : "";
+
         function randomString() {
             const len = 10;
             var result = '';
             var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             for (var i = 0; i < len; i++) {
+                if(i == 5) result += '-';
                 result += characters.charAt(Math.floor(Math.random() * characters.length));
             }
             return result;
         }
     
         // Check if it is a course or gym ID 
-        let entity = null;
-        try {
-            entity = await courseService.getCourse(courseOrGymId);
+        let entity = await courseService.getCourse(courseOrGymId);
+        if(entity != null) {
+            // ok
+        } else {
+            entity = await gymService.getGym(courseOrGymId);
             if(entity != null) {
-                // ok
+                // still ok
             } else {
-                entity = await gymService.getGym(courseOrGymId);
-                if(entity != null) {
-                    // still ok
-                } else {
-                    console.log("Neither gym nor course!");
-                }
+                console.log("Neither gym nor course!");
+                return null;
             }
-        } catch (error) {
-            console.log("Error while checking purchase: ", error);
         }
         
         if(entity != null && uid != null) {
-            let type = "DAY_PASS"; // TODO infer from request, entity
             let purchaseDate = new Date();
             let expirationDate = new Date();
-            expirationDate.setDate(purchaseDate.getDate() + 1);
             const offset = 
                 (type == "DAY_PASS")   ? 1 :
-                (type == "MONTH_PASS") ? 30 :
-                (type == "YEAR_PASS")  ? 365 :
-                0; // TODO: not 0 but course duration
-            const subscription = new subscriptionModel({
+                (type == "MONTHLY_PASS") ? 30 :
+                (type == "YEARLY_PASS")  ? 365 :
+                0; 
+            expirationDate.setDate(purchaseDate.getDate() + offset);
+            const subscription = {
                 gymId: ("gymId" in entity) ? entity.gymId : entity._id,
                 courseId: ("gymId" in entity) ? entity._id : null,
                 name: entity.name,
                 type: type,
-                price: 1234,
+                price: 1234, // TODO!!! why is this still missing lol
                 optionals: [],
                 purchaseDate: purchaseDate,
                 expireDate: expirationDate,
                 ticketSecret: randomString(),
-                courseId: (typeof entity === "Course") ? courseOrGymId : null,
+                courseId: ("gymId" in entity) ? courseOrGymId : null,
                 userId: uid
-
-
-            });
-            await subscription.save();
+            };
             return subscription;
         }
         return null;

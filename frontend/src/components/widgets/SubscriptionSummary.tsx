@@ -1,7 +1,8 @@
 
 import { Grid, Paper, Typography } from "@mui/material";
 import React, { FC, useState } from "react";
-import { Item, Subscription } from "../../models/allModels";
+import { Item, Option, Subscription, SubscriptionTypes } from "../../models/allModels";
+import { toCleanSubscriptionTypeFormat } from "../../api/utils/formatters"; 
 
 type SsProps = {
   shown: boolean;
@@ -30,7 +31,7 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
           }} onClick={() => {}}>
             <div style={{ minHeight: "100px"  }}>
               <span style={{ fontWeight: "bold" }}>
-                VIP Ticket
+                { toCleanSubscriptionTypeFormat(props.item.type as SubscriptionTypes) }
               </span>
               <br /><br />
               <span>
@@ -38,26 +39,26 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
               </span>
             </div>
           </Paper>
-
-          <Paper style={{
-            backgroundColor:  "#005",
-            color:            "#fff",
-            borderRadius:     "12px",
-            padding:          "1.5em",
-            margin:           "1em"
-          }}>
-            <div style={{ minHeight: "100px"  }}>
-              <span style={{ fontWeight: "bold" }}>
-                Equipment Rental
-              </span>
-              <br /><br />
-              <span>
-                Option Description
-              </span>
-            </div>
-          </Paper>
-          
-        </Grid>
+          { props.subscription.optionals.map((opt: Option) => (
+            <Paper style={{
+              backgroundColor:  "#005",
+              color:            "#fff",
+              borderRadius:     "12px",
+              padding:          "1.5em",
+              margin:           "1em"
+            }}>
+              <div style={{ minHeight: "100px"  }}>
+                <span style={{ fontWeight: "bold" }}>
+                  
+                </span>
+                <br /><br />
+                <span>
+                  Option Description
+                </span>
+              </div>
+            </Paper>
+          ))}
+          </Grid>
         { /* ....... */ }
         <div>
           <table style={{border: "none", width: "100%"}}>

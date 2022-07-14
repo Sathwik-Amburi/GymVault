@@ -1,6 +1,8 @@
 const userModel = require("../database/models/user");
 const stripe = require('stripe')(process.env.STRIPE_SK)
 const subscriptionService = require('../services/subscriptionService');
+const subscriptionModel = require("../database/models/subscription");
+
 
 const createStripeConnectAccount = async (req, res) => {
 
@@ -83,10 +85,7 @@ const getBalances = async (req, res) => {
 
 
 const createCheckoutSession = async (req, res) => {
-    console.log(req.body);
-    console.log("-----------------------------------------------------");
-
-    // temporary: just gets ANY gym owner's stripe account id to forward payments to
+    // TODO: temp: just gets ANY gym owner's stripe account id to forward payments to
     const gym_owner = await userModel.find({ role: "gym_owner" }).limit(1).exec();
     const stripe_account_id = gym_owner[0].stripe_account_id
 
@@ -116,10 +115,9 @@ const createCheckoutSession = async (req, res) => {
             quantity: 1,
         })
     });
-    console.log(li);
 
     try {
-        let totalPrice = req.body.baseItem.price + req.body.options.reduce((acc, curr) => acc + curr.price, 0);
+        let totalPrice = (req.body.baseItem.price + req.body.options.reduce((acc, curr) => acc + curr.price, 0)).toFixed(2)
         // create stripe checkout session for purchasing the product
         const sessionData = {
             payment_method_types: ["card"],
@@ -128,7 +126,7 @@ const createCheckoutSession = async (req, res) => {
 
             mode: 'payment',
             success_url: `http://localhost:3000/stripe/checkout/callback/${product}/${req.body.id},${req.body.baseItem._id},${req.body.options.map(option => option._id).join(",")}`,
-            cancel_url: `http://localhost:3000/buy/${product}/cancelled`,
+            cancel_url: `http://localhost:3000/buy/${req.body.id}/cancelled`,
             payment_intent_data: {
                 application_fee_amount: Math.ceil(totalPrice * 0.25) * 100, // we get 25% cut and round up to nearest int in eur cent
                 transfer_data: {
@@ -138,6 +136,7 @@ const createCheckoutSession = async (req, res) => {
         };
         console.log(sessionData);
         const session = await stripe.checkout.sessions.create(sessionData);
+        session['pending_subscription'] = await subscriptionService.generateSubscriptionData(req.user.id, req.body.id, req.body.baseItem._id, req.body.options)
 
         // save stripe payment session into user's model (with payment_status: unpaid)
         await userModel.findByIdAndUpdate(req.user.id, { stripe_session: session })
@@ -164,17 +163,19 @@ const getPaymentStatus = async (req, res) => {
     const session = await stripe.checkout.sessions.retrieve(user.stripe_session.id)
     // the session exists and belongs to the user
     if (session.payment_status === 'paid') {
-        await user.update({ stripe_session: null }) // delete checkout session so that it is not reused
-        
         // TODO: add payment to the database
         console.log(user);
-        const subscription = await subscriptionService.purchase(user._id, session.line_items);
+        const subscription = new subscriptionModel({
+            ...user.stripe_session.pending_subscription
+        }).save();
         if (subscription) {
             res.status(200)
             .json({ paid: true, message: `Subscription purchased`, response: subscription });
+            await user.update({ stripe_session: null }) // delete checkout session so that it is not reused
         } else {
             res.status(404).json({ message: `Subscription not purchased` });
         }
+        
     }
 
     else { // user is attempting to use stripe checkout callback before payment

@@ -5,7 +5,7 @@ export const toCleanSubscriptionTypeFormat = (
 ): string => {
   switch (subscriptionType) {
     case SubscriptionTypes.DAY_PASS:
-      return "Day Pass";
+      return "Daily Pass";
     case SubscriptionTypes.MONTHLY_PASS:
       return "Monthly Pass";
     case SubscriptionTypes.YEARLY_PASS:

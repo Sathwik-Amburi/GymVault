@@ -31,6 +31,7 @@ function StripeCallback() {
             }
 
         } catch (error) {
+            console.log(error)
             alert("No stripe session initiated!")
             navigate('/user/unauthorized')
         }
