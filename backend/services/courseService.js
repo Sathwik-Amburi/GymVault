@@ -85,6 +85,18 @@ class CourseService {
 
   filterCoursesByPriceRanges = async (priceRanges, city, name) => {
     try {
+      const allRatings = await reviewModel.aggregate([
+        { $match: { courseId: { $ne: null, $exists: true } } },
+        { $unwind: "$courseId" },
+        {
+          $group: {
+            _id: "$courseId",
+            rating: { $avg: "$rating" },
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
       const filters = priceRanges.map((item) => {
         return {
           $elemMatch: {
@@ -109,7 +121,27 @@ class CourseService {
         const courses = onlyCourses.filter((course) => {
           return course.gymId.city == city;
         });
-        return { courses };
+
+        const coursesWithRatings = courses.map((item1) => {
+          return {
+            ...item1._doc,
+            rating: allRatings
+              .filter((item2) => {
+                return item1._doc._id.toString() == item2._id.toString();
+              })
+              .map((item3) => {
+                return { rating: item3.rating, ratedBy: item3.count };
+              }),
+          };
+        });
+
+        return {
+          courses: coursesWithRatings.sort(
+            (a, b) =>
+              (b.rating.length !== 0 ? b.rating[0].rating : -Infinity) -
+              (a.rating.length !== 0 ? a.rating[0].rating : -Infinity)
+          ),
+        };
       } else {
         const onlyCourses = await courseModel
           .find({})
@@ -118,7 +150,27 @@ class CourseService {
         const courses = onlyCourses.filter((course) => {
           return course.gymId.city == city;
         });
-        return { courses };
+
+        const coursesWithRatings = courses.map((item1) => {
+          return {
+            ...item1._doc,
+            rating: allRatings
+              .filter((item2) => {
+                return item1._doc._id.toString() == item2._id.toString();
+              })
+              .map((item3) => {
+                return { rating: item3.rating, ratedBy: item3.count };
+              }),
+          };
+        });
+
+        return {
+          courses: coursesWithRatings.sort(
+            (a, b) =>
+              (b.rating.length !== 0 ? b.rating[0].rating : -Infinity) -
+              (a.rating.length !== 0 ? a.rating[0].rating : -Infinity)
+          ),
+        };
       }
     } catch (error) {
       console.log("Error while filtering courses", error.message);

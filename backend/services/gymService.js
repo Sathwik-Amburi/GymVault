@@ -106,6 +106,17 @@ class GymService {
 
   filterGymsByPriceRanges = async (priceRanges, city) => {
     try {
+      const allRatings = await reviewModel.aggregate([
+        { $unwind: "$gymId" },
+        {
+          $group: {
+            _id: "$gymId",
+            rating: { $avg: "$rating" },
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
       const filters = priceRanges.map((item) => {
         return {
           $elemMatch: {
@@ -125,12 +136,52 @@ class GymService {
           },
           city: city,
         });
-        return { gyms };
+
+        const gymsWithRatings = gyms.map((item1) => {
+          return {
+            ...item1._doc,
+            rating: allRatings
+              .filter((item2) => {
+                return item1._doc._id.toString() == item2._id.toString();
+              })
+              .map((item3) => {
+                return { rating: item3.rating, ratedBy: item3.count };
+              }),
+          };
+        });
+
+        return {
+          gyms: gymsWithRatings.sort(
+            (a, b) =>
+              (b.rating.length !== 0 ? b.rating[0].rating : -Infinity) -
+              (a.rating.length !== 0 ? a.rating[0].rating : -Infinity)
+          ),
+        };
       } else {
         const gyms = await gymModel.find({
           city: city,
         });
-        return { gyms };
+
+        const gymsWithRatings = gyms.map((item1) => {
+          return {
+            ...item1._doc,
+            rating: allRatings
+              .filter((item2) => {
+                return item1._doc._id.toString() == item2._id.toString();
+              })
+              .map((item3) => {
+                return { rating: item3.rating, ratedBy: item3.count };
+              }),
+          };
+        });
+
+        return {
+          gyms: gymsWithRatings.sort(
+            (a, b) =>
+              (b.rating.length !== 0 ? b.rating[0].rating : -Infinity) -
+              (a.rating.length !== 0 ? a.rating[0].rating : -Infinity)
+          ),
+        };
       }
     } catch (error) {
       console.log("Error while filtering gyms", error.message);
