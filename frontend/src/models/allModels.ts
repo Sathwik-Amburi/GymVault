@@ -80,6 +80,7 @@ export enum SubscriptionTypes {
 export interface Subscription {
   userId: string;
   gymId: string;
+  courseId:string;
   name?: string;
   type: SubscriptionTypes;
   price: number;

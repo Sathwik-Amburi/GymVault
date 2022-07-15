@@ -12,7 +12,7 @@ const ReviewSchema = new mongoose.Schema({
     required: true,
   },
   gymId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "Gym",
     default: null,
     // required: true,

@@ -59,7 +59,7 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
             </>
           ) : null }
           <Typography variant="body2">{props.item.description}</Typography>
-            <ReviewButton userId = {props.subscription.userId} gymId = {props.subscription.gymId} username = {props.user.firstName} />
+            <ReviewButton userId = {props.subscription.userId} gymId = {props.subscription.gymId} username = {props.user.firstName} courseId = {props.subscription.courseId} />
         </Grid>
       </Grid>
   );

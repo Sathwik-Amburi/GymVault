@@ -22,8 +22,19 @@ export default function ReviewButton(props: any) {
     const [value, setValue] = React.useState<number | null>(0);
     const [rating, setReview] = useState<any>(0);
     const [reviewAdded,setReviewAdded] = useState<boolean>(false);
+    let gymId = props.gymId
+    let courseId = props.courseId
     let userId = props.userId
-    let Id = props.gymId || props.courseId
+    let Id
+    if (props.courseId === null){
+        Id = props.gymId
+
+    }
+    else{
+        Id =props.courseId
+        gymId = null
+    }
+
 
     try {
         ApiCalls.getReviewByUserId(userId,Id)
@@ -52,6 +63,7 @@ export default function ReviewButton(props: any) {
             title: data.get('title'),
             description: data.get('description'),
         });
+
         ApiCalls.addReview(
             data.get("userId"),
             data.get("username"),
@@ -127,7 +139,7 @@ export default function ReviewButton(props: any) {
                                             hidden
                                         />
                                         <input
-                                            value = {props.gymId || null}
+                                            value = {gymId || null}
                                             name = 'gymId'
                                             id = 'gymId'
                                             hidden

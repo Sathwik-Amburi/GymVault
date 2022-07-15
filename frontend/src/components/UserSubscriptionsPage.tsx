@@ -50,7 +50,7 @@ const UserSubscriptionsPage: FC = () => {
           let subscription: Subscription = {
             userId: obj.userId,
             gymId: obj.gym._id,
-            // TODO: where's courseId??
+            courseId:obj.courseId,
             name: (obj.course != null) ? obj.course.name : obj.gym.name,
             type: obj.type,
             optionals: obj.optionals,
