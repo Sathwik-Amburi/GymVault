@@ -21,7 +21,7 @@ export default function ReviewButton(props: any) {
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState<number | null>(0);
     const [rating, setReview] = useState<any>(0);
-    let reviewAdded = false
+    const [reviewAdded,setReviewAdded] = useState<boolean>(false);
     let userId = props.userId
     let Id = props.gymId || props.courseId
 
@@ -29,13 +29,14 @@ export default function ReviewButton(props: any) {
         ApiCalls.getReviewByUserId(userId,Id)
             .then((res) => {
                 setReview(res.data.response);
+                setReviewAdded(true)
             }
             );
     } catch(e){
         //do nothing
     }
 
-    reviewAdded = (rating !== 0);
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -60,8 +61,9 @@ export default function ReviewButton(props: any) {
             data.get("title"),
             data.get("description")
         )
-        setOpen(false);
-
+        setOpen(false)
+        setReviewAdded(true);
+        setReview(data.get("rating"))
     };
 
     return (
