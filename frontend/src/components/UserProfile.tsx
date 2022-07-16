@@ -1,8 +1,10 @@
+import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
 import { UserProfileDetails } from "../models/allModels";
 import UserCard from "./widgets/userCard/UserCard"
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
+
 const UserProfile: FC = () => {
   const [profile, setProfile] = useState<UserProfileDetails>();
   const token = localStorage.getItem("token");
@@ -15,6 +17,20 @@ const UserProfile: FC = () => {
       .catch((err) => UnifiedErrorHandler.handle(err, "TODO: The user you're seeing does not exist in the database"));
   }, []);
 
+  const handleChange = async (event: any) => {
+    const file: File = event.target.files[0]
+    // const formData = new FormData()
+    // formData.append("file", event.target.files[0]);
+    // formData.append("fileName", event.target.files[0].name);
+
+    let response = await axios.post(`/s3/putItem/${file.name}`, {type: file.type})
+    const url = response.data.url
+    console.log(url)
+    let headers = { 'Content-Type':  file.type }
+    await axios.put(url, file, {headers})
+
+  }
+
   return (
     <>
       {/*<div>*/}
@@ -24,10 +40,17 @@ const UserProfile: FC = () => {
       {/*<div>Phone Number: {profile?.phoneNumber}</div>*/}
       {/*<div>Email: {profile?.email}</div>*/}
       <UserCard
-          firstName = {profile?.firstName}
-          lastName = {profile?.lastName}
-          email = {profile?.email}
-          phNo = {profile?.phoneNumber}
+        firstName={profile?.firstName}
+        lastName={profile?.lastName}
+        email={profile?.email}
+        phNo={profile?.phoneNumber}
+      />
+
+      <input
+        type="file"
+        accept="image/*"
+        id="contained-button-file"
+        onChange={handleChange}
       />
     </>
   );
