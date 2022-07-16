@@ -9,6 +9,6 @@ router.get(
     subscriptionController.getSubscriptionsByUserId
 );
 
-router.get("/s3/putItem/:key", userController.retrievePutSignedURL)
+router.post("/s3/putItem", userController.retrievePutSignedURL)
 
 module.exports = router;
