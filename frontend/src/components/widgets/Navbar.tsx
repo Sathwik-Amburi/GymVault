@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setAuthentication } from "../../store/slices/authenticationSlice";
 import { useNavigate } from "react-router-dom";
+import userIcon from "../../images/usericon.png";
 
 const Navbar: FC = () => {
   const dispatch = useDispatch();
@@ -119,7 +120,7 @@ const Navbar: FC = () => {
             <Avatar
               onClick={handleAvatarClick}
               alt="Firstname Lastname"
-              src="/avatar.jpg"
+              src={userIcon}
               style={{ marginRight: 16,  cursor: "pointer" }}
               sx={{ bgcolor: "teal" }}
             />

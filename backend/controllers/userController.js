@@ -11,14 +11,15 @@ const getProfile = async (req, res) => {
 };
 
 
-const retrievePutSignedURL = (req, res) => {
+const retrievePutSignedURL = async (req, res) => {
     const key = `profiles/${req.user.name}-${req.user.id}/${req.body.fileName}`
     const type = req.body.type
 
     s3Service.emptyS3Directory(`profiles/${req.user.name}-${req.user.id}`)
     const url = s3Service.retrievePutSignedURL(key, type)
-    
-    res.json({ url })
+    await userService.setProfile(req.user.id, key)
+
+    res.json({ url, key })
 }
 
 

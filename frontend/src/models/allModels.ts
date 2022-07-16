@@ -115,4 +115,5 @@ export interface UserProfileDetails {
   phoneNumber: string;
   email: string;
   payouts_enabled: boolean;
+  profilePicture: string
 }
