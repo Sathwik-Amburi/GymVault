@@ -19,13 +19,13 @@ const UserProfile: FC = () => {
 
   const handleChange = async (event: any) => {
     const file: File = event.target.files[0]
+
     // const formData = new FormData()
     // formData.append("file", event.target.files[0]);
     // formData.append("fileName", event.target.files[0].name);
 
-    let response = await axios.post(`/s3/putItem/${file.name}`, {type: file.type})
+    let response = await axios.post(`user/s3/putItem`, {fileName: file.name , type: file.type}, {headers: { "x-access-token": String(localStorage.getItem('token')) }})
     const url = response.data.url
-    console.log(url)
     let headers = { 'Content-Type':  file.type }
     await axios.put(url, file, {headers})
 

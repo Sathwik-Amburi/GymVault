@@ -12,7 +12,12 @@ const getProfile = async (req, res) => {
 
 
 const retrievePutSignedURL = (req, res) => {
-    const url = s3Service.retrievePutSignedURL(req.params.key, req.body.type)
+    const key = `profiles/${req.user.name}-${req.user.id}/${req.body.fileName}`
+    const type = req.body.type
+
+    s3Service.emptyS3Directory(`profiles/${req.user.name}-${req.user.id}`)
+
+    const url = s3Service.retrievePutSignedURL(key, type)
     res.json({ url })
 }
 
