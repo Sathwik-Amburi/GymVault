@@ -16,8 +16,8 @@ const retrievePutSignedURL = (req, res) => {
     const type = req.body.type
 
     s3Service.emptyS3Directory(`profiles/${req.user.name}-${req.user.id}`)
-
     const url = s3Service.retrievePutSignedURL(key, type)
+    
     res.json({ url })
 }
 
