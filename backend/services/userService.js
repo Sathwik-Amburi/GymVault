@@ -17,7 +17,8 @@ class UserService {
       email: user.email,
       phoneNumber: user.phoneNumber,
       payouts_enabled: user.payouts_enabled,
-      profilePicture: user.profilePicture
+      profilePicture: user.profilePicture,
+      created: user.created
     };
   };
 

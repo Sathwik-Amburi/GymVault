@@ -3,8 +3,12 @@ import "./ProfileCard.css";
 import userIcon from "../../../images/usericon.png";
 import axios from "axios";
 import Box from '@mui/material/Box';
-import LinearProgress from '@mui/material/LinearProgress';
 import CircularProgress from '@mui/material/CircularProgress';
+import { IconButton } from "@mui/material";
+import { PhotoCamera } from "@mui/icons-material";
+import moment from "moment";
+
+
 
 
 function UserCard(props: any) {
@@ -43,25 +47,55 @@ function UserCard(props: any) {
         <>
 
             <div className="card-container">
-                <header className="header-profile" style={{ padding: "50px 40px" }}>
+                <header className="header-profile" style={{ padding: "10px 20px" }}>
                     <img style={{ width: "200px", height: "200px", display: loading ? 'none' : 'block' }} className="user-pic" src={srcImg} alt='f' />
                     <Box style={{ display: loading ? 'block' : 'none' }} sx={{ width: '100%' }}>
                         <CircularProgress />
                     </Box>
+
+                    <input
+                        type="file"
+                        accept="image/*"
+                        id="contained-button-file"
+                        style={{ display: 'none' }}
+                        onChange={handleChange}
+                    />
+
+                    <label htmlFor="contained-button-file">
+                        <IconButton color="primary" aria-label="upload picture"
+                            component="span">
+                            <PhotoCamera style={{ fontSize: "45px", display: loading ? 'none' : 'block' }} />
+                        </IconButton>
+                    </label>
                 </header>
-                <h1 className="bold-text">
-                    {props.firstName} {props.lastName}
-                </h1>
-                <h2 className="normal-text">{props.email}</h2>
-                <h2 className="normal-text">Ph.No: {props.phNo}</h2>
+                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <h1 className="bold-text">
+                            Email
+                        </h1>
+                        <h1 className="normal-text">
+                            {props.email}
+                        </h1>
+                    </div>
 
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <h1 className="bold-text">
+                            Name
+                        </h1>
+                        <h1 className="normal-text">
+                            {props.firstName} {props.lastName}
+                        </h1>
+                    </div>
 
-                <input
-                    type="file"
-                    accept="image/*"
-                    id="contained-button-file"
-                    onChange={handleChange}
-                />
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <h1 className="bold-text">
+                            Member since
+                        </h1>
+                        <h1 className="normal-text">
+                            {moment(props.created).format('DD/MM/YYYY')}
+                        </h1>
+                    </div>
+                </div>
             </div>
 
         </>
