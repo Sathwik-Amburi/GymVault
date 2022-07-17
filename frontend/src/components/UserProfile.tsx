@@ -1,4 +1,3 @@
-import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
 import { UserProfileDetails } from "../models/allModels";
