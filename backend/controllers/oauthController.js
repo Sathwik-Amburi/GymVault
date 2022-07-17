@@ -23,6 +23,7 @@ const googleAuth = async (req, res) => {
                     email: match.email,
                     name: match.firstName + match.lastName,
                     role: match.role,
+                    profilePicture: match.profilePicture
                 },
                 process.env.JWT_SECRET,
                 { expiresIn: process.env.JWT_EXPIRATION }

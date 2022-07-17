@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    value: null
+    url: null
 }
 
 export const profilePictureSlice = createSlice({
@@ -9,7 +9,7 @@ export const profilePictureSlice = createSlice({
     initialState,
     reducers: {
         setProfilePicture: (state, action) => {
-            state.value = action.payload
+            state.url = action.payload.url
         }
     }
 })

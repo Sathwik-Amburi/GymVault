@@ -18,7 +18,8 @@ import { setAuthentication } from "../store/slices/authenticationSlice";
 import style from "../css/google.module.css";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-import jwt_decode, {JwtPayload} from "jwt-decode";
+import jwt_decode, { JwtPayload } from "jwt-decode";
+import { setProfilePicture } from "../store/slices/profilePictureSlice";
 
 
 const theme = createTheme();
@@ -50,7 +51,10 @@ const LoginPage: FC = () => {
       .then((res) => {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("role", res.data.role);
-        const {profilePicture}= jwt_decode<payload>(res.data.token)
+        
+        const { profilePicture } = jwt_decode<payload>(res.data.token)
+        dispatch(setProfilePicture({ url: String(profilePicture) }))
+
         dispatch(
           setAuthentication({ isAuthenticated: true, role: res.data.role })
         );
@@ -83,6 +87,10 @@ const LoginPage: FC = () => {
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("role", "user");
+
+        const { profilePicture } = jwt_decode<payload>(response.data.token)
+        dispatch(setProfilePicture({ url: String(profilePicture) }))
+
         dispatch(setAuthentication({ isAuthenticated: true, role: "user" }));
         navigate("/");
       }

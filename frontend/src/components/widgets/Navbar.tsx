@@ -9,6 +9,7 @@ import { RootState } from "../../store";
 import { setAuthentication } from "../../store/slices/authenticationSlice";
 import { useNavigate } from "react-router-dom";
 import userIcon from "../../images/usericon.png";
+import { S3_BASE_URL } from "../../config/config";
 
 const Navbar: FC = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,8 @@ const Navbar: FC = () => {
     (state: RootState) => state.authentication.isAuthenticated
   );
   const role = useSelector((state: RootState) => state.authentication.role);
+  let url = useSelector((state: RootState) => state.profilePicture.url)
+  const profilePicture = url? `${S3_BASE_URL}/${url}` : userIcon
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -120,7 +123,7 @@ const Navbar: FC = () => {
             <Avatar
               onClick={handleAvatarClick}
               alt="Firstname Lastname"
-              src={userIcon}
+              src={String(profilePicture)}
               style={{ marginRight: 16,  cursor: "pointer" }}
               sx={{ bgcolor: "teal" }}
             />
