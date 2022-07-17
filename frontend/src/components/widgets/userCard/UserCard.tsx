@@ -7,6 +7,9 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { IconButton } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
 import moment from "moment";
+import { S3_BASE_URL } from "../../../config/config";
+import { useDispatch } from "react-redux";
+import { setProfilePicture } from "../../../store/slices/profilePictureSlice";
 
 
 
@@ -15,13 +18,14 @@ function UserCard(props: any) {
 
     const [srcImg, setSrcImg] = useState<string>("")
     const [loading, setLoading] = useState<Boolean>(false)
+    let dispatch = useDispatch()
 
     useEffect(() => {
         if (props.profilePicture === undefined || !props.profilePicture) {
             setSrcImg(userIcon)
         }
         else {
-            let src = `https://gymvaultv1.s3.amazonaws.com/${props.profilePicture}`
+            let src = `${S3_BASE_URL}/${props.profilePicture}`
             setSrcImg(src)
         }
     }, [])
@@ -33,11 +37,12 @@ function UserCard(props: any) {
         let response = await axios.post(`user/s3/putItem`, { fileName: file.name, type: file.type }, { headers: { "x-access-token": String(localStorage.getItem('token')) } })
         const url = response.data.url
         const key = response.data.key
-        let src = `https://gymvaultv1.s3.amazonaws.com/${key}`
+        let src = `${S3_BASE_URL}/${key}`
         let headers = { 'Content-Type': file.type }
         await axios.put(url, file, { headers })
         setTimeout(() => {
             setSrcImg(src)
+            dispatch(setProfilePicture({url: key}))
             setLoading(false)
         }, 2000)
 
