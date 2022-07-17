@@ -18,6 +18,8 @@ import { setAuthentication } from "../store/slices/authenticationSlice";
 import style from "../css/google.module.css";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import jwt_decode, {JwtPayload} from "jwt-decode";
+
 
 const theme = createTheme();
 
@@ -31,6 +33,14 @@ const LoginPage: FC = () => {
       message: "",
     });
 
+  interface payload {
+    id: String,
+    email: String,
+    name: String,
+    role: String,
+    profilePicture: String
+  }
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -40,6 +50,7 @@ const LoginPage: FC = () => {
       .then((res) => {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("role", res.data.role);
+        const {profilePicture}= jwt_decode<payload>(res.data.token)
         dispatch(
           setAuthentication({ isAuthenticated: true, role: res.data.role })
         );

@@ -27,8 +27,9 @@ class authService {
           {
             id: match.id,
             email: match.email,
-            name: match.name,
+            name: match.firstName + match.lastName,
             role: match.role,
+            profilePicture: match.profilePicture
           },
           process.env.JWT_SECRET,
           { expiresIn: process.env.JWT_EXPIRATION }
