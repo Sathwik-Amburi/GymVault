@@ -95,7 +95,7 @@ const createCheckoutSession = async (req, res) => {
     let li = [{
         price_data: {
             currency: "eur",
-            unit_amount: req.body.baseItem.price * 100, // in eur cents
+            unit_amount: Math.ceil(req.body.baseItem.price * 100), // in eur cents no decimal points
             product_data: {
                 //id: req.body.baseItem._id,
                 name: req.body.baseItem.name,
@@ -107,7 +107,7 @@ const createCheckoutSession = async (req, res) => {
         li.push({
             price_data: {
                 currency: "eur",
-                unit_amount: option.price * 100, // in eur cents
+                unit_amount: Math.ceil(option.price * 100), // in eur cents no decimal points
                 product_data: {
                     name: option.name,
                 },
@@ -125,7 +125,7 @@ const createCheckoutSession = async (req, res) => {
             line_items: li,
 
             mode: 'payment',
-            success_url: `http://localhost:3000/stripe/checkout/callback/${product}/${req.body.id},${req.body.baseItem._id},${req.body.options.map(option => option._id).join(",")}`,
+            success_url: `http://localhost:3000/stripe/checkout/callback/${product}/${req.body.id}`,
             cancel_url: `http://localhost:3000/buy/${req.body.id}/cancelled`,
             payment_intent_data: {
                 application_fee_amount: Math.ceil(totalPrice * 0.25) * 100, // we get 25% cut and round up to nearest int in eur cent
@@ -163,11 +163,8 @@ const getPaymentStatus = async (req, res) => {
     const session = await stripe.checkout.sessions.retrieve(user.stripe_session.id)
     // the session exists and belongs to the user
     if (session.payment_status === 'paid') {
-        // TODO: add payment to the database
-        console.log(user);
-        const subscription = new subscriptionModel({
-            ...user.stripe_session.pending_subscription
-        }).save();
+        // handle successful legitament payment
+        const subscription = new subscriptionModel({...user.stripe_session.pending_subscription}).save();
         if (subscription) {
             res.status(200)
             .json({ paid: true, message: `Subscription purchased`, response: subscription });
