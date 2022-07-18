@@ -22,11 +22,8 @@ const OwnerProfile: FC = () => {
   return (
     <>
       <div>
-        Hello dear gym owner {profile?.firstName} {profile?.lastName} ! Welcome
-        to your dashboard
+        Welcome to your dashboard, {profile?.firstName} {profile?.lastName}
       </div>
-      <div>Phone Number: {profile?.phoneNumber}</div>
-      <div>Email: {profile?.email}</div>
 
       {profile?.payouts_enabled ? <StripeConnected/> : <StripeOnboard/>}
 
