@@ -124,12 +124,6 @@ const CourseViewPage: FC = () => {
           <hr />
           <p>{course.description}</p>
           <div style={{ textAlign: "right" }}>
-            <Typography
-              variant="h6"
-              style={{ display: "inline", marginRight: "2em" }}
-            >
-              Starts from <b>69 €</b>
-            </Typography>
             <Button
               variant="contained"
               color="success"
