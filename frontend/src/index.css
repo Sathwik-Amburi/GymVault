@@ -126,3 +126,22 @@ hr {
     height: 86px;
   }
 }
+
+.footer {
+  background-color: #EDEDED;
+  position: relative;
+  padding:1em;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer-logo {
+  text-align:center;
+}
+
+.footer-links{
+  text-align: center;
+  width:100%;
+  padding:1em;
+
+}

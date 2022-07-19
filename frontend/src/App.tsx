@@ -27,6 +27,7 @@ import Terms from "./components/Terms";
 import CreateGym from "./components/CreateGym";
 import StripeConnectCallback from "./components/stripe/StripeConnectCallback";
 import StripeGymCallback from "./components/stripe/StripeGymCheckoutCallback";
+import Footer from "./components/Footer";
 
 const THEME = createTheme({
   typography: {
@@ -128,6 +129,7 @@ const App: FC = () => {
             </Container>
           </>)} />
         </Routes>
+        <Footer />
       </ThemeProvider>
     </BrowserRouter>
   );
