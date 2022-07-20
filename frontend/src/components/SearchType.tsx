@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
-import Map from "./widgets/map/Map";
+import Map from "./widgets/map/GermanyMap";
 
 
 interface City {

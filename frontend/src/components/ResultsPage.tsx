@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { setGymResults } from "../store/slices/gymResultsSlice";
 import ResultsSort from "./ResultsSort";
+import CityMap from "./widgets/map/CityMap";
 
 const ResultsPage: FC = () => {
   const dispatch = useDispatch();
@@ -48,6 +49,14 @@ const ResultsPage: FC = () => {
         <ResultsFilter city={city} name={name} />
         <ResultsSort />
       </Grid>
+
+
+      <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: "30px 0px" }}>
+        <CityMap city={city} />
+      </div>
+
+
+
       <ChonkySpinner loading={loading}>
         <Grid
           container

@@ -4,14 +4,13 @@ import Typography from "@mui/material/Typography";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import Container from "@mui/material/Container";
 import mainLogo from "../images/gymvault.png";
-import axios from "axios";
 import SearchType from "./SearchType";
 
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 
-import Map from "./widgets/map/Map";
+import Map from "./widgets/map/GermanyMap";
 
 /* retrieved from: https://mui.com/material-ui/getting-started/templates/pricing/*/
 
