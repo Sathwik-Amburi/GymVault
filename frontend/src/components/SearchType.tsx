@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
+import Map from "./widgets/map/Map";
 
 
 interface City {
@@ -61,13 +62,13 @@ export default function SearchType(props: any) {
 
   return (
     <>
-
+      <Map />
       <div
         style={{
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
-          margin: "30px 0px 40px 0px",
+          margin: "30px 0px 20px 0px",
         }}
       >
         <div
