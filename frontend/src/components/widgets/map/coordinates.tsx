@@ -16,6 +16,14 @@ export const markers: Marker[] = [
     {city: 'Bremen', coordinates: [53.0793, 8.8017]},
     {city: 'Bremerhaven', coordinates: [53.5396, 8.5809]},
     {city: 'Brunswick', coordinates: [31.1500, 81.4915]},
+
+
+    {city: 'Cologne', coordinates: [50.9375, 6.9603]},
+    {city: 'Hamburg', coordinates: [53.5511, 9.9937]},
+    {city: 'Munich', coordinates: [48.1351, 11.5820]},
+    {city: 'Stuttgart', coordinates: [48.7758, 9.1829]},
+
+
 ]
 
 

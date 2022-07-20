@@ -18,17 +18,19 @@ export default function SearchType(props: any) {
   let [city, setCity] = useState<string>("");
   let [error, setError] = useState<string>("");
   const [cities, setCities] = useState<City[]>([]);
-
+  const [loaded, setLoaded] = useState<Boolean>(false);
 
 
   useEffect(() => {
+    setLoaded(false)
     ApiCalls.getAllAvailableSearchCities(props.type)
       .then((res) => {
         setCities(
           res.data.map((city) => {
             return { label: city };
           })
-        );
+        )
+        setLoaded(true)
       })
       .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gym cities"));
   }, [props.type]);
@@ -62,7 +64,7 @@ export default function SearchType(props: any) {
 
   return (
     <>
-      <Map setCity={setCity} />
+      {loaded ? <Map cities={cities} setCity={setCity} /> : ''}
       <div
         style={{
           display: "flex",
