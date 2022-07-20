@@ -7,18 +7,21 @@ import { useNavigate } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
+
 interface City {
   label: string;
 }
 
-export default function SearchType({ type }: any) {
+export default function SearchType(props: any) {
   let [name, setName] = useState<string>("");
   let [city, setCity] = useState<string>("");
   let [error, setError] = useState<string>("");
   const [cities, setCities] = useState<City[]>([]);
 
+
+
   useEffect(() => {
-    ApiCalls.getAllAvailableSearchCities(type)
+    ApiCalls.getAllAvailableSearchCities(props.type)
       .then((res) => {
         setCities(
           res.data.map((city) => {
@@ -27,7 +30,7 @@ export default function SearchType({ type }: any) {
         );
       })
       .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gym cities"));
-  }, [type]);
+  }, [props.type]);
 
   let navigate = useNavigate();
 
@@ -50,8 +53,7 @@ export default function SearchType({ type }: any) {
       }, 2000);
     } else {
       navigate(
-        `/results/${
-          type === "gyms" ? "gyms" : "courses"
+        `/results/${props.type === "gyms" ? "gyms" : "courses"
         }/search?name=${name}&city=${city}`
       );
     }
@@ -59,6 +61,7 @@ export default function SearchType({ type }: any) {
 
   return (
     <>
+
       <div
         style={{
           display: "flex",
@@ -78,7 +81,7 @@ export default function SearchType({ type }: any) {
             onChange={handleNameChange}
             style={{ marginRight: "3px" }}
             fullWidth
-            label={type === "gyms" ? "Gym Name" : "Course Name"}
+            label={props.type === "gyms" ? "Gym Name" : "Course Name"}
             id="fullWidth"
           />
         </div>
@@ -112,6 +115,8 @@ export default function SearchType({ type }: any) {
           Search
         </Button>
       </div>
+
+
     </>
   );
 }
