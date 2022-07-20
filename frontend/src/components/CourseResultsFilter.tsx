@@ -13,12 +13,13 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
-import { Filter, SubscriptionTypes } from "../models/allModels";
+import { PriceRangeFilter, SubscriptionTypes } from "../models/allModels";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import { useDispatch } from "react-redux";
 import { setCourseResults } from "../store/slices/courseResultsSlice";
+import PriceCheckIcon from "@mui/icons-material/PriceCheck";
 
 interface PriceRangeSliderState {
   minPrice: number;
@@ -55,7 +56,7 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
       sliderChanged: false,
     });
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [activeFilters, setActiveFilters] = useState<Filter[]>([]);
+  const [activeFilters, setActiveFilters] = useState<PriceRangeFilter[]>([]);
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
@@ -208,6 +209,33 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
     }
   };
 
+  const handleFilterClear = () => {
+    setActiveFilters([]);
+    setSessionPassPriceRange({
+      minPrice: 0,
+      maxPrice: sessionPassMaxPrice,
+      sliderChanged: false,
+    });
+    setMonthlyPassPriceRange({
+      minPrice: 0,
+      maxPrice: monthlyPassMaxPrice,
+      sliderChanged: false,
+    });
+    setYearlyPassPriceRange({
+      minPrice: 0,
+      maxPrice: yearlyPassMaxPrice,
+      sliderChanged: false,
+    });
+
+    city &&
+      ApiCalls.getAllCoursesByCityOrName(city, name)
+        .then((res) => {
+          dispatch(setCourseResults({ filteredCourses: res.data.response }));
+          setOpenModal(false);
+        })
+        .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get courses"));
+  };
+
   return (
     <>
       <Grid
@@ -260,101 +288,118 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
               Filter by
             </BootstrapDialogTitle>
             <DialogContent dividers sx={{ width: 500 }}>
-              <Typography>
-                Session Pass (€): between {sessionPasspriceRange.minPrice} and{" "}
-                {sessionPasspriceRange.maxPrice} EUR
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <Box sx={{ width: 300, marginLeft: "16px" }}>
-                  <Slider
-                    getAriaLabel={() => "Temperature range"}
-                    max={sessionPassMaxPrice}
-                    value={[
-                      sessionPasspriceRange.minPrice,
-                      sessionPasspriceRange.maxPrice,
-                    ]}
-                    onChange={handleSessionPassSliderChange}
-                    valueLabelDisplay="auto"
-                    getAriaValueText={() => {
-                      return `${[
-                        sessionPasspriceRange.minPrice,
-                        sessionPasspriceRange.maxPrice,
-                      ]} €`;
-                    }}
-                    marks={[
-                      { value: 0, label: "0 €" },
-                      {
-                        value: sessionPassMaxPrice,
-                        label: `${sessionPassMaxPrice} €`,
-                      },
-                    ]}
+              <Grid container direction={"column"}>
+                <Grid item style={{ display: "flex", alignItems: "center" }}>
+                  <PriceCheckIcon
+                    fontSize="small"
+                    color="success"
+                    style={{ marginRight: "4px" }}
                   />
-                </Box>
-              </Typography>
-              <Typography>
-                Monthly Pass (€): between {monthlyPasspriceRange.minPrice} and{" "}
-                {monthlyPasspriceRange.maxPrice} EUR
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <Box sx={{ width: 300, marginLeft: "16px" }}>
-                  <Slider
-                    getAriaLabel={() => "Temperature range"}
-                    max={monthlyPassMaxPrice}
-                    value={[
-                      monthlyPasspriceRange.minPrice,
-                      monthlyPasspriceRange.maxPrice,
-                    ]}
-                    onChange={handleMonthlyPassSliderChange}
-                    valueLabelDisplay="auto"
-                    getAriaValueText={() => {
-                      return `${[
-                        monthlyPasspriceRange.minPrice,
-                        monthlyPasspriceRange.maxPrice,
-                      ]} €`;
-                    }}
-                    marks={[
-                      { value: 0, label: "0 €" },
-                      {
-                        value: monthlyPassMaxPrice,
-                        label: `${monthlyPassMaxPrice} €`,
-                      },
-                    ]}
-                  />
-                </Box>
-              </Typography>
-              <Typography>
-                Yearly Pass (€): between {yearlyPasspriceRange.minPrice} and{" "}
-                {yearlyPasspriceRange.maxPrice} EUR
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <Box sx={{ width: 300, marginLeft: "16px" }}>
-                  <Slider
-                    getAriaLabel={() => "Temperature range"}
-                    max={yearlyPassMaxPrice}
-                    value={[
-                      yearlyPasspriceRange.minPrice,
-                      yearlyPasspriceRange.maxPrice,
-                    ]}
-                    onChange={handleYearlyPassSliderChange}
-                    valueLabelDisplay="auto"
-                    getAriaValueText={() => {
-                      return `${[
-                        yearlyPasspriceRange.minPrice,
-                        yearlyPasspriceRange.maxPrice,
-                      ]} €`;
-                    }}
-                    marks={[
-                      { value: 0, label: "0 €" },
-                      {
-                        value: yearlyPassMaxPrice,
-                        label: `${yearlyPassMaxPrice} €`,
-                      },
-                    ]}
-                  />
-                </Box>
-              </Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>
+                    Prices
+                  </Typography>
+                </Grid>
+                <div style={{ marginLeft: "32px" }}>
+                  <Typography>
+                    Session Pass (€): between {sessionPasspriceRange.minPrice}{" "}
+                    and {sessionPasspriceRange.maxPrice} EUR
+                  </Typography>
+                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <Box sx={{ width: 300, marginLeft: "16px" }}>
+                      <Slider
+                        getAriaLabel={() => "Temperature range"}
+                        max={sessionPassMaxPrice}
+                        value={[
+                          sessionPasspriceRange.minPrice,
+                          sessionPasspriceRange.maxPrice,
+                        ]}
+                        onChange={handleSessionPassSliderChange}
+                        valueLabelDisplay="auto"
+                        getAriaValueText={() => {
+                          return `${[
+                            sessionPasspriceRange.minPrice,
+                            sessionPasspriceRange.maxPrice,
+                          ]} €`;
+                        }}
+                        marks={[
+                          { value: 0, label: "0 €" },
+                          {
+                            value: sessionPassMaxPrice,
+                            label: `${sessionPassMaxPrice} €`,
+                          },
+                        ]}
+                      />
+                    </Box>
+                  </Typography>
+                  <Typography>
+                    Monthly Pass (€): between {monthlyPasspriceRange.minPrice}{" "}
+                    and {monthlyPasspriceRange.maxPrice} EUR
+                  </Typography>
+                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <Box sx={{ width: 300, marginLeft: "16px" }}>
+                      <Slider
+                        getAriaLabel={() => "Temperature range"}
+                        max={monthlyPassMaxPrice}
+                        value={[
+                          monthlyPasspriceRange.minPrice,
+                          monthlyPasspriceRange.maxPrice,
+                        ]}
+                        onChange={handleMonthlyPassSliderChange}
+                        valueLabelDisplay="auto"
+                        getAriaValueText={() => {
+                          return `${[
+                            monthlyPasspriceRange.minPrice,
+                            monthlyPasspriceRange.maxPrice,
+                          ]} €`;
+                        }}
+                        marks={[
+                          { value: 0, label: "0 €" },
+                          {
+                            value: monthlyPassMaxPrice,
+                            label: `${monthlyPassMaxPrice} €`,
+                          },
+                        ]}
+                      />
+                    </Box>
+                  </Typography>
+                  <Typography>
+                    Yearly Pass (€): between {yearlyPasspriceRange.minPrice} and{" "}
+                    {yearlyPasspriceRange.maxPrice} EUR
+                  </Typography>
+                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <Box sx={{ width: 300, marginLeft: "16px" }}>
+                      <Slider
+                        getAriaLabel={() => "Temperature range"}
+                        max={yearlyPassMaxPrice}
+                        value={[
+                          yearlyPasspriceRange.minPrice,
+                          yearlyPasspriceRange.maxPrice,
+                        ]}
+                        onChange={handleYearlyPassSliderChange}
+                        valueLabelDisplay="auto"
+                        getAriaValueText={() => {
+                          return `${[
+                            yearlyPasspriceRange.minPrice,
+                            yearlyPasspriceRange.maxPrice,
+                          ]} €`;
+                        }}
+                        marks={[
+                          { value: 0, label: "0 €" },
+                          {
+                            value: yearlyPassMaxPrice,
+                            label: `${yearlyPassMaxPrice} €`,
+                          },
+                        ]}
+                      />
+                    </Box>
+                  </Typography>
+                </div>
+              </Grid>
             </DialogContent>
             <DialogActions>
+              <Button autoFocus onClick={handleFilterClear}>
+                Clear all filters
+              </Button>
               <Button autoFocus onClick={handleFilter}>
                 Filter
               </Button>
