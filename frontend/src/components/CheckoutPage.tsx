@@ -69,7 +69,7 @@ const CheckoutPage: FC = () => {
       address: gym.address,
       description: gym.description,
       price: -1, // TODO: this "price" here can be dropped from the schema i think?
-      optionals: gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
+      optionals: gym.optionals == undefined ? [] : gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
 
       fgColor: "",
       bgColor: "",
@@ -85,7 +85,7 @@ const CheckoutPage: FC = () => {
       type: "course",
       address: gym.address,
       description: course.description,
-      optionals: gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
+      optionals: gym.optionals == undefined ? [] : gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
 
       fgColor: "",
       bgColor: "",

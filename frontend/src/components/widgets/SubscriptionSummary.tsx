@@ -35,7 +35,14 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
               </span>
               <br /><br />
               <span>
-                Option Description
+                { props.item.type === SubscriptionTypes.DAY_PASS ? 
+                    "Lasts 24 hours from purchase" :
+                  props.item.type === SubscriptionTypes.MONTHLY_PASS ?
+                    "Lasts 30 days from purchase" :
+                  props.item.type === SubscriptionTypes.YEARLY_PASS ?
+                    "Lasts 365 days from purchase"
+                  : null
+                  })
               </span>
             </div>
           </Paper>
@@ -49,11 +56,11 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
             }}>
               <div style={{ minHeight: "100px"  }}>
                 <span style={{ fontWeight: "bold" }}>
-                  
+                  { opt.name }
                 </span>
                 <br /><br />
                 <span>
-                  Option Description
+                  { opt.description }
                 </span>
               </div>
             </Paper>

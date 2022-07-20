@@ -29,7 +29,6 @@ const UserSubscriptionsPage: FC = () => {
   useEffect(() => {
     if(token) {
       ApiCalls.getSubscriptions(token).then((res) => {
-        console.log(res);
         let activeItems: [Item,Subscription][] = [];
         let pastItems: [Item,Subscription][] = [];
 

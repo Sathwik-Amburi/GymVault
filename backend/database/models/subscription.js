@@ -1,5 +1,21 @@
 const mongoose = require("mongoose");
 
+// TODO: make option.js, deduplicate
+const Option = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+});
+
 const SubscriptionSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -27,7 +43,7 @@ const SubscriptionSchema = new mongoose.Schema({
     required: true,
   },
   optionals: {
-    type: [String],
+    type: [Option],
   },
   purchaseDate: {
     type: Date,

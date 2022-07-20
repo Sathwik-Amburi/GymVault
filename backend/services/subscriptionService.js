@@ -54,10 +54,19 @@ class SubscriptionService {
         }
     }
 
-    generateSubscriptionData = async (uid, courseOrGymId, subType, optionals) => {
-        let type =  subType == 1 ? "DAY_PASS" :
-                    subType == 2 ? "MONTHLY_PASS" :
-                    subType == 3 ? "YEARLY_PASS" : "";
+    generateSubscriptionData = async (uid, courseOrGymId, baseType, basePrice, rawOptionals) => {
+        let price = 0;
+        let optionals = rawOptionals.map(optional => {
+            return {                
+                name: optional.name,
+                description: optional.description,
+                price: optional.price,
+            }
+        });
+
+        let type =  baseType == 1 ? "DAY_PASS" :
+                    baseType == 2 ? "MONTHLY_PASS" :
+                    baseType == 3 ? "YEARLY_PASS" : "";
 
         function randomString() {
             const len = 10;
@@ -98,8 +107,8 @@ class SubscriptionService {
                 courseId: ("gymId" in entity) ? entity._id : null,
                 name: entity.name,
                 type: type,
-                price: 1234, // TODO!!! why is this still missing lol
-                optionals: [],
+                price: basePrice + optionals.reduce((acc, cur) => acc + cur.price, 0),
+                optionals: optionals,
                 purchaseDate: purchaseDate,
                 expireDate: expirationDate,
                 ticketSecret: randomString(),
