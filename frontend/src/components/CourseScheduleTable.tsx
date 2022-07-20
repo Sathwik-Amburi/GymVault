@@ -3,6 +3,7 @@ import {
   Collapse,
   IconButton,
   Paper,
+  Radio,
   Table,
   TableBody,
   TableCell,
@@ -16,8 +17,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { CourseSession } from "../models/allModels";
 
-const Row = (props: { row: CourseSession }) => {
-  const { row } = props;
+const Row = (props: { row: CourseSession, selected?: string, setSelected?: (id: string) => void }) => {
+  const { row, selected, setSelected } = props;
   const [open, setOpen] = useState(false);
 
   return (
@@ -40,12 +41,10 @@ const Row = (props: { row: CourseSession }) => {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Sessions
-              </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
+                    { selected !== undefined && <TableCell> </TableCell> }
                     <TableCell>Time</TableCell>
                     <TableCell>Instructor</TableCell>
                   </TableRow>
@@ -53,6 +52,9 @@ const Row = (props: { row: CourseSession }) => {
                 <TableBody>
                   {row.sessionDetails.map((historyRow) => (
                     <TableRow key={historyRow.sessionTime}>
+                      { selected !== undefined && <TableCell> 
+                        <Radio />
+                      </TableCell>}
                       <TableCell component="th" scope="row">
                         {historyRow.sessionTime}
                       </TableCell>
@@ -71,10 +73,12 @@ const Row = (props: { row: CourseSession }) => {
 
 interface CourseScheduleTableProps {
   courseSessions: CourseSession[];
+  selected?: string;
+  setSelected?: (id: string) => void;
 }
 
 const CourseScheduleTable: FC<CourseScheduleTableProps> = ({
-  courseSessions,
+  courseSessions, selected, setSelected
 }) => {
   return (
     <TableContainer component={Paper}>
@@ -87,7 +91,7 @@ const CourseScheduleTable: FC<CourseScheduleTableProps> = ({
         </TableHead>
         <TableBody>
           {courseSessions.map((row) => (
-            <Row key={row.sessionDay} row={row} />
+            <Row key={row.sessionDay} row={row} selected={selected} setSelected={setSelected} />
           ))}
         </TableBody>
       </Table>

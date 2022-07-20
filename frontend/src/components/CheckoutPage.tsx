@@ -1,4 +1,4 @@
-import { Card, Grid, TextField, Typography } from "@mui/material";
+import { Card, FormControl, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, TextField, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
 import { Course, Gym, Item, Option, PurchaseOption, SubscriptionOffers } from "../models/allModels";
@@ -10,6 +10,7 @@ import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import ColorGenerator from "./widgets/utilities/ColorGenerator";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import CourseScheduleTable from "./CourseScheduleTable";
 
 
 const CheckoutPage: FC = () => {
@@ -24,7 +25,8 @@ const CheckoutPage: FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [basePurchases, setBasePurchases] = useState<PurchaseOption[]>([]);
-  let [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [selectedSession, setSelectedSession] = useState<string>("");
 
   function setSubscriptionBases(subscriptionOffers: SubscriptionOffers[]) {
     if (subscriptionOffers !== undefined && subscriptionOffers.length > 0) {
@@ -222,13 +224,37 @@ const CheckoutPage: FC = () => {
           <Typography variant="h6" style={{ fontWeight: "bold" }}>
             Starting Date
           </Typography>
-          todo calendar thingy
+          <hr />
+          <CourseScheduleTable courseSessions={ [
+            { 
+              sessionDay: "Monday",
+              sessionDetails: [{
+                sessionTime: "9:00 AM",
+                sessionsInstructor: "Emmanuel Macron"
+              },
+              {
+                sessionTime: "11:00 AM",
+                sessionsInstructor: "Marine Le Pen"
+              },]
+            },
+            { 
+              sessionDay: "Wednesday",
+              sessionDetails: [{
+                sessionTime: "9:00 AM",
+                sessionsInstructor: "Boris Johnson"
+              },
+              {
+                sessionTime: "11:00 AM",
+                sessionsInstructor: "Austin Powers"
+              },]
+            }
+          ] } selected={selectedSession} setSelected={setSelectedSession} />
+          
+          <br />
+          <br />
           <br />
           <Typography variant="h6" style={{ fontWeight: "bold" }}>
-            Ending Date
-          </Typography>
-          <Typography variant="body1">
-            + 30 days, so 
+            Starting Date, for gmyms
           </Typography>
           <hr className="mini-hr" />
           <br />
