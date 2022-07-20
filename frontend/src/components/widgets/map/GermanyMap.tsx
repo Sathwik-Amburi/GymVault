@@ -25,6 +25,12 @@ export default function Map(props: any) {
                         console.log(marker.city)
                         props.setCity(marker.city)
                     },
+                    mouseover: (e) => {
+                        e.target.openPopup()
+                    },
+                    mouseout: (e) => {
+                        e.target.closePopup()
+                    },
                 }}>
                 <Popup>
                     {marker.city}
@@ -45,7 +51,6 @@ export default function Map(props: any) {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 <>
-
                     {markers.map((marker) => displayMarkers(marker))}
                 </>
 

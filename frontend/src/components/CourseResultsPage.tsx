@@ -51,7 +51,7 @@ const CourseResultsPage: FC = () => {
       </Grid>
 
       <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: "30px 0px" }}>
-        <CityMap city={city} />
+        <CityMap item="course" city={city} />
       </div>
 
 
