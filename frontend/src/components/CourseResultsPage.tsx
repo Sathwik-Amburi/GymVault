@@ -10,6 +10,8 @@ import { RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { setCourseResults } from "../store/slices/courseResultsSlice";
 import CourseResultsSort from "./CourseResultsSort";
+import CityMap from "./widgets/map/CityMap";
+
 
 const CourseResultsPage: FC = () => {
   const dispatch = useDispatch();
@@ -47,6 +49,12 @@ const CourseResultsPage: FC = () => {
           <CourseResultsSort />
         </Grid>
       </Grid>
+
+      <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: "30px 0px" }}>
+        <CityMap city={city} />
+      </div>
+
+
       <ChonkySpinner loading={loading}>
         <Grid
           container
