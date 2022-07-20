@@ -1,7 +1,7 @@
 import { Card, FormControl, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, TextField, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
-import { Course, Gym, Item, Option, PurchaseOption, SubscriptionOffers } from "../models/allModels";
+import { Course, CourseSession, Gym, Item, Option, PurchaseOption, SubscriptionOffers } from "../models/allModels";
 import PurchaseGrid from "./widgets/PurchaseGrid";
 import PurchaseCart, { CartItem } from "./widgets/PurchaseCart";
 import ApiCalls from "../api/apiCalls";
@@ -9,7 +9,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import ColorGenerator from "./widgets/utilities/ColorGenerator";
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import CourseScheduleTable from "./CourseScheduleTable";
 
 
@@ -26,7 +25,10 @@ const CheckoutPage: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [basePurchases, setBasePurchases] = useState<PurchaseOption[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [courseSessions, setCourseSessions] = useState<CourseSession[]>([]);
   const [selectedSession, setSelectedSession] = useState<string>("");
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(new Date());
+
 
   function setSubscriptionBases(subscriptionOffers: SubscriptionOffers[]) {
     if (subscriptionOffers !== undefined && subscriptionOffers.length > 0) {
@@ -95,6 +97,7 @@ const CheckoutPage: FC = () => {
       bgColor: "",
     } as Item;
     setItem(newItem);
+    setCourseSessions(course.sessions);
   }
 
   const [item, setItem] = useState<Item>({
@@ -220,36 +223,30 @@ const CheckoutPage: FC = () => {
           <br />
           <br />
           <br />
+          
 
           <Typography variant="h6" style={{ fontWeight: "bold" }}>
             Starting Date
           </Typography>
+          <Typography variant="body1">
+            Depending on your ticket time, this may last for the time of the session only, or for a period starting from it
+          </Typography>
           <hr />
-          <CourseScheduleTable courseSessions={ [
-            { 
-              sessionDay: "Monday",
-              sessionDetails: [{
-                sessionTime: "9:00 AM",
-                sessionsInstructor: "Emmanuel Macron"
-              },
-              {
-                sessionTime: "11:00 AM",
-                sessionsInstructor: "Marine Le Pen"
-              },]
-            },
-            { 
-              sessionDay: "Wednesday",
-              sessionDetails: [{
-                sessionTime: "9:00 AM",
-                sessionsInstructor: "Boris Johnson"
-              },
-              {
-                sessionTime: "11:00 AM",
-                sessionsInstructor: "Austin Powers"
-              },]
-            }
-          ] } selected={selectedSession} setSelected={setSelectedSession} />
-          
+          { item.type == "course" ? <>
+            <CourseScheduleTable courseSessions={ courseSessions } selected={selectedSession} setSelected={setSelectedSession} />
+          </> : <>
+            <TextField
+              id="date"
+              label="TODO IMPLEMENT LOL"
+              type="date"
+              defaultValue="2017-05-24"
+              sx={{ width: 220 }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </> }
+
           <br />
           <br />
           <br />
