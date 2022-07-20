@@ -116,7 +116,7 @@ hr {
 
 .leaflet-container{
   width: 50vw;
-  height: 60vh;
+  height: 70vh;
 }
 
 @media only screen and (max-width: 767px) {

@@ -11,7 +11,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 
-import Map from "./Map";
+import Map from "./widgets/map/Map";
 
 /* retrieved from: https://mui.com/material-ui/getting-started/templates/pricing/*/
 
@@ -77,7 +77,7 @@ export default function FrontPage() {
         </div>
       </Container>
 
-      <Map/>
+      {/* <Map/> */}
       
       <Container maxWidth="md" component="main">
         <div
