@@ -75,8 +75,6 @@ export default function FrontPage() {
           needs, and pay only for what you use. All fully digitally.
         </div>
       </Container>
-
-      {/* <Map/> */}
       
       <Container maxWidth="md" component="main">
         <div
