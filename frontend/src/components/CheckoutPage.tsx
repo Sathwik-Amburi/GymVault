@@ -8,6 +8,7 @@ import ApiCalls from "../api/apiCalls";
 import { useNavigate, useParams } from "react-router-dom";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
+import ColorGenerator from "./widgets/utilities/ColorGenerator";
 
 const CheckoutPage: FC = () => {
   const { id, returnState } = useParams<{
@@ -147,31 +148,10 @@ const CheckoutPage: FC = () => {
   }, [id, navigate, returnState]);
   
   function optionToPurchase(option: Option, colorHash: string): PurchaseOption {
-    // technically, custom ones would be saved in the backend too, but that's way overkill
-    let colorSchemas: [string, string][] = [
-      ["#555", "#fff"],
-      ["#CD9400", "#fff"],
-      ["#f00", "#fff"],
-      ["#fff", "#57f"],
-    ];
-
-    // copied from: https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
-    function simpleHash(str: string): number {
-      var hash = 0, i, chr;
-      if (str.length === 0) return hash;
-      for (i = 0; i < str.length; i++) {
-        chr   = str.charCodeAt(i);
-        hash  = ((hash << 5) - hash) + chr;
-        hash |= 0; // Convert to 32bit integer
-      }
-      return hash;
-    };
-
-    let h = simpleHash(colorHash);
     return {
       ...option,
-      bgColor: colorSchemas[h % colorSchemas.length][0],
-      fgColor: colorSchemas[h % colorSchemas.length][1],
+      bgColor: ColorGenerator.nameToColor(colorHash),
+      fgColor: "white",
     } as PurchaseOption;
   }
 

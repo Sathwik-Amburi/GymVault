@@ -129,26 +129,24 @@ const UserSubscriptionsPage: FC = () => {
           backgroundColor: "#555",
           width: "100%",
         }}>
-          <Container maxWidth="lg" style={{ padding: "3em" }}>
-            <Grid container >
-              <Grid item xs={12} style={{ color: "white" }}>
-                <Typography variant="h6" style={{fontWeight: "bold" }}>
-                  Expired Subscriptions
-                </Typography>
-                <Typography variant="body1">
-                  In memoriam
-                </Typography>
-              </Grid>
-              { pastItems.map((i: [Item, Subscription]) => {
-                let item = i[0];
-                let subscription = i[1];
-                return (
-                  <SubscriptionEntry item={item} subscription={subscription} expired={true} user={user}/>
-                );
-              })}
-                
+          <Grid container>
+            <Grid item xs={12} style={{ color: "white" }}>
+              <Typography variant="h6" style={{fontWeight: "bold" }}>
+                Expired Subscriptions
+              </Typography>
+              <Typography variant="body1">
+                In memoriam
+              </Typography>
             </Grid>
-          </Container>
+            { pastItems.map((i: [Item, Subscription]) => {
+              let item = i[0];
+              let subscription = i[1];
+              return (
+                <SubscriptionEntry item={item} subscription={subscription} expired={true} user={user}/>
+              );
+            })}
+              
+          </Grid>
         </Container>
       ) : null }
     </>

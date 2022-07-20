@@ -31,6 +31,7 @@ const ResultsPage: FC = () => {
           dispatch(setGymResults({ filteredGyms: res.data.response }));
           setLoading(false);
         })
+
         .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms"));
   }, []);
 
@@ -58,7 +59,7 @@ const ResultsPage: FC = () => {
           margin: "30px 0px",
         }}
       >
-        <CityMap city={city} />
+        <CityMap item="gym" city={city} />
       </div>
 
       <ChonkySpinner loading={loading}>

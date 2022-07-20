@@ -46,9 +46,10 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
           <span>{props.item.address}</span>
           <hr />
         </Grid>
+        <Grid item md={6} xs={12} style={{ display: shownSecret ? "none" : "block" }}>
+          <SubscriptionSummary item={props.item} subscription={props.subscription} shown={shownSecret} expired={props.expired} />
+        </Grid>
 
-        <SubscriptionSummary item={props.item} subscription={props.subscription} shown={shownSecret} expired={props.expired} />
-        
         { /* Secret display */ }
         <SecretDisplay id={`${props.subscription.userId}${props.subscription._id}`} shown={shownSecret} code={props.subscription.ticketSecret} />
         <Grid item md={6} xs={12} style={{ paddingLeft: "2em" }}>
