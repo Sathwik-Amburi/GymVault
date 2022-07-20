@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   Box,
   Dialog,
@@ -10,15 +10,20 @@ import {
   Slider,
   Typography,
   Button,
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
-import { Filter, SubscriptionTypes } from "../models/allModels";
+import { Gym, PriceRangeFilter, SubscriptionTypes } from "../models/allModels";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import { useDispatch } from "react-redux";
 import { setGymResults } from "../store/slices/gymResultsSlice";
+import PriceCheckIcon from "@mui/icons-material/PriceCheck";
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 
 interface PriceRangeSliderState {
   minPrice: number;
@@ -29,10 +34,17 @@ interface PriceRangeSliderState {
 interface ResultsFilterProps {
   city: string | null;
   name: string | null;
+  gyms: Gym[];
 }
 
-const ResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
+export interface Filter {
+  priceRangeFilters: PriceRangeFilter[];
+  amenitiesFilters: string[];
+}
+
+const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
   const dispatch = useDispatch();
+  const [allAmenities, setAllAmenities] = useState<string[]>([]);
   const dailyPassMaxPrice = 50;
   const monthlyPassMaxPrice = 100;
   const yearlyPassMaxPrice = 750;
@@ -55,7 +67,19 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
       sliderChanged: false,
     });
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [activeFilters, setActiveFilters] = useState<Filter[]>([]);
+  const [activeFilters, setActiveFilters] = useState<PriceRangeFilter[]>([]);
+  const [activeAmenities, setActiveAmenities] = useState<string[]>([]);
+
+  useEffect(() => {
+    city &&
+      ApiCalls.getAllGymAmenitiesByCity(name, city)
+        .then((res) => {
+          setAllAmenities(res.data.amenities);
+        })
+        .catch((err) =>
+          UnifiedErrorHandler.handle(err, `Cannot get gym amenities in ${city}`)
+        );
+  }, [gyms]);
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
@@ -67,8 +91,13 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
     resetFilterPriceRangeValue(filterType);
 
     setActiveFilters(updatedActiveFilters);
+    const filters: Filter = {
+      priceRangeFilters: updatedActiveFilters,
+      amenitiesFilters: activeAmenities,
+    };
+
     city &&
-      ApiCalls.getGymsByFilters(updatedActiveFilters, city)
+      ApiCalls.getGymsByFilters(filters, city)
         .then((res) => {
           if (res.data.message === "No results found") {
             dispatch(setGymResults({ filteredGyms: [] }));
@@ -122,8 +151,12 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
 
   const handleFilter = () => {
     buildActiveFilters();
+    const filters: Filter = {
+      priceRangeFilters: activeFilters,
+      amenitiesFilters: activeAmenities,
+    };
     city &&
-      ApiCalls.getGymsByFilters(activeFilters, city)
+      ApiCalls.getGymsByFilters(filters, city)
         .then((res) => {
           if (res.data.message === "No results found") {
             dispatch(setGymResults({ filteredGyms: [] }));
@@ -201,6 +234,46 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
     }
   };
 
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    value: string
+  ) => {
+    var newActiveAmenities: string[] = [];
+    if (event.target.checked) {
+      newActiveAmenities = [...activeAmenities, value];
+    } else {
+      newActiveAmenities = activeAmenities.filter((item) => item !== value);
+    }
+    setActiveAmenities(newActiveAmenities);
+  };
+
+  const handleFilterClear = () => {
+    setActiveAmenities([""]);
+    setActiveFilters([]);
+    setDailyPassPriceRange({
+      minPrice: 0,
+      maxPrice: dailyPassMaxPrice,
+      sliderChanged: false,
+    });
+    setMonthlyPassPriceRange({
+      minPrice: 0,
+      maxPrice: monthlyPassMaxPrice,
+      sliderChanged: false,
+    });
+    setYearlyPassPriceRange({
+      minPrice: 0,
+      maxPrice: yearlyPassMaxPrice,
+      sliderChanged: false,
+    });
+    city &&
+      ApiCalls.getAllGymsByCityOrName(city, name)
+        .then((res) => {
+          dispatch(setGymResults({ filteredGyms: res.data.response }));
+          setOpenModal(false);
+        })
+        .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms"));
+  };
+
   return (
     <>
       <Grid
@@ -253,101 +326,154 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
               Filter by
             </BootstrapDialogTitle>
             <DialogContent dividers sx={{ width: 500 }}>
-              <Typography>
-                Daily Pass (€): between {dailyPasspriceRange.minPrice} and{" "}
-                {dailyPasspriceRange.maxPrice} EUR
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <Box sx={{ width: 300, marginLeft: "16px" }}>
-                  <Slider
-                    getAriaLabel={() => "Temperature range"}
-                    max={dailyPassMaxPrice}
-                    value={[
-                      dailyPasspriceRange.minPrice,
-                      dailyPasspriceRange.maxPrice,
-                    ]}
-                    onChange={handleDayPassSliderChange}
-                    valueLabelDisplay="auto"
-                    getAriaValueText={() => {
-                      return `${[
-                        dailyPasspriceRange.minPrice,
-                        dailyPasspriceRange.maxPrice,
-                      ]} €`;
-                    }}
-                    marks={[
-                      { value: 0, label: "0 €" },
-                      {
-                        value: dailyPassMaxPrice,
-                        label: `${dailyPassMaxPrice} €`,
-                      },
-                    ]}
+              <Grid container direction={"column"}>
+                <Grid item style={{ display: "flex", alignItems: "center" }}>
+                  <PriceCheckIcon
+                    fontSize="small"
+                    color="success"
+                    style={{ marginRight: "4px" }}
                   />
-                </Box>
-              </Typography>
-              <Typography>
-                Monthly Pass (€): between {monthlyPasspriceRange.minPrice} and{" "}
-                {monthlyPasspriceRange.maxPrice} EUR
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <Box sx={{ width: 300, marginLeft: "16px" }}>
-                  <Slider
-                    getAriaLabel={() => "Temperature range"}
-                    max={monthlyPassMaxPrice}
-                    value={[
-                      monthlyPasspriceRange.minPrice,
-                      monthlyPasspriceRange.maxPrice,
-                    ]}
-                    onChange={handleMonthlyPassSliderChange}
-                    valueLabelDisplay="auto"
-                    getAriaValueText={() => {
-                      return `${[
-                        monthlyPasspriceRange.minPrice,
-                        monthlyPasspriceRange.maxPrice,
-                      ]} €`;
-                    }}
-                    marks={[
-                      { value: 0, label: "0 €" },
-                      {
-                        value: monthlyPassMaxPrice,
-                        label: `${monthlyPassMaxPrice} €`,
-                      },
-                    ]}
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>
+                    Prices
+                  </Typography>
+                </Grid>
+                <div style={{ marginLeft: "32px" }}>
+                  <Typography>
+                    Daily Pass (€): between {dailyPasspriceRange.minPrice} and{" "}
+                    {dailyPasspriceRange.maxPrice} EUR
+                  </Typography>
+                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <Box sx={{ width: 300, marginLeft: "16px" }}>
+                      <Slider
+                        getAriaLabel={() => "Temperature range"}
+                        max={dailyPassMaxPrice}
+                        value={[
+                          dailyPasspriceRange.minPrice,
+                          dailyPasspriceRange.maxPrice,
+                        ]}
+                        onChange={handleDayPassSliderChange}
+                        valueLabelDisplay="auto"
+                        getAriaValueText={() => {
+                          return `${[
+                            dailyPasspriceRange.minPrice,
+                            dailyPasspriceRange.maxPrice,
+                          ]} €`;
+                        }}
+                        marks={[
+                          { value: 0, label: "0 €" },
+                          {
+                            value: dailyPassMaxPrice,
+                            label: `${dailyPassMaxPrice} €`,
+                          },
+                        ]}
+                      />
+                    </Box>
+                  </Typography>
+                  <Typography>
+                    Monthly Pass (€): between {monthlyPasspriceRange.minPrice}{" "}
+                    and {monthlyPasspriceRange.maxPrice} EUR
+                  </Typography>
+                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <Box sx={{ width: 300, marginLeft: "16px" }}>
+                      <Slider
+                        getAriaLabel={() => "Temperature range"}
+                        max={monthlyPassMaxPrice}
+                        value={[
+                          monthlyPasspriceRange.minPrice,
+                          monthlyPasspriceRange.maxPrice,
+                        ]}
+                        onChange={handleMonthlyPassSliderChange}
+                        valueLabelDisplay="auto"
+                        getAriaValueText={() => {
+                          return `${[
+                            monthlyPasspriceRange.minPrice,
+                            monthlyPasspriceRange.maxPrice,
+                          ]} €`;
+                        }}
+                        marks={[
+                          { value: 0, label: "0 €" },
+                          {
+                            value: monthlyPassMaxPrice,
+                            label: `${monthlyPassMaxPrice} €`,
+                          },
+                        ]}
+                      />
+                    </Box>
+                  </Typography>
+                  <Typography>
+                    Yearly Pass (€): between {yearlyPasspriceRange.minPrice} and{" "}
+                    {yearlyPasspriceRange.maxPrice} EUR
+                  </Typography>
+                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <Box sx={{ width: 300, marginLeft: "16px" }}>
+                      <Slider
+                        getAriaLabel={() => "Temperature range"}
+                        max={yearlyPassMaxPrice}
+                        value={[
+                          yearlyPasspriceRange.minPrice,
+                          yearlyPasspriceRange.maxPrice,
+                        ]}
+                        onChange={handleYearlyPassSliderChange}
+                        valueLabelDisplay="auto"
+                        getAriaValueText={() => {
+                          return `${[
+                            yearlyPasspriceRange.minPrice,
+                            yearlyPasspriceRange.maxPrice,
+                          ]} €`;
+                        }}
+                        marks={[
+                          { value: 0, label: "0 €" },
+                          {
+                            value: yearlyPassMaxPrice,
+                            label: `${yearlyPassMaxPrice} €`,
+                          },
+                        ]}
+                      />
+                    </Box>
+                  </Typography>
+                </div>
+                <Grid item style={{ display: "flex", alignItems: "center" }}>
+                  <FitnessCenterIcon
+                    fontSize="small"
+                    sx={{ color: "#4e78f5" }}
+                    style={{ marginRight: "4px" }}
                   />
-                </Box>
-              </Typography>
-              <Typography>
-                Yearly Pass (€): between {yearlyPasspriceRange.minPrice} and{" "}
-                {yearlyPasspriceRange.maxPrice} EUR
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <Box sx={{ width: 300, marginLeft: "16px" }}>
-                  <Slider
-                    getAriaLabel={() => "Temperature range"}
-                    max={yearlyPassMaxPrice}
-                    value={[
-                      yearlyPasspriceRange.minPrice,
-                      yearlyPasspriceRange.maxPrice,
-                    ]}
-                    onChange={handleYearlyPassSliderChange}
-                    valueLabelDisplay="auto"
-                    getAriaValueText={() => {
-                      return `${[
-                        yearlyPasspriceRange.minPrice,
-                        yearlyPasspriceRange.maxPrice,
-                      ]} €`;
-                    }}
-                    marks={[
-                      { value: 0, label: "0 €" },
-                      {
-                        value: yearlyPassMaxPrice,
-                        label: `${monthlyPassMaxPrice} €`,
-                      },
-                    ]}
-                  />
-                </Box>
-              </Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>
+                    Amenities
+                  </Typography>
+                </Grid>
+                <div style={{ wordWrap: "break-word", marginLeft: "32px" }}>
+                  <FormGroup>
+                    <Grid container item xs={12}>
+                      {allAmenities.map((item, index) => (
+                        <FormControlLabel
+                          key={index}
+                          control={
+                            <Checkbox
+                              onChange={(event) =>
+                                handleCheckboxChange(event, item)
+                              }
+                              checked={
+                                activeAmenities.find(
+                                  (element) => element === item
+                                )
+                                  ? true
+                                  : false
+                              }
+                            />
+                          }
+                          label={item}
+                        />
+                      ))}
+                    </Grid>
+                  </FormGroup>
+                </div>
+              </Grid>
             </DialogContent>
             <DialogActions>
+              <Button autoFocus onClick={handleFilterClear}>
+                Clear all filters
+              </Button>
               <Button autoFocus onClick={handleFilter}>
                 Filter
               </Button>

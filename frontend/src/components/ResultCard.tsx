@@ -33,7 +33,7 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
             component="img"
             alt="gym picture"
             height="250"
-            image={image}
+            image={gym.images ? gym.images[0] : image}
           />
           <CardContent>
             <Grid container direction={"row"} alignItems="center">

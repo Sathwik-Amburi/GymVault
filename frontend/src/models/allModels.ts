@@ -91,7 +91,11 @@ export interface Subscription {
   _id: string;
 }
 
-export type Filter = PriceRangeFilter;
+export interface Filter {
+  priceRanges: PriceRangeFilter[];
+  amenities: string[]
+
+}
 
 export interface PriceRangeFilter {
   type: SubscriptionTypes;
