@@ -62,7 +62,7 @@ export default function SearchType(props: any) {
 
   return (
     <>
-      <Map />
+      <Map setCity={setCity} />
       <div
         style={{
           display: "flex",
@@ -101,6 +101,7 @@ export default function SearchType(props: any) {
             id="combo-box-demo"
             options={cities}
             sx={{ width: 300 }}
+            value={city}
             renderInput={(params) => <TextField {...params} label="City" />}
           />
 

@@ -3,7 +3,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { markers } from './coordinates';
 
 
-export default function Map() {
+export default function Map(props: any) {
     return (
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: "60px" }}>
 
@@ -14,7 +14,13 @@ export default function Map() {
                 />
                 <>
                     {markers.map((marker) =>
-                        <Marker position={marker.coordinates}>
+                        <Marker position={marker.coordinates}
+                            eventHandlers={{
+                                click: (e) => {
+                                    console.log(marker.city)
+                                    props.setCity(marker.city)
+                                },
+                            }}>
                             <Popup>
                                 {marker.city}
                             </Popup>
