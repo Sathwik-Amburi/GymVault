@@ -74,6 +74,11 @@ const GymSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
+  coordinates: {
+    type: [Number],
+    default: [],
+    required: true
+  }
 });
 
 const Gym = mongoose.model("Gym", GymSchema);
