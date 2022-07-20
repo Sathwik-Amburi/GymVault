@@ -1,4 +1,4 @@
-import { Card, Grid, Typography } from "@mui/material";
+import { Card, Grid, TextField, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
 import { Course, Gym, Item, Option, PurchaseOption, SubscriptionOffers } from "../models/allModels";
@@ -9,6 +9,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import ColorGenerator from "./widgets/utilities/ColorGenerator";
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+
 
 const CheckoutPage: FC = () => {
   const { id, returnState } = useParams<{
@@ -78,7 +80,6 @@ const CheckoutPage: FC = () => {
     setItem(item);
   }
   function setCourse(course: Course, gym: Gym) {
-    // values left to "item.xxx" are recycled from setGym
     let newItem = {
       _id: course._id,
       gymName: gym.name,
@@ -214,6 +215,22 @@ const CheckoutPage: FC = () => {
           </Typography>
           <hr />
           <Typography variant="body1">{item.description}</Typography>
+          <br />
+          <br />
+          <br />
+
+          <Typography variant="h6" style={{ fontWeight: "bold" }}>
+            Starting Date
+          </Typography>
+          todo calendar thingy
+          <br />
+          <Typography variant="h6" style={{ fontWeight: "bold" }}>
+            Ending Date
+          </Typography>
+          <Typography variant="body1">
+            + 30 days, so 
+          </Typography>
+          <hr className="mini-hr" />
           <br />
           <br />
           <br />

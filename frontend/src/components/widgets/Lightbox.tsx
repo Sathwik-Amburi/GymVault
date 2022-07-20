@@ -7,9 +7,9 @@ type LbProps = {
 
 const Lightbox: FC<LbProps> = (props) => {
   let totalStates = props.states;
-  if(totalStates == undefined)
-    totalStates = [];
-  let [viewing, setViewing] = useState<string>((totalStates !== undefined && totalStates.length > 0) ? totalStates[0] : "");
+  console.log(totalStates);
+  if(totalStates == undefined) totalStates = [];
+  let [viewing, setViewing] = useState<string>("");
 
   return (
     <Grid container spacing={2}>
@@ -18,7 +18,7 @@ const Lightbox: FC<LbProps> = (props) => {
           style={{
             padding: "10em",
             textAlign: "center",
-            backgroundImage: `url(${viewing}`,
+            backgroundImage: `url(${(totalStates.length != 1 ? viewing : totalStates[0])})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center center"
@@ -27,7 +27,8 @@ const Lightbox: FC<LbProps> = (props) => {
           
         </Paper>
       </Grid>
-      {totalStates.map((state) => {
+      { totalStates.length > 1 && (
+        totalStates.map((state) => {
         return (
           <Grid item onClick={() => setViewing(state)} style={{ flex: "1 1 auto", maxWidth: "800px" }}>
             <Paper
@@ -43,7 +44,7 @@ const Lightbox: FC<LbProps> = (props) => {
             ></Paper>
           </Grid>
         );
-      })}
+      }))}
     </Grid>
   );
 };

@@ -12,6 +12,7 @@ import SignUpPage from "./components/SignUpPage";
 import LoginPage from "./components/LoginPage";
 import EmailConfirmationPage from "./components/EmailConfirmationPage";
 import PageNotFound from "./components/PageNotFound";
+import "./index.css";
 
 // EXP: use Montserrat font
 import { ThemeProvider, createTheme } from "@mui/material/styles";
