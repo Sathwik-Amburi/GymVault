@@ -73,10 +73,10 @@ const filterGyms = async (req, res) => {
   }
 };
 
-const filterGymsByPriceRanges = async (req, res) => {
-  const { priceRanges, city } = req.body;
+const filterGymsBySelectedFilters = async (req, res) => {
+  const { filters, city } = req.body;
 
-  const results = await gymService.filterGymsByPriceRanges(priceRanges, city);
+  const results = await gymService.filterGymsBySelectedFilters(filters, city);
 
   if (results.gyms.length > 0) {
     res.status(200).json({
@@ -85,6 +85,27 @@ const filterGymsByPriceRanges = async (req, res) => {
     });
   } else {
     res.status(200).json({ message: `No results found` });
+  }
+};
+
+const getAllGymAmenitiesByCity = async (req, res) => {
+  const { name, city } = req.query;
+
+  if (!city || city == null || city == undefined) {
+    return res
+      .status(400)
+      .json({ message: "search failed", errors: ["Please choose a city"] });
+  }
+
+  const amenities = await gymService.getAllGymAmenitiesByCity(name, city);
+
+  if (amenities.length > 0) {
+    res.status(200).json({
+      message: `${amenities.length} results found`,
+      amenities: amenities,
+    });
+  } else {
+    res.status(200).json({ message: `No amenities found` });
   }
 };
 
@@ -113,6 +134,7 @@ module.exports = {
   getGym,
   addGym,
   filterGyms,
-  filterGymsByPriceRanges,
+  filterGymsBySelectedFilters,
+  getAllGymAmenitiesByCity,
   addSubscription,
 };

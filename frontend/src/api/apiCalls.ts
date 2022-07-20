@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Filter } from "../components/ResultsFilter";
 import { PriceRangeFilter, UserProfileDetails } from "../models/allModels";
 
 export default class ApiCalls {
@@ -26,19 +27,27 @@ export default class ApiCalls {
     });
   };
 
-  public static getGymsByFilters = async (
-    priceRanges: PriceRangeFilter[],
-    city?: string
-  ) => {
+  public static getGymsByFilters = async (filters: Filter, city?: string) => {
     return await axios.post(
-      "/gyms/filter/price-ranges",
-      { priceRanges, city },
+      "/gyms/filter/selected-ranges",
+      { filters, city },
       {
         headers: {
           "Content-Type": "application/json",
         },
       }
     );
+  };
+
+  public static getAllGymAmenitiesByCity = async (
+    name?: string | null,
+    city?: string
+  ) => {
+    return await axios.get(`/gyms/amenities?city=${city}&name=${name}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   };
 
   public static getCoursesByFilters = async (
@@ -147,7 +156,7 @@ export default class ApiCalls {
     });
   };
 
-  public static getReviewByUserId = async (userid:string,id:string) =>{
+  public static getReviewByUserId = async (userid: string, id: string) => {
     return await axios.get(`/reviews/user/${userid}-${id}`, {
       headers: {
         "Content-Type": "application/json",

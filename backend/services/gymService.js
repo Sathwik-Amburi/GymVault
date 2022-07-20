@@ -104,8 +104,10 @@ class GymService {
     }
   };
 
-  filterGymsByPriceRanges = async (priceRanges, city) => {
+  filterGymsBySelectedFilters = async (filterResults, city) => {
     try {
+      const { priceRangeFilters, amenitiesFilters } = filterResults;
+
       const allRatings = await reviewModel.aggregate([
         { $unwind: "$gymId" },
         {
@@ -117,7 +119,7 @@ class GymService {
         },
       ]);
 
-      const filters = priceRanges.map((item) => {
+      const filters = priceRangeFilters.map((item) => {
         return {
           $elemMatch: {
             subscriptionType: item.type,
@@ -129,63 +131,61 @@ class GymService {
         };
       });
 
-      if (filters.length > 0) {
-        const gyms = await gymModel.find({
-          subscriptionOffers: {
-            $all: filters,
-          },
-          city: city,
-        });
+      var newFilters = {
+        subscriptionOffers: {
+          $all: filters,
+        },
+        city: city,
+        amenities: { $all: amenitiesFilters },
+      };
 
-        const gymsWithRatings = gyms.map((item1) => {
-          return {
-            ...item1._doc,
-            rating: allRatings
-              .filter((item2) => {
-                return item1._doc._id.toString() == item2._id.toString();
-              })
-              .map((item3) => {
-                return { rating: item3.rating, ratedBy: item3.count };
-              }),
-          };
-        });
-
-        return {
-          gyms: gymsWithRatings.sort(
-            (a, b) =>
-              (b.rating.length !== 0 ? b.rating[0].rating : -Infinity) -
-              (a.rating.length !== 0 ? a.rating[0].rating : -Infinity)
-          ),
-        };
-      } else {
-        const gyms = await gymModel.find({
-          city: city,
-        });
-
-        const gymsWithRatings = gyms.map((item1) => {
-          return {
-            ...item1._doc,
-            rating: allRatings
-              .filter((item2) => {
-                return item1._doc._id.toString() == item2._id.toString();
-              })
-              .map((item3) => {
-                return { rating: item3.rating, ratedBy: item3.count };
-              }),
-          };
-        });
-
-        return {
-          gyms: gymsWithRatings.sort(
-            (a, b) =>
-              (b.rating.length !== 0 ? b.rating[0].rating : -Infinity) -
-              (a.rating.length !== 0 ? a.rating[0].rating : -Infinity)
-          ),
-        };
+      if (filters.length === 0) {
+        delete newFilters.subscriptionOffers;
       }
+      if (amenitiesFilters.length === 0) {
+        delete newFilters.amenities;
+      }
+
+      const gyms = await gymModel.find(newFilters);
+
+      const gymsWithRatings = gyms.map((item1) => {
+        return {
+          ...item1._doc,
+          rating: allRatings
+            .filter((item2) => {
+              return item1._doc._id.toString() == item2._id.toString();
+            })
+            .map((item3) => {
+              return { rating: item3.rating, ratedBy: item3.count };
+            }),
+        };
+      });
+
+      return {
+        gyms: gymsWithRatings.sort(
+          (a, b) =>
+            (b.rating.length !== 0 ? b.rating[0].rating : -Infinity) -
+            (a.rating.length !== 0 ? a.rating[0].rating : -Infinity)
+        ),
+      };
     } catch (error) {
       console.log("Error while filtering gyms", error.message);
     }
+  };
+
+  getAllGymAmenitiesByCity = async (name, city) => {
+    const amenities = await gymModel.find(
+      { city, name: { $regex: String(name), $options: "i" } },
+      { amenities: 1, _id: 0 }
+    );
+    const allAmenities = amenities
+      .map((item) => {
+        return item.amenities;
+      })
+      .flat()
+      .filter((v, i, a) => a.indexOf(v) === i);
+
+    return allAmenities;
   };
 
   addSubscription = async (subscriptionBody) => {

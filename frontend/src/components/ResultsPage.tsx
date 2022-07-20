@@ -47,16 +47,20 @@ const ResultsPage: FC = () => {
         </Grid>
       </Grid>
       <Grid container>
-        <ResultsFilter city={city} name={name} />
+        <ResultsFilter city={city} name={name} gyms={gymResults} />
         <ResultsSort />
       </Grid>
 
-
-      <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: "30px 0px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          margin: "30px 0px",
+        }}
+      >
         <CityMap item="gym" city={city} />
       </div>
-
-
 
       <ChonkySpinner loading={loading}>
         <Grid
