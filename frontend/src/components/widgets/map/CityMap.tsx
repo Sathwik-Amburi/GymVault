@@ -15,24 +15,28 @@ export default function CityMap(props: any) {
         (state: any) => state.gymResults.filteredGyms
     );
 
+    const courseResults = useSelector(
+        (state: any) => state.courseResults.filteredCourses
+    );
+
     useEffect(() => {
         setLoaded(false)
         let cityTuple: any = markers.find((marker) => {
             return marker.city === props.city
         })
-        console.log(gymResults)
         setCenter(cityTuple.coordinates)
         setLoaded(true)
     }, [])
 
 
     const displayGymMarker = (gym: any) => {
-        console.log(gym)
         return <Marker position={gym.coordinates}
             eventHandlers={{
                 mouseover: (e) => {
-                    console.log("center")
                     e.target.openPopup()
+                },
+                mouseout: (e) => {
+                    e.target.closePopup()
                 },
                 click: (e) => {
                     navigate(`/gym/${gym._id}`);
@@ -40,6 +44,23 @@ export default function CityMap(props: any) {
             }}>
             <Popup>
                 {gym.name}
+            </Popup>
+        </Marker>
+    }
+
+
+    const displayCourseMarker = (course: any) => {
+        return <Marker position={course.gymId.coordinates}
+            eventHandlers={{
+                mouseover: (e) => {
+                    e.target.openPopup()
+                },
+                mouseout: (e) => {
+                    e.target.closePopup()
+                }
+            }}>
+            <Popup>
+                {course.gymId.name}
             </Popup>
         </Marker>
     }
@@ -56,35 +77,10 @@ export default function CityMap(props: any) {
                     />
 
                     <>
-                        {props.item === 'gym' ? gymResults.map((gym: any) => displayGymMarker(gym)) : ''}
-                        {/* {gymResults.map((gym: any) => {
-
-                            return <Marker position={gym.coordinates}
-                                eventHandlers={{
-                                    click: (e) => {
-                                        console.log("center")
-                                        // props.setCity(marker.city)
-                                    },
-                                }}>
-                                <Popup>
-                                    Venue
-                                </Popup>
-                            </Marker>
-
-                        })} */}
+                        {props.item === 'gym' ?
+                            gymResults.map((gym: any) => displayGymMarker(gym)) :
+                            courseResults.map((course: any) => displayCourseMarker(course))}
                     </>
-
-                    {/* <Marker position={center}
-                        eventHandlers={{
-                            click: (e) => {
-                                console.log("center")
-                                // props.setCity(marker.city)
-                            },
-                        }}>
-                        <Popup>
-                            Venue
-                        </Popup>
-                    </Marker> */}
 
                 </MapContainer>
 
