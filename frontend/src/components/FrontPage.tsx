@@ -10,6 +10,9 @@ import SearchType from "./SearchType";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
+
+import Map from "./Map";
+
 /* retrieved from: https://mui.com/material-ui/getting-started/templates/pricing/*/
 
 export default function FrontPage() {
@@ -73,6 +76,9 @@ export default function FrontPage() {
           needs, and pay only for what you use. All fully digitally.
         </div>
       </Container>
+
+      <Map/>
+      
       <Container maxWidth="md" component="main">
         <div
           style={{
