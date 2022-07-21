@@ -10,6 +10,7 @@ import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import ColorGenerator from "./widgets/utilities/ColorGenerator";
 import CourseScheduleTable from "./CourseScheduleTable";
+import moment from "moment";
 
 
 const CheckoutPage: FC = () => {
@@ -27,8 +28,15 @@ const CheckoutPage: FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [courseSessions, setCourseSessions] = useState<CourseSession[]>([]);
   const [selectedSession, setSelectedSession] = useState<string>("");
-  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(new Date());
+  const [selectedStartDate, setSelectedStartDate] = useState<string>("choose one");
 
+  function validateStartDate(date: string) {
+    return !(
+      !moment(date, "DD/MM/YYYY").isValid() || 
+      moment(date, "DD/MM/YYYY").isAfter(moment().add(1, "month")) ||
+      moment(date, "DD/MM/YYYY").isBefore(moment())
+    );
+  }
 
   function setSubscriptionBases(subscriptionOffers: SubscriptionOffers[]) {
     if (subscriptionOffers !== undefined && subscriptionOffers.length > 0) {
@@ -121,7 +129,6 @@ const CheckoutPage: FC = () => {
         let courseResponse = res.data.response;
         ApiCalls.getGym(res.data.response.gymId)
           .then((res) => {
-            console.log(res);
             setGym(res.data.response);
             setCourse(courseResponse, res.data.response);
             setSubscriptionBases(res.data.response.subscriptionOffers);
@@ -133,7 +140,6 @@ const CheckoutPage: FC = () => {
         // it's not a course, so see if a corresponding gym exists
         ApiCalls.getGym(id!)
           .then((res) => {
-            console.log(res.data.response);
             setGym(res.data.response);
             setSubscriptionBases(res.data.response.subscriptionOffers);
 
@@ -226,34 +232,56 @@ const CheckoutPage: FC = () => {
           
 
           <Typography variant="h6" style={{ fontWeight: "bold" }}>
-            Starting Date
+            When
           </Typography>
-          <Typography variant="body1">
-            Depending on your ticket time, this may last for the time of the session only, or for a period starting from it
+          <Typography variant="body2">
+            The range of validity depends on your ticket type
           </Typography>
-          <hr />
+          <hr className="mini-hr" />
           { item.type == "course" ? <>
             <CourseScheduleTable courseSessions={ courseSessions } selected={selectedSession} setSelected={setSelectedSession} />
           </> : <>
-            <TextField
-              id="date"
-              label="TODO IMPLEMENT LOL"
-              type="date"
-              defaultValue="2017-05-24"
-              sx={{ width: 220 }}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
+            <br />
+            <Grid container spacing={3}>
+              <Grid item md={3} xs={6}>
+                <Typography variant="body1" style={{ fontWeight: "bold" }}>
+                  Start Date
+                </Typography>
+                <Typography variant="body1">
+                  { selectedStartDate }
+                </Typography>
+              </Grid>
+              <Grid item md={3} xs={6}>
+                <Typography variant="body1" style={{ fontWeight: "bold" }}>
+                  Duration
+                </Typography>
+                <Typography variant="body1">
+                  { cart == undefined ? "-" : 
+                    cart.length == 0 ? "-" :
+                    cart[0]._id == "1" ? "One day" :
+                    cart[0]._id == "2" ? "30 days" :
+                    cart[0]._id == "3" ? "365 days" :
+                    "-" 
+                  }
+                </Typography>
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <TextField
+                  id="date"
+                  type="date"
+                  defaultValue={new Date().getDate()+"-"+(new Date().getMonth()+1)+"-"+new Date().getFullYear()}
+                  inputProps={{
+                    min: moment().format("YYYY-MM-DD"),
+                    max: moment().add(1, "month").format("YYYY-MM-DD"),
+                  }}
+                  sx={{ width: 220 }}
+                  onChange={(e) => { setSelectedStartDate(moment(e.target.value).format("DD/MM/YYYY")) }}
+                  error={ !validateStartDate(selectedStartDate) }
+                />
+              </Grid>
+            </Grid>
           </> }
 
-          <br />
-          <br />
-          <br />
-          <Typography variant="h6" style={{ fontWeight: "bold" }}>
-            Starting Date, for gmyms
-          </Typography>
-          <hr className="mini-hr" />
           <br />
           <br />
           <br />
@@ -263,6 +291,8 @@ const CheckoutPage: FC = () => {
           <hr className="mini-hr" />
           <PurchaseCart
             baseId={id!}
+            startDate={selectedSession ? selectedSession : selectedStartDate }
+            dateValidator={validateStartDate}
             cart={cart}
             setCart={setCart}
             allowCheckout={editable}

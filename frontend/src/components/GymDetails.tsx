@@ -95,7 +95,7 @@ const GymViewPage: FC = () => {
     <ChonkySpinner loading={loading}>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
-          <Lightbox states={gym.images} />
+          <Lightbox states={gym.images !== undefined ? gym.images : []} />
         </Grid>
 
         <Grid item xs={12} md={6}>

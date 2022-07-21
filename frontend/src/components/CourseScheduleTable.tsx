@@ -10,7 +10,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from "@mui/material";
 import { FC, Fragment, useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -53,7 +52,9 @@ const Row = (props: { row: CourseSession, selected?: string, setSelected?: (id: 
                   {row.sessionDetails.map((historyRow) => (
                     <TableRow key={historyRow.sessionTime}>
                       { selected !== undefined && <TableCell> 
-                        <Radio />
+                        <Radio onChange={() => {
+                          if(setSelected !== undefined) setSelected(row.sessionDay + historyRow.sessionTime);
+                        }} checked={selected === row.sessionDay + historyRow.sessionTime} />
                       </TableCell>}
                       <TableCell component="th" scope="row">
                         {historyRow.sessionTime}

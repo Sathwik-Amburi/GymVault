@@ -1,14 +1,16 @@
 import { Grid, Paper } from "@mui/material";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 type LbProps = {
-  states?: string[];
+  states: string[];
 };
 
 const Lightbox: FC<LbProps> = (props) => {
-  let totalStates = props.states;
-  if(totalStates == undefined) totalStates = [];
-  let [viewing, setViewing] = useState<string>("");
+  let [viewing, setViewing] = useState<string>("?");
+
+  useEffect(() => {
+    setViewing(props.states !== undefined && props.states.length > 0 ? props.states[0] : "?");
+  }, [props.states]);
 
   return (
     <Grid container spacing={2}>
@@ -17,7 +19,7 @@ const Lightbox: FC<LbProps> = (props) => {
           style={{
             padding: "10em",
             textAlign: "center",
-            backgroundImage: `url(${(totalStates.length != 1 ? viewing : totalStates[0])})`,
+            backgroundImage: `url(${viewing})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center center"
@@ -26,8 +28,8 @@ const Lightbox: FC<LbProps> = (props) => {
           
         </Paper>
       </Grid>
-      { totalStates.length > 1 && (
-        totalStates.map((state) => {
+      { props.states.length > 1 && (
+        props.states.map((state) => {
         return (
           <Grid item onClick={() => setViewing(state)} style={{ flex: "1 1 auto", maxWidth: "800px" }}>
             <Paper

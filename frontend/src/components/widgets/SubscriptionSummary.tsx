@@ -4,6 +4,7 @@ import React, { FC, useState } from "react";
 import { Item, Option, Subscription, SubscriptionTypes } from "../../models/allModels";
 import { toCleanSubscriptionTypeFormat } from "../../api/utils/formatters"; 
 import ColorGenerator from "./utilities/ColorGenerator";
+import moment from "moment";
 
 type SsProps = {
   shown: boolean;
@@ -14,17 +15,16 @@ type SsProps = {
 
 const SubscriptionSummary: FC<SsProps> = (props) => {
   return (
-    <Grid item md={6} xs={12}
-      style={{
-        borderRadius: "12px",
-    }}>
-      <Grid container>
+    <Grid container spacing={3}>
+      <Grid item md={6} xs={12}
+        style={{
+          borderRadius: "12px",
+      }}>
         <Paper style={{
           backgroundColor:  "#f00",
           color: "#fff",
           borderRadius: "12px",
-          padding: "1.5em",
-          margin: "1em"
+          padding: "1.5em"
         }} onClick={() => {}}>
           <div style={{ minHeight: "100px"  }}>
             <span style={{ fontWeight: "bold" }}>
@@ -43,13 +43,17 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
             </span>
           </div>
         </Paper>
-        { props.subscription.optionals.map((opt: Option) => (
+      </Grid>
+      { props.subscription.optionals.map((opt: Option) => (
+        <Grid item md={6} xs={12}
+          style={{
+            borderRadius: "12px",
+        }}>
           <Paper style={{
             backgroundColor:  ColorGenerator.nameToColor(opt.name),
             color:            "#fff",
             borderRadius:     "12px",
-            padding:          "1.5em",
-            margin:           "1em"
+            padding:          "1.5em"
           }}>
             <div style={{ minHeight: "100px"  }}>
               <span style={{ fontWeight: "bold" }}>
@@ -61,9 +65,8 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
               </span>
             </div>
           </Paper>
-        ))}
         </Grid>
-      { /* ....... */ }
+        ))}
       <Grid item xs={12}>
         <table style={{border: "none", width: "100%"}}>
           <tbody>
@@ -75,7 +78,7 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
               </td>
               <td>
                 <Typography variant="h6">
-                  { new Date(props.subscription.purchaseDate!).toLocaleDateString() }
+                  { moment(props.subscription.purchaseDate).format("DD/MM/YYYY") }
                 </Typography>
               </td>
               <td style={{textAlign: "right"}}>
@@ -92,7 +95,7 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
               </td>
               <td>
                 <Typography variant="h6">
-                  { new Date(props.subscription.expireDate!).toLocaleDateString() }
+                  { moment(props.subscription.expireDate!).format("DD/MM/YYYY") }
                 </Typography>
               </td>
               <td style={{textAlign: "right"}}>

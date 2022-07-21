@@ -98,7 +98,7 @@ const createCheckoutSession = async (req, res) => {
             unit_amount: Math.ceil(req.body.baseItem.price * 100), // in eur cents no decimal points
             product_data: {
                 //id: req.body.baseItem._id,
-                name: req.body.baseItem.name,
+                name: req.body.baseItem.name + " (starts " + req.body.startDate + ")"
             },
         },
         quantity: 1,
@@ -135,7 +135,7 @@ const createCheckoutSession = async (req, res) => {
             },
         };
         const session = await stripe.checkout.sessions.create(sessionData);
-        session['pending_subscription'] = await subscriptionService.generateSubscriptionData(req.user.id, req.body.id, req.body.baseItem._id, req.body.baseItem.price, req.body.options)
+        session['pending_subscription'] = await subscriptionService.generateSubscriptionData(req.user.id, req.body.id, req.body.baseItem._id, req.body.startDate, req.body.baseItem.price, req.body.options)
 
         // save stripe payment session into user's model (with payment_status: unpaid)
         await userModel.findByIdAndUpdate(req.user.id, { stripe_session: session })
