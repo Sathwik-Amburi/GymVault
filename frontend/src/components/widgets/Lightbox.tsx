@@ -7,7 +7,6 @@ type LbProps = {
 
 const Lightbox: FC<LbProps> = (props) => {
   let totalStates = props.states;
-  console.log(totalStates);
   if(totalStates == undefined) totalStates = [];
   let [viewing, setViewing] = useState<string>("");
 
