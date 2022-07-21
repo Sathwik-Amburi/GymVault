@@ -29,16 +29,16 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
   const stripeHandlePayment = async () => {
     if(!props.dateValidator(props.startDate)) {
       alert("Please select a valid date");
+      alert(props.startDate);
       return;
     }
     setLoading(true);
     props.setEditable(false);
-    let price = 0;
-    let name = ''
     let baseItem = props.cart.find((item) => item.base);
     let options = props.cart.filter((item) => !item.base);
+    let startDate = props.startDate;
     const headers = { "x-access-token": String(localStorage.getItem('token')) }
-    let response = await axios.post('/stripe/get-stripe-session', {id, baseItem, options}, { headers })
+    let response = await axios.post('/stripe/get-stripe-session', {id, baseItem, startDate, options}, { headers })
     window.location.href = response.data.link
   }
 

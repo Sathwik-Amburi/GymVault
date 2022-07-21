@@ -28,7 +28,7 @@ const CheckoutPage: FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [courseSessions, setCourseSessions] = useState<CourseSession[]>([]);
   const [selectedSession, setSelectedSession] = useState<string>("");
-  const [selectedStartDate, setSelectedStartDate] = useState<string>( moment().format("DD/MM/YYYY"));
+  const [selectedStartDate, setSelectedStartDate] = useState<string>("choose one");
 
   function validateStartDate(date: string) {
     return !(
@@ -258,9 +258,9 @@ const CheckoutPage: FC = () => {
                 <Typography variant="body1">
                   { cart == undefined ? "-" : 
                     cart.length == 0 ? "-" :
-                    cart[0]._id == "1" ? "1 session/day" :
-                    cart[0]._id == "2" ? "1 month" :
-                    cart[0]._id == "3" ? "1 year" :
+                    cart[0]._id == "1" ? "One day" :
+                    cart[0]._id == "2" ? "30 days" :
+                    cart[0]._id == "3" ? "365 days" :
                     "-" 
                   }
                 </Typography>

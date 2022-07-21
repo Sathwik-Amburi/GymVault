@@ -54,7 +54,7 @@ class SubscriptionService {
         }
     }
 
-    generateSubscriptionData = async (uid, courseOrGymId, baseType, basePrice, rawOptionals) => {
+    generateSubscriptionData = async (uid, courseOrGymId, baseType, startDateString, basePrice, rawOptionals) => {
         let price = 0;
         let optionals = rawOptionals.map(optional => {
             return {                
@@ -94,7 +94,7 @@ class SubscriptionService {
         }
         
         if(entity != null && uid != null) {
-            let purchaseDate = new Date();
+            let purchaseDate = new Date(startDateString); // TODO: do the same for sessions!! e.g. match date, time , instructor
             let expirationDate = new Date();
             const offset = 
                 (type == "DAY_PASS")   ? 1 :
