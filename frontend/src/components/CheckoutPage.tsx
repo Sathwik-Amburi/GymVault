@@ -121,7 +121,6 @@ const CheckoutPage: FC = () => {
         let courseResponse = res.data.response;
         ApiCalls.getGym(res.data.response.gymId)
           .then((res) => {
-            console.log(res);
             setGym(res.data.response);
             setCourse(courseResponse, res.data.response);
             setSubscriptionBases(res.data.response.subscriptionOffers);
@@ -133,7 +132,6 @@ const CheckoutPage: FC = () => {
         // it's not a course, so see if a corresponding gym exists
         ApiCalls.getGym(id!)
           .then((res) => {
-            console.log(res.data.response);
             setGym(res.data.response);
             setSubscriptionBases(res.data.response.subscriptionOffers);
 
@@ -226,7 +224,7 @@ const CheckoutPage: FC = () => {
           
 
           <Typography variant="h6" style={{ fontWeight: "bold" }}>
-            Starting Date
+            When
           </Typography>
           <Typography variant="body1">
             Depending on your ticket time, this may last for the time of the session only, or for a period starting from it
@@ -247,13 +245,6 @@ const CheckoutPage: FC = () => {
             />
           </> }
 
-          <br />
-          <br />
-          <br />
-          <Typography variant="h6" style={{ fontWeight: "bold" }}>
-            Starting Date, for gmyms
-          </Typography>
-          <hr className="mini-hr" />
           <br />
           <br />
           <br />
