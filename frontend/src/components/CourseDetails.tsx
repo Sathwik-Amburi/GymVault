@@ -101,7 +101,7 @@ const CourseViewPage: FC = () => {
     <ChonkySpinner loading={loading}>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} spacing={2}>
-          <Lightbox states={course.images} />
+          <Lightbox states={course.images !== undefined ? course.images : []} />
         </Grid>
         <Grid item xs={12} md={6}>
           <h1 style={{ display: "inline" }}>{course.name}</h1>
