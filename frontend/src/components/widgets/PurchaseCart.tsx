@@ -14,9 +14,11 @@ export interface CartItem {
 
 interface CartProps {
   baseId: string,
+  startDate: string,
   cart: CartItem[],
   setCart: (cart: CartItem[]) => void,
   setEditable: (editable: boolean) => void,
+  dateValidator: (date: string) => boolean,
   allowCheckout: boolean,
 }
 
@@ -25,6 +27,10 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const stripeHandlePayment = async () => {
+    if(!props.dateValidator(props.startDate)) {
+      alert("Please select a valid date");
+      return;
+    }
     setLoading(true);
     props.setEditable(false);
     let price = 0;
