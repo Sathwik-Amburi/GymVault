@@ -12,6 +12,7 @@ import SignUpPage from "./components/SignUpPage";
 import LoginPage from "./components/LoginPage";
 import EmailConfirmationPage from "./components/EmailConfirmationPage";
 import PageNotFound from "./components/PageNotFound";
+
 import "./index.css";
 
 // EXP: use Montserrat font
@@ -29,6 +30,9 @@ import CreateGym from "./components/CreateGym";
 import StripeConnectCallback from "./components/stripe/StripeConnectCallback";
 import StripeGymCallback from "./components/stripe/StripeGymCheckoutCallback";
 import Footer from "./components/Footer";
+import GymSignUpPage from "./components/GymSignUpPage";
+import {Grid} from "@mui/material";
+import ContactUs from "./components/ContactUs";
 
 const THEME = createTheme({
   typography: {
@@ -93,7 +97,7 @@ const App: FC = () => {
 
                 <Route path="/results/gyms/search" element={<ResultsPage />} />
                 <Route path="/buy/:id" element={<PrivateRoute><CheckoutPage /></PrivateRoute>} />
-                <Route path="/buy/:id/:returnState" element={<CheckoutPage />} />
+                <Route path="/buy/:id/:returnState" element={<PrivateRoute><CheckoutPage /></PrivateRoute>} />
                 <Route
                   path="/user/profile"
                   element={
@@ -115,7 +119,7 @@ const App: FC = () => {
                   path="/stripe/checkout/callback/gym/:gym_id"
                   element={<PrivateRoute><StripeGymCallback /></PrivateRoute>}
                 />
-                
+
                 <Route
                   path="/user/owner-profile"
                   element={
@@ -124,13 +128,16 @@ const App: FC = () => {
                     </RoleWrapper>
                   }
                 />
+
                 <Route path="/user/unauthorized" element={<NotAuthorizedPage />} />
                 <Route path="/*" element={<PageNotFound />} />
+                <Route path="/gym-signup" element={<GymSignUpPage />} />
+                <Route path="/contact-us" element={<ContactUs />} />
               </Routes>
             </Container>
           </>)} />
         </Routes>
-        <Footer />
+          <Footer />
       </ThemeProvider>
     </BrowserRouter>
   );

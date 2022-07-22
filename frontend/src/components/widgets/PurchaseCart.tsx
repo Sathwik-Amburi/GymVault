@@ -27,9 +27,9 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const stripeHandlePayment = async () => {
-    if(!props.dateValidator(props.startDate)) {
+    // S: indicates that it's a session identifier, the backend will take care of that
+    if(props.startDate.substring(0, 2) != "S:" && !props.dateValidator(props.startDate)) {
       alert("Please select a valid date");
-      alert(props.startDate);
       return;
     }
     setLoading(true);

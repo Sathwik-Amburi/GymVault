@@ -20,6 +20,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import { setProfilePicture } from "../store/slices/profilePictureSlice";
+import userIcon from "../images/usericon.png";
 
 
 const theme = createTheme();
@@ -53,7 +54,7 @@ const LoginPage: FC = () => {
         localStorage.setItem("role", res.data.role);
         
         const { profilePicture } = jwt_decode<payload>(res.data.token)
-        dispatch(setProfilePicture({ url: String(profilePicture) }))
+        dispatch(setProfilePicture({ url: String(profilePicture)}))
 
         dispatch(
           setAuthentication({ isAuthenticated: true, role: res.data.role })
