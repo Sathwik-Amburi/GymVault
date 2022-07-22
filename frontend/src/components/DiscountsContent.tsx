@@ -3,66 +3,84 @@ import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { Button } from '@mui/material';
 
+let newOffers: any = {}
 
 function valuetext(value: number) {
     return `${value}`;
 }
 
-export default function DiscountsPage() {
+interface subscriptionOffer {
+    subscriptionType: string,
+    subscriptionPrice: number,
+    discount: number,
+}
 
-    const handleChange = (event: Event) => {
-        console.log((event.target as HTMLInputElement).value)
+interface DiscountsPageProps {
+    subscriptionOffers: subscriptionOffer[],
+    editSubscriptionOffers: (subscriptionOffers: subscriptionOffer[]) => Promise<void>,
+    children?: React.ReactNode,
+}
+
+
+
+
+const DiscountsPage: React.FC<DiscountsPageProps> = ({ subscriptionOffers, editSubscriptionOffers }) => {
+
+
+    const handleChange = (event: Event, s: subscriptionOffer) => {
+        const key = s.subscriptionType
+        const value = (event.target as HTMLInputElement).value
+        newOffers[String(key)] = [s.subscriptionType, s.subscriptionPrice, value]
     }
+
+    const displaySubscriptionOffers = (s: subscriptionOffer) => {
+
+        return <>
+            <div>{s.subscriptionType}</div>
+            <Box sx={{ width: 300 }}>
+                <Slider
+                    onChange={(event: Event) => handleChange(event, s)}
+                    aria-label="Discount"
+                    defaultValue={s.discount}
+                    getAriaValueText={valuetext}
+                    valueLabelDisplay="auto"
+                    step={5}
+                    marks
+                    min={0}
+                    max={90}
+                />
+            </Box>
+        </>
+    }
+
+    const handleSubmit = async (event : any, subscriptionOffers: subscriptionOffer[]) => {
+        event.preventDefault()
+        let subscriptionTypes = Object.keys(newOffers)
+        let x = subscriptionOffers.map((subscriptionOffer: subscriptionOffer) => {
+            if (subscriptionTypes.includes(subscriptionOffer.subscriptionType)) {
+                let index = subscriptionOffer.subscriptionType
+                return { subscriptionType: newOffers[index][0], subscriptionPrice: newOffers[index][1], discount: newOffers[index][2], }
+            }
+            else {
+                return subscriptionOffer
+            }
+        })
+        await editSubscriptionOffers(x)
+    }
+
+
 
     return (
         <>
             <h1>Discount Percentage </h1>
 
-            <div>Daily Subscription</div>
-            <Box sx={{ width: 300 }}>
-                <Slider
-                    onChange={handleChange}
-                    aria-label="Discount"
-                    defaultValue={30}
-                    getAriaValueText={valuetext}
-                    valueLabelDisplay="auto"
-                    step={5}
-                    marks
-                    min={0}
-                    max={90}
-                />
-            </Box>
+            <>
+                {subscriptionOffers.map((s) => displaySubscriptionOffers(s))}
+            </>
 
-            <div>Monthly Subscription</div>
-            <Box sx={{ width: 300 }}>
-                <Slider
-                    onChange={handleChange}
-                    aria-label="Discount"
-                    defaultValue={60}
-                    getAriaValueText={valuetext}
-                    valueLabelDisplay="auto"
-                    step={5}
-                    marks
-                    min={0}
-                    max={90}
-                />
-            </Box>
-
-            <div>Yearly Subscription</div>
-            <Box sx={{ width: 300 }}>
-                <Slider
-                    onChange={handleChange}
-                    aria-label="Discount"
-                    defaultValue={15}
-                    getAriaValueText={valuetext}
-                    valueLabelDisplay="auto"
-                    step={5}
-                    marks
-                    min={0}
-                    max={90}
-                />
-            </Box>
-            <Button style={{float:'right'}} variant="contained">Save</Button>
+            <Button onClick={(event: any) => handleSubmit(event, subscriptionOffers)} style={{ float: 'right' }} variant="contained">Save</Button>
         </>
     )
 }
+
+export default DiscountsPage
