@@ -20,7 +20,7 @@ export interface Rating {
 }
 
 export interface SubscriptionOffers {
-  subscriptionType: SubscriptionTypes.DAY_PASS;
+  subscriptionType: SubscriptionTypes;
   subscriptionPrice: number;
   discount: number
 }
