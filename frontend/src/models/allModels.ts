@@ -22,6 +22,7 @@ export interface Rating {
 export interface SubscriptionOffers {
   subscriptionType: SubscriptionTypes.DAY_PASS;
   subscriptionPrice: number;
+  discount: number
 }
 
 export interface Course {
