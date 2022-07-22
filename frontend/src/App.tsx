@@ -30,6 +30,9 @@ import CreateGym from "./components/CreateGym";
 import StripeConnectCallback from "./components/stripe/StripeConnectCallback";
 import StripeGymCallback from "./components/stripe/StripeGymCheckoutCallback";
 import Footer from "./components/Footer";
+import GymSignUpPage from "./components/GymSignUpPage";
+import {Grid} from "@mui/material";
+import ContactUs from "./components/ContactUs";
 
 const THEME = createTheme({
   typography: {
@@ -128,11 +131,13 @@ const App: FC = () => {
 
                 <Route path="/user/unauthorized" element={<NotAuthorizedPage />} />
                 <Route path="/*" element={<PageNotFound />} />
+                <Route path="/gym-signup" element={<GymSignUpPage />} />
+                <Route path="/contact-us" element={<ContactUs />} />
               </Routes>
             </Container>
           </>)} />
         </Routes>
-        <Footer />
+          <Footer />
       </ThemeProvider>
     </BrowserRouter>
   );
