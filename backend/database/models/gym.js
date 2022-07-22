@@ -10,6 +10,10 @@ const subscriptionOffer = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  discount:{
+    type: Number,
+    default:0
+  }
 });
 
 const Option = new mongoose.Schema({
