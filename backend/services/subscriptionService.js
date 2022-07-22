@@ -78,11 +78,29 @@ class SubscriptionService {
             }
             return result;
         }
+
+        let purchaseDate = new Date(startDateString); // TODO: do the same for sessions!! e.g. match date, time , instructor
+        let expirationDate = new Date();
     
         // Check if it is a course or gym ID 
         let entity = await courseService.getCourse(courseOrGymId);
         if(entity != null) {
-            // ok
+            // ok, it's a course - get the real start date from the session data
+            let found = false;
+            entity.sessions.forEach(session => {
+                session.sessionDetails.forEach(sessionDetail => {
+                    if(session.sessionDay + sessionDetail.sessionTime + sessionDetail.sessionsInstructor == startDateString) {
+                        purchaseDate = new Date();
+                        // TODO: compute purchase date by summing days of week to current, times, etc
+                        found = true;
+                        console.log("Match found, session start: " + purchaseDate);
+                        //actually, it lasts 24h from the 1st session, not until its end? expirationDate = new Date(session.endDate);
+                    }
+                });
+            });
+            if(!found) {
+                console.log("No match found for " + startDateString);
+            }
         } else {
             entity = await gymService.getGym(courseOrGymId);
             if(entity != null) {
@@ -94,8 +112,6 @@ class SubscriptionService {
         }
         
         if(entity != null && uid != null) {
-            let purchaseDate = new Date(startDateString); // TODO: do the same for sessions!! e.g. match date, time , instructor
-            let expirationDate = new Date();
             const offset = 
                 (type == "DAY_PASS")   ? 1 :
                 (type == "MONTHLY_PASS") ? 30 :

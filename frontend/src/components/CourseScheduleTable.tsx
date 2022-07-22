@@ -53,8 +53,8 @@ const Row = (props: { row: CourseSession, selected?: string, setSelected?: (id: 
                     <TableRow key={historyRow.sessionTime}>
                       { selected !== undefined && <TableCell> 
                         <Radio onChange={() => {
-                          if(setSelected !== undefined) setSelected(row.sessionDay + historyRow.sessionTime);
-                        }} checked={selected === row.sessionDay + historyRow.sessionTime} />
+                          if(setSelected !== undefined) setSelected("S:" + row.sessionDay + historyRow.sessionTime + historyRow.sessionsInstructor);
+                        }} checked={selected === "S:" + row.sessionDay + historyRow.sessionTime + historyRow.sessionsInstructor} />
                       </TableCell>}
                       <TableCell component="th" scope="row">
                         {historyRow.sessionTime}

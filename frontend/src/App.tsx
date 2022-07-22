@@ -93,7 +93,7 @@ const App: FC = () => {
 
                 <Route path="/results/gyms/search" element={<ResultsPage />} />
                 <Route path="/buy/:id" element={<PrivateRoute><CheckoutPage /></PrivateRoute>} />
-                <Route path="/buy/:id/:returnState" element={<CheckoutPage />} />
+                <Route path="/buy/:id/:returnState" element={<PrivateRoute><CheckoutPage /></PrivateRoute>} />
                 <Route
                   path="/user/profile"
                   element={
