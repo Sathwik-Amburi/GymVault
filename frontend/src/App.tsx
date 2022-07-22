@@ -12,6 +12,7 @@ import SignUpPage from "./components/SignUpPage";
 import LoginPage from "./components/LoginPage";
 import EmailConfirmationPage from "./components/EmailConfirmationPage";
 import PageNotFound from "./components/PageNotFound";
+
 import "./index.css";
 
 // EXP: use Montserrat font
@@ -115,7 +116,7 @@ const App: FC = () => {
                   path="/stripe/checkout/callback/gym/:gym_id"
                   element={<PrivateRoute><StripeGymCallback /></PrivateRoute>}
                 />
-                
+
                 <Route
                   path="/user/owner-profile"
                   element={
@@ -124,6 +125,7 @@ const App: FC = () => {
                     </RoleWrapper>
                   }
                 />
+
                 <Route path="/user/unauthorized" element={<NotAuthorizedPage />} />
                 <Route path="/*" element={<PageNotFound />} />
               </Routes>

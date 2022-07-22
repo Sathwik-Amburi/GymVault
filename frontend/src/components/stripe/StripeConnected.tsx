@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import axios from "axios";
 import { FC, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import DiscountsModal from '../DiscountsModal';
 
 
 const StripeConnect: FC = () => {
@@ -34,9 +35,14 @@ const StripeConnect: FC = () => {
     return (
         <div>
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "10px 10px", marginTop: "40px" }}>
-                <i style={{ color: "#3a598c", textShadow: "7px 11px grey", margin: "20px 0", fontSize: "160px" }} className="fa fa-home" aria-hidden="true"></i>
+
+                <div>
+                    <i style={{ color: "#3a598c", textShadow: "7px 11px grey", margin: "20px 0", fontSize: "160px" }} className="fa fa-home" aria-hidden="true"></i>
+                </div>
+
 
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
+
                     <div style={{ textAlign: "center", margin: "15px" }}>
                         {!loading ?
                             <Button onClick={handlePayoutSettings} variant="outlined"> <i style={{ fontSize: '27px', padding: "4px" }} className="fa-solid fa-money-check" aria-hidden="true"></i>Manage Earnings</Button>
@@ -47,12 +53,12 @@ const StripeConnect: FC = () => {
 
                     <div style={{ textAlign: "center", margin: "15px" }}>
                         <Button onClick={() => navigate('/gym/add')} variant="contained"> <i style={{ fontSize: '27px', padding: "4px" }} className="fa-solid fa-dumbbell" aria-hidden="true"></i> Gym Settings</Button>
-                        <div style={{ fontSize: "12px", margin: "11px 3px", color: "grey" }}> <i>You can add/edit your gym's detail here</i> </div>
+                        <div style={{ fontSize: "12px", margin: "11px 3px", color: "grey" }}> <i>You can view your gym's detail here</i> </div>
                     </div>
 
                     <div style={{ textAlign: "center", margin: "15px" }}>
-                        <Button onClick={() => navigate('/gym/add')} variant="contained"> <i style={{ fontSize: '27px', padding: "4px" }} className="fa-solid fa-dumbbell" aria-hidden="true"></i> Discounts</Button>
-                        <div style={{ fontSize: "12px", margin: "11px 3px", color: "grey" }}> <i>You can add/edit your gym's detail here</i> </div>
+                        <DiscountsModal/>
+                        <div style={{ fontSize: "12px", margin: "11px 3px", color: "grey" }}> <i>You can add discounts to your gym's subscription here</i> </div>
                     </div>
                 </div>
 
