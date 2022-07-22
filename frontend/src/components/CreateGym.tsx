@@ -7,23 +7,44 @@ import {
   Box,
   Button,
   Checkbox,
+  Collapse,
+  IconButton,
+  Input,
   MenuItem,
   Modal,
   Paper,
   Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
 } from "@mui/material";
 import Lightbox from "./widgets/Lightbox";
 import { allCities } from "../config/cities";
-import { useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { SubscriptionOffers, CourseSession } from "../models/allModels";
+import {
+  SubscriptionOffers,
+  CourseSession,
+  SessionDetails,
+  SubscriptionTypes,
+  UserProfileDetails,
+} from "../models/allModels";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
+import ApiCalls from "../api/apiCalls";
+import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 interface NewCourseState {
   name: string;
   gymId: string;
   description: string;
-  images?: string[];
+  images?: string;
   subscriptionOffers: SubscriptionOffers[];
   sessions: CourseSession[];
 }
@@ -50,7 +71,8 @@ const courseModalStyle = {
   width: 800,
 };
 
-export default function CreateGym() {
+const CreateGym: FC = () => {
+  const [profile, setProfile] = useState<UserProfileDetails>();
   const [openOptionModal, setOpenOptionModal] = useState(false);
   const handleOpenOptionModal = () => setOpenOptionModal(true);
   const handleCloseOptionModal = () => setOpenOptionModal(false);
@@ -59,28 +81,64 @@ export default function CreateGym() {
   const handleCloseCourseModal = () => setOpenCourseModal(false);
   const [options, setOptions] = useState<NewOptionState[]>([]);
   const [courses, setCourses] = useState<NewCourseState[]>([]);
+  const [courseSessions, setCourseSessions] = useState<CourseSession[]>([
+    { sessionDay: "Monday", sessionDetails: [] },
+    { sessionDay: "Tuesday", sessionDetails: [] },
+    { sessionDay: "Wednesday", sessionDetails: [] },
+    { sessionDay: "Thursday", sessionDetails: [] },
+    { sessionDay: "Friday", sessionDetails: [] },
+    { sessionDay: "Saturday", sessionDetails: [] },
+    { sessionDay: "Sunday", sessionDetails: [] },
+  ]);
+  let [images, setImages] = React.useState<string[]>([
+    "https://thecatapi.com/api/images/get?format=src&type=png",
+    "https://thecatapi.com/api/images/get?format=src&type=png&2",
+    "https://thecatapi.com/api/images/get?format=src&type=png&3",
+  ]);
+  const [courseImages, setCourseImages] = useState<string[]>([
+    "https://thecatapi.com/api/images/get?format=src&type=png",
+    "https://thecatapi.com/api/images/get?format=src&type=png&2",
+    "https://thecatapi.com/api/images/get?format=src&type=png&3",
+  ]);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    ApiCalls.getUserProfile(token)
+      .then((res) => {
+        setProfile(res.data);
+      })
+      .catch((err) =>
+        UnifiedErrorHandler.handle(err, "Cannot get user profile")
+      );
+  }, [token]);
 
   const gymValidationSchema = yup.object({
     name: yup.string().required("Name is required"),
+    website: yup.string(),
     phone: yup.number().required("Phone number is required"),
+    city: yup.string().required("City is required"),
     address: yup.string().required("Address is required"),
     description: yup.string().required("Description is required"),
+    gymImages: yup.string(),
     amenities: yup.string().required("Amenities are required"),
-    optionName: yup.string().required("Option name is required"),
-    optionDescription: yup.string().required("Option description is required"),
-    optionPrice: yup.number().required("Option price is required"),
+    dayPassSelected: yup.boolean(),
+    dayPassPrice: yup.number(),
+    gymMonthlySubscriptionSelected: yup.boolean(),
+    gymMonthlySubscriptionPrice: yup.number(),
+    gymYearlySubscriptionSelected: yup.boolean(),
+    gymYearlySubscriptionPrice: yup.number(),
   });
 
   const courseValidationSchema = yup.object({
     courseName: yup.string().required("Course name is required"),
     courseDescription: yup.string().required("Course description is required"),
-    coursePrice: yup.number().required("Course price is required"),
     courseSessionTicketSelected: yup.boolean(),
     courseSessionTicketPrice: yup.number(),
     monthlySubscriptionSelected: yup.boolean(),
     monthlySubscriptionPrice: yup.number(),
     yearlySubscriptionSelected: yup.boolean(),
     yearlySubscriptionPrice: yup.number(),
+    courseImages: yup.string(),
   });
 
   const optionValidationSchema = yup.object({
@@ -92,14 +150,25 @@ export default function CreateGym() {
   const gymFormik = useFormik({
     initialValues: {
       name: "",
+      website: "",
       phone: "",
+      city: "",
       address: "",
       description: "",
+      gymImages: "",
       amenities: "",
+      dayPassSelected: false,
+      dayPassPrice: 0,
+      gymMonthlySubscriptionSelected: false,
+      gymMonthlySubscriptionPrice: 0,
+      gymYearlySubscriptionSelected: false,
+      gymYearlySubscriptionPrice: 0,
     },
     validationSchema: gymValidationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      console.log(values);
+      console.log(options);
+      console.log(courses);
     },
   });
 
@@ -132,18 +201,34 @@ export default function CreateGym() {
       monthlySubscriptionPrice: 0,
       yearlySubscriptionSelected: false,
       yearlySubscriptionPrice: 0,
+      courseImages: "",
     },
     validationSchema: courseValidationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-      // const newCourse: NewCourseState = {
-      //   name: values.courseName,
-      //   description: values.courseDescription,
-      //   // price: values.coursePrice,
-      // };
-      // setCourses([...courses, newCourse]);
-      // setOpenCourseModal(false);
-      // optionFormik.resetForm();
+      const newCourse: NewCourseState = {
+        name: values.courseName,
+        description: values.courseDescription,
+        gymId: "",
+        sessions: courseSessions,
+        subscriptionOffers: [
+          {
+            subscriptionType: SubscriptionTypes.SESSION_PASS,
+            subscriptionPrice: values.courseSessionTicketPrice,
+          },
+          {
+            subscriptionType: SubscriptionTypes.MONTHLY_PASS,
+            subscriptionPrice: values.monthlySubscriptionPrice,
+          },
+          {
+            subscriptionType: SubscriptionTypes.YEARLY_PASS,
+            subscriptionPrice: values.yearlySubscriptionPrice,
+          },
+        ],
+        images: values.courseImages,
+      };
+      setCourses([...courses, newCourse]);
+      setOpenCourseModal(false);
+      courseFormik.resetForm();
     },
   });
 
@@ -156,12 +241,6 @@ export default function CreateGym() {
     const updatedCourses = courses.filter((item) => item.name !== course.name);
     setCourses(updatedCourses);
   };
-
-  let [images, setImages] = React.useState<string[]>([
-    "https://thecatapi.com/api/images/get?format=src&type=png",
-    "https://thecatapi.com/api/images/get?format=src&type=png&2",
-    "https://thecatapi.com/api/images/get?format=src&type=png&3",
-  ]);
 
   return (
     <form onSubmit={gymFormik.handleSubmit}>
@@ -203,9 +282,17 @@ export default function CreateGym() {
         </Grid>
         <Grid item md={6} xs={12}>
           <TextField
+            id="email"
+            name="email"
+            value={gymFormik.values.website}
+            onChange={gymFormik.handleChange}
+            inputProps={{ style: { fontWeight: "bold" } }}
+            error={
+              gymFormik.touched.website && Boolean(gymFormik.errors.website)
+            }
+            helperText={gymFormik.touched.website && gymFormik.errors.website}
             fullWidth
             label="Website"
-            type="url"
             placeholder="https://hypergym.com"
           />
         </Grid>
@@ -237,7 +324,7 @@ export default function CreateGym() {
           <Typography variant="h6" style={{ fontWeight: "bold" }}>
             Location
           </Typography>
-          <Typography variant="body2">Where we'll find you</Typography>
+          <Typography variant="body2">Where can we find you ? </Typography>
           <hr className="mini-hr" />
         </Grid>
         <Grid item md={6} xs={12}>
@@ -266,6 +353,7 @@ export default function CreateGym() {
             name="city"
             onChange={gymFormik.handleChange}
             inputProps={{ style: { fontWeight: "bold" } }}
+            value={gymFormik.values.city}
           >
             {allCities.map((item) => (
               <MenuItem value={item}>{item}</MenuItem>
@@ -278,19 +366,12 @@ export default function CreateGym() {
             Contact Info
           </Typography>
           <Typography variant="body2">
-            How customers, and the GymVault staff, can reach you
+            How can customers, and the GymVault staff, reach you ?
           </Typography>
           <hr className="mini-hr" />
         </Grid>
         <Grid item md={6} xs={12}>
-          <TextField
-            fullWidth
-            label="Email"
-            type="email"
-            defaultValue={"the one you're signed up with lol"}
-            disabled
-            required
-          />
+          <TextField fullWidth value={profile ? profile.email : ""} required />
         </Grid>
         <Grid item md={6} xs={12}>
           <TextField
@@ -313,49 +394,112 @@ export default function CreateGym() {
             Subscriptions
           </Typography>
           <Typography variant="body2">
-            What kind of entry tickets your customers can buy. All are optional
+            What kind of entry tickets can your customers buy ?
           </Typography>
           <hr className="mini-hr" />
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={3}>
             <Grid item md={4} xs={12}>
-              <Checkbox size="small" color="secondary" />
+              <Checkbox
+                size="small"
+                onChange={gymFormik.handleChange}
+                value={gymFormik.values.dayPassSelected}
+                color="secondary"
+                name="dayPassSelected"
+                id="dayPassSelected"
+              />
               <Typography variant="body1" style={{ display: "inline-block" }}>
-                Daily Ticket
+                Day Pass
               </Typography>
               <br />
               <TextField
+                disabled={!gymFormik.values.dayPassSelected}
+                id="dayPassPrice"
+                name="dayPassPrice"
+                value={gymFormik.values.dayPassPrice}
+                onChange={gymFormik.handleChange}
+                required
+                error={
+                  gymFormik.touched.dayPassPrice &&
+                  Boolean(gymFormik.errors.dayPassPrice)
+                }
+                helperText={
+                  gymFormik.touched.dayPassPrice &&
+                  gymFormik.errors.dayPassPrice
+                }
                 fullWidth
                 label="Price (EUR)"
                 type="number"
-                placeholder="6.69"
+                placeholder="6.99"
               />
             </Grid>
             <Grid item md={4} xs={12}>
-              <Checkbox size="small" color="secondary" />
+              <Checkbox
+                size="small"
+                onChange={gymFormik.handleChange}
+                value={gymFormik.values.gymMonthlySubscriptionSelected}
+                color="secondary"
+                name="gymMonthlySubscriptionSelected"
+                id="gymMonthlySubscriptionSelected"
+              />
               <Typography variant="body1" style={{ display: "inline-block" }}>
                 Monthly Subscription
               </Typography>
               <br />
               <TextField
+                disabled={!gymFormik.values.gymMonthlySubscriptionSelected}
+                id="gymMonthlySubscriptionPrice"
+                name="gymMonthlySubscriptionPrice"
+                value={gymFormik.values.gymMonthlySubscriptionPrice}
+                onChange={gymFormik.handleChange}
+                required
+                error={
+                  gymFormik.touched.gymMonthlySubscriptionPrice &&
+                  Boolean(gymFormik.errors.gymMonthlySubscriptionPrice)
+                }
+                helperText={
+                  gymFormik.touched.gymMonthlySubscriptionPrice &&
+                  gymFormik.errors.gymMonthlySubscriptionPrice
+                }
                 fullWidth
                 label="Price (EUR)"
                 type="number"
-                placeholder="69.69"
+                placeholder="49.99"
               />
             </Grid>
             <Grid item md={4} xs={12}>
-              <Checkbox size="small" color="secondary" />
+              <Checkbox
+                size="small"
+                onChange={gymFormik.handleChange}
+                value={gymFormik.values.gymYearlySubscriptionSelected}
+                color="secondary"
+                name="gymYearlySubscriptionSelected"
+                id="gymYearlySubscriptionSelected"
+              />
               <Typography variant="body1" style={{ display: "inline-block" }}>
                 Yearly Subscription
               </Typography>
               <br />
               <TextField
+                disabled={!gymFormik.values.gymYearlySubscriptionSelected}
+                id="gymYearlySubscriptionPrice"
+                name="gymYearlySubscriptionPrice"
+                value={gymFormik.values.gymYearlySubscriptionPrice}
+                onChange={gymFormik.handleChange}
+                required
+                error={
+                  gymFormik.touched.gymYearlySubscriptionPrice &&
+                  Boolean(gymFormik.errors.gymYearlySubscriptionPrice)
+                }
+                helperText={
+                  gymFormik.touched.gymYearlySubscriptionPrice &&
+                  gymFormik.errors.gymYearlySubscriptionPrice
+                }
                 fullWidth
                 label="Price (EUR)"
                 type="number"
-                placeholder="699.69"
+                placeholder="329.99"
               />
             </Grid>
           </Grid>
@@ -400,226 +544,295 @@ export default function CreateGym() {
                       onClick={() => handleDeleteCourse(item)}
                       style={{ position: "absolute", top: "5px", right: "5px" }}
                     />
-                    {/* <Typography
-                      variant="h6"
-                      style={{
-                        fontWeight: "bold",
-                        float: "right",
-                      }}
-                    >
-                      {item.price > 0 ? item.price + "€" : "free"}
-                    </Typography> */}
-
                     <span style={{ fontWeight: "bold" }}>{item.name}</span>
                     <br />
                     <br />
                     <span>{item.description}</span>
+                    <br />
+                    {item.subscriptionOffers.map((subscription) => (
+                      <div>
+                        <span>
+                          {toCleanSubscriptionTypeFormat(
+                            subscription.subscriptionType
+                          )}{" "}
+                        </span>
+                        <span>{subscription.subscriptionPrice} EUR</span>
+                      </div>
+                    ))}
                   </div>
                 </Paper>
               </Grid>
             ))}
             <Modal open={openCourseModal} onClose={handleCloseCourseModal}>
               <Box sx={courseModalStyle}>
-                <Grid
-                  onSubmit={courseFormik.handleSubmit}
-                  container
-                  component="form"
-                  spacing={3}
-                  style={{
-                    padding: "1em",
-                    borderRadius: "20px",
-                    backgroundColor: "#eee",
-                  }}
-                >
+                <form onSubmit={courseFormik.handleSubmit} id="myForm">
                   <Grid
-                    item
-                    md={12}
-                    xs={12}
-                    style={{ padding: 0, marginBottom: "16px" }}
+                    container
+                    spacing={3}
+                    style={{
+                      padding: "1em",
+                      borderRadius: "20px",
+                      backgroundColor: "#eee",
+                      overflowY: "scroll",
+                    }}
+                    height={600}
                   >
-                    <TextField
-                      fullWidth
-                      id="courseName"
-                      name="courseName"
-                      value={courseFormik.values.courseName}
-                      onChange={courseFormik.handleChange}
-                      required
-                      label="Course Name"
-                      placeholder="Spinning"
-                      error={
-                        courseFormik.touched.courseName &&
-                        Boolean(courseFormik.errors.courseName)
-                      }
-                      helperText={
-                        courseFormik.touched.courseName &&
-                        courseFormik.errors.courseName
-                      }
-                    />
-                  </Grid>
-                  <Grid
-                    item
-                    md={12}
-                    xs={12}
-                    style={{ padding: 0, marginBottom: "16px" }}
-                  >
-                    <TextField
-                      fullWidth
-                      id="courseDescription"
-                      name="courseDescription"
-                      value={courseFormik.values.courseDescription}
-                      onChange={courseFormik.handleChange}
-                      required
-                      multiline={true}
-                      rows={4}
-                      label="Course Description"
-                      placeholder="This 80 minute class is the ultimate in endurance and strength training. Rotating between two instructors, clients get the best of two full classes consisting of indoor cycling and power and strength."
-                      error={
-                        courseFormik.touched.courseDescription &&
-                        Boolean(courseFormik.errors.courseDescription)
-                      }
-                      helperText={
-                        courseFormik.touched.courseDescription &&
-                        courseFormik.errors.courseDescription
-                      }
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="h6" style={{ fontWeight: "bold" }}>
-                      Course Subscriptions
-                    </Typography>
-                    <Typography variant="body2">
-                      What kind of entry tickets to your courses can your
-                      customer buy ?
-                    </Typography>
-                    <hr className="mini-hr" />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Grid container spacing={3}>
-                      <Grid item md={4} xs={12}>
-                        <Checkbox
-                          size="small"
-                          onChange={courseFormik.handleChange}
-                          value={
-                            courseFormik.values.courseSessionTicketSelected
-                          }
-                          color="secondary"
-                          name="courseSessionTicketSelected"
-                          id="courseSessionTicketSelected"
-                        />
-                        <Typography
-                          variant="body1"
-                          style={{ display: "inline-block" }}
-                        >
-                          Session Ticket
-                        </Typography>
-                        <br />
-                        <TextField
-                          disabled={
-                            !courseFormik.values.courseSessionTicketSelected
-                          }
-                          id="courseSessionTicketPrice"
-                          name="courseSessionTicketPrice"
-                          value={courseFormik.values.courseSessionTicketPrice}
-                          onChange={courseFormik.handleChange}
-                          required
-                          error={
-                            courseFormik.touched.courseSessionTicketPrice &&
-                            Boolean(
+                    <Grid
+                      item
+                      md={12}
+                      xs={12}
+                      style={{ padding: 0, marginBottom: "16px" }}
+                    >
+                      <TextField
+                        fullWidth
+                        id="courseName"
+                        name="courseName"
+                        value={courseFormik.values.courseName}
+                        onChange={courseFormik.handleChange}
+                        required
+                        label="Course Name"
+                        placeholder="Spinning"
+                        error={
+                          courseFormik.touched.courseName &&
+                          Boolean(courseFormik.errors.courseName)
+                        }
+                        helperText={
+                          courseFormik.touched.courseName &&
+                          courseFormik.errors.courseName
+                        }
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={12}
+                      xs={12}
+                      style={{ padding: 0, marginBottom: "16px" }}
+                    >
+                      <TextField
+                        fullWidth
+                        id="courseDescription"
+                        name="courseDescription"
+                        value={courseFormik.values.courseDescription}
+                        onChange={courseFormik.handleChange}
+                        required
+                        multiline={true}
+                        rows={4}
+                        label="Course Description"
+                        placeholder="This 80 minute class is the ultimate in endurance and strength training. Rotating between two instructors, clients get the best of two full classes consisting of indoor cycling and power and strength."
+                        error={
+                          courseFormik.touched.courseDescription &&
+                          Boolean(courseFormik.errors.courseDescription)
+                        }
+                        helperText={
+                          courseFormik.touched.courseDescription &&
+                          courseFormik.errors.courseDescription
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="h6" style={{ fontWeight: "bold" }}>
+                        Course Subscriptions
+                      </Typography>
+                      <Typography variant="body2">
+                        What kind of entry tickets to your courses can your
+                        customer buy ?
+                      </Typography>
+                      <hr className="mini-hr" />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Grid container spacing={3}>
+                        <Grid item md={4} xs={12}>
+                          <Checkbox
+                            size="small"
+                            onChange={courseFormik.handleChange}
+                            value={
+                              courseFormik.values.courseSessionTicketSelected
+                            }
+                            color="secondary"
+                            name="courseSessionTicketSelected"
+                            id="courseSessionTicketSelected"
+                          />
+                          <Typography
+                            variant="body1"
+                            style={{ display: "inline-block" }}
+                          >
+                            Session Ticket
+                          </Typography>
+                          <br />
+                          <TextField
+                            disabled={
+                              !courseFormik.values.courseSessionTicketSelected
+                            }
+                            id="courseSessionTicketPrice"
+                            name="courseSessionTicketPrice"
+                            value={courseFormik.values.courseSessionTicketPrice}
+                            onChange={courseFormik.handleChange}
+                            required
+                            error={
+                              courseFormik.touched.courseSessionTicketPrice &&
+                              Boolean(
+                                courseFormik.errors.courseSessionTicketPrice
+                              )
+                            }
+                            helperText={
+                              courseFormik.touched.courseSessionTicketPrice &&
                               courseFormik.errors.courseSessionTicketPrice
-                            )
-                          }
-                          helperText={
-                            courseFormik.touched.courseSessionTicketPrice &&
-                            courseFormik.errors.courseSessionTicketPrice
-                          }
-                          fullWidth
-                          label="Price (EUR)"
-                          type="number"
-                          placeholder="6.99"
-                        />
-                      </Grid>
-                      <Grid item md={4} xs={12}>
-                        <Checkbox
-                          size="small"
-                          onChange={courseFormik.handleChange}
-                          value={
-                            courseFormik.values.monthlySubscriptionSelected
-                          }
-                          color="secondary"
-                          name="monthlySubscriptionSelected"
-                          id="monthlySubscriptionSelected"
-                        />
-                        <Typography
-                          variant="body1"
-                          style={{ display: "inline-block" }}
-                        >
-                          Monthly Subscription
-                        </Typography>
-                        <br />
-                        <TextField
-                          disabled={
-                            !courseFormik.values.monthlySubscriptionSelected
-                          }
-                          id="monthlySubscriptionPrice"
-                          name="monthlySubscriptionPrice"
-                          value={courseFormik.values.monthlySubscriptionPrice}
-                          onChange={courseFormik.handleChange}
-                          required
-                          error={
-                            courseFormik.touched.monthlySubscriptionPrice &&
-                            Boolean(
+                            }
+                            fullWidth
+                            label="Price (EUR)"
+                            type="number"
+                            placeholder="6.99"
+                          />
+                        </Grid>
+                        <Grid item md={4} xs={12}>
+                          <Checkbox
+                            size="small"
+                            onChange={courseFormik.handleChange}
+                            value={
+                              courseFormik.values.monthlySubscriptionSelected
+                            }
+                            color="secondary"
+                            name="monthlySubscriptionSelected"
+                            id="monthlySubscriptionSelected"
+                          />
+                          <Typography
+                            variant="body1"
+                            style={{ display: "inline-block" }}
+                          >
+                            Monthly Subscription
+                          </Typography>
+                          <br />
+                          <TextField
+                            disabled={
+                              !courseFormik.values.monthlySubscriptionSelected
+                            }
+                            id="monthlySubscriptionPrice"
+                            name="monthlySubscriptionPrice"
+                            value={courseFormik.values.monthlySubscriptionPrice}
+                            onChange={courseFormik.handleChange}
+                            required
+                            error={
+                              courseFormik.touched.monthlySubscriptionPrice &&
+                              Boolean(
+                                courseFormik.errors.monthlySubscriptionPrice
+                              )
+                            }
+                            helperText={
+                              courseFormik.touched.monthlySubscriptionPrice &&
                               courseFormik.errors.monthlySubscriptionPrice
-                            )
-                          }
-                          helperText={
-                            courseFormik.touched.monthlySubscriptionPrice &&
-                            courseFormik.errors.monthlySubscriptionPrice
-                          }
-                          fullWidth
-                          label="Price (EUR)"
-                          type="number"
-                          placeholder="49.99"
-                        />
+                            }
+                            fullWidth
+                            label="Price (EUR)"
+                            type="number"
+                            placeholder="49.99"
+                          />
+                        </Grid>
+                        <Grid item md={4} xs={12}>
+                          <Checkbox
+                            size="small"
+                            onChange={courseFormik.handleChange}
+                            value={
+                              courseFormik.values.yearlySubscriptionSelected
+                            }
+                            color="secondary"
+                            name="yearlySubscriptionSelected"
+                            id="yearlySubscriptionSelected"
+                          />
+                          <Typography
+                            variant="body1"
+                            style={{ display: "inline-block" }}
+                          >
+                            Yearly Subscription
+                          </Typography>
+                          <br />
+                          <TextField
+                            disabled={
+                              !courseFormik.values.yearlySubscriptionSelected
+                            }
+                            id="yearlySubscriptionPrice"
+                            name="yearlySubscriptionPrice"
+                            value={courseFormik.values.yearlySubscriptionPrice}
+                            onChange={courseFormik.handleChange}
+                            required
+                            error={
+                              courseFormik.touched.yearlySubscriptionPrice &&
+                              Boolean(
+                                courseFormik.errors.yearlySubscriptionPrice
+                              )
+                            }
+                            helperText={
+                              courseFormik.touched.yearlySubscriptionPrice &&
+                              courseFormik.errors.yearlySubscriptionPrice
+                            }
+                            fullWidth
+                            label="Price (EUR)"
+                            type="number"
+                            placeholder="329.99"
+                          />
+                        </Grid>
                       </Grid>
-                      <Grid item md={4} xs={12}>
-                        <Checkbox
-                          size="small"
-                          onChange={courseFormik.handleChange}
-                          value={courseFormik.values.yearlySubscriptionSelected}
-                          color="secondary"
-                          name="yearlySubscriptionSelected"
-                          id="yearlySubscriptionSelected"
-                        />
-                        <Typography
-                          variant="body1"
-                          style={{ display: "inline-block" }}
-                        >
-                          Yearly Subscription
-                        </Typography>
-                        <br />
-                        <TextField
-                          disabled={
-                            !courseFormik.values.yearlySubscriptionSelected
-                          }
-                          id="yearlySubscriptionPrice"
-                          name="yearlySubscriptionPrice"
-                          value={courseFormik.values.yearlySubscriptionPrice}
-                          onChange={courseFormik.handleChange}
-                          required
-                          error={
-                            courseFormik.touched.yearlySubscriptionPrice &&
-                            Boolean(courseFormik.errors.yearlySubscriptionPrice)
-                          }
-                          helperText={
-                            courseFormik.touched.yearlySubscriptionPrice &&
-                            courseFormik.errors.yearlySubscriptionPrice
-                          }
-                          fullWidth
-                          label="Price (EUR)"
-                          type="number"
-                          placeholder="329.99"
-                        />
-                      </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="h6" style={{ fontWeight: "bold" }}>
+                        Course Sessions
+                      </Typography>
+                      <Typography variant="body2">
+                        What time of the week are the session held ?
+                      </Typography>
+                      <hr className="mini-hr" />
+                    </Grid>
+                    <TableContainer component={Paper}>
+                      <Table aria-label="collapsible table" size="small">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell />
+                            <TableCell>Weekly Schedule</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {courseSessions.map((row) => (
+                            <Row
+                              key={row.sessionDay}
+                              row={row.sessionDay}
+                              courseSessions={courseSessions}
+                              setCourseSessions={setCourseSessions}
+                            />
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+
+                    <Grid item xs={12}>
+                      <Typography variant="h6" style={{ fontWeight: "bold" }}>
+                        Pictures
+                      </Typography>
+                      <Typography variant="body2">
+                        Paste in the URLs of the pictures you want to use for
+                        your course on the right, see their preview on the left.
+                        Easy, right?
+                      </Typography>
+                      <hr className="mini-hr" />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <Lightbox states={courseImages} />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        fullWidth
+                        name="courseImages"
+                        id="courseImages"
+                        value={courseFormik.values.courseImages}
+                        onChange={(e) => {
+                          let urls = e.target.value.split("\n");
+                          setCourseImages(urls);
+                          courseFormik.handleChange(e);
+                        }}
+                        multiline
+                        placeholder={`https://hypergym.com/images/course1.jpg\nhttps://hypergym.com/images/course2.jpg\n...`}
+                        required
+                        rows={20}
+                        label="Picture URLs (one per line)"
+                      />
                     </Grid>
                   </Grid>
                   <Button
@@ -627,11 +840,11 @@ export default function CreateGym() {
                     color="success"
                     fullWidth
                     type="submit"
-                    onClick={()=>{console.log(courseFormik.values)}}
+                    id="myForm"
                   >
                     Add course
                   </Button>
-                </Grid>
+                </form>
               </Box>
             </Modal>
             <Button
@@ -640,7 +853,7 @@ export default function CreateGym() {
               fullWidth
               onClick={handleOpenCourseModal}
             >
-              {options.length === 0 ? "Add a course" : "Add another course"}
+              {courses.length === 0 ? "Add a course" : "Add another course"}
             </Button>
           </div>
         </Grid>
@@ -660,16 +873,20 @@ export default function CreateGym() {
         </Grid>
         <Grid item md={6} xs={12}>
           <TextField
+            name="gymImages"
+            id="gymImages"
+            value={gymFormik.values.gymImages}
+            onChange={(e) => {
+              let urls = e.target.value.split("\n");
+              setImages(urls);
+              gymFormik.handleChange(e);
+            }}
             fullWidth
             multiline
             placeholder={`https://hypergym.com/images/gym.jpg\nhttps://hypergym.com/images/gym2.jpg\n...`}
             required
             rows={20}
             label="Picture URLs (one per line)"
-            onChange={(e) => {
-              let urls = e.target.value.split("\n");
-              setImages(urls);
-            }}
           />
         </Grid>
 
@@ -678,7 +895,7 @@ export default function CreateGym() {
             Offerings
           </Typography>
           <Typography variant="body2">
-            What else you offer to your customers
+            What else do you offer to your customers ?
           </Typography>
           <hr className="mini-hr" />
         </Grid>
@@ -878,4 +1095,167 @@ export default function CreateGym() {
       </Button>
     </form>
   );
-}
+};
+
+const Row = (props: {
+  row: string;
+  courseSessions: CourseSession[];
+  setCourseSessions: (sessions: CourseSession[]) => void;
+}) => {
+  const [open, setOpen] = useState(false);
+  const [time, setTime] = useState<string>("");
+  const [instructor, setInstructor] = useState<string>("");
+  const { row, courseSessions, setCourseSessions } = props;
+  const [daySessions, setDaySessions] = useState<SessionDetails[]>(
+    courseSessions[courseSessions.findIndex((el) => el.sessionDay === row)]
+      .sessionDetails
+  );
+
+  const handleTimeInput = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setTime(event.target.value);
+  };
+
+  const handleInstructorInput = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setInstructor(event.target.value);
+  };
+
+  const handleSessionInfoAdd = () => {
+    if (instructor === "" || time === "") {
+      return;
+    }
+    setDaySessions([
+      ...daySessions,
+      { sessionTime: time, sessionsInstructor: instructor },
+    ]);
+
+    var allSessions = courseSessions;
+    allSessions[allSessions.findIndex((el) => el.sessionDay === row)] = {
+      sessionDay: row,
+      sessionDetails: [
+        ...daySessions,
+        { sessionTime: time, sessionsInstructor: instructor },
+      ],
+    };
+
+    setCourseSessions(allSessions);
+    setTime("");
+    setInstructor("");
+  };
+
+  const handleSessionDetailsDelete = (session: SessionDetails) => {
+    const updatedSessions = daySessions.filter(
+      (item) => item.sessionTime !== session.sessionTime
+    );
+    setDaySessions(updatedSessions);
+
+    var allSessions = courseSessions;
+    allSessions[allSessions.findIndex((el) => el.sessionDay === row)] = {
+      sessionDay: row,
+      sessionDetails: updatedSessions,
+    };
+
+    setCourseSessions(allSessions);
+  };
+
+  return (
+    <Fragment>
+      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {row}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    <TableCell style={{ fontWeight: "bold" }}>Time</TableCell>
+                    <TableCell style={{ fontWeight: "bold" }}>
+                      Instructor
+                    </TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {daySessions.length > 0 ? (
+                    <>
+                      {daySessions.map((item, index) => (
+                        <TableRow key={index}>
+                          <TableCell component="th" scope="row">
+                            {item.sessionTime}
+                          </TableCell>
+                          <TableCell>{item.sessionsInstructor}</TableCell>
+                          <TableCell>
+                            <DeleteIcon
+                              color="info"
+                              fontSize="small"
+                              sx={{
+                                "&:hover": {
+                                  color: "red",
+                                  cursor: "pointer",
+                                },
+                              }}
+                              onClick={() => handleSessionDetailsDelete(item)}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </>
+                  ) : null}
+                  <TableRow>
+                    <TableCell component="th" scope="row">
+                      <Input
+                        placeholder="11:30 - 14:00"
+                        inputProps={{ "aria-label": "description" }}
+                        onChange={handleTimeInput}
+                        value={time}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Input
+                        placeholder="Kevin Smith"
+                        inputProps={{ "aria-label": "description" }}
+                        onChange={handleInstructorInput}
+                        value={instructor}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <AddCircleIcon
+                        color="info"
+                        fontSize="small"
+                        sx={{
+                          "&:hover": {
+                            color: "green",
+                            cursor: "pointer",
+                          },
+                        }}
+                        onClick={handleSessionInfoAdd}
+                      />
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </Fragment>
+  );
+};
+
+export default CreateGym;
