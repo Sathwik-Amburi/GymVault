@@ -17,8 +17,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="white">
       {"Copyright © "}
-      GymVault {" "}
-      {new Date().getFullYear()}
+      GymVault {new Date().getFullYear()}
       {"."}
     </Typography>
   );

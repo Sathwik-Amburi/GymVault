@@ -6,6 +6,7 @@ import {
   Avatar,
   CardHeader,
   Card,
+  Box,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
@@ -122,11 +123,22 @@ const CourseViewPage: FC = () => {
             )}
           </div>
           <hr />
-          <p>{course.description}</p>
+          <Box
+            style={{
+              padding: "1em",
+              border: "3px solid #C31D56",
+              borderRadius: "20px 0 20px 0",
+            }}
+            sx={{boxShadow: 5}}
+          >
+            <p style={{ margin: 0 }}>{course.description}</p>
+          </Box>
+          <br />
           <div style={{ textAlign: "right" }}>
             <Button
               variant="contained"
               color="success"
+              sx={{ fontWeight: "bold" }}
               onClick={handleBuySubscriptionClick}
             >
               Buy Subscription
@@ -169,9 +181,12 @@ const CourseViewPage: FC = () => {
                 href="tel:+49123456789"
                 variant="contained"
                 color="secondary"
-                style={{color:" white", fontWeight: "bold"}}
+                style={{ color: " white", fontWeight: "bold" }}
               >
-                <i className="fas fa-phone" style={{ marginRight: "1em", color:"white" }} />
+                <i
+                  className="fas fa-phone"
+                  style={{ marginRight: "1em", color: "white" }}
+                />
                 Call
               </Button>
             </div>

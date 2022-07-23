@@ -110,7 +110,7 @@ const GymViewPage: FC = () => {
 
         <Grid item xs={12} md={6}>
           <p>
-            <h1 style={{ display: "inline", color: "green" }}>{gym.name}</h1>
+            <h1 style={{ display: "inline" }}>{gym.name}</h1>
             <StarIcon
               fontSize="medium"
               sx={{ color: "#faec2d" }}
@@ -140,13 +140,17 @@ const GymViewPage: FC = () => {
             {gym.address}
           </div>
           <hr />
-          <Box>
-            <Grid>
-              <p>{gym.description}</p>
-              <br />
-            </Grid>
+          <Box
+            style={{
+              padding: "1em",
+              border: "3px solid #C31D56",
+              borderRadius: "0 20px 0 20px",
+            }}
+            sx={{ boxShadow: 5 }}
+          >
+            <p style={{ margin: 0 }}>{gym.description}</p>
           </Box>
-
+          <br />
           <div style={{ textAlign: "right" }}>
             <Button
               variant="contained"
@@ -162,11 +166,15 @@ const GymViewPage: FC = () => {
         <Grid item md={7} xs={12}>
           <Typography
             variant="h5"
-            style={{ marginBottom: "1em", fontWeight: "bold" }}
+            style={{
+              marginBottom: "1em",
+              fontWeight: "bold",
+              color: "#519dd9",
+            }}
           >
             What you'll find inside
           </Typography>
-          <hr />
+          <hr className="mini-hr" style={{ backgroundColor: "#519dd9" }} />
           <Paper style={{ padding: "2em", backgroundColor: "white" }}>
             <Typography variant="h6">Courses</Typography>
             <br />
@@ -174,7 +182,11 @@ const GymViewPage: FC = () => {
               {courses.length > 0 ? (
                 courses.map((item) => {
                   return (
-                    <Grid item xs={6} onClick={() => handleCourseChipClick(item._id)}>
+                    <Grid
+                      item
+                      xs={6}
+                      onClick={() => handleCourseChipClick(item._id)}
+                    >
                       <Card>
                         <CardMedia
                           component="img"
@@ -225,11 +237,15 @@ const GymViewPage: FC = () => {
         <Grid item md={5} xs={12}>
           <Typography
             variant="h5"
-            style={{ marginBottom: "1em", fontWeight: "bold" }}
+            style={{
+              marginBottom: "1em",
+              fontWeight: "bold",
+              color: "#519dd9",
+            }}
           >
             Pricing
           </Typography>
-          <hr />
+          <hr className="mini-hr" style={{ backgroundColor: "#519dd9" }} />
           <PricingList subscriptionOffers={gym.subscriptionOffers} />
         </Grid>
       </Grid>

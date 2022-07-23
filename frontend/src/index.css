@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext');
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext");
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Montserrat", "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Montserrat", "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -36,7 +36,6 @@ hr {
   border: 2px solid #000; /* TODO set to theme color */
 }
 
-
 #notfound {
   position: relative;
   height: 100vh;
@@ -63,18 +62,18 @@ hr {
 }
 
 .notfound .notfound-404 h1 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 146px;
   font-weight: 700;
   margin: 0px;
   color: #232323;
 }
 
-.notfound .notfound-404 h1>span {
+.notfound .notfound-404 h1 > span {
   display: inline-block;
   width: 120px;
   height: 120px;
-  background-image: url('images/emoji.png');
+  background-image: url("images/emoji.png");
   background-size: cover;
   -webkit-transform: scale(1.4);
   -ms-transform: scale(1.4);
@@ -83,7 +82,7 @@ hr {
 }
 
 .notfound h2 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 22px;
   font-weight: 700;
   margin: 0;
@@ -92,13 +91,13 @@ hr {
 }
 
 .notfound p {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   color: #787878;
   font-weight: 300;
 }
 
 .notfound a {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   display: inline-block;
   padding: 12px 30px;
   font-weight: 700;
@@ -114,7 +113,7 @@ hr {
   opacity: 0.8;
 }
 
-.leaflet-container{
+.leaflet-container {
   width: 50vw;
   height: 70vh;
 }
@@ -126,27 +125,26 @@ hr {
   .notfound .notfound-404 h1 {
     font-size: 86px;
   }
-  .notfound .notfound-404 h1>span {
+  .notfound .notfound-404 h1 > span {
     width: 86px;
     height: 86px;
   }
 }
 
 .footer {
-  background-color: #EDEDED;
+  background-color: #ededed;
   position: relative;
-  padding:1em;
+  padding: 1em;
   bottom: 0;
   width: 100%;
 }
 
 .footer-logo {
-  text-align:center;
+  text-align: center;
 }
 
-.footer-links{
+.footer-links {
   text-align: center;
-  width:100%;
+  width: 100%;
   padding: 0.7em;
-
 }

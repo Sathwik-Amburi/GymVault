@@ -70,7 +70,7 @@ export default function CityMap(props: any) {
     return (
         <>
             {loaded ?
-                <MapContainer style={{ height: "500px", width: "80vw" }} center={center} zoom={12} scrollWheelZoom={false}>
+                <MapContainer style={{ height: "400px", width: "80vw" }} center={center} zoom={12} scrollWheelZoom={false}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
