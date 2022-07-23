@@ -19,8 +19,8 @@ const Navbar: FC = () => {
   );
   // alert(isAuthenticated)
   const role = useSelector((state: RootState) => state.authentication.role);
-  let url = useSelector((state: RootState) => state.profilePicture.url)
-  const profilePicture = url? `${S3_BASE_URL}/${url}` : userIcon
+  let url = useSelector((state: RootState) => state.profilePicture.url);
+  const profilePicture = url ? `${S3_BASE_URL}/${url}` : userIcon;
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -58,7 +58,7 @@ const Navbar: FC = () => {
   };
 
   return (
-    <AppBar position="static" color="default" elevation={0}>
+    <AppBar position="static" elevation={0}>
       <Toolbar sx={{ flexWrap: "wrap" }}>
         <img src="/favicon.ico" alt="Gym Sport" style={{ height: "32px" }} />
         <Link
@@ -66,7 +66,11 @@ const Navbar: FC = () => {
           variant="h6"
           color="inherit"
           noWrap
-          style={{ fontWeight: "bold", textDecoration: "none",  cursor: "pointer"}}
+          style={{
+            fontWeight: "bold",
+            textDecoration: "none",
+            cursor: "pointer",
+          }}
           sx={{ flexGrow: 1, paddingLeft: "1em" }}
         >
           GymVault
@@ -74,17 +78,21 @@ const Navbar: FC = () => {
         {!isAuthenticated && (
           <>
             <Button
-              color="inherit"
-              variant="outlined"
-              style={{ marginRight: 16 }}
+              color="primary"
+              variant="text"
+              style={{
+                marginRight: 16,
+                background: "white",
+                fontWeight: "bold",
+              }}
               onClick={handleLoginClick}
             >
               Log in
             </Button>
             <Button
-              color="primary"
+              color="inherit"
               variant="outlined"
-              style={{ marginRight: 16 }}
+              style={{ marginRight: 16, color: "white", fontWeight: "bold" }}
               onClick={handleSignUpClick}
             >
               Sign up
@@ -125,7 +133,7 @@ const Navbar: FC = () => {
               onClick={handleAvatarClick}
               alt="Firstname Lastname"
               src={String(profilePicture)}
-              style={{ marginRight: 16,  cursor: "pointer" }}
+              style={{ marginRight: 16, cursor: "pointer" }}
               sx={{ bgcolor: "teal" }}
             />
           </>

@@ -285,8 +285,8 @@ const CreateGym: FC = () => {
         </Grid>
         <Grid item md={6} xs={12}>
           <TextField
-            id="email"
-            name="email"
+            id="website"
+            name="website"
             value={gymFormik.values.website}
             onChange={gymFormik.handleChange}
             inputProps={{ style: { fontWeight: "bold" } }}
