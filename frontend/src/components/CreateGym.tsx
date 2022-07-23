@@ -432,7 +432,7 @@ const CreateGym: FC = () => {
                   gymFormik.errors.dayPassPrice
                 }
                 fullWidth
-                label="Price (EUR)"
+                label="Price (&euro;)"
                 type="number"
                 placeholder="6.99"
               />
@@ -466,7 +466,7 @@ const CreateGym: FC = () => {
                   gymFormik.errors.gymMonthlySubscriptionPrice
                 }
                 fullWidth
-                label="Price (EUR)"
+                label="Price (&euro;)"
                 type="number"
                 placeholder="49.99"
               />
@@ -500,7 +500,7 @@ const CreateGym: FC = () => {
                   gymFormik.errors.gymYearlySubscriptionPrice
                 }
                 fullWidth
-                label="Price (EUR)"
+                label="Price (&euro;)"
                 type="number"
                 placeholder="329.99"
               />
@@ -559,7 +559,7 @@ const CreateGym: FC = () => {
                             subscription.subscriptionType
                           )}{" "}
                         </span>
-                        <span>{subscription.subscriptionPrice} EUR</span>
+                        <span>{subscription.subscriptionPrice} &euro;</span>
                       </div>
                     ))}
                   </div>
@@ -682,7 +682,7 @@ const CreateGym: FC = () => {
                               courseFormik.errors.courseSessionTicketPrice
                             }
                             fullWidth
-                            label="Price (EUR)"
+                            label="Price (&euro;)"
                             type="number"
                             placeholder="6.99"
                           />
@@ -725,7 +725,7 @@ const CreateGym: FC = () => {
                               courseFormik.errors.monthlySubscriptionPrice
                             }
                             fullWidth
-                            label="Price (EUR)"
+                            label="Price (&euro;)"
                             type="number"
                             placeholder="49.99"
                           />
@@ -768,7 +768,7 @@ const CreateGym: FC = () => {
                               courseFormik.errors.yearlySubscriptionPrice
                             }
                             fullWidth
-                            label="Price (EUR)"
+                            label="Price (&euro;)"
                             type="number"
                             placeholder="329.99"
                           />
@@ -1049,7 +1049,7 @@ const CreateGym: FC = () => {
                       value={optionFormik.values.optionPrice}
                       onChange={optionFormik.handleChange}
                       required
-                      label="Option Price (EUR)"
+                      label="Option Price (&euro;)"
                       placeholder="19.99"
                       error={
                         optionFormik.touched.optionPrice &&

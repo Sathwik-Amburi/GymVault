@@ -37,10 +37,10 @@ const PricingList: FC<PricingListProps> = ({ subscriptionOffers }) => {
                 <Grid item alignSelf={"end"}>
                   {item.discount ?
                     <>
-                      <span style={{ fontWeight: "bold", textDecoration: 'line-through', margin:"2px" }}> {item.subscriptionPrice} EUR</span>
-                      <span style={{ fontStyle: "italic", color: 'red' }}> {(item.subscriptionPrice * (100 - item.discount) / 100).toFixed(2)} EUR</span>
+                      <span style={{ fontWeight: "bold", textDecoration: 'line-through', margin:"2px" }}> {item.subscriptionPrice} &euro;</span>
+                      <span style={{ fontStyle: "italic", color: 'red' }}> {(item.subscriptionPrice * (100 - item.discount) / 100).toFixed(2)} &euro;</span>
                     </> :
-                    <span style={{ fontWeight: "bold" }}> {item.subscriptionPrice} EUR</span>
+                    <span style={{ fontWeight: "bold" }}> {item.subscriptionPrice} &euro;</span>
                   }
                 </Grid>
               </Grid>

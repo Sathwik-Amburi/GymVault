@@ -255,7 +255,7 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
                   disableElevation
                   style={{ marginRight: "8px" }}
                 >
-                  {item.name} {item.minPrice} and {item.maxPrice} EUR
+                  {item.name} {item.minPrice} and {item.maxPrice} &euro;
                   <CloseIcon
                     fontSize="small"
                     onClick={() => handleCloseFilter(item.type)}
@@ -302,7 +302,7 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
                 <div style={{ marginLeft: "32px" }}>
                   <Typography>
                     Session Pass (€): between {sessionPasspriceRange.minPrice}{" "}
-                    and {sessionPasspriceRange.maxPrice} EUR
+                    and {sessionPasspriceRange.maxPrice} &euro;
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     <Box sx={{ width: 300, marginLeft: "16px" }}>
@@ -333,7 +333,7 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
                   </Typography>
                   <Typography>
                     Monthly Pass (€): between {monthlyPasspriceRange.minPrice}{" "}
-                    and {monthlyPasspriceRange.maxPrice} EUR
+                    and {monthlyPasspriceRange.maxPrice} &euro;
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     <Box sx={{ width: 300, marginLeft: "16px" }}>
@@ -364,7 +364,7 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
                   </Typography>
                   <Typography>
                     Yearly Pass (€): between {yearlyPasspriceRange.minPrice} and{" "}
-                    {yearlyPasspriceRange.maxPrice} EUR
+                    {yearlyPasspriceRange.maxPrice} &euro;
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     <Box sx={{ width: 300, marginLeft: "16px" }}>

@@ -104,7 +104,7 @@ const ResultCard: FC<ResultCardProps> = ({ course }) => {
                           color="text.secondary"
                           style={{ fontWeight: "bold" }}
                         >
-                          {item.subscriptionPrice} EUR
+                          {item.subscriptionPrice} &euro;
                         </Typography>
                       </Grid>
                     </Grid>

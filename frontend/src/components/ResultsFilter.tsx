@@ -293,7 +293,7 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
                   disableElevation
                   style={{ marginRight: "8px" }}
                 >
-                  {item.name} {item.minPrice} and {item.maxPrice} EUR
+                  {item.name} {item.minPrice} and {item.maxPrice} &euro;
                   <CloseIcon
                     fontSize="small"
                     onClick={() => handleCloseFilter(item.type)}
@@ -340,7 +340,7 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
                 <div style={{ marginLeft: "32px" }}>
                   <Typography>
                     Daily Pass (€): between {dailyPasspriceRange.minPrice} and{" "}
-                    {dailyPasspriceRange.maxPrice} EUR
+                    {dailyPasspriceRange.maxPrice} &euro;
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     <Box sx={{ width: 300, marginLeft: "16px" }}>
@@ -371,7 +371,7 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
                   </Typography>
                   <Typography>
                     Monthly Pass (€): between {monthlyPasspriceRange.minPrice}{" "}
-                    and {monthlyPasspriceRange.maxPrice} EUR
+                    and {monthlyPasspriceRange.maxPrice} &euro;
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     <Box sx={{ width: 300, marginLeft: "16px" }}>
@@ -402,7 +402,7 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
                   </Typography>
                   <Typography>
                     Yearly Pass (€): between {yearlyPasspriceRange.minPrice} and{" "}
-                    {yearlyPasspriceRange.maxPrice} EUR
+                    {yearlyPasspriceRange.maxPrice} &euro;
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     <Box sx={{ width: 300, marginLeft: "16px" }}>
