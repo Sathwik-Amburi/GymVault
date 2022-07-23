@@ -117,7 +117,6 @@ const CheckoutPage: FC = () => {
     address: "",
     description: "",
     optionals: [],
-    subscriptionOffers: [],
 
     fgColor: "",
     bgColor: "",
