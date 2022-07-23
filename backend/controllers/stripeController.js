@@ -2,6 +2,8 @@ const userModel = require("../database/models/user");
 const stripe = require('stripe')(process.env.STRIPE_SK)
 const subscriptionService = require('../services/subscriptionService');
 const subscriptionModel = require("../database/models/subscription");
+const gymModel = require("../database/models/gym");
+const courseModel = require("../database/models/course");
 
 
 const createStripeConnectAccount = async (req, res) => {
@@ -85,14 +87,14 @@ const getBalances = async (req, res) => {
 
 
 const createCheckoutSession = async (req, res) => {
-    // TODO: temp: just gets ANY gym owner's stripe account id to forward payments to
-    const gym_owner = await userModel.find({ role: "gym_owner" }).limit(1).exec();
-    const stripe_account_id = gym_owner[0].stripe_account_id
+    const stripe_account_id = await getPayee(req.body.id)
+    console.log(stripe_account_id)
+    // const stripe_account_id = gym_owner.stripe_account_id
 
     const product = 'gym'
     let startDate = req.body.startDate;
     // const product = req.body.product
-    if(startDate.length > 2 && startDate.substring(0, 2) === "S:") {
+    if (startDate.length > 2 && startDate.substring(0, 2) === "S:") {
         startDate = startDate.substring(2);
     }
 
@@ -140,7 +142,7 @@ const createCheckoutSession = async (req, res) => {
         };
         const session = await stripe.checkout.sessions.create(sessionData);
         session['pending_subscription'] = await subscriptionService.generateSubscriptionData(req.user.id, req.body.id, req.body.baseItem._id, startDate, req.body.baseItem.price, req.body.options)
-        if(session['pending_subscription'] === null) {
+        if (session['pending_subscription'] === null) {
             return res.status(500).send("Error creating subscription")
         }
         // save stripe payment session into user's model (with payment_status: unpaid)
@@ -169,15 +171,15 @@ const getPaymentStatus = async (req, res) => {
     // the session exists and belongs to the user
     if (session.payment_status === 'paid') {
         // handle successful legitament payment
-        const subscription = new subscriptionModel({...user.stripe_session.pending_subscription}).save();
+        const subscription = new subscriptionModel({ ...user.stripe_session.pending_subscription }).save();
         if (subscription) {
             res.status(200)
-            .json({ paid: true, message: `Subscription purchased`, response: subscription });
+                .json({ paid: true, message: `Subscription purchased`, response: subscription });
             await user.update({ stripe_session: null }) // delete checkout session so that it is not reused
         } else {
             res.status(404).json({ message: `Subscription not purchased` });
         }
-        
+
     }
 
     else { // user is attempting to use stripe checkout callback before payment
@@ -185,6 +187,22 @@ const getPaymentStatus = async (req, res) => {
     }
 
 
+}
+
+const getPayee = async (item_id) => {
+    let gym = await gymModel.findOne({ _id: item_id }).populate("userId")
+    let course = await courseModel.findOne({ _id: item_id }).populate("userId")
+    if (gym) {
+        return gym.userId.stripe_account_id
+    }
+    else if (course) {
+        return course.userId.stripe_account_id
+    }
+    else{
+        const gym_owner = await userModel.find({ role: "gym_owner" }).limit(1).exec();
+        const stripe_account_id = gym_owner[0].stripe_account_id
+        return stripe_account_id
+    }
 }
 
 

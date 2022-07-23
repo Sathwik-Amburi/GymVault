@@ -113,7 +113,7 @@ const addGym = async (req, res) => {
       let sessions = course.sessions.filter((session) => session.sessionDetails.length > 0)
       let images = course.images.split('\n')
       let gymId = newGym._id
-      const newCourse = new courseModel({ name, description, images, subscriptionOffers, sessions, gymId })
+      const newCourse = new courseModel({ name, description, images, subscriptionOffers, sessions, gymId, userId: req.user.id})
       await newCourse.save()
     })
   }

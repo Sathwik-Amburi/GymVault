@@ -15,7 +15,7 @@ export const markers: Marker[] = [
     { city: 'Bottrop', coordinates: [51.5291, 6.9447] },
     { city: 'Bremen', coordinates: [53.0793, 8.8017] },
     { city: 'Bremerhaven', coordinates: [53.5396, 8.5809] },
-    { city: 'Brunswick', coordinates: [31.1500, 81.4915] },
+    { city: 'Brunswick', coordinates: [52.2689, 10.5268] },
     { city: 'Chemnitz', coordinates: [50.8282, 12.9209] },
     { city: 'Cologne', coordinates: [50.9375, 6.9603] },
     { city: 'Cottbus', coordinates: [51.7563, 14.3329] },
