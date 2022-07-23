@@ -2,6 +2,7 @@ const subscriptionModel = require("../database/models/subscription");
 const courseService = require("./courseService");
 const gymService = require("./gymService");
 const ObjectId = require('mongoose').Types.ObjectId; 
+const moment = require("moment");
 
 class SubscriptionService {
     getSubscriptionsByUserId = async (userId) => {
@@ -78,8 +79,9 @@ class SubscriptionService {
             }
             return result;
         }
-
-        let purchaseDate = new Date(startDateString); // TODO: do the same for sessions!! e.g. match date, time , instructor
+        
+        let purchaseDate = moment(); // WILL BE REPLACED by either startDateString or session date
+        console.log(purchaseDate);
         let expirationDate = new Date();
     
         // Check if it is a course or gym ID 
@@ -90,21 +92,30 @@ class SubscriptionService {
             entity.sessions.forEach(session => {
                 session.sessionDetails.forEach(sessionDetail => {
                     if(session.sessionDay + sessionDetail.sessionTime + sessionDetail.sessionsInstructor == startDateString) {
-                        purchaseDate = new Date();
+                        purchaseDate = moment().startOf('day');
                         // TODO: compute purchase date by summing days of week to current, times, etc
-                        found = true;
-                        console.log("Match found, session start: " + purchaseDate);
-                        //actually, it lasts 24h from the 1st session, not until its end? expirationDate = new Date(session.endDate);
+                        let i = 10;
+                        while(purchaseDate.format("dddd") != session.sessionDay && i > 0) {
+                            //console.log(purchaseDate.format("dddd") + " != " + session.sessionDay + ", i=" + i);
+                            purchaseDate.add(1, 'days');
+                            i--;
+                        }
+                        if(i != 0) { 
+                            found = true;
+                            console.log("Match found, session start: " + purchaseDate.format("DD/MM/YYYY"));
+                            purchaseDate = purchaseDate.toDate();
+                        } else {
+                            console.log("No match found for " + startDateString);
+                            return null;
+                        }
                     }
                 });
             });
-            if(!found) {
-                console.log("No match found for " + startDateString);
-            }
         } else {
             entity = await gymService.getGym(courseOrGymId);
             if(entity != null) {
-                // still ok
+                // it's a gym; then get the start date & apply it
+                purchaseDate = moment(startDateString).toDate();
             } else {
                 console.log("Neither gym nor course!");
                 return null;
