@@ -9,7 +9,6 @@ import SearchType from "./SearchType";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
-
 import Map from "./widgets/map/GermanyMap";
 
 /* retrieved from: https://mui.com/material-ui/getting-started/templates/pricing/*/
@@ -17,8 +16,9 @@ import Map from "./widgets/map/GermanyMap";
 export default function FrontPage() {
   let [filter, setFilter] = React.useState<string>("gym");
   let [gymButton, setGymButton] = React.useState<object>({
-    backgroundColor: "#3259ad",
+    backgroundColor: "#3B66A5",
     color: "white",
+    fontWeight: "bold",
   });
   let [courseButton, setCourseButton] = React.useState<object>({});
 
@@ -26,10 +26,18 @@ export default function FrontPage() {
     if (filter == "gym") {
       setFilter("course");
       setGymButton({});
-      setCourseButton({ backgroundColor: "#3259ad", color: "white" });
+      setCourseButton({
+        backgroundColor: "#3B66A5",
+        color: "white",
+        fontWeight: "bold",
+      });
     } else {
       setFilter("gym");
-      setGymButton({ backgroundColor: "#3259ad", color: "white" });
+      setGymButton({
+        backgroundColor: "#3B66A5",
+        color: "white",
+        fontWeight: "bold",
+      });
       setCourseButton({});
     }
   };
@@ -70,12 +78,13 @@ export default function FrontPage() {
         <div
           style={{ whiteSpace: "pre-wrap", color: "grey", fontStyle: "italic" }}
         >
-          We help gym owners and clients <b>connect faster, easier, and hassle-free</b>.
-          Browse our large gym and course catalog, choose the one that matches your exact
-          needs, and pay only for what you use. All fully digitally.
+          We help gym owners and clients{" "}
+          <b>connect faster, easier, and hassle-free</b>. Browse our large gym
+          and course catalog, choose the one that matches your exact needs, and
+          pay only for what you use. All fully digitally.
         </div>
       </Container>
-      
+
       <Container maxWidth="md" component="main">
         <div
           style={{
@@ -86,16 +95,9 @@ export default function FrontPage() {
             alignItems: "center",
           }}
         >
-          <span style={{ marginRight: "1em", color: "grey" }}>
-            Look for
-          </span>
+          <span style={{ marginRight: "1em", color: "grey" }}>Look for</span>
 
-          <ToggleButtonGroup
-            // value={alignment}
-            exclusive
-            // onChange={handleAlignment}
-            aria-label="text alignment"
-          >
+          <ToggleButtonGroup exclusive aria-label="text alignment">
             <ToggleButton
               size="small"
               onClick={toggle}

@@ -84,11 +84,18 @@ const CourseResultsSort: FC = () => {
         justifyContent="space-between"
       >
         <Box>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Sort by</InputLabel>
+          <FormControl style={{ width: 180 }}>
+            <InputLabel
+              id="demo-simple-select-label"
+              color="secondary"
+              style={{ fontWeight: "bold" }}
+            >
+              Sort by
+            </InputLabel>
             <Select
-              IconComponent={SwapVertIcon}
+              IconComponent={() => <SwapVertIcon color="secondary" />}
               size="small"
+              color="secondary"
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={sortBy}

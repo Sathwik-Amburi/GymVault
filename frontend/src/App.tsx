@@ -50,7 +50,7 @@ const THEME = createTheme({
       main: "#519DD9",
     },
     background: {
-      default: "#EDEDED",
+      default: "white",
     },
   },
 });

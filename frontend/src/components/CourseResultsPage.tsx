@@ -12,7 +12,6 @@ import { setCourseResults } from "../store/slices/courseResultsSlice";
 import CourseResultsSort from "./CourseResultsSort";
 import CityMap from "./widgets/map/CityMap";
 
-
 const CourseResultsPage: FC = () => {
   const dispatch = useDispatch();
   const queries = new URLSearchParams(window.location.search);
@@ -38,7 +37,7 @@ const CourseResultsPage: FC = () => {
     <>
       <Grid>
         <Grid>
-          <Typography fontSize={"2em"}>
+          <Typography fontSize={"2em"} fontWeight="bold">
             {courseResults ? courseResults.length : 0}{" "}
             {getCourseSpelling(courseResults?.length)}
             found in {city}
@@ -50,10 +49,16 @@ const CourseResultsPage: FC = () => {
         </Grid>
       </Grid>
 
-      <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: "30px 0px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          margin: "30px 0px",
+        }}
+      >
         <CityMap item="course" city={city} />
       </div>
-
 
       <ChonkySpinner loading={loading}>
         <Grid

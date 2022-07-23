@@ -6,6 +6,8 @@ import {
   Chip,
   Avatar,
   CardHeader,
+  Box,
+  Divider,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
@@ -18,6 +20,8 @@ import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import StarIcon from "@mui/icons-material/Star";
 import { S3_BASE_URL } from "../config/config";
+import PhoneIcon from "@mui/icons-material/Phone";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const moment = require("moment");
 
@@ -64,7 +68,7 @@ const GymViewPage: FC = () => {
     ApiCalls.getReviewsById(fid)
       .then((res) => {
         setReviews(res.data.response);
-        console.log(res.data.response)
+        console.log(res.data.response);
       })
       .catch((err) =>
         UnifiedErrorHandler.handle(
@@ -102,7 +106,7 @@ const GymViewPage: FC = () => {
 
         <Grid item xs={12} md={6}>
           <p>
-            <h1 style={{ display: "inline" }}>{gym.name}</h1>
+            <h1 style={{ display: "inline", color: "green" }}>{gym.name}</h1>
             <StarIcon
               fontSize="medium"
               sx={{ color: "#faec2d" }}
@@ -118,17 +122,32 @@ const GymViewPage: FC = () => {
               </span>
             )}
           </p>
-
+          <div
+            style={{
+              display: "flex",
+              justifyItems: "center",
+              marginBottom: "8px",
+            }}
+          >
+            <PhoneIcon color="secondary" />+{gym.phoneNumber}
+          </div>
+          <div style={{ display: "flex", justifyItems: "center" }}>
+            <LocationOnIcon sx={{ color: "red" }} />
+            {gym.address}
+          </div>
           <hr />
-          <p>{gym.description}</p>
-          <br />
-          <p>Tel: +{gym.phoneNumber}</p>
-          <p>{gym.address}</p>
+          <Box>
+            <Grid>
+              <p>{gym.description}</p>
+              <br />
+            </Grid>
+          </Box>
 
           <div style={{ textAlign: "right" }}>
             <Button
               variant="contained"
               color="success"
+              sx={{ fontWeight: "bold" }}
               onClick={handleBuySubscriptionClick}
             >
               Buy Subscription
@@ -144,7 +163,7 @@ const GymViewPage: FC = () => {
             What you'll find inside
           </Typography>
           <hr />
-          <Paper style={{ padding: "2em", backgroundColor: "#eee" }}>
+          <Paper style={{ padding: "2em", backgroundColor: "white" }}>
             <Typography variant="h6">Courses</Typography>
             <br />
             {courses.length > 0 ? (
@@ -165,7 +184,7 @@ const GymViewPage: FC = () => {
 
             <br />
             <br />
-            <hr />
+            <Divider />
             <br />
             <Typography variant="h6">Amenities</Typography>
             <Typography variant="body2">
@@ -177,8 +196,12 @@ const GymViewPage: FC = () => {
                 <Chip
                   label={amenity}
                   style={{ margin: "0.3em" }}
-                  color="secondary"
-                  variant="outlined"
+                  sx={{
+                    color: "white",
+                    fontWeight: "bold",
+                    backgroundColor: "#C31D56",
+                  }}
+                  variant="filled"
                 />
               );
             })}
@@ -214,7 +237,11 @@ const GymViewPage: FC = () => {
                   elevation={3}
                 >
                   <CardHeader
-                    avatar={<Avatar src={`${S3_BASE_URL}/${review.userId.profilePicture}`} />}
+                    avatar={
+                      <Avatar
+                        src={`${S3_BASE_URL}/${review.userId.profilePicture}`}
+                      />
+                    }
                     title={review.username}
                     subheader={moment(review.dateAdded).format("MMM Do YYYY")}
                   />

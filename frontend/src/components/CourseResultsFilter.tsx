@@ -14,7 +14,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
 import { PriceRangeFilter, SubscriptionTypes } from "../models/allModels";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import TuneIcon from "@mui/icons-material/Tune";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import { useDispatch } from "react-redux";
@@ -269,11 +269,18 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
           <Button
             variant="contained"
             size="small"
+            color="secondary"
             disableElevation
-            style={{ marginRight: "8px", float: "right" }}
+            style={{
+              marginRight: "8px",
+              float: "right",
+              fontWeight: "bold",
+              color: "white",
+              height: "38px",
+            }}
             onClick={handleOpenModal}
           >
-            <FilterAltIcon fontSize="small" /> Filters
+            <TuneIcon fontSize="medium" /> Filters
           </Button>
 
           <BootstrapDialog
@@ -397,10 +404,29 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
               </Grid>
             </DialogContent>
             <DialogActions>
-              <Button autoFocus onClick={handleFilterClear}>
+              <Button
+                autoFocus
+                onClick={handleFilterClear}
+                color="primary"
+                variant="outlined"
+                style={{
+                  background: "white",
+                  fontWeight: "bold",
+                }}
+              >
                 Clear all filters
               </Button>
-              <Button autoFocus onClick={handleFilter}>
+              <Button
+                autoFocus
+                onClick={handleFilter}
+                color="inherit"
+                variant="outlined"
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  backgroundColor: "#D7053E",
+                }}
+              >
                 Filter
               </Button>
             </DialogActions>
@@ -421,7 +447,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   const { children, onClose, ...other } = props;
 
   return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+    <DialogTitle sx={{ m: 0, p: 2, fontWeight: "bold" }} {...other}>
       {children}
       {onClose ? (
         <IconButton

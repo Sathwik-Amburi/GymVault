@@ -19,7 +19,6 @@ const PricingList: FC<PricingListProps> = ({ subscriptionOffers }) => {
                 fontSize: "14px",
                 alignItems: "center",
                 display: "flex",
-                fontWeight: "bold",
               }}
               key={index}
             >
@@ -35,13 +34,33 @@ const PricingList: FC<PricingListProps> = ({ subscriptionOffers }) => {
                   </span>
                 </Grid>
                 <Grid item alignSelf={"end"}>
-                  {item.discount ?
+                  {item.discount ? (
                     <>
-                      <span style={{ fontWeight: "bold", textDecoration: 'line-through', margin:"2px" }}> {item.subscriptionPrice} &euro;</span>
-                      <span style={{ fontStyle: "italic", color: 'red' }}> {(item.subscriptionPrice * (100 - item.discount) / 100).toFixed(2)} &euro;</span>
-                    </> :
-                    <span style={{ fontWeight: "bold" }}> {item.subscriptionPrice} &euro;</span>
-                  }
+                      <span
+                        style={{
+                          color: "red",
+                          textDecoration: "line-through",
+                          margin: "2px",
+                        }}
+                      >
+                        {" "}
+                        {item.subscriptionPrice} &euro;
+                      </span>
+                      <span style={{ fontWeight: "bold" }}>
+                        {" "}
+                        {(
+                          (item.subscriptionPrice * (100 - item.discount)) /
+                          100
+                        ).toFixed(2)}{" "}
+                        &euro;
+                      </span>
+                    </>
+                  ) : (
+                    <span style={{ fontWeight: "bold" }}>
+                      {" "}
+                      {item.subscriptionPrice} &euro;
+                    </span>
+                  )}
                 </Grid>
               </Grid>
             </div>
