@@ -89,7 +89,7 @@ const PurchaseGrid: FC<GridProps> = (props: GridProps) => {
               }}
             >
               {item.price}
-              { isNaN(item.price) ? "" : "€"}
+              { isNaN(item.price) ? "" : "$"}
             </Typography>
             <div style={{
               marginTop: "3em"
