@@ -140,7 +140,9 @@ const createCheckoutSession = async (req, res) => {
         };
         const session = await stripe.checkout.sessions.create(sessionData);
         session['pending_subscription'] = await subscriptionService.generateSubscriptionData(req.user.id, req.body.id, req.body.baseItem._id, startDate, req.body.baseItem.price, req.body.options)
-
+        if(session['pending_subscription'] === null) {
+            return res.status(500).send("Error creating subscription")
+        }
         // save stripe payment session into user's model (with payment_status: unpaid)
         await userModel.findByIdAndUpdate(req.user.id, { stripe_session: session })
 
