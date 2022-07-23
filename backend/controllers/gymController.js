@@ -12,6 +12,27 @@ const getAllGyms = async (req, res) => {
   }
 };
 
+const gymByOwnerId = async (req, res) => {
+  if(req.user.role!=="gym_owner"){
+    return res.status(403).json({message: 'forbidden'})
+  } 
+  // temporary get Progym in Hamburg
+  const gym = await gymModel.findById('62c572f1dc7d322846a2a9b2')
+  res.json({gym})
+}
+
+const editGymSubscriptionPrice = async (req, res) => {
+  if(req.user.role!=="gym_owner"){
+    return res.status(403).json({message: 'forbidden'})
+  }
+  if(!req.body.subscriptionOffers || req.body.subscriptionOffers === undefined){
+    return res.status(400).json({message: 'invalid request'})
+  }
+  // temporary get Progym in Hamburg
+  const gym = await gymModel.findByIdAndUpdate('62c572f1dc7d322846a2a9b2', {subscriptionOffers: req.body.subscriptionOffers}, {new: true})
+  res.json({gym})
+}
+
 const getAllAvailableSearchCities = async (req, res) => {
   try {
     const { type } = req.params;
@@ -137,4 +158,6 @@ module.exports = {
   filterGymsBySelectedFilters,
   getAllGymAmenitiesByCity,
   addSubscription,
+  gymByOwnerId,
+  editGymSubscriptionPrice
 };

@@ -14,7 +14,7 @@ class ReviewService {
     try {
       const gymReviews = await reviewModel.find({
         $or: [{ gymId: Id }, { courseId: Id }],
-      });
+      }).populate("userId", "-password");
       return gymReviews;
     } catch (error) {
       console.log("Error while fetching gym reviews", error.message);

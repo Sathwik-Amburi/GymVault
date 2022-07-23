@@ -86,13 +86,32 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
                         </Typography>
                       </Grid>
                       <Grid item alignSelf={"end"}>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          style={{ fontWeight: "bold" }}
-                        >
-                          {item.subscriptionPrice} EUR
-                        </Typography>
+                        {item.discount ?
+                          <>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              style={{ fontWeight: "bold", textDecoration: 'line-through' }}
+                            >
+                              {item.subscriptionPrice} EUR
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              style={{ textDecoration: 'none', marginBottom: "10px", color: "red" }}>
+                              {(item.subscriptionPrice * (100 - item.discount) / 100).toFixed(2)} EUR
+                            </Typography>
+                          </>
+                          :
+
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {item.subscriptionPrice} EUR
+                          </Typography>
+                        }
+
                       </Grid>
                     </Grid>
                   </div>

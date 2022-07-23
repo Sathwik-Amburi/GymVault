@@ -85,6 +85,7 @@ const CheckoutPage: FC = () => {
       description: gym.description,
       price: -1, // TODO: this "price" here can be dropped from the schema i think?
       optionals: gym.optionals == undefined ? [] : gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
+      subscriptionOffers: gym.subscriptionOffers,
 
       fgColor: "",
       bgColor: "",
