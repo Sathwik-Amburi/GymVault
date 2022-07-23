@@ -39,6 +39,8 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
+import axios from 'axios';
+
 
 interface NewCourseState {
   name: string;
@@ -165,10 +167,17 @@ const CreateGym: FC = () => {
       gymYearlySubscriptionPrice: 0,
     },
     validationSchema: gymValidationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-      console.log(options);
-      console.log(courses);
+    onSubmit: async (values: any) => {
+      const gym = values
+      const gymoptions: any = options
+      const gymcourses: any = courses
+
+      const data = { gym, gymcourses, gymoptions }
+      const headers = { "x-access-token": String(localStorage.getItem('token')) }
+      await axios.post(`gyms/add-gym`, data, { headers })
+      console.log(gym);
+      console.log(gymoptions);
+      console.log(gymcourses);
     },
   });
 
@@ -179,7 +188,7 @@ const CreateGym: FC = () => {
       optionPrice: 0,
     },
     validationSchema: optionValidationSchema,
-    onSubmit: (values) => {
+    onSubmit: (values: any) => {
       const newOption: NewOptionState = {
         name: values.optionName,
         description: values.optionDescription,
@@ -204,7 +213,7 @@ const CreateGym: FC = () => {
       courseImages: "",
     },
     validationSchema: courseValidationSchema,
-    onSubmit: (values) => {
+    onSubmit: (values: any) => {
       const newCourse: NewCourseState = {
         name: values.courseName,
         description: values.courseDescription,
@@ -214,17 +223,17 @@ const CreateGym: FC = () => {
           {
             subscriptionType: SubscriptionTypes.SESSION_PASS,
             subscriptionPrice: values.courseSessionTicketPrice,
-            discount:0
+            discount: 0
           },
           {
             subscriptionType: SubscriptionTypes.MONTHLY_PASS,
             subscriptionPrice: values.monthlySubscriptionPrice,
-            discount:0
+            discount: 0
           },
           {
             subscriptionType: SubscriptionTypes.YEARLY_PASS,
             subscriptionPrice: values.yearlySubscriptionPrice,
-            discount:0
+            discount: 0
           },
         ],
         images: values.courseImages,
