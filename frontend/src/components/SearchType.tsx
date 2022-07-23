@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import Map from "./widgets/map/GermanyMap";
-
+import SearchIcon from "@mui/icons-material/Search";
 
 interface City {
   label: string;
@@ -20,17 +20,16 @@ export default function SearchType(props: any) {
   const [cities, setCities] = useState<City[]>([]);
   const [loaded, setLoaded] = useState<Boolean>(false);
 
-
   useEffect(() => {
-    setLoaded(false)
+    setLoaded(false);
     ApiCalls.getAllAvailableSearchCities(props.type)
       .then((res) => {
         setCities(
           res.data.map((city) => {
             return { label: city };
           })
-        )
-        setLoaded(true)
+        );
+        setLoaded(true);
       })
       .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gym cities"));
   }, [props.type]);
@@ -56,7 +55,8 @@ export default function SearchType(props: any) {
       }, 2000);
     } else {
       navigate(
-        `/results/${props.type === "gyms" ? "gyms" : "courses"
+        `/results/${
+          props.type === "gyms" ? "gyms" : "courses"
         }/search?name=${name}&city=${city}`
       );
     }
@@ -64,7 +64,7 @@ export default function SearchType(props: any) {
 
   return (
     <>
-      {loaded ? <Map cities={cities} setCity={setCity} /> : ''}
+      {loaded ? <Map cities={cities} setCity={setCity} /> : ""}
       <div
         style={{
           display: "flex",
@@ -112,15 +112,13 @@ export default function SearchType(props: any) {
 
         <Button
           onClick={search}
-          style={{ marginLeft: "3px", height: "55px" }}
+          style={{ marginLeft: "3px", height: "55px", fontWeight: "bold" }}
           variant="contained"
-          endIcon={<i className="fas fa-search" />}
+          endIcon={<SearchIcon sx={{ color: "white" }} />}
         >
           Search
         </Button>
       </div>
-
-
     </>
   );
 }

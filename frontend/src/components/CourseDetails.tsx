@@ -169,8 +169,9 @@ const CourseViewPage: FC = () => {
                 href="tel:+49123456789"
                 variant="contained"
                 color="secondary"
+                style={{color:" white", fontWeight: "bold"}}
               >
-                <i className="fas fa-phone" style={{ marginRight: "1em" }} />
+                <i className="fas fa-phone" style={{ marginRight: "1em", color:"white" }} />
                 Call
               </Button>
             </div>

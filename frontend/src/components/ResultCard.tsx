@@ -1,12 +1,20 @@
-import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
-import { FC } from "react";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Chip,
+  Grid,
+  Typography,
+} from "@mui/material";
+import { FC, useEffect } from "react";
 import image from "../images/progym.jpg";
 import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { Gym } from "../models/allModels";
+import { Gym, SubscriptionOffers } from "../models/allModels";
 import { useNavigate } from "react-router-dom";
 import PriceCheckIcon from "@mui/icons-material/PriceCheck";
 import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
+import DiscountIcon from "@mui/icons-material/Discount";
 
 interface ResultCardProps {
   gym: Gym;
@@ -18,6 +26,15 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
     navigate(`/gym/${gym._id}`);
   };
 
+  const calculateHighestDiscount = (
+    subscriptionOffers: SubscriptionOffers[]
+  ): number => {
+    const highestDiscount = Math.max(
+      ...subscriptionOffers.map((item) => item.discount)
+    );
+    return highestDiscount;
+  };
+
   return (
     <>
       <Grid container onClick={handleCardClick} style={{ cursor: "pointer" }}>
@@ -25,10 +42,38 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
           sx={{
             maxWidth: 345,
             ":hover": {
-              boxShadow: 20,
+              boxShadow: 10,
             },
+            borderColor: "#519DD9",
+            borderRadius: "18px",
+            position: "relative",
           }}
         >
+          {gym.subscriptionOffers.filter((item) => item.discount !== 0)
+            .length != 0 ? (
+            <Chip
+              icon={<DiscountIcon fontSize="small" />}
+              label={
+                <span>
+                  Up to{" "}
+                  <strong>
+                    {calculateHighestDiscount(gym.subscriptionOffers)}%
+                  </strong>{" "}
+                  off !
+                </span>
+              }
+              variant="filled"
+              color="primary"
+              style={{
+                position: "absolute",
+                top: "15px",
+                left: "15px",
+                color: "white",
+                padding: "0.6em",
+              }}
+            />
+          ) : null}
+
           <CardMedia
             component="img"
             alt="gym picture"
@@ -85,33 +130,43 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
                           {toCleanSubscriptionTypeFormat(item.subscriptionType)}
                         </Typography>
                       </Grid>
-                      <Grid item alignSelf={"end"}>
-                        {item.discount ?
+                      <Grid item alignSelf={"end"} display="flex">
+                        {item.discount ? (
                           <>
                             <Typography
                               variant="body2"
-                              color="text.secondary"
-                              style={{ fontWeight: "bold", textDecoration: 'line-through' }}
+                              color="red"
+                              style={{ textDecoration: "line-through" }}
                             >
-                              {item.subscriptionPrice} EUR
+                              {item.subscriptionPrice} &euro;
                             </Typography>
                             <Typography
                               variant="body2"
-                              style={{ textDecoration: 'none', marginBottom: "10px", color: "red" }}>
-                              {(item.subscriptionPrice * (100 - item.discount) / 100).toFixed(2)} EUR
+                              color="text.secondary"
+                              style={{
+                                textDecoration: "none",
+                                marginLeft: "4px",
+
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {(
+                                (item.subscriptionPrice *
+                                  (100 - item.discount)) /
+                                100
+                              ).toFixed(2)}{" "}
+                              &euro;
                             </Typography>
                           </>
-                          :
-
+                        ) : (
                           <Typography
                             variant="body2"
                             color="text.secondary"
                             style={{ fontWeight: "bold" }}
                           >
-                            {item.subscriptionPrice} EUR
+                            {item.subscriptionPrice} &euro;
                           </Typography>
-                        }
-
+                        )}
                       </Grid>
                     </Grid>
                   </div>

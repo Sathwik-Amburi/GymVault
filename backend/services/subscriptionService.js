@@ -2,6 +2,7 @@ const subscriptionModel = require("../database/models/subscription");
 const courseService = require("./courseService");
 const gymService = require("./gymService");
 const ObjectId = require('mongoose').Types.ObjectId; 
+const moment = require("moment");
 
 class SubscriptionService {
     getSubscriptionsByUserId = async (userId) => {
@@ -55,7 +56,16 @@ class SubscriptionService {
     }
 
     generateSubscriptionData = async (uid, courseOrGymId, baseType, startDateString, basePrice, rawOptionals) => {
-        let price = 0;
+        // parse baseType - TODO: is this correct? (aka, is baseType reliably mapped?)
+        let type =  baseType == 1 ? "DAY_PASS" :
+                    baseType == 2 ? "MONTHLY_PASS" :
+                    baseType == 3 ? "YEARLY_PASS" : "";
+        const offset = 
+                    (type == "DAY_PASS")   ? 1 :
+                    (type == "MONTHLY_PASS") ? 30 :
+                    (type == "YEARLY_PASS")  ? 365 :
+                    0; 
+
         let optionals = rawOptionals.map(optional => {
             return {                
                 name: optional.name,
@@ -63,10 +73,6 @@ class SubscriptionService {
                 price: optional.price,
             }
         });
-
-        let type =  baseType == 1 ? "DAY_PASS" :
-                    baseType == 2 ? "MONTHLY_PASS" :
-                    baseType == 3 ? "YEARLY_PASS" : "";
 
         function randomString() {
             const len = 10;
@@ -78,9 +84,10 @@ class SubscriptionService {
             }
             return result;
         }
-
-        let purchaseDate = new Date(startDateString); // TODO: do the same for sessions!! e.g. match date, time , instructor
-        let expirationDate = new Date();
+        
+        let purchaseDate = moment(); // WILL BE REPLACED by either startDateString or session date
+        console.log(purchaseDate);
+        let expirationDate = moment().startOf('day').toDate();
     
         // Check if it is a course or gym ID 
         let entity = await courseService.getCourse(courseOrGymId);
@@ -90,21 +97,40 @@ class SubscriptionService {
             entity.sessions.forEach(session => {
                 session.sessionDetails.forEach(sessionDetail => {
                     if(session.sessionDay + sessionDetail.sessionTime + sessionDetail.sessionsInstructor == startDateString) {
-                        purchaseDate = new Date();
-                        // TODO: compute purchase date by summing days of week to current, times, etc
-                        found = true;
-                        console.log("Match found, session start: " + purchaseDate);
-                        //actually, it lasts 24h from the 1st session, not until its end? expirationDate = new Date(session.endDate);
+                        purchaseDate = moment().startOf('day');
+                        // compute purchase date by summing days of week to current, times, etc
+                        let i = 9;
+                        while(purchaseDate.format("dddd") != session.sessionDay && i > 0) {
+                            //console.log(purchaseDate.format("dddd") + " != " + session.sessionDay + ", i=" + i);
+                            purchaseDate.add(1, 'days');
+                            i--;
+                        }
+                        if(i != 0) { 
+                            found = true;
+                            console.log("Match found, session start: " + purchaseDate.format("DD/MM/YYYY"));
+                            // if it's a single session ticket, it is only valid in that timeframe
+                            if(baseType == 1) {
+                                console.log("Single session ticket, setting validity to session time only");
+                                let sessionTime = sessionDetail.sessionTime.split(" - ");
+                                expirationDate = moment(purchaseDate.format("YYYY-MM-DD") + " " + sessionTime[1], "HH:mm").toDate();
+                                purchaseDate = moment(purchaseDate.format("YYYY-MM-DD") + " " + sessionTime[0], "HH:mm").toDate();
+                            } else {
+                                purchaseDate = purchaseDate.toDate();
+                                // it's a month/yearly ticket, so it starts today, but not at the session type
+                                expirationDate.setDate(purchaseDate.getDate() + offset);                            }
+                        } else {
+                            console.log("No match found for " + startDateString);
+                            return null;
+                        }
                     }
                 });
             });
-            if(!found) {
-                console.log("No match found for " + startDateString);
-            }
         } else {
             entity = await gymService.getGym(courseOrGymId);
             if(entity != null) {
-                // still ok
+                // it's a gym; then get the start date & apply it
+                purchaseDate = moment(startDateString).startOf('day').toDate();
+                expirationDate.setDate(purchaseDate.getDate() + offset);
             } else {
                 console.log("Neither gym nor course!");
                 return null;
@@ -112,12 +138,6 @@ class SubscriptionService {
         }
         
         if(entity != null && uid != null) {
-            const offset = 
-                (type == "DAY_PASS")   ? 1 :
-                (type == "MONTHLY_PASS") ? 30 :
-                (type == "YEARLY_PASS")  ? 365 :
-                0; 
-            expirationDate.setDate(purchaseDate.getDate() + offset);
             const subscription = {
                 gymId: ("gymId" in entity) ? entity.gymId : entity._id,
                 courseId: ("gymId" in entity) ? entity._id : null,

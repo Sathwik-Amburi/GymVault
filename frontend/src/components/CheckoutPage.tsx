@@ -1,7 +1,7 @@
 import { Card, FormControl, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, TextField, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
-import { Course, CourseSession, Gym, Item, Option, PurchaseOption, SubscriptionOffers } from "../models/allModels";
+import { Course, CourseSession, Gym, Item, Option, PurchaseOption, SubscriptionOffers, SubscriptionTypes } from "../models/allModels";
 import PurchaseGrid from "./widgets/PurchaseGrid";
 import PurchaseCart, { CartItem } from "./widgets/PurchaseCart";
 import ApiCalls from "../api/apiCalls";
@@ -261,9 +261,9 @@ const CheckoutPage: FC = () => {
                 <Typography variant="body1">
                   { cart == undefined ? "-" : 
                     cart.length == 0 ? "-" :
-                    cart[0]._id == "1" ? "One day" :
-                    cart[0]._id == "2" ? "30 days" :
-                    cart[0]._id == "3" ? "365 days" :
+                    cart[0].name == toCleanSubscriptionTypeFormat(SubscriptionTypes.DAY_PASS) ? "One day" :
+                    cart[0].name == toCleanSubscriptionTypeFormat(SubscriptionTypes.MONTHLY_PASS) ? "30 days" :
+                    cart[0].name == toCleanSubscriptionTypeFormat(SubscriptionTypes.YEARLY_PASS) ? "365 days" :
                     "-" 
                   }
                 </Typography>

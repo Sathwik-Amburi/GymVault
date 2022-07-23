@@ -58,7 +58,7 @@ const Navbar: FC = () => {
   };
 
   return (
-    <AppBar position="static" elevation={0}>
+    <AppBar position="static" elevation={3}>
       <Toolbar sx={{ flexWrap: "wrap" }}>
         <img src="/favicon.ico" alt="Gym Sport" style={{ height: "32px" }} />
         <Link
@@ -105,18 +105,26 @@ const Navbar: FC = () => {
             {role === "gym_owner" ? (
               <Button
                 onClick={handleDashboardClick}
-                color="inherit"
+                color="primary"
                 variant="outlined"
-                style={{ marginRight: 16 }}
+                style={{
+                  marginRight: 16,
+                  background: "white",
+                  fontWeight: "bold",
+                }}
               >
                 My Dashboard
               </Button>
             ) : (
               <Button
                 onClick={handleTicketsClick}
-                color="inherit"
+                color="primary"
                 variant="outlined"
-                style={{ marginRight: 16 }}
+                style={{
+                  marginRight: 16,
+                  background: "white",
+                  fontWeight: "bold",
+                }}
               >
                 My Tickets
               </Button>
@@ -124,7 +132,7 @@ const Navbar: FC = () => {
             <Button
               color="inherit"
               variant="outlined"
-              style={{ marginRight: 16 }}
+              style={{ marginRight: 16, color: "white", fontWeight: "bold" }}
               onClick={handleLogout}
             >
               Logout

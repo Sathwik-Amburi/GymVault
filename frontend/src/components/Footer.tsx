@@ -15,11 +15,9 @@ import Link from "@mui/material/Link";
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="text.secondary">
+    <Typography variant="body2" color="white">
       {"Copyright © "}
-      <Link color="inherit" href="/">
-        GymVault
-      </Link>{" "}
+      GymVault {" "}
       {new Date().getFullYear()}
       {"."}
     </Typography>
@@ -43,9 +41,10 @@ export default function Footer() {
       <Box
         component="footer"
         sx={{
-          py: 3,
+          py: 1,
           px: 2,
           mt: "auto",
+          boxShadow: 10,
         }}
       >
         <Container maxWidth="sm">
@@ -65,45 +64,44 @@ export default function Footer() {
                   fontWeight: "bold",
                   textDecoration: "none",
                   cursor: "pointer",
+                  color: "white",
                 }}
                 sx={{ flexGrow: 1, paddingLeft: "1em" }}
               >
                 GymVault
               </Link>
             </Grid>
-            <Grid className="footer-links">
-              <Link href="#" underline="hover" sx={{ p: 1 }} color="#519DD9">
+            <Grid className="footer-links" style={{ fontWeight: "bold" }}>
+              <Link href="#" underline="hover" sx={{ p: 1, color: "white" }}>
                 {"About Us"}
               </Link>
               <Link
                 href="/contact-us"
                 underline="hover"
-                sx={{ p: 1 }}
-                color="#519DD9"
+                sx={{ p: 1, color: "white" }}
               >
                 {"Contact Us"}
               </Link>
               <Link
                 href="/gym-signup"
                 underline="hover"
-                sx={{ p: 1 }}
-                color="#519DD9"
+                sx={{ p: 1, color: "white" }}
               >
-                {"SignUp as a Gym!"}
+                {"Sign up as a Gym!"}
               </Link>
             </Grid>
             <Grid className="footer-links">
-              <Link href="#" underline="hover" sx={{ p: 1 }}>
-                <FacebookIcon />
+              <Link href="#" underline="hover" sx={{ p: 1, color: "white" }}>
+                <FacebookIcon sx={{ color: "white" }} />
               </Link>
               <Link href="#" underline="hover" sx={{ p: 1 }}>
-                <InstagramIcon />
+                <InstagramIcon sx={{ color: "white" }} />
               </Link>
               <Link href="#" underline="hover" sx={{ p: 1 }}>
-                <TwitterIcon />
+                <TwitterIcon sx={{ color: "white" }} />
               </Link>
               <Link href="#" underline="hover" sx={{ p: 1 }}>
-                <LinkedInIcon />
+                <LinkedInIcon sx={{ color: "white" }} />
               </Link>
             </Grid>
             <Grid xs={12} className="footer-links">

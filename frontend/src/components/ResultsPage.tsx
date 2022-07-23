@@ -39,7 +39,7 @@ const ResultsPage: FC = () => {
     <>
       <Grid>
         <Grid>
-          <Typography fontSize={"2em"}>
+          <Typography fontSize={"2em"} fontWeight="bold">
             {gymResults ? gymResults.length : 0}{" "}
             {getGymSpelling(gymResults?.length)}
             found in {city}
