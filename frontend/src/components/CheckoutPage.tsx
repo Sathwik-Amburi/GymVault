@@ -12,7 +12,7 @@ import ColorGenerator from "./widgets/utilities/ColorGenerator";
 import CourseScheduleTable from "./CourseScheduleTable";
 import moment from "moment";
 import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
-import DatePicker from "./widgets/DatePicker"
+import EuropeanDatePicker from "./widgets/EuropeanDatePicker"
 
 const CheckoutPage: FC = () => {
   const { id, returnState } = useParams<{
@@ -246,7 +246,17 @@ const CheckoutPage: FC = () => {
           </> : <>
             <br />
             <Grid container spacing={3}>
-              <Grid item md={3} xs={6}>
+              <Grid item xs={12}>
+                <EuropeanDatePicker 
+                  defaultValue={new Date()}
+                  min={moment().toDate()}
+                  max={moment().add(1, "month").toDate()}
+                  setValue={setSelectedStartDate}
+                  value={selectedStartDate}
+                  validator={validateStartDate}
+                />
+              </Grid>
+              <Grid item xs={6}>
                 <Typography variant="body1" style={{ fontWeight: "bold" }}>
                   Start Date
                 </Typography>
@@ -254,7 +264,7 @@ const CheckoutPage: FC = () => {
                   { selectedStartDate }
                 </Typography>
               </Grid>
-              <Grid item md={3} xs={6}>
+              <Grid item xs={6} style={{textAlign: "right"}}>
                 <Typography variant="body1" style={{ fontWeight: "bold" }}>
                   Duration
                 </Typography>
@@ -267,21 +277,6 @@ const CheckoutPage: FC = () => {
                     "-" 
                   }
                 </Typography>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <DatePicker />
-                <TextField
-                  id="date"
-                  type="date"
-                  defaultValue={new Date().getDate()+"-"+(new Date().getMonth()+1)+"-"+new Date().getFullYear()}
-                  inputProps={{
-                    min: moment().format("YYYY-MM-DD"),
-                    max: moment().add(1, "month").format("YYYY-MM-DD"),
-                  }}
-                  sx={{ width: 220 }}
-                  onChange={(e) => { setSelectedStartDate(moment(e.target.value).format("DD/MM/YYYY")) }}
-                  error={ !validateStartDate(selectedStartDate) }
-                />
               </Grid>
             </Grid>
           </> }
