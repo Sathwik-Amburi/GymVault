@@ -93,12 +93,12 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
                               color="text.secondary"
                               style={{ fontWeight: "bold", textDecoration: 'line-through' }}
                             >
-                              {item.subscriptionPrice} EUR
+                              {item.subscriptionPrice} &euro;
                             </Typography>
                             <Typography
                               variant="body2"
                               style={{ textDecoration: 'none', marginBottom: "10px", color: "red" }}>
-                              {(item.subscriptionPrice * (100 - item.discount) / 100).toFixed(2)} EUR
+                              {(item.subscriptionPrice * (100 - item.discount) / 100).toFixed(2)} &euro;
                             </Typography>
                           </>
                           :
@@ -108,7 +108,7 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
                             color="text.secondary"
                             style={{ fontWeight: "bold" }}
                           >
-                            {item.subscriptionPrice} EUR
+                            {item.subscriptionPrice} &euro;
                           </Typography>
                         }
 
