@@ -6,15 +6,12 @@ import {
   Chip,
   Avatar,
   CardHeader,
-<<<<<<< HEAD
   Box,
   Divider,
-=======
   Card,
   CardContent,
   CardActions,
   CardMedia,
->>>>>>> c4950896ca37efef2b81db155b37cbc5ea0d1db6
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
@@ -202,10 +199,7 @@ const GymViewPage: FC = () => {
 
             <br />
             <br />
-<<<<<<< HEAD
             <Divider />
-=======
->>>>>>> c4950896ca37efef2b81db155b37cbc5ea0d1db6
             <br />
             <Typography variant="h6">Amenities</Typography>
             <Typography variant="body2">
