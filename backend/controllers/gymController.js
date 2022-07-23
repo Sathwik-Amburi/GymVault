@@ -1,5 +1,7 @@
 const gymService = require("../services/gymService");
 const gymModel = require("../database/models/gym");
+const courseModel = require("../database/models/course");
+
 
 const getAllGyms = async (req, res) => {
   try {
@@ -13,24 +15,24 @@ const getAllGyms = async (req, res) => {
 };
 
 const gymByOwnerId = async (req, res) => {
-  if(req.user.role!=="gym_owner"){
-    return res.status(403).json({message: 'forbidden'})
-  } 
+  if (req.user.role !== "gym_owner") {
+    return res.status(403).json({ message: 'forbidden' })
+  }
   // temporary get Progym in Hamburg
   const gym = await gymModel.findById('62c572f1dc7d322846a2a9b2')
-  res.json({gym})
+  res.json({ gym })
 }
 
 const editGymSubscriptionPrice = async (req, res) => {
-  if(req.user.role!=="gym_owner"){
-    return res.status(403).json({message: 'forbidden'})
+  if (req.user.role !== "gym_owner") {
+    return res.status(403).json({ message: 'forbidden' })
   }
-  if(!req.body.subscriptionOffers || req.body.subscriptionOffers === undefined){
-    return res.status(400).json({message: 'invalid request'})
+  if (!req.body.subscriptionOffers || req.body.subscriptionOffers === undefined) {
+    return res.status(400).json({ message: 'invalid request' })
   }
   // temporary get Progym in Hamburg
-  const gym = await gymModel.findByIdAndUpdate('62c572f1dc7d322846a2a9b2', {subscriptionOffers: req.body.subscriptionOffers}, {new: true})
-  res.json({gym})
+  const gym = await gymModel.findByIdAndUpdate('62c572f1dc7d322846a2a9b2', { subscriptionOffers: req.body.subscriptionOffers }, { new: true })
+  res.json({ gym })
 }
 
 const getAllAvailableSearchCities = async (req, res) => {
@@ -63,15 +65,59 @@ const getGym = async (req, res) => {
 };
 
 const addGym = async (req, res) => {
-  try {
-    const gym = new gymModel(req.body);
-    gymService.addGym(gym);
 
-    res.status(200).json({ message: "Gym added successfully", response: gym });
-  } catch (error) {
-    console.log(`Error while adding gym`, error.message);
-    res.status(400).json({ error: "Error while adding gym" });
-  }
+  let { gym, gymcourses, gymoptions } = req.body
+
+  // create gym
+  let { address, city, description, name, phone, website,
+    amenities, gymImages,
+    dayPassSelected, dayPassPrice,
+    gymMonthlySubscriptionSelected, gymMonthlySubscriptionPrice,
+    gymYearlySubscriptionSelected, gymYearlySubscriptionPrice,
+  } = gym
+
+  let subscriptionOffers = []
+  dayPassSelected && dayPassPrice > 0 ? 
+  subscriptionOffers.push({ subscriptionType: 'DAY_PASS', subscriptionPrice: dayPassPrice }) : ''
+  
+  gymMonthlySubscriptionSelected && gymMonthlySubscriptionPrice > 0 ? 
+  subscriptionOffers.push({ subscriptionType: 'MONTHLY_PASS', subscriptionPrice: gymMonthlySubscriptionPrice }) : ''
+  
+  gymYearlySubscriptionSelected && gymYearlySubscriptionPrice > 0 ? 
+  subscriptionOffers.push({ subscriptionType: 'YEARLY_PASS', subscriptionPrice: gymYearlySubscriptionPrice }) : ''
+
+
+  const newGym = new gymModel({
+    name,
+    email: req.user.email,
+    city,
+    phoneNumber: phone,
+    address,
+    description,
+    amenities: amenities.split('\n'),
+    websiteURL: website,
+    subscriptionOffers,
+    optionals: gymoptions ? gymoptions : [],
+    images: gymImages.split('\n'),
+    coordinates: [48.15705493629793, 11.58455211562878]
+  });
+  await newGym.save()
+
+  // create courses
+  gymcourses.forEach(async (course) => {
+    let description = course.description
+    let name = course.name
+    let subscriptionOffers = course.subscriptionOffers.filter((s) => s.subscriptionPrice > 0)
+    let sessions = course.sessions.filter((session) => session.sessionDetails.length > 0)
+    let images = course.images.split('\n')
+    let gymId = newGym._id
+    const newCourse = new courseModel({name, description, images, subscriptionOffers, sessions, gymId})
+    await newCourse.save()
+    console.log({ gymId: newGym._id, description, name, subscriptionOffers, sessions, images })
+  })
+
+  res.status(201).send("success")
+  
 };
 
 const filterGyms = async (req, res) => {
@@ -148,6 +194,7 @@ const addSubscription = async (req, res) => {
       .json({ error: `Error while adding subscription to gym ${gymId}` });
   }
 };
+
 
 module.exports = {
   getAllGyms,

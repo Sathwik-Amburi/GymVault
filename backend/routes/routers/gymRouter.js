@@ -8,7 +8,7 @@ const { validateJwtToken } = require("../../middleware/jwtAuth");
 
 router.get("/get-all-gyms", gymController.getAllGyms);
 router.get("/cities/:type", gymController.getAllAvailableSearchCities);
-router.post("/add-gym", gymController.addGym);
+router.post("/add-gym", validateJwtToken, gymController.addGym);
 router.get("/filter", gymController.filterGyms);
 router.post("/filter/selected-ranges", gymController.filterGymsBySelectedFilters);
 router.post("/subscriptions/add-subscription", gymController.addSubscription);
