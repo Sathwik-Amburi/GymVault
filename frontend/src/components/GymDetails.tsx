@@ -6,6 +6,10 @@ import {
   Chip,
   Avatar,
   CardHeader,
+  Card,
+  CardContent,
+  CardActions,
+  CardMedia,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
@@ -147,25 +151,35 @@ const GymViewPage: FC = () => {
           <Paper style={{ padding: "2em", backgroundColor: "#eee" }}>
             <Typography variant="h6">Courses</Typography>
             <br />
-            {courses.length > 0 ? (
-              courses.map((item) => {
-                return (
-                  <Chip
-                    label={item.name}
-                    style={{ margin: "0.3em" }}
-                    onClick={() => handleCourseChipClick(item._id)}
-                  />
-                );
-              })
-            ) : (
-              <Typography variant="caption" style={{ fontStyle: "italic" }}>
-                This gym does not offer any courses yet
-              </Typography>
-            )}
+            <Grid container spacing={2}>
+              {courses.length > 0 ? (
+                courses.map((item) => {
+                  return (
+                    <Grid item xs={6} onClick={() => handleCourseChipClick(item._id)}>
+                      <Card>
+                        <CardMedia
+                          component="img"
+                          height="140"
+                          image={`${item.images[0]}`}
+                        />
+                        <CardContent>
+                          <Typography gutterBottom variant="h5" component="div">
+                            {item.name}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  );
+                })
+              ) : (
+                <Typography variant="caption" style={{ fontStyle: "italic" }}>
+                  This gym does not offer any courses yet
+                </Typography>
+              )}
+            </Grid>
 
             <br />
             <br />
-            <hr />
             <br />
             <Typography variant="h6">Amenities</Typography>
             <Typography variant="body2">
