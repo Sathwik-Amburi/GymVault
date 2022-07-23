@@ -17,6 +17,7 @@ import PricingList from "./widgets/PricingList";
 import ChonkySpinner from "./widgets/ChonkySpinner";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import StarIcon from "@mui/icons-material/Star";
+import { S3_BASE_URL } from "../config/config";
 
 const moment = require("moment");
 
@@ -63,6 +64,7 @@ const GymViewPage: FC = () => {
     ApiCalls.getReviewsById(fid)
       .then((res) => {
         setReviews(res.data.response);
+        console.log(res.data.response)
       })
       .catch((err) =>
         UnifiedErrorHandler.handle(
@@ -212,7 +214,7 @@ const GymViewPage: FC = () => {
                   elevation={3}
                 >
                   <CardHeader
-                    avatar={<Avatar src="todo" />}
+                    avatar={<Avatar src={`${S3_BASE_URL}/${review.userId.profilePicture}`} />}
                     title={review.username}
                     subheader={moment(review.dateAdded).format("MMM Do YYYY")}
                   />

@@ -52,6 +52,7 @@ const LoginPage: FC = () => {
       .then((res) => {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("role", res.data.role);
+        localStorage.setItem("profilepicture",jwt_decode<any>(String(res.data.token)).profilePicture)
         
         const { profilePicture } = jwt_decode<payload>(res.data.token)
         dispatch(setProfilePicture({ url: String(profilePicture)}))
@@ -88,6 +89,7 @@ const LoginPage: FC = () => {
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("role", "user");
+        localStorage.setItem("profilepicture",jwt_decode<any>(String(response.data.token)).profilePicture)
 
         const { profilePicture } = jwt_decode<payload>(response.data.token)
         dispatch(setProfilePicture({ url: String(profilePicture) }))

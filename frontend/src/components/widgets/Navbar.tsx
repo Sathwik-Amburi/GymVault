@@ -17,6 +17,7 @@ const Navbar: FC = () => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.authentication.isAuthenticated
   );
+  // alert(isAuthenticated)
   const role = useSelector((state: RootState) => state.authentication.role);
   let url = useSelector((state: RootState) => state.profilePicture.url)
   const profilePicture = url? `${S3_BASE_URL}/${url}` : userIcon
