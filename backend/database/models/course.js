@@ -49,6 +49,11 @@ const CourseSchema = new mongoose.Schema({
     ref: "Gym",
     required: true,
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   name: {
     type: String,
     required: true,
