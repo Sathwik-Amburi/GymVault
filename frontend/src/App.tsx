@@ -31,7 +31,7 @@ import StripeConnectCallback from "./components/stripe/StripeConnectCallback";
 import StripeGymCallback from "./components/stripe/StripeGymCheckoutCallback";
 import Footer from "./components/Footer";
 import GymSignUpPage from "./components/GymSignUpPage";
-import {Grid} from "@mui/material";
+import { Grid } from "@mui/material";
 import ContactUs from "./components/ContactUs";
 
 const THEME = createTheme({
@@ -41,6 +41,17 @@ const THEME = createTheme({
     fontWeightLight: 300,
     fontWeightRegular: 400,
     fontWeightMedium: 500,
+  },
+  palette: {
+    primary: {
+      main: "#D7053E",
+    },
+    secondary: {
+      main: "#519DD9",
+    },
+    background: {
+      default: "#EDEDED",
+    },
   },
 });
 
@@ -71,73 +82,102 @@ const App: FC = () => {
               </PrivateRoute>
             }
           />
-          { /* All other routes */}
-          <Route path="/*" element={(<>
-            <Container maxWidth="lg" style={{ padding: "3em" }}>
-              <Routes>
-                <Route path="/" element={<FrontPage />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="/gym/add" element={<CreateGym />} />
-                <Route path="/gym/:id" element={<GymViewPage />} />
-                <Route path="/course/:id" element={<CourseViewPage />} />
-                <Route path="/user/signup" element={<SignUpPage />} />
-                <Route
-                  path="/user/confirmation/:email"
-                  element={<EmailConfirmationPage />}
-                />
-                <Route
-                  path="/user/email-verified"
-                  element={<EmailConfirmedPage />}
-                />
-                <Route path="/user/login" element={<LoginPage />} />
-                <Route
-                  path="/results/courses/search"
-                  element={<CourseResultsPage />}
-                />
+          {/* All other routes */}
+          <Route
+            path="/*"
+            element={
+              <>
+                <Container maxWidth="lg" style={{ padding: "3em" }}>
+                  <Routes>
+                    <Route path="/" element={<FrontPage />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/gym/add" element={<CreateGym />} />
+                    <Route path="/gym/:id" element={<GymViewPage />} />
+                    <Route path="/course/:id" element={<CourseViewPage />} />
+                    <Route path="/user/signup" element={<SignUpPage />} />
+                    <Route
+                      path="/user/confirmation/:email"
+                      element={<EmailConfirmationPage />}
+                    />
+                    <Route
+                      path="/user/email-verified"
+                      element={<EmailConfirmedPage />}
+                    />
+                    <Route path="/user/login" element={<LoginPage />} />
+                    <Route
+                      path="/results/courses/search"
+                      element={<CourseResultsPage />}
+                    />
 
-                <Route path="/results/gyms/search" element={<ResultsPage />} />
-                <Route path="/buy/:id" element={<PrivateRoute><CheckoutPage /></PrivateRoute>} />
-                <Route path="/buy/:id/:returnState" element={<PrivateRoute><CheckoutPage /></PrivateRoute>} />
-                <Route
-                  path="/user/profile"
-                  element={
-                    <PrivateRoute>
-                      <UserProfile />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/stripe/connect/callback"
-                  element={
-                    <RoleWrapper allowedRoles={["gym_owner"]}>
-                      <StripeConnectCallback />
-                    </RoleWrapper>
-                  }
-                />
+                    <Route
+                      path="/results/gyms/search"
+                      element={<ResultsPage />}
+                    />
+                    <Route
+                      path="/buy/:id"
+                      element={
+                        <PrivateRoute>
+                          <CheckoutPage />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/buy/:id/:returnState"
+                      element={
+                        <PrivateRoute>
+                          <CheckoutPage />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/user/profile"
+                      element={
+                        <PrivateRoute>
+                          <UserProfile />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/stripe/connect/callback"
+                      element={
+                        <RoleWrapper allowedRoles={["gym_owner"]}>
+                          <StripeConnectCallback />
+                        </RoleWrapper>
+                      }
+                    />
 
-                <Route
-                  path="/stripe/checkout/callback/gym/:gym_id"
-                  element={<PrivateRoute><StripeGymCallback /></PrivateRoute>}
-                />
+                    <Route
+                      path="/stripe/checkout/callback/gym/:gym_id"
+                      element={
+                        <PrivateRoute>
+                          <StripeGymCallback />
+                        </PrivateRoute>
+                      }
+                    />
 
-                <Route
-                  path="/user/owner-profile"
-                  element={
-                    <RoleWrapper allowedRoles={["gym_owner"]}>
-                      <OwnerProfile />
-                    </RoleWrapper>
-                  }
-                />
+                    <Route
+                      path="/user/owner-profile"
+                      element={
+                        <RoleWrapper allowedRoles={["gym_owner"]}>
+                          <OwnerProfile />
+                        </RoleWrapper>
+                      }
+                    />
 
-                <Route path="/user/unauthorized" element={<NotAuthorizedPage />} />
-                <Route path="/*" element={<PageNotFound />} />
-                <Route path="/gym-signup" element={<GymSignUpPage />} />
-                <Route path="/contact-us" element={<ContactUs />} />
-              </Routes>
-            </Container>
-          </>)} />
+                    <Route
+                      path="/user/unauthorized"
+                      element={<NotAuthorizedPage />}
+                    />
+                    <Route path="/*" element={<PageNotFound />} />
+                    <Route path="/gym-signup" element={<GymSignUpPage />} />
+                    <Route path="/contact-us" element={<ContactUs />} />
+                  </Routes>
+                </Container>
+              </>
+            }
+          />
         </Routes>
-          <Footer />
+        <Footer />
       </ThemeProvider>
     </BrowserRouter>
   );

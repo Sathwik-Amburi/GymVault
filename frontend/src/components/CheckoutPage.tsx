@@ -11,6 +11,7 @@ import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import ColorGenerator from "./widgets/utilities/ColorGenerator";
 import CourseScheduleTable from "./CourseScheduleTable";
 import moment from "moment";
+import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
 
 
 const CheckoutPage: FC = () => {
@@ -44,9 +45,10 @@ const CheckoutPage: FC = () => {
       if(subscriptionOffers.length > 0)
         items.push({
           _id: "1",
-          name: "Daily Entrance",
+          name: toCleanSubscriptionTypeFormat(subscriptionOffers[0].subscriptionType),
           description: "Fixed duration, base-tier ticket",
-          price: subscriptionOffers[0].subscriptionPrice,
+          price: +(subscriptionOffers[0].subscriptionPrice * (100-subscriptionOffers[0].discount)/100).toFixed(2)
+          ,
           bgColor: "#030",
           fgColor: "#fff"
         } as PurchaseOption);
@@ -54,9 +56,9 @@ const CheckoutPage: FC = () => {
       if(subscriptionOffers.length > 1)
         items.push({
           _id: "2",
-          name: "Monthly Ticket",
+          name: toCleanSubscriptionTypeFormat(subscriptionOffers[1].subscriptionType),
           description: "Fixed duration, base-tier ticket",
-          price: subscriptionOffers[1].subscriptionPrice,
+          price:  +(subscriptionOffers[1].subscriptionPrice * (100-subscriptionOffers[1].discount)/100).toFixed(2),
           bgColor: "#060",
           fgColor: "#fff"
         } as PurchaseOption);
@@ -64,9 +66,9 @@ const CheckoutPage: FC = () => {
       if(subscriptionOffers.length > 2)
         items.push({
           _id: "3",
-          name: "Yearly Subscription",
+          name: toCleanSubscriptionTypeFormat(subscriptionOffers[2].subscriptionType),
           description: "Fixed duration, base-tier ticket",
-          price: subscriptionOffers[2].subscriptionPrice,
+          price:  +(subscriptionOffers[2].subscriptionPrice * (100-subscriptionOffers[2].discount)/100).toFixed(2),
           bgColor: "#090",
           fgColor: "#fff"
         } as PurchaseOption);
