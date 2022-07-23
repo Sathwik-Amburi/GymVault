@@ -56,7 +56,6 @@ export interface Item {
   address: string;
   description: string;
   optionals: PurchaseOption[];
-  subscriptionOffers: SubscriptionOffers[];
 
   fgColor: string;
   bgColor: string;
