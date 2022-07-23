@@ -12,7 +12,7 @@ import ColorGenerator from "./widgets/utilities/ColorGenerator";
 import CourseScheduleTable from "./CourseScheduleTable";
 import moment from "moment";
 import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
-
+import DatePicker from "./widgets/DatePicker"
 
 const CheckoutPage: FC = () => {
   const { id, returnState } = useParams<{
@@ -269,6 +269,7 @@ const CheckoutPage: FC = () => {
                 </Typography>
               </Grid>
               <Grid item md={6} xs={12}>
+                <DatePicker />
                 <TextField
                   id="date"
                   type="date"
