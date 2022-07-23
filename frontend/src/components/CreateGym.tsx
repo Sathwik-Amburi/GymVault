@@ -40,6 +40,8 @@ import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import axios from 'axios';
+import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from "react-leaflet";
+import { marker } from "leaflet";
 
 
 interface NewCourseState {
@@ -74,6 +76,7 @@ const courseModalStyle = {
 };
 
 const CreateGym: FC = () => {
+  const [position, setPosition] = useState<[number, number]>([0,0])
   const [profile, setProfile] = useState<UserProfileDetails>();
   const [openOptionModal, setOpenOptionModal] = useState(false);
   const handleOpenOptionModal = () => setOpenOptionModal(true);
@@ -113,6 +116,18 @@ const CreateGym: FC = () => {
         UnifiedErrorHandler.handle(err, "Cannot get user profile")
       );
   }, [token]);
+
+  const Markers = () => {
+    const map = useMapEvents({
+      click(e) {
+        setPosition([e.latlng.lat, e.latlng.lng])
+      },
+    })
+    return (
+      position[0]!=0 && position[1]!=0? <Marker position={position} /> : <></>
+    )
+
+  }
 
   const gymValidationSchema = yup.object({
     name: yup.string().required("Name is required"),
@@ -171,13 +186,15 @@ const CreateGym: FC = () => {
       const gym = values
       const gymoptions: any = options
       const gymcourses: any = courses
+      const gymlocation = position
 
-      const data = { gym, gymcourses, gymoptions }
+      const data = { gym, gymcourses, gymoptions, gymlocation }
       const headers = { "x-access-token": String(localStorage.getItem('token')) }
       await axios.post(`gyms/add-gym`, data, { headers })
       console.log(gym);
       console.log(gymoptions);
       console.log(gymcourses);
+      console.log(gymlocation)
     },
   });
 
@@ -1091,6 +1108,34 @@ const CreateGym: FC = () => {
             </Button>
           </div>
         </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h6" style={{ fontWeight: "bold" }}>
+            Location
+          </Typography>
+          <Typography variant="body2">
+            Place a marker on the map at your gym's location
+          </Typography>
+          <hr className="mini-hr" />
+        </Grid>
+        <Grid item md={6} xs={12}>
+          <MapContainer center={[51.505, 10.4515]} zoom={5.5} scrollWheelZoom={false}>
+            <Markers />
+
+
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+          </MapContainer>
+        </Grid>
+
+
+
+
+
+
+
         <Grid item xs={12} style={{ marginTop: "5em" }} />
         <Grid item md={9} xs={12}>
           <Typography variant="h6" style={{ fontWeight: "bold" }}>
