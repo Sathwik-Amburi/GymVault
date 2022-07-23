@@ -42,6 +42,7 @@ function UserCard(props: any) {
         await axios.put(url, file, { headers })
         setTimeout(() => {
             setSrcImg(src)
+            localStorage.setItem('profilepicture', key)
             dispatch(setProfilePicture({url: key}))
             setLoading(false)
         }, 2000)
