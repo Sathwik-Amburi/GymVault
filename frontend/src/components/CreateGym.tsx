@@ -214,14 +214,17 @@ const CreateGym: FC = () => {
           {
             subscriptionType: SubscriptionTypes.SESSION_PASS,
             subscriptionPrice: values.courseSessionTicketPrice,
+            discount:0
           },
           {
             subscriptionType: SubscriptionTypes.MONTHLY_PASS,
             subscriptionPrice: values.monthlySubscriptionPrice,
+            discount:0
           },
           {
             subscriptionType: SubscriptionTypes.YEARLY_PASS,
             subscriptionPrice: values.yearlySubscriptionPrice,
+            discount:0
           },
         ],
         images: values.courseImages,
