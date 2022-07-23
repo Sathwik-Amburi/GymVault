@@ -66,7 +66,7 @@ const getGym = async (req, res) => {
 
 const addGym = async (req, res) => {
 
-  let { gym, gymcourses, gymoptions } = req.body
+  let { gym, gymcourses, gymoptions, gymlocation } = req.body
 
   // create gym
   let { address, city, description, name, phone, website,
@@ -77,14 +77,14 @@ const addGym = async (req, res) => {
   } = gym
 
   let subscriptionOffers = []
-  dayPassSelected && dayPassPrice > 0 ? 
-  subscriptionOffers.push({ subscriptionType: 'DAY_PASS', subscriptionPrice: dayPassPrice }) : ''
-  
-  gymMonthlySubscriptionSelected && gymMonthlySubscriptionPrice > 0 ? 
-  subscriptionOffers.push({ subscriptionType: 'MONTHLY_PASS', subscriptionPrice: gymMonthlySubscriptionPrice }) : ''
-  
-  gymYearlySubscriptionSelected && gymYearlySubscriptionPrice > 0 ? 
-  subscriptionOffers.push({ subscriptionType: 'YEARLY_PASS', subscriptionPrice: gymYearlySubscriptionPrice }) : ''
+  dayPassSelected && dayPassPrice > 0 ?
+    subscriptionOffers.push({ subscriptionType: 'DAY_PASS', subscriptionPrice: dayPassPrice }) : ''
+
+  gymMonthlySubscriptionSelected && gymMonthlySubscriptionPrice > 0 ?
+    subscriptionOffers.push({ subscriptionType: 'MONTHLY_PASS', subscriptionPrice: gymMonthlySubscriptionPrice }) : ''
+
+  gymYearlySubscriptionSelected && gymYearlySubscriptionPrice > 0 ?
+    subscriptionOffers.push({ subscriptionType: 'YEARLY_PASS', subscriptionPrice: gymYearlySubscriptionPrice }) : ''
 
 
   const newGym = new gymModel({
@@ -99,25 +99,27 @@ const addGym = async (req, res) => {
     subscriptionOffers,
     optionals: gymoptions ? gymoptions : [],
     images: gymImages.split('\n'),
-    coordinates: [48.15705493629793, 11.58455211562878]
+    coordinates: gymlocation,
+    userId: req.user.id
   });
   await newGym.save()
 
   // create courses
-  gymcourses.forEach(async (course) => {
-    let description = course.description
-    let name = course.name
-    let subscriptionOffers = course.subscriptionOffers.filter((s) => s.subscriptionPrice > 0)
-    let sessions = course.sessions.filter((session) => session.sessionDetails.length > 0)
-    let images = course.images.split('\n')
-    let gymId = newGym._id
-    const newCourse = new courseModel({name, description, images, subscriptionOffers, sessions, gymId})
-    await newCourse.save()
-    console.log({ gymId: newGym._id, description, name, subscriptionOffers, sessions, images })
-  })
+  if (gymcourses.length > 0) {
+    gymcourses.forEach(async (course) => {
+      let description = course.description
+      let name = course.name
+      let subscriptionOffers = course.subscriptionOffers.filter((s) => s.subscriptionPrice > 0)
+      let sessions = course.sessions.filter((session) => session.sessionDetails.length > 0)
+      let images = course.images.split('\n')
+      let gymId = newGym._id
+      const newCourse = new courseModel({ name, description, images, subscriptionOffers, sessions, gymId })
+      await newCourse.save()
+    })
+  }
 
   res.status(201).send("success")
-  
+
 };
 
 const filterGyms = async (req, res) => {
