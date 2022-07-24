@@ -59,7 +59,9 @@ class SubscriptionService {
         // parse baseType - TODO: is this correct? (aka, is baseType reliably mapped?)
         let type =  baseType == 1 ? "DAY_PASS" :
                     baseType == 2 ? "MONTHLY_PASS" :
-                    baseType == 3 ? "YEARLY_PASS" : "";
+                    baseType == 3 ? "YEARLY_PASS" :
+                    baseType == 4 ? "SESSION_PASS" :
+                    "";
         const offset = 
                     (type == "DAY_PASS")   ? 1 :
                     (type == "MONTHLY_PASS") ? 30 :
@@ -95,7 +97,7 @@ class SubscriptionService {
             // it's a course - get the real start date from the session data
 
             // if it's a single session ticket, it is only valid in that timeframe
-            if(baseType == 1) {
+            if(baseType == 4) {
                 let found = false;
                 entity.sessions.forEach(session => {
                     session.sessionDetails.forEach(sessionDetail => {

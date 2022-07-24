@@ -2,6 +2,7 @@ import { Table, TableBody, TableRow, TableCell, Typography, Button, tableCellCla
 import axios from "axios";
 import { FC, useState } from "react";
 import { useParams } from 'react-router-dom';
+import UnifiedErrorHandler from "./utilities/UnifiedErrorHandler";
 
 
 export interface CartItem {
@@ -28,7 +29,7 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
 
   const stripeHandlePayment = async () => {
     // S: indicates that it's a session identifier, the backend will take care of that
-    if(props.startDate.substring(0, 2) != "S:" && !props.dateValidator(props.startDate)) {
+    if(props.startDate.substring(0, 2) !== "S:" && !props.dateValidator(props.startDate)) {
       alert("Please select a valid date");
       return;
     }
@@ -39,7 +40,12 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
     let startDate = props.startDate;
     const headers = { "x-access-token": String(localStorage.getItem('token')) }
     let response = await axios.post('/stripe/get-stripe-session', {id, baseItem, startDate, options}, { headers })
-    window.location.href = response.data.link
+    if(response.status === 200) {
+      let session = response.data;
+      window.location.href = session.link;
+    } else {
+      UnifiedErrorHandler.handle(response.request, "Error while creating Stripe session");
+    }
   }
 
   return (
@@ -69,7 +75,7 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
         <TableRow>
           <TableCell>
             <Typography variant="h5" style={{ fontWeight: "bold" }}>
-              € {props.cart.reduce((acc, curr) => acc + curr.price, 0).toFixed(2)}
+              € todo
             </Typography>
           </TableCell>
           <TableCell>

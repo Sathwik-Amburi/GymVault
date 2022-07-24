@@ -48,11 +48,11 @@ const CheckoutPage: FC = () => {
           _id: so.subscriptionType === SubscriptionTypes.DAY_PASS ? "1" :
                so.subscriptionType === SubscriptionTypes.MONTHLY_PASS ? "2" :
                so.subscriptionType === SubscriptionTypes.YEARLY_PASS ? "3" :
+               so.subscriptionType === SubscriptionTypes.SESSION_PASS ? "4" :
                "?",
           name: toCleanSubscriptionTypeFormat(so.subscriptionType),
           description: "Fixed duration, base-tier ticket",
-          price: +(so.subscriptionPrice * (100-so.discount)/100).toFixed(2)
-          ,
+          price: so.discount !== undefined ? +(so.subscriptionPrice * (100-so.discount)/100).toFixed(2) : so.subscriptionPrice.toFixed(2),
           bgColor: "#030",
           fgColor: "#fff"
         } as PurchaseOption);
@@ -71,7 +71,7 @@ const CheckoutPage: FC = () => {
       address: gym.address,
       description: gym.description,
       price: -1, // TODO: this "price" here can be dropped from the schema i think?
-      optionals: gym.optionals == undefined ? [] : gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
+      optionals: gym.optionals === undefined ? [] : gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
       subscriptionOffers: gym.subscriptionOffers,
 
       fgColor: "",
@@ -87,7 +87,7 @@ const CheckoutPage: FC = () => {
       type: "course",
       address: gym.address,
       description: course.description,
-      optionals: gym.optionals == undefined ? [] : gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
+      optionals: gym.optionals === undefined ? [] : gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
 
       fgColor: "",
       bgColor: "",
@@ -113,13 +113,12 @@ const CheckoutPage: FC = () => {
     // TODO: rewrite the other way around (get the gym first, then the course if it exists)
     ApiCalls.getCourse(id!)
       .then((res) => {
-        setSubscriptionBases(res.data.response.subscriptionOffers);
         let courseResponse = res.data.response;
         ApiCalls.getGym(res.data.response.gymId)
-          .then((res) => {
-            setGym(res.data.response);
-            setCourse(courseResponse, res.data.response);
-            setSubscriptionBases(res.data.response.subscriptionOffers);
+          .then((gymRes) => {
+            setGym(gymRes.data.response);
+            setCourse(courseResponse, gymRes.data.response);
+            setSubscriptionBases(courseResponse.subscriptionOffers);
           }).catch((err) => UnifiedErrorHandler.handle(err, "Could not load gym for course"));
 
         setLoading(false);
@@ -228,7 +227,7 @@ const CheckoutPage: FC = () => {
           <hr className="mini-hr" />
           { (item.type == "course" 
                   && cart.length > 0
-                  && cart[0].name == toCleanSubscriptionTypeFormat(SubscriptionTypes.DAY_PASS)) ? 
+                  && cart[0].name == toCleanSubscriptionTypeFormat(SubscriptionTypes.SESSION_PASS)) ? 
           <>
             <CourseScheduleTable courseSessions={ courseSessions } selected={selectedSession} setSelected={setSelectedSession} />
           </> : <>
@@ -257,9 +256,10 @@ const CheckoutPage: FC = () => {
                   Duration
                 </Typography>
                 <Typography variant="body1">
-                  { cart == undefined ? "-" : 
-                    cart.length == 0 ? "-" :
+                  { cart === undefined ? "-" : 
+                    cart.length === 0 ? "-" :
                     cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.DAY_PASS) ? "One day" :
+                    cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.SESSION_PASS) ? "One session" :
                     cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.MONTHLY_PASS) ? "30 days" :
                     cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.YEARLY_PASS) ? "365 days" :
                     "-" 
@@ -278,7 +278,10 @@ const CheckoutPage: FC = () => {
           <hr className="mini-hr" />
           <PurchaseCart
             baseId={id!}
-            startDate={selectedSession && cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.DAY_PASS) ? selectedSession : selectedStartDate }
+            startDate={selectedSession 
+                && cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.SESSION_PASS)
+                  ? selectedSession : selectedStartDate 
+            }
             dateValidator={validateStartDate}
             cart={cart}
             setCart={setCart}
