@@ -15,7 +15,7 @@ const PageNotFound: FC = () => {
         //         <a href="/">Back to homepage</a>
         //     </div>
         // </div>
-        <>
+        <div style={{marginTop:'13vh'}}>
             <a target="_blank"
                href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwj1m7vB5oH5AhWER3wKHQhXDa4QFnoECCAQAQ&url=https%3A%2F%2Fwww.enationalelectronics.com%2F&usg=AOvVaw0CoGpfiGKRton9yE4Q8_Hv">
                 <div className="container">
@@ -661,7 +661,7 @@ const PageNotFound: FC = () => {
             <Typography variant = 'h3' align='center'>
                 Page not found!
             </Typography>
-        </>
+        </div>
     );
 }
 export default PageNotFound;
