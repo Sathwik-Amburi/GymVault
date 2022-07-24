@@ -112,8 +112,8 @@ class SubscriptionService {
                             if(baseType == 1) {
                                 console.log("Single session ticket, setting validity to session time only");
                                 let sessionTime = sessionDetail.sessionTime.split(" - ");
-                                expirationDate = moment(purchaseDate.format("DD/MM/YYYY") + " " + sessionTime[1], "HH:mm").toDate();
-                                purchaseDate = moment(purchaseDate.format("DD/MM/YYYY") + " " + sessionTime[0], "HH:mm").toDate();
+                                expirationDate = moment(purchaseDate.format("YYYY-MM-DD") + " " + sessionTime[1], "HH:mm").toDate();
+                                purchaseDate = moment(purchaseDate.format("YYYY-MM-DD") + " " + sessionTime[0], "HH:mm").toDate();
                             } else {
                                 purchaseDate = purchaseDate.toDate();
                                 // it's a month/yearly ticket, so it starts today, but not at the session type
@@ -129,7 +129,7 @@ class SubscriptionService {
             entity = await gymService.getGym(courseOrGymId);
             if(entity != null) {
                 // it's a gym; then get the start date & apply it
-                purchaseDate = moment(startDateString).startOf('day').toDate();
+                purchaseDate = moment(startDateString, "DD/MM/YYYY").startOf('day').toDate();
                 expirationDate.setDate(purchaseDate.getDate() + offset);
             } else {
                 console.log("Neither gym nor course!");
