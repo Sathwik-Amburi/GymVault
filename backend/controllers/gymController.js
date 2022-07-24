@@ -18,8 +18,7 @@ const gymByOwnerId = async (req, res) => {
   if (req.user.role !== "gym_owner") {
     return res.status(403).json({ message: 'forbidden' })
   }
-  // temporary get Progym in Hamburg
-  const gym = await gymModel.findById('62c572f1dc7d322846a2a9b2')
+  const gym = await gymModel.findOne({userId: req.user.id})
   res.json({ gym })
 }
 
@@ -30,8 +29,7 @@ const editGymSubscriptionPrice = async (req, res) => {
   if (!req.body.subscriptionOffers || req.body.subscriptionOffers === undefined) {
     return res.status(400).json({ message: 'invalid request' })
   }
-  // temporary get Progym in Hamburg
-  const gym = await gymModel.findByIdAndUpdate('62c572f1dc7d322846a2a9b2', { subscriptionOffers: req.body.subscriptionOffers }, { new: true })
+  const gym = await gymModel.findOneAndUpdate({ userId: req.user.id }, { subscriptionOffers: req.body.subscriptionOffers }, { new: true })
   res.json({ gym })
 }
 
@@ -113,7 +111,7 @@ const addGym = async (req, res) => {
       let sessions = course.sessions.filter((session) => session.sessionDetails.length > 0)
       let images = course.images.split('\n')
       let gymId = newGym._id
-      const newCourse = new courseModel({ name, description, images, subscriptionOffers, sessions, gymId, userId: req.user.id})
+      const newCourse = new courseModel({ name, description, images, subscriptionOffers, sessions, gymId, userId: req.user.id })
       await newCourse.save()
     })
   }
