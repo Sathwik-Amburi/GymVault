@@ -80,6 +80,7 @@ const CreateGym: FC = () => {
   const [mapCity, setMapCity] = useState<string>("")
   const [cityCoordinates, setCityCoordinates] = useState<any>([51.505, 10.4515])
   const [zoom, setZoom] = useState<number>(6)
+  const [chosen, setChosen] = useState<boolean>(false)
 
   const [profile, setProfile] = useState<UserProfileDetails>();
   const [openOptionModal, setOpenOptionModal] = useState(false);
@@ -125,6 +126,7 @@ const CreateGym: FC = () => {
     const map = useMapEvents({
       click(e) {
         setPosition([e.latlng.lat, e.latlng.lng])
+        setChosen(true)
       },
     })
     return (
@@ -207,7 +209,7 @@ const CreateGym: FC = () => {
       const gym = values
       const gymoptions: any = options
       const gymcourses: any = courses
-      const gymlocation = position
+      const gymlocation = chosen ? position: [999, 999]
       const data = { gym, gymcourses, gymoptions, gymlocation }
       const headers = { "x-access-token": String(localStorage.getItem('token')) }
       await axios.post(`gyms/add-gym`, data, { headers })

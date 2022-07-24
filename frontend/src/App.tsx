@@ -91,7 +91,7 @@ const App: FC = () => {
                   <Routes>
                     <Route path="/" element={<FrontPage />} />
                     <Route path="/terms" element={<Terms />} />
-                    <Route path="/gym/add" element={<CreateGym />} />
+                    {/* <Route path="/gym/add" element={<CreateGym />} /> */}
                     <Route path="/gym/:id" element={<GymViewPage />} />
                     <Route path="/course/:id" element={<CourseViewPage />} />
                     <Route path="/user/signup" element={<SignUpPage />} />
@@ -142,6 +142,15 @@ const App: FC = () => {
                       element={
                         <RoleWrapper allowedRoles={["gym_owner"]}>
                           <StripeConnectCallback />
+                        </RoleWrapper>
+                      }
+                    />
+
+                    <Route
+                      path="/gym/add"
+                      element={
+                        <RoleWrapper allowedRoles={["gym_owner"]}>
+                          <CreateGym />
                         </RoleWrapper>
                       }
                     />
