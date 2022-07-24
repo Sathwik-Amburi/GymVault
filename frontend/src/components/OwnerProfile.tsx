@@ -8,12 +8,15 @@ import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 
 const OwnerProfile: FC = () => {
   const [profile, setProfile] = useState<UserProfileDetails>();
+  const [loaded, setLoaded] = useState<boolean>(false)
   const token = localStorage.getItem("token");
 
   useEffect(() => {
+    setLoaded(false)
     ApiCalls.getUserProfile(token)
       .then((res) => {
         setProfile(res.data);
+        setLoaded(true)
       }).catch((err) => UnifiedErrorHandler.handle(err, "Cannot get user profile"));
   }, [token]);
 
@@ -24,8 +27,7 @@ const OwnerProfile: FC = () => {
       <div>
         Welcome to your dashboard, {profile?.firstName} {profile?.lastName}
       </div>
-
-      {profile?.payouts_enabled ? <StripeConnected/> : <StripeOnboard/>}
+      {loaded ? (profile?.payouts_enabled ? <StripeConnected/> : <StripeOnboard/>): ''}
 
       
 
