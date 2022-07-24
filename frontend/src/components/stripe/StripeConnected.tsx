@@ -51,10 +51,10 @@ const StripeConnect: FC = () => {
                         <div style={{ fontSize: "12px", margin: "11px 3px", color: "grey" }}> <i>You will be redirected to your Stripe Connect dashboard</i> </div>
                     </div>
 
-                    <div style={{ textAlign: "center", margin: "15px" }}>
+                    {/* <div style={{ textAlign: "center", margin: "15px" }}>
                         <Button onClick={() => navigate('/gym/add')} variant="contained"> <i style={{ fontSize: '27px', padding: "4px" }} className="fa-solid fa-dumbbell" aria-hidden="true"></i> Gym Settings</Button>
                         <div style={{ fontSize: "12px", margin: "11px 3px", color: "grey" }}> <i>You can view your gym's detail here</i> </div>
-                    </div>
+                    </div> */}
 
                     <div style={{ textAlign: "center", margin: "15px" }}>
                         <DiscountsModal/>
