@@ -195,14 +195,10 @@ const getPayee = async (item_id) => {
     if (gym) {
         return gym.userId.stripe_account_id
     }
-    else if (course) {
+    else {
         return course.userId.stripe_account_id
     }
-    else{
-        const gym_owner = await userModel.find({ role: "gym_owner" }).limit(1).exec();
-        const stripe_account_id = gym_owner[0].stripe_account_id
-        return stripe_account_id
-    }
+
 }
 
 
