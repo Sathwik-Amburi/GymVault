@@ -16,8 +16,10 @@ const PurchaseGrid: FC<GridProps> = (props: GridProps) => {
   const [selectedOption, setSelectedOption] = useState<string[]>([]);
 
   useEffect(() => {
-    /*TODO */
-  }, []);
+    if (props.cart.length > 0) {
+      setSelected(props.cart[0]._id);
+    }
+  }, [props.bases]);
   let defaultBg = "#999";
 
   return (

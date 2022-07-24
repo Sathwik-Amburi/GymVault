@@ -75,7 +75,9 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
         <TableRow>
           <TableCell>
             <Typography variant="h5" style={{ fontWeight: "bold" }}>
-              € todo
+              € {props.cart.reduce((acc, curr) => 
+                      acc + curr.price, 0).toFixed(2)
+                }
             </Typography>
           </TableCell>
           <TableCell>
