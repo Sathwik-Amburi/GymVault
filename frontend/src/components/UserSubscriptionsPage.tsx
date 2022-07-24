@@ -90,12 +90,10 @@ const UserSubscriptionsPage: FC = () => {
             Below you can see your subscription. Click on it to copy your access identifier, and print the tickets if needed:
           </Typography>
         </>) : ( <>
-          <Typography variant="h6" style={{fontWeight: "bold", color: "#555"}}>
-          Active Subscriptions
+          <Typography variant = 'h3' style={{fontWeight: "bold", color: "#555"}}>
+            My Tickets
           </Typography>
-          <Typography style={{ color: "#555", marginBottom: "3em" }}>
-            Below you can see your subscriptions. Click on them to copy your access identifier, and print the tickets if needed:
-          </Typography>
+          <hr />
         </>)}
 
 
@@ -104,17 +102,60 @@ const UserSubscriptionsPage: FC = () => {
           { (activeItems.length > 0) ?
             activeItems.map((item) => {
               return (
-                <><SubscriptionEntry item={item[0]} subscription={item[1]} expired={false} user={user}  /></>
+                <>
+                  <Typography variant="h6" style={{fontWeight: "bold", color: "#555"}}>
+                    Active Subscriptions
+                  </Typography>
+                  <Typography style={{ color: "#555", marginBottom: "3em" }}>
+                    Below you can see your subscriptions. Click on them to copy your access identifier, and print the tickets if needed:
+                  </Typography>
+
+                  <SubscriptionEntry item={item[0]} subscription={item[1]} expired={false} user={user}  /></>
               );
             }) : ( <>
               <Container maxWidth="lg" style={{ padding: "2em", textAlign: "center" }}>
-                <Typography variant="h5" style={{marginTop: "6em"}}>
-                  No active subscriptions :( 
-                </Typography>
+                <div className="wrapper">
+                  <div className="preloader">
+                    <svg className="cart" role="img" aria-label="Shopping cart line animation" viewBox="0 0 128 128"
+                         width="128px" height="128px" xmlns="http://www.w3.org/2000/svg">
+                      <g fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="8">
+                        <g className="cart__track" stroke="hsla(0,10%,10%,0.1)">
+                          <polyline points="4,4 21,4 26,22 124,22 112,64 35,64 39,80 106,80"/>
+                          <circle cx="43" cy="111" r="13"/>
+                          <circle cx="102" cy="111" r="13"/>
+                        </g>
+                        <g className="cart__lines" stroke="currentColor">
+                          <polyline className="cart__top" points="4,4 21,4 26,22 124,22 112,64 35,64 39,80 106,80"
+                                    strokeDasharray="338 338" strokeDashoffset="-338"/>
+                          <g className="cart__wheel1" transform="rotate(-90,43,111)">
+                            <circle className="cart__wheel-stroke" cx="43" cy="111" r="13"
+                                    strokeDasharray="81.68 81.68" strokeDashoffset="81.68"/>
+                          </g>
+                          <g className="cart__wheel2" transform="rotate(90,102,111)">
+                            <circle className="cart__wheel-stroke" cx="102" cy="111" r="13"
+                                    strokeDasharray="81.68 81.68" strokeDashoffset="81.68"/>
+                          </g>
+                        </g>
+                      </g>
+                    </svg>
+                  </div>
+                  <div className="typing-demo">
+                    No Active Subscriptions.😢
+                  </div>
+                </div>
                 <br />
-                <Button variant="outlined" color="primary" style={{marginLeft: "1em"}} href="/">
+                <div className="button-box">
+                <a href="/">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
                   Get one?
-                </Button>
+                </a>
+                </div>
+                {/*<Button className = "get-one" variant="outlined" color="primary" style={{marginLeft: "1em"}} href="/">*/}
+
+                {/*</Button>*/}
               </Container>
             </> )
           }
