@@ -193,12 +193,21 @@ const getPayee = async (item_id) => {
     let gym = await gymModel.findOne({ _id: item_id }).populate("userId")
     let course = await courseModel.findOne({ _id: item_id }).populate("userId")
     if (gym) {
-        return gym.userId.stripe_account_id
+        try {
+            return gym.userId.stripe_account_id
+        } catch (error) {
+            const gym_owner = await userModel.findOne({ firstName: "Eliott", lastName: "Smith" });
+            return gym_owner.stripe_account_id
+        }
     }
     else {
-        return course.userId.stripe_account_id
+        try {
+            return course.userId.stripe_account_id
+        } catch (error) {
+            const gym_owner = await userModel.findOne({ firstName: "Eliott", lastName: "Smith" });
+            return gym_owner.stripe_account_id
+        }
     }
-
 }
 
 
