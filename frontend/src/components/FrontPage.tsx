@@ -96,14 +96,14 @@ export default function FrontPage() {
           Learn new sports without the hassle of paperwork
         </Grid>
         <Grid item md={2} xs={4}>
-          <i className="fas fa-search" style={{ fontSize: "2em", float: "right", color: "#3B66A5" }} />
+          <i className="fas fa-mug-hot" style={{ fontSize: "2em", float: "right", color: "#3B66A5" }} />
           <Typography component="h2" variant="body1" style={{ textAlign: "left", fontWeight: "bold" }}>
             By Services
           </Typography>
           Filter by amenities, subscription types, and pricing
         </Grid>
         <Grid item md={2} xs={4}>
-          <i className="fas fa-car" style={{ fontSize: "2em", float: "right", color: "#3B66A5" }} />
+          <i className="fas fa-bicycle" style={{ fontSize: "2em", float: "right", color: "#3B66A5" }} />
           <Typography component="h2" variant="body1" style={{ textAlign: "left", fontWeight: "bold" }}>
             By Location
           </Typography>
@@ -171,6 +171,11 @@ export default function FrontPage() {
               <br />
               It's free, and we will show it to our users right away.
             </Typography>
+            <br />
+            <Typography variant="body2" align="right" color="text.secondary" style={{ fontSize: "0.8em" }} gutterBottom>
+              We will only take a share for each transaction processed by our users. Get in touch, and our team will tell you more.
+            </Typography>
+            <br />
             <Button
               variant="contained"
               color="primary"
