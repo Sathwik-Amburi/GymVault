@@ -92,28 +92,29 @@ class SubscriptionService {
         // Check if it is a course or gym ID 
         let entity = await courseService.getCourse(courseOrGymId);
         if(entity != null) {
-            // ok, it's a course - get the real start date from the session data
-            let found = false;
-            entity.sessions.forEach(session => {
-                session.sessionDetails.forEach(sessionDetail => {
-                    if(session.sessionDay + sessionDetail.sessionTime + sessionDetail.sessionsInstructor == startDateString) {
-                        purchaseDate = moment().startOf('day');
-                        // compute purchase date by summing days of week to current, times, etc
-                        let i = 9;
-                        while(purchaseDate.format("dddd") != session.sessionDay && i > 0) {
-                            //console.log(purchaseDate.format("dddd") + " != " + session.sessionDay + ", i=" + i);
-                            purchaseDate.add(1, 'days');
-                            i--;
-                        }
-                        if(i != 0) { 
-                            found = true;
+            // it's a course - get the real start date from the session data
+
+            // if it's a single session ticket, it is only valid in that timeframe
+            if(baseType == 1) {
+                let found = false;
+                entity.sessions.forEach(session => {
+                    session.sessionDetails.forEach(sessionDetail => {
+                        if(session.sessionDay + sessionDetail.sessionTime + sessionDetail.sessionsInstructor == startDateString) {
+                            purchaseDate = moment().startOf('day');
+                            // compute purchase date by summing days of week to current, times, etc
+                            let i = 9;
+                            while(purchaseDate.format("dddd") != session.sessionDay && i > 0) {
+                                //console.log(purchaseDate.format("dddd") + " != " + session.sessionDay + ", i=" + i);
+                                purchaseDate.add(1, 'days');
+                                i--;
+                            }
+                            if(i != 0) { 
+                                found = true;
                             console.log("Match found, session start: " + purchaseDate.format("DD/MM/YYYY"));
-                            // if it's a single session ticket, it is only valid in that timeframe
-                            if(baseType == 1) {
-                                console.log("Single session ticket, setting validity to session time only");
-                                let sessionTime = sessionDetail.sessionTime.split(" - ");
-                                expirationDate = moment(purchaseDate.format("YYYY-MM-DD") + " " + sessionTime[1], "HH:mm").toDate();
-                                purchaseDate = moment(purchaseDate.format("YYYY-MM-DD") + " " + sessionTime[0], "HH:mm").toDate();
+                            console.log("Single session ticket, setting validity to session time only");
+                            let sessionTime = sessionDetail.sessionTime.split(" - ");
+                            expirationDate = moment(purchaseDate.format("YYYY-MM-DD") + " " + sessionTime[1], "HH:mm").toDate();
+                            purchaseDate = moment(purchaseDate.format("YYYY-MM-DD") + " " + sessionTime[0], "HH:mm").toDate();
                             } else {
                                 purchaseDate = purchaseDate.toDate();
                                 // it's a month/yearly ticket, so it starts today, but not at the session type
@@ -122,9 +123,13 @@ class SubscriptionService {
                             console.log("No match found for " + startDateString);
                             return null;
                         }
-                    }
+                    });
                 });
-            });
+            } else {
+                // it's a monthly/yearly ticket, so it starts the first day, but not at the session type
+                purchaseDate = moment(startDateString, "DD/MM/YYYY").startOf('day').toDate();
+                expirationDate.setDate(purchaseDate.getDate() + offset);
+            }
         } else {
             entity = await gymService.getGym(courseOrGymId);
             if(entity != null) {

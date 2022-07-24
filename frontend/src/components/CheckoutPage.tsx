@@ -1,4 +1,4 @@
-import { Card, FormControl, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, TextField, Typography } from "@mui/material";
+import { Card, Grid, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
 import { Course, CourseSession, Gym, Item, Option, PurchaseOption, SubscriptionOffers, SubscriptionTypes } from "../models/allModels";
@@ -13,6 +13,7 @@ import CourseScheduleTable from "./CourseScheduleTable";
 import moment from "moment";
 import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
 import EuropeanDatePicker from "./widgets/EuropeanDatePicker"
+import { Subscript } from "@mui/icons-material";
 
 const CheckoutPage: FC = () => {
   const { id, returnState } = useParams<{
@@ -42,36 +43,20 @@ const CheckoutPage: FC = () => {
   function setSubscriptionBases(subscriptionOffers: SubscriptionOffers[]) {
     if (subscriptionOffers !== undefined && subscriptionOffers.length > 0) {
       let items: PurchaseOption[] = [];
-      if(subscriptionOffers.length > 0)
+      subscriptionOffers.forEach((so) => {
         items.push({
-          _id: "1",
-          name: toCleanSubscriptionTypeFormat(subscriptionOffers[0].subscriptionType),
+          _id: so.subscriptionType === SubscriptionTypes.DAY_PASS ? "1" :
+               so.subscriptionType === SubscriptionTypes.MONTHLY_PASS ? "2" :
+               so.subscriptionType === SubscriptionTypes.YEARLY_PASS ? "3" :
+               "?",
+          name: toCleanSubscriptionTypeFormat(so.subscriptionType),
           description: "Fixed duration, base-tier ticket",
-          price: +(subscriptionOffers[0].subscriptionPrice * (100-subscriptionOffers[0].discount)/100).toFixed(2)
+          price: +(so.subscriptionPrice * (100-so.discount)/100).toFixed(2)
           ,
           bgColor: "#030",
           fgColor: "#fff"
         } as PurchaseOption);
-
-      if(subscriptionOffers.length > 1)
-        items.push({
-          _id: "2",
-          name: toCleanSubscriptionTypeFormat(subscriptionOffers[1].subscriptionType),
-          description: "Fixed duration, base-tier ticket",
-          price:  +(subscriptionOffers[1].subscriptionPrice * (100-subscriptionOffers[1].discount)/100).toFixed(2),
-          bgColor: "#060",
-          fgColor: "#fff"
-        } as PurchaseOption);
-      
-      if(subscriptionOffers.length > 2)
-        items.push({
-          _id: "3",
-          name: toCleanSubscriptionTypeFormat(subscriptionOffers[2].subscriptionType),
-          description: "Fixed duration, base-tier ticket",
-          price:  +(subscriptionOffers[2].subscriptionPrice * (100-subscriptionOffers[2].discount)/100).toFixed(2),
-          bgColor: "#090",
-          fgColor: "#fff"
-        } as PurchaseOption);
+      });
 
       setBasePurchases(items);
       setCart([{ ...items[0], base: true } as CartItem]);
@@ -241,7 +226,10 @@ const CheckoutPage: FC = () => {
             The range of validity depends on your ticket type
           </Typography>
           <hr className="mini-hr" />
-          { item.type == "course" ? <>
+          { (item.type == "course" 
+                  && cart.length > 0
+                  && cart[0].name == toCleanSubscriptionTypeFormat(SubscriptionTypes.DAY_PASS)) ? 
+          <>
             <CourseScheduleTable courseSessions={ courseSessions } selected={selectedSession} setSelected={setSelectedSession} />
           </> : <>
             <br />
@@ -271,9 +259,9 @@ const CheckoutPage: FC = () => {
                 <Typography variant="body1">
                   { cart == undefined ? "-" : 
                     cart.length == 0 ? "-" :
-                    cart[0].name == toCleanSubscriptionTypeFormat(SubscriptionTypes.DAY_PASS) ? "One day" :
-                    cart[0].name == toCleanSubscriptionTypeFormat(SubscriptionTypes.MONTHLY_PASS) ? "30 days" :
-                    cart[0].name == toCleanSubscriptionTypeFormat(SubscriptionTypes.YEARLY_PASS) ? "365 days" :
+                    cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.DAY_PASS) ? "One day" :
+                    cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.MONTHLY_PASS) ? "30 days" :
+                    cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.YEARLY_PASS) ? "365 days" :
                     "-" 
                   }
                 </Typography>
@@ -290,7 +278,7 @@ const CheckoutPage: FC = () => {
           <hr className="mini-hr" />
           <PurchaseCart
             baseId={id!}
-            startDate={selectedSession ? selectedSession : selectedStartDate }
+            startDate={selectedSession && cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.DAY_PASS) ? selectedSession : selectedStartDate }
             dateValidator={validateStartDate}
             cart={cart}
             setCart={setCart}
