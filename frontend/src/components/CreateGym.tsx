@@ -42,7 +42,7 @@ import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import axios from 'axios';
 import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import { marker } from "leaflet";
-import {markers} from "../components/widgets/map/coordinates"
+import { markers } from "../components/widgets/map/coordinates"
 
 interface NewCourseState {
   name: string;
@@ -76,7 +76,7 @@ const courseModalStyle = {
 };
 
 const CreateGym: FC = () => {
-  const [position, setPosition] = useState<[number, number]>([0,0])
+  const [position, setPosition] = useState<[number, number]>([0, 0])
   const [mapCity, setMapCity] = useState<string>("")
   const [cityCoordinates, setCityCoordinates] = useState<any>([51.505, 10.4515])
   const [zoom, setZoom] = useState<number>(6)
@@ -128,16 +128,16 @@ const CreateGym: FC = () => {
       },
     })
     return (
-      position[0]!=0 && position[1]!=0? <Marker position={position} /> : <></>
+      position[0] != 0 && position[1] != 0 ? <Marker position={position} /> : <></>
     )
   }
 
-  const SetMapCenter = ({center, zoom}: any) => {
+  const SetMapCenter = ({ center, zoom }: any) => {
     const map = useMap();
     map.setView(center, zoom);
     return null;
   }
-  
+
 
   const gymValidationSchema = yup.object({
     name: yup.string().required("Name is required"),
@@ -166,7 +166,17 @@ const CreateGym: FC = () => {
     yearlySubscriptionSelected: yup.boolean(),
     yearlySubscriptionPrice: yup.number(),
     courseImages: yup.string(),
-    // courseSessions: yup.
+    courseSessions: yup.array().of(
+      yup.object().shape({
+        sessionDay: yup.string(),
+        sessionDetails: yup.array().of(
+          yup.object().shape({
+            sessionTime: yup.string().trim().matches(new RegExp('/^[0-2][0-9]\:[0-5][0-9]\s{1}-\s{1}[0-2][0-9]\:[0-5][0-9]$/'), 'invalid format'),
+            sessionsInstructor: yup.string()
+          })
+        ),
+      })
+    )
   });
 
   const optionValidationSchema = yup.object({
@@ -198,7 +208,6 @@ const CreateGym: FC = () => {
       const gymoptions: any = options
       const gymcourses: any = courses
       const gymlocation = position
-
       const data = { gym, gymcourses, gymoptions, gymlocation }
       const headers = { "x-access-token": String(localStorage.getItem('token')) }
       await axios.post(`gyms/add-gym`, data, { headers })
@@ -239,6 +248,7 @@ const CreateGym: FC = () => {
       yearlySubscriptionSelected: false,
       yearlySubscriptionPrice: 0,
       courseImages: "",
+      courseSessions: {}
     },
     validationSchema: courseValidationSchema,
     onSubmit: (values: any) => {
@@ -391,7 +401,7 @@ const CreateGym: FC = () => {
             label="City"
             id="city"
             name="city"
-            onChange={(e: any) => {gymFormik.handleChange(e); setMapCity(e.target.value); setCityCoordinates(markers.find((m) => m.city == e.target.value)?.coordinates ); setZoom(13); SetMapCenter({center: cityCoordinates, zoom:11}) }}
+            onChange={(e: any) => { gymFormik.handleChange(e); setMapCity(e.target.value); setCityCoordinates(markers.find((m) => m.city == e.target.value)?.coordinates); setZoom(13); SetMapCenter({ center: cityCoordinates, zoom: 11 }) }}
             inputProps={{ style: { fontWeight: "bold" } }}
             value={gymFormik.values.city}
           >
@@ -1132,7 +1142,7 @@ const CreateGym: FC = () => {
         <Grid item md={6} xs={12}>
           <MapContainer center={cityCoordinates} zoom={zoom} scrollWheelZoom={false}>
             <Markers />
-            <SetMapCenter center={cityCoordinates} zoom={zoom}/>
+            <SetMapCenter center={cityCoordinates} zoom={zoom} />
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

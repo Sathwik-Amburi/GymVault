@@ -86,7 +86,7 @@ const GymSchema = new mongoose.Schema({
   coordinates: {
     type: [Number],
     default: [],
-    required: true
+    required: false
   }
 });
 
