@@ -53,7 +53,7 @@ export default function DiscountsModal() {
 
     return (
         <div>
-            <Button variant="outlined" onClick={handleOpen}><i style={{ fontSize: '27px', padding: "4px" }} className="fa fa-percent" aria-hidden="true"></i> Discounts</Button>
+            <Button variant="contained" onClick={handleOpen}><i style={{ fontSize: '27px', padding: "4px" }} className="fa fa-percent" aria-hidden="true"></i> Discounts</Button>
             <Modal
                 open={open}
                 onClose={handleClose}

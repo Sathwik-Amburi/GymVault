@@ -40,9 +40,9 @@ import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import axios from 'axios';
-import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import { marker } from "leaflet";
-
+import {markers} from "../components/widgets/map/coordinates"
 
 interface NewCourseState {
   name: string;
@@ -77,6 +77,10 @@ const courseModalStyle = {
 
 const CreateGym: FC = () => {
   const [position, setPosition] = useState<[number, number]>([0,0])
+  const [mapCity, setMapCity] = useState<string>("")
+  const [cityCoordinates, setCityCoordinates] = useState<any>([51.505, 10.4515])
+  const [zoom, setZoom] = useState<number>(6)
+
   const [profile, setProfile] = useState<UserProfileDetails>();
   const [openOptionModal, setOpenOptionModal] = useState(false);
   const handleOpenOptionModal = () => setOpenOptionModal(true);
@@ -126,8 +130,14 @@ const CreateGym: FC = () => {
     return (
       position[0]!=0 && position[1]!=0? <Marker position={position} /> : <></>
     )
-
   }
+
+  const SetMapCenter = ({center, zoom}: any) => {
+    const map = useMap();
+    map.setView(center, zoom);
+    return null;
+  }
+  
 
   const gymValidationSchema = yup.object({
     name: yup.string().required("Name is required"),
@@ -156,6 +166,7 @@ const CreateGym: FC = () => {
     yearlySubscriptionSelected: yup.boolean(),
     yearlySubscriptionPrice: yup.number(),
     courseImages: yup.string(),
+    // courseSessions: yup.
   });
 
   const optionValidationSchema = yup.object({
@@ -380,7 +391,7 @@ const CreateGym: FC = () => {
             label="City"
             id="city"
             name="city"
-            onChange={gymFormik.handleChange}
+            onChange={(e: any) => {gymFormik.handleChange(e); setMapCity(e.target.value); setCityCoordinates(markers.find((m) => m.city == e.target.value)?.coordinates ); setZoom(13); SetMapCenter({center: cityCoordinates, zoom:11}) }}
             inputProps={{ style: { fontWeight: "bold" } }}
             value={gymFormik.values.city}
           >
@@ -1119,10 +1130,9 @@ const CreateGym: FC = () => {
           <hr className="mini-hr" />
         </Grid>
         <Grid item md={6} xs={12}>
-          <MapContainer center={[51.505, 10.4515]} zoom={5.5} scrollWheelZoom={false}>
+          <MapContainer center={cityCoordinates} zoom={zoom} scrollWheelZoom={false}>
             <Markers />
-
-
+            <SetMapCenter center={cityCoordinates} zoom={zoom}/>
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
