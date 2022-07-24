@@ -90,12 +90,10 @@ const UserSubscriptionsPage: FC = () => {
             Below you can see your subscription. Click on it to copy your access identifier, and print the tickets if needed:
           </Typography>
         </>) : ( <>
-          <Typography variant="h6" style={{fontWeight: "bold", color: "#555"}}>
-          Active Subscriptions
+          <Typography variant = 'h3' style={{fontWeight: "bold", color: "#555"}}>
+            My Tickets
           </Typography>
-          <Typography style={{ color: "#555", marginBottom: "3em" }}>
-            Below you can see your subscriptions. Click on them to copy your access identifier, and print the tickets if needed:
-          </Typography>
+          <hr />
         </>)}
 
 
@@ -104,17 +102,37 @@ const UserSubscriptionsPage: FC = () => {
           { (activeItems.length > 0) ?
             activeItems.map((item) => {
               return (
-                <><SubscriptionEntry item={item[0]} subscription={item[1]} expired={false} user={user}  /></>
+                <>
+                  <Typography variant="h6" style={{fontWeight: "bold", color: "#555"}}>
+                    Active Subscriptions
+                  </Typography>
+                  <Typography style={{ color: "#555", marginBottom: "3em" }}>
+                    Below you can see your subscriptions. Click on them to copy your access identifier, and print the tickets if needed:
+                  </Typography>
+
+                  <SubscriptionEntry item={item[0]} subscription={item[1]} expired={false} user={user}  /></>
               );
             }) : ( <>
               <Container maxWidth="lg" style={{ padding: "2em", textAlign: "center" }}>
-                <Typography variant="h5" style={{marginTop: "6em"}}>
-                  No active subscriptions :( 
-                </Typography>
+                <div className="twrapper">
+                  <i className="fa-solid fa-ticket" style={{fontSize:"80px", marginBottom:"4vh"}}></i>
+                  <div className="typing-demo">
+                    No Active Subscriptions.
+                  </div>
+                </div>
                 <br />
-                <Button variant="outlined" color="primary" style={{marginLeft: "1em"}} href="/">
+                <div className="button-box">
+                <a href="/">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
                   Get one?
-                </Button>
+                </a>
+                </div>
+                {/*<Button className = "get-one" variant="outlined" color="primary" style={{marginLeft: "1em"}} href="/">*/}
+
+                {/*</Button>*/}
               </Container>
             </> )
           }

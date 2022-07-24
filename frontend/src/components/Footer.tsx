@@ -90,19 +90,38 @@ export default function Footer() {
               </Link>
             </Grid>
             <Grid className="footer-links">
-              <Link href="#" underline="hover" sx={{ p: 1, color: "white" }}>
-                <FacebookIcon sx={{ color: "white" }} />
-              </Link>
-              <Link href="#" underline="hover" sx={{ p: 1 }}>
-                <InstagramIcon sx={{ color: "white" }} />
-              </Link>
-              <Link href="#" underline="hover" sx={{ p: 1 }}>
-                <TwitterIcon sx={{ color: "white" }} />
-              </Link>
-              <Link href="#" underline="hover" sx={{ p: 1 }}>
-                <LinkedInIcon sx={{ color: "white" }} />
-              </Link>
-            </Grid>
+            {/*  <Link href="#" underline="hover" sx={{ p: 1, color: "white" }}>*/}
+            {/*    <FacebookIcon sx={{ color: "white" }} />*/}
+            {/*  </Link>*/}
+            {/*  <Link href="#" underline="hover" sx={{ p: 1 }}>*/}
+            {/*    <InstagramIcon sx={{ color: "white" }} />*/}
+            {/*  </Link>*/}
+            {/*  <Link href="#" underline="hover" sx={{ p: 1 }}>*/}
+            {/*    <TwitterIcon sx={{ color: "white" }} />*/}
+            {/*  </Link>*/}
+            {/*  <Link href="#" underline="hover" sx={{ p: 1 }}>*/}
+            {/*    <LinkedInIcon sx={{ color: "white" }} />*/}
+            {/*  </Link>*/}
+
+              <ul className="wrapper">
+                  <li className="icon facebook">
+                      <span className="tooltip">Facebook</span>
+                      <span><i className="fab fa-facebook-f"></i></span>
+                  </li>
+                  <li className="icon twitter">
+                      <span className="tooltip">Twitter</span>
+                      <span><i className="fab fa-twitter"></i></span>
+                  </li>
+                  <li className="icon instagram">
+                      <span className="tooltip">Instagram</span>
+                      <span><i className="fab fa-instagram"></i></span>
+                  </li>
+                  <li className="icon youtube">
+                      <span className="tooltip">Youtube</span>
+                      <span><i className="fab fa-youtube"></i></span>
+                  </li>
+              </ul>
+                </Grid>
             <Grid xs={12} className="footer-links">
               <Copyright />
             </Grid>
