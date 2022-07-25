@@ -238,11 +238,9 @@ const CourseViewPage: FC = () => {
                     title={review.username}
                     subheader={moment(review.dateAdded).format("MMM Do YYYY")}
                   />
-                  <div>
-                    <StarWidget rating={review.rating} />
-                  </div>
+
                   <p>
-                    <b>{review.title}</b>
+                    <b><StarWidget rating={review.rating} /> {review.title}</b>
                   </p>
                   <p>{review.description}</p>
                 </Paper>
