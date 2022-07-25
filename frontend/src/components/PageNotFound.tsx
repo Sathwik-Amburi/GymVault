@@ -17,7 +17,7 @@ const PageNotFound: FC = () => {
         // </div>
         <div style={{marginTop:'13vh'}}>
             <a target="_blank"
-               href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwj1m7vB5oH5AhWER3wKHQhXDa4QFnoECCAQAQ&url=https%3A%2F%2Fwww.enationalelectronics.com%2F&usg=AOvVaw0CoGpfiGKRton9yE4Q8_Hv">
+               href="">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12 col-md-12 mt-5 mb-5">

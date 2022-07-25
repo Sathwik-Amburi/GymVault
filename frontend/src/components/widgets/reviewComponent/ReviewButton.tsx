@@ -81,21 +81,6 @@ export default function ReviewButton(props: any) {
     return (
         <div>
             {!reviewAdded &&            <>
-                <Box
-                    sx={{
-                        '& > legend': { mt: 2 },
-                    }}
-                >
-                    <Typography component="legend" style={{display: "inline-block"}}>Rate this: </Typography>
-                    <Rating
-                        name="rating"
-                        size = "large"
-                        value={value}
-                        onChange={(event, newValue) => {
-                            setValue(newValue);
-                        }}
-                    />
-                </Box>
                 <Button variant="contained" onClick={handleClickOpen}>
                     Write a review!
                 </Button>
@@ -103,7 +88,7 @@ export default function ReviewButton(props: any) {
             {reviewAdded &&
                 <>
                     <hr />
-                    <Typography component="legend" style={{display: "inline-block"}}>You have rated this subscription: </Typography>
+                    <Typography component="legend" style={{display: "inline-block",fontWeight:'bold'}}>You have rated this subscription: </Typography>
                     <Rating name="read-only" value={rating} size = "large" readOnly />
                 </>
             }
@@ -126,6 +111,22 @@ export default function ReviewButton(props: any) {
                             >
                                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                                     <Grid>
+                                        <hr />
+                                        <Box
+                                            sx={{
+                                                '& > legend': { mt: 2 },
+                                            }}
+                                        >
+                                            <Typography component="legend" style={{display: "inline-block", fontWeight:'bold'}}>Rate this: </Typography>
+                                            <Rating
+                                                name="rating"
+                                                size = "large"
+                                                value={value}
+                                                onChange={(event, newValue) => {
+                                                    setValue(newValue);
+                                                }}
+                                            />
+                                        </Box>
                                         <input
                                             value = {props.userId}
                                             name = 'userId'

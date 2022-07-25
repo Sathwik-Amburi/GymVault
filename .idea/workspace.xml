@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7636728c-3d1f-493b-8c73-11fe9373b36b" name="Changes" comment="added a mui/x datepicker">
+    <list default="true" id="c132dbfb-c14e-4ca0-9526-b1b8031c7467" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_7_23_2022_4_31_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_7_23_2022_4_31_PM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/ContactUs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ContactUs.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Footer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/GymSignUpPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/GymSignUpPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/PageNotFound.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/PageNotFound.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/UserSubscriptionsPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/UserSubscriptionsPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/widgets/reviewComponent/ReviewButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/widgets/reviewComponent/ReviewButton.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
