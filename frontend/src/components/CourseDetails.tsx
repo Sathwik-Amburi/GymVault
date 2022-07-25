@@ -19,6 +19,7 @@ import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import PricingList from "./widgets/PricingList";
 import StarIcon from "@mui/icons-material/Star";
 import CourseScheduleTable from "./CourseScheduleTable";
+import Pagination from "@mui/material/Pagination";
 
 const moment = require("moment");
 
@@ -252,6 +253,7 @@ const CourseViewPage: FC = () => {
             </Typography>
           )}
         </Grid>
+        <Pagination count={5} />
       </Grid>
     </ChonkySpinner>
   );
