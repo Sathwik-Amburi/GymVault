@@ -37,9 +37,11 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
                 props.item.type === SubscriptionTypes.MONTHLY_PASS ?
                   "Lasts 30 days from purchase" :
                 props.item.type === SubscriptionTypes.YEARLY_PASS ?
-                  "Lasts 365 days from purchase"
+                  "Lasts 365 days from purchase":
+                props.item.type === SubscriptionTypes.SESSION_PASS ?
+                  "Lasts for the duration of a session"
                 : null
-                })
+                }
             </span>
           </div>
         </Paper>
@@ -77,9 +79,14 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
                 </Typography>
               </td>
               <td>
-                <Typography variant="h6">
-                  { moment(props.subscription.purchaseDate).format("DD/MM/YYYY") }
+                <Typography variant="h6" style={{ display: "inline" }}>
+                  { moment(props.subscription.purchaseDate).utc().format("DD/MM/YYYY") }
                 </Typography>
+                { props.item.type === SubscriptionTypes.SESSION_PASS && (
+                  <Typography variant="body1" style={{ display: "inline", marginLeft: "1em" }}>
+                     @ <b>{ moment(props.subscription.purchaseDate).utc().format("HH:mm") }</b>
+                  </Typography>
+                ) }
               </td>
               <td style={{textAlign: "right"}}>
                 <Typography variant="h6" style={{ fontWeight: "bold" }}>
@@ -94,9 +101,15 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
                 </Typography>
               </td>
               <td>
-                <Typography variant="h6">
-                  { moment(props.subscription.expireDate!).format("DD/MM/YYYY") }
+                <Typography variant="h6" style={{ display: "inline" }}>
+                  { moment(props.subscription.expireDate!).utc().format("DD/MM/YYYY") }
                 </Typography>
+
+                { props.item.type === SubscriptionTypes.SESSION_PASS && (
+                  <Typography variant="body1" style={{ display: "inline", marginLeft: "1em" }}>
+                     @ <b>{ moment(props.subscription.expireDate).utc().format("HH:mm") }</b>
+                  </Typography>
+                ) }
               </td>
               <td style={{textAlign: "right"}}>
                 <Typography variant="body1">

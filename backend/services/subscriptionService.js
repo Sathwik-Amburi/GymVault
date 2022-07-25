@@ -115,8 +115,10 @@ class SubscriptionService {
                             console.log("Match found, session start: " + purchaseDate.format("DD/MM/YYYY"));
                             console.log("Single session ticket, setting validity to session time only");
                             let sessionTime = sessionDetail.sessionTime.split(" - ");
-                            expirationDate = moment(purchaseDate.format("YYYY-MM-DD") + " " + sessionTime[1], "HH:mm").toDate();
-                            purchaseDate = moment(purchaseDate.format("YYYY-MM-DD") + " " + sessionTime[0], "HH:mm").toDate();
+                            console.log(sessionTime);
+                            expirationDate = moment(purchaseDate.format("YYYY-MM-DD") + " " + sessionTime[1] + " +0000", "YYYY-MM-DD HH:mm Z").toDate();
+                            purchaseDate =   moment(purchaseDate.format("YYYY-MM-DD") + " " + sessionTime[0] + " +0000", "YYYY-MM-DD HH:mm Z").toDate();
+                            console.log("purchase: ", purchaseDate, ", expiry: ", expirationDate);
                             } else {
                                 purchaseDate = purchaseDate.toDate();
                                 // it's a month/yearly ticket, so it starts today, but not at the session type
