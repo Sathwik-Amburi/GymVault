@@ -1,6 +1,6 @@
 import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import { FC } from "react";
-import image from "../images/progym.jpg";
+import NoImage from "../images/no-pictures.png";
 import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { Course } from "../models/allModels";
@@ -33,9 +33,9 @@ const ResultCard: FC<ResultCardProps> = ({ course }) => {
         >
           <CardMedia
             component="img"
-            alt="gym picture"
+            alt="course picture"
             height="250"
-            image={image}
+            image={course.images && course.images[0] ? course.images[0] : NoImage}
           />
           <CardContent>
             <Grid container direction={"row"} alignItems="center">

@@ -10,6 +10,7 @@ export default function CityMap(props: any) {
 
     let [center, setCenter] = useState<[number, number]>([0, 0])
     let [loaded, setLoaded] = useState<boolean>(false)
+    const [zoom, setZoom] = useState<number>(12)
     let navigate = useNavigate()
     const gymResults = useSelector(
         (state: any) => state.gymResults.filteredGyms
@@ -24,7 +25,13 @@ export default function CityMap(props: any) {
         let cityTuple: any = markers.find((marker) => {
             return marker.city === props.city
         })
-        setCenter(cityTuple.coordinates)
+        if(props.item === 'gymDetails'){
+            setZoom(14)
+            setCenter(props.gym.coordinates)
+        }else {
+            setCenter(cityTuple.coordinates)
+        }
+        
         setLoaded(true)
     }, [])
 
@@ -43,7 +50,7 @@ export default function CityMap(props: any) {
                 }
             }}>
             <Popup>
-                {gym.name}
+                {props.item === 'gymDetails' ? (<span style={{fontWeight: "bold", fontStyle:"italic"}}>{gym.address}</span>): <>{gym.name}</>}
             </Popup>
         </Marker>
     }
@@ -70,7 +77,7 @@ export default function CityMap(props: any) {
     return (
         <>
             {loaded ?
-                <MapContainer style={{ height: "400px", width: "80vw" }} center={center} zoom={12} scrollWheelZoom={false}>
+                <MapContainer style={{ height: "400px", width: "80vw" }} center={center} zoom={zoom} scrollWheelZoom={false}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -80,6 +87,8 @@ export default function CityMap(props: any) {
                         {props.item === 'gym' ?
                             gymResults.map((gym: any) => displayGymMarker(gym)) :
                             courseResults.map((course: any) => displayCourseMarker(course))}
+                        {props.item === 'gymDetails' &&
+                            displayGymMarker(props.gym)}
                     </>
 
                 </MapContainer>
