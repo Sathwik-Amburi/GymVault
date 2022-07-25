@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { useNavigate } from 'react-router-dom';
 import { markers } from './coordinates';
+
 
 
 export default function Map(props: any) {
 
     let [presentCities, setPresentCities] = useState<string[]>([])
     let [loaded, setLoaded] = useState<boolean>(false)
+    let navigate = useNavigate()
 
     useEffect(() => {
         let aux: any[] = []
@@ -22,8 +25,11 @@ export default function Map(props: any) {
             return <Marker position={marker.coordinates}
                 eventHandlers={{
                     click: (e) => {
-                        console.log(marker.city)
                         props.setCity(marker.city)
+                        navigate(
+                            `/results/${props.type === "gyms" ? "gyms" : "courses"
+                            }/search?name=&city=${marker.city}`
+                        );
                     },
                     mouseover: (e) => {
                         e.target.openPopup()
