@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const subscriptionOffer = new mongoose.Schema({
   subscriptionType: {
     type: String,
-    enum: ["DAY_PASS", "MONTHLY_PASS", "YEARLY_PASS"],
+    enum: ["SESSION_PASS", "DAY_PASS", "MONTHLY_PASS", "YEARLY_PASS"],
     required: true,
   },
   subscriptionPrice: {

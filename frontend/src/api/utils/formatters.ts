@@ -10,8 +10,6 @@ export const toCleanSubscriptionTypeFormat = (
       return "Monthly Pass";
     case SubscriptionTypes.YEARLY_PASS:
       return "Yearly Pass";
-    case SubscriptionTypes.COURSE_TICKET:
-      return "Course Ticket";
     case SubscriptionTypes.SESSION_PASS:
       return "Session Pass";
     default:
@@ -29,8 +27,6 @@ export const toCleanSubscriptionRange = (
       return "Month";
     case SubscriptionTypes.YEARLY_PASS:
       return "Year";
-    case SubscriptionTypes.COURSE_TICKET:
-      return "Session";
     case SubscriptionTypes.SESSION_PASS:
       return "Session";
     default:

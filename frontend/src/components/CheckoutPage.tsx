@@ -36,7 +36,7 @@ const CheckoutPage: FC = () => {
     return !(
       !moment(date, "DD/MM/YYYY").isValid() || 
       moment(date, "DD/MM/YYYY").isAfter(moment().add(1, "month")) ||
-      moment(date, "DD/MM/YYYY").isBefore(moment())
+      moment(date, "DD/MM/YYYY").isBefore(moment().startOf("day"))
     );
   }
 

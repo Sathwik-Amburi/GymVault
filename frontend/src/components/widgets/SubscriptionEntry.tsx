@@ -36,7 +36,7 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
                   (props.subscription.type === "DAY_PASS") ? "daily ticket" : 
                   (props.subscription.type === "MONTHLY_PASS") ? "monthly pass" :
                   (props.subscription.type === "YEARLY_PASS") ? "yearly pass" :
-                  (props.subscription.type === "COURSE_TICKET") ? "course" : 
+                  (props.subscription.type === "SESSION_PASS") ? "course" : 
                   "generic ticket"
                 }
               </span>

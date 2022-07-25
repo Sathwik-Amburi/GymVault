@@ -36,7 +36,7 @@ const SubscriptionSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["DAY_PASS", "MONTHLY_PASS", "YEARLY_PASS"],
+    enum: ["SESSION_PASS", "DAY_PASS", "MONTHLY_PASS", "YEARLY_PASS"],
   },
   price: {
     type: Number,
