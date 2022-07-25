@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c132dbfb-c14e-4ca0-9526-b1b8031c7467" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_7_23_2022_4_31_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_7_23_2022_4_31_PM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/PageNotFound.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/PageNotFound.tsx" afterDir="false" />
+    <list default="true" id="c132dbfb-c14e-4ca0-9526-b1b8031c7467" name="Changes" comment="UI changes to review button.">
       <change beforePath="$PROJECT_DIR$/frontend/src/components/widgets/reviewComponent/ReviewButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/widgets/reviewComponent/ReviewButton.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -301,6 +298,7 @@
     <MESSAGE value="yarn.lock commit" />
     <MESSAGE value="added pages for contact us and gym-signup pages." />
     <MESSAGE value="added a mui/x datepicker" />
-    <option name="LAST_COMMIT_MESSAGE" value="added a mui/x datepicker" />
+    <MESSAGE value="UI changes to review button." />
+    <option name="LAST_COMMIT_MESSAGE" value="UI changes to review button." />
   </component>
 </project>

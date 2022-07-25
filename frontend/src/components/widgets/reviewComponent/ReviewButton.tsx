@@ -81,6 +81,7 @@ export default function ReviewButton(props: any) {
     return (
         <div>
             {!reviewAdded &&            <>
+                <hr />
                 <Button variant="contained" onClick={handleClickOpen}>
                     Write a review!
                 </Button>
@@ -111,7 +112,7 @@ export default function ReviewButton(props: any) {
                             >
                                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                                     <Grid>
-                                        <hr />
+
                                         <Box
                                             sx={{
                                                 '& > legend': { mt: 2 },
