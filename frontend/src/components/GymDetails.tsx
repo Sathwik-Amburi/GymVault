@@ -26,6 +26,7 @@ import StarIcon from "@mui/icons-material/Star";
 import { S3_BASE_URL } from "../config/config";
 import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import CityMap from "./widgets/map/CityMap";
 
 const moment = require("moment");
 
@@ -235,18 +236,43 @@ const GymViewPage: FC = () => {
           </Paper>
         </Grid>
         <Grid item md={5} xs={12}>
-          <Typography
-            variant="h5"
-            style={{
-              marginBottom: "1em",
-              fontWeight: "bold",
-              color: "#519dd9",
-            }}
-          >
-            Pricing
-          </Typography>
-          <hr className="mini-hr" style={{ backgroundColor: "#519dd9" }} />
-          <PricingList subscriptionOffers={gym.subscriptionOffers} />
+          <Grid item style={{marginBottom: "16px"}}>
+            <Typography
+              variant="h5"
+              style={{
+                marginBottom: "1em",
+                fontWeight: "bold",
+                color: "#519dd9",
+              }}
+            >
+              Pricing
+            </Typography>
+            <hr className="mini-hr" style={{ backgroundColor: "#519dd9" }} />
+            <PricingList subscriptionOffers={gym.subscriptionOffers} />
+          </Grid>
+          <Grid item>
+            <Typography
+              variant="h5"
+              style={{
+                marginBottom: "1em",
+                fontWeight: "bold",
+                color: "#519dd9",
+              }}
+            >
+              Where you'll find us 
+            </Typography>
+            <hr className="mini-hr" style={{ backgroundColor: "#519dd9" }} />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                margin: "30px 0px",
+              }}
+            >
+              {gym.city && <CityMap item="gymDetails" city={gym.city} gym={gym} />}
+            </div>
+          </Grid>
         </Grid>
       </Grid>
       <br />
