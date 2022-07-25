@@ -28,9 +28,6 @@ const OwnerProfile: FC = () => {
         Welcome to your dashboard, {profile?.firstName} {profile?.lastName}
       </div>
       {loaded ? (profile?.payouts_enabled ? <StripeConnected/> : <StripeOnboard/>): ''}
-
-      
-
     </>
   );
 }

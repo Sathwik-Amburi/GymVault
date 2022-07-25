@@ -64,7 +64,7 @@ export default function SearchType(props: any) {
 
   return (
     <>
-      {loaded ? <Map cities={cities} setCity={setCity} /> : ""}
+      {loaded ? <Map type={props.type} cities={cities} setCity={setCity} /> : ""}
       <div
         style={{
           display: "flex",
