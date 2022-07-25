@@ -84,9 +84,10 @@ const UserSubscriptionsPage: FC = () => {
           height: "2em"
         }}></div>
 
-        <Typography variant="h4" style={{fontWeight: "bold", color: "#555"}} gutterBottom>
+        <Typography variant="h4" style={{fontWeight: "bold"}} gutterBottom>
           My Tickets
         </Typography>
+        <hr />
 
         { newSubscription ? ( <>
           <Typography variant="h6" style={{fontWeight: "bold", color: "#00763D"}}>
