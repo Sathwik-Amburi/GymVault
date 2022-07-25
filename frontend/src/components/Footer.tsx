@@ -71,7 +71,7 @@ export default function Footer() {
               </Link>
             </Grid>
             <Grid className="footer-links" style={{ fontWeight: "bold" }}>
-              <Link href="#" underline="hover" sx={{ p: 1, color: "white" }}>
+              <Link href="/" underline="hover" sx={{ p: 1, color: "white" }}>
                 {"About Us"}
               </Link>
               <Link
