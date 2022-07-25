@@ -75,7 +75,6 @@ export enum SubscriptionTypes {
   SESSION_PASS = "SESSION_PASS",
   MONTHLY_PASS = "MONTHLY_PASS",
   YEARLY_PASS = "YEARLY_PASS",
-  COURSE_TICKET = "COURSE_TICKET",
 }
 
 export interface Subscription {

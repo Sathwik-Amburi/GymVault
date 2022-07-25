@@ -1,5 +1,6 @@
 import { Button, Container, Grid, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
+import { act } from "react-dom/test-utils";
 import { useSearchParams } from "react-router-dom";
 import ApiCalls from "../api/apiCalls";
 
@@ -82,6 +83,12 @@ const UserSubscriptionsPage: FC = () => {
         <div style={{
           height: "2em"
         }}></div>
+
+        <Typography variant="h4" style={{fontWeight: "bold"}} gutterBottom>
+          My Tickets
+        </Typography>
+        <hr />
+
         { newSubscription ? ( <>
           <Typography variant="h6" style={{fontWeight: "bold", color: "#00763D"}}>
           Your booking was successful.
@@ -89,28 +96,21 @@ const UserSubscriptionsPage: FC = () => {
           <Typography style={{ color: "#00763D", marginBottom: "3em" }}>
             Below you can see your subscription. Click on it to copy your access identifier, and print the tickets if needed:
           </Typography>
-        </>) : ( <>
-          <Typography variant = 'h3' style={{fontWeight: "bold", color: "#555"}}>
-            My Tickets
+        </>) : activeItems.length > 0 && ( <>
+          <Typography variant="h6" style={{fontWeight: "bold", color: "#555"}}>
+            Active Subscriptions
           </Typography>
-          <hr />
+          <Typography style={{ color: "#555", marginBottom: "3em" }}>
+            Below you can see your subscriptions. Click on them to copy your access identifier, and print the tickets if needed:
+          </Typography>
         </>)}
-
 
         <ChonkySpinner loading={loading}>
 
           { (activeItems.length > 0) ?
             activeItems.map((item) => {
               return (
-                <>
-                  <Typography variant="h6" style={{fontWeight: "bold", color: "#555"}}>
-                    Active Subscriptions
-                  </Typography>
-                  <Typography style={{ color: "#555", marginBottom: "3em" }}>
-                    Below you can see your subscriptions. Click on them to copy your access identifier, and print the tickets if needed:
-                  </Typography>
-
-                  <SubscriptionEntry item={item[0]} subscription={item[1]} expired={false} user={user}  /></>
+                <><SubscriptionEntry item={item[0]} subscription={item[1]} expired={false} user={user}  /></>
               );
             }) : ( <>
               <Container maxWidth="lg" style={{ padding: "2em", textAlign: "center" }}>

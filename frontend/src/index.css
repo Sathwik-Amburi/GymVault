@@ -18,7 +18,7 @@ hr {
   height: 5px;
   margin: 1.5rem 0;
   border: none;
-  background-color: #000; /* TODO set to theme color */
+  background-color: #232323; /* TODO set to theme color */
   max-width: 8em;
   border-radius: 3px;
 }
@@ -27,13 +27,13 @@ hr {
   height: 3px;
   margin: 0.5rem 0;
   border: none;
-  background-color: #000; /* TODO set to theme color */
+  background-color: #232323; /* TODO set to theme color */
   max-width: 4em;
   border-radius: 3px;
 }
 
 .purchase-grid-item :hover {
-  border: 2px solid #000; /* TODO set to theme color */
+  border: 2px solid #232323; /* TODO set to theme color */
 }
 
 #notfound {
