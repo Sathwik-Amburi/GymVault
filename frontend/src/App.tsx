@@ -87,7 +87,7 @@ const App: FC = () => {
             path="/*"
             element={
               <>
-                <Container maxWidth="lg" style={{ padding: "3em" }}>
+                <Container maxWidth="lg" style={{ padding: "3em", position: "relative", minHeight: "90vh" }}>
                   <Routes>
                     <Route path="/" element={<FrontPage />} />
                     <Route path="/terms" element={<Terms />} />

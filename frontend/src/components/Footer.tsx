@@ -33,7 +33,7 @@ export default function Footer() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        mt: "25vh",
+        mt: "auto",
         backgroundColor: "#DB0038",
       }}
     >
@@ -47,7 +47,7 @@ export default function Footer() {
         }}
       >
         <Container maxWidth="sm">
-          <Grid container>
+          <Grid container style={{padding: "2em"}}>
             <Grid className="footer-logo" xs={12} md={12}>
               <img
                 src="/favicon.ico"
