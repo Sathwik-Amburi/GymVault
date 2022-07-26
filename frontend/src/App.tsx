@@ -31,7 +31,6 @@ import StripeConnectCallback from "./components/stripe/StripeConnectCallback";
 import StripeGymCallback from "./components/stripe/StripeGymCheckoutCallback";
 import Footer from "./components/Footer";
 import GymSignUpPage from "./components/GymSignUpPage";
-import { Grid } from "@mui/material";
 import ContactUs from "./components/ContactUs";
 
 const THEME = createTheme({
@@ -149,9 +148,7 @@ const App: FC = () => {
                     <Route
                       path="/gym/add"
                       element={
-                        <RoleWrapper allowedRoles={["gym_owner"]}>
                           <CreateGym />
-                        </RoleWrapper>
                       }
                     />
 

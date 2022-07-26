@@ -40,8 +40,7 @@ import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import axios from 'axios';
-import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from "react-leaflet";
-import { marker } from "leaflet";
+import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import { markers } from "../components/widgets/map/coordinates"
 
 interface NewCourseState {
@@ -122,7 +121,7 @@ const CreateGym: FC = () => {
       },
     })
     return (
-      position[0] != 0 && position[1] != 0 ? <Marker position={position} /> : <></>
+      position[0] !== 0 && position[1] !== 0 ? <Marker position={position} /> : <></>
     )
   }
 
@@ -395,7 +394,7 @@ const CreateGym: FC = () => {
             label="City"
             id="city"
             name="city"
-            onChange={(e: any) => { gymFormik.handleChange(e); setMapCity(e.target.value); setCityCoordinates(markers.find((m) => m.city == e.target.value)?.coordinates); setZoom(13); SetMapCenter({ center: cityCoordinates, zoom: 11 }) }}
+            onChange={(e: any) => { gymFormik.handleChange(e); setMapCity(e.target.value); setCityCoordinates(markers.find((m) => m.city === e.target.value)?.coordinates); setZoom(13); SetMapCenter({ center: cityCoordinates, zoom: 11 }) }}
             inputProps={{ style: { fontWeight: "bold" } }}
             value={gymFormik.values.city}
           >
