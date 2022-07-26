@@ -1,13 +1,6 @@
 // import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import CopyrightIcon from "@mui/icons-material/Copyright";
-import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";

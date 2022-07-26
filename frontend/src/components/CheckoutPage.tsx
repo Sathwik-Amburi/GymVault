@@ -12,8 +12,7 @@ import ColorGenerator from "./widgets/utilities/ColorGenerator";
 import CourseScheduleTable from "./CourseScheduleTable";
 import moment from "moment";
 import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
-import EuropeanDatePicker from "./widgets/EuropeanDatePicker"
-import { Subscript } from "@mui/icons-material";
+import EuropeanDatePicker from "./widgets/EuropeanDatePicker";
 
 const CheckoutPage: FC = () => {
   const { id, returnState } = useParams<{
@@ -229,7 +228,12 @@ const CheckoutPage: FC = () => {
                   && cart.length > 0
                   && cart[0].name == toCleanSubscriptionTypeFormat(SubscriptionTypes.SESSION_PASS)) ? 
           <>
-            <CourseScheduleTable courseSessions={ courseSessions } selected={selectedSession} setSelected={setSelectedSession} />
+            <CourseScheduleTable 
+              courseSessions={ courseSessions } 
+              selected={selectedSession} 
+              setSelected={setSelectedSession} 
+              showNextSessionDate={true}
+            />
           </> : <>
             <br />
             <Grid container spacing={3}>
