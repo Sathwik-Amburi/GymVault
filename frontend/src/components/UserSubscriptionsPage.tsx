@@ -140,32 +140,32 @@ const UserSubscriptionsPage: FC = () => {
         </ChonkySpinner>
       </Container>
       { (pastItems.length > 0) ? (
-        <Container style={{ 
+        <div style={{ 
           padding: "3em",
           margin: "3em 0 0 0",
-          maxWidth: "30000%",
           backgroundColor: "#555",
           width: "100%",
         }}>
-          <Grid container>
-            <Grid item xs={12} style={{ color: "white" }}>
-              <Typography variant="h6" style={{fontWeight: "bold" }}>
-                Expired Subscriptions
-              </Typography>
-              <Typography variant="body1">
-                In memoriam
-              </Typography>
+          <Container maxWidth="lg" style={{ padding: "3em" }}>
+            <Grid container maxWidth="lg">
+              <Grid item xs={12} style={{ color: "white" }}>
+                <Typography variant="h6" style={{fontWeight: "bold" }}>
+                  Expired Subscriptions
+                </Typography>
+                <Typography variant="body1">
+                  In memoriam
+                </Typography>
+              </Grid>
+              { pastItems.map((i: [Item, Subscription]) => {
+                let item = i[0];
+                let subscription = i[1];
+                return (
+                  <SubscriptionEntry item={item} subscription={subscription} expired={true} user={user}/>
+                );
+              })}
             </Grid>
-            { pastItems.map((i: [Item, Subscription]) => {
-              let item = i[0];
-              let subscription = i[1];
-              return (
-                <SubscriptionEntry item={item} subscription={subscription} expired={true} user={user}/>
-              );
-            })}
-              
-          </Grid>
-        </Container>
+          </Container>
+        </div>
       ) : null }
     </>
   );
