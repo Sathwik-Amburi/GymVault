@@ -27,7 +27,7 @@ import { S3_BASE_URL } from "../config/config";
 import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CityMap from "./widgets/map/CityMap";
-import Pagination from '@mui/material/Pagination';
+
 const moment = require("moment");
 
 const GymViewPage: FC = () => {
@@ -289,7 +289,6 @@ const GymViewPage: FC = () => {
           {reviews.length > 0 ? (
             reviews.map((review) => {
               return (
-                  <>
                 <Paper
                   style={{ padding: "1em", marginBottom: "8px" }}
                   elevation={3}
@@ -308,7 +307,6 @@ const GymViewPage: FC = () => {
                   </p>
                   <p>{review.description}</p>
                 </Paper>
-                  </>
               );
             })
           ) : (
@@ -317,7 +315,6 @@ const GymViewPage: FC = () => {
             </Typography>
           )}
         </Grid>
-        <Pagination count={5} />
       </Grid>
     </ChonkySpinner>
   );
