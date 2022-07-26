@@ -86,7 +86,7 @@ export default function Footer() {
                 underline="hover"
                 sx={{ p: 1, color: "white" }}
               >
-                {"Sign up as a Gym!"}
+                {"Sign Up as a Gym"}
               </Link>
             </Grid>
             <Grid className="footer-links">

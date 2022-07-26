@@ -1,5 +1,5 @@
 
-import { Grid, Paper, Typography } from "@mui/material";
+import { Button, Grid, Paper, Typography } from "@mui/material";
 import React, { FC, useState } from "react";
 import { Item, Subscription,UserProfileDetails } from "../../models/allModels";
 import SecretDisplay from "./SecretDisplay";
@@ -26,8 +26,7 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
         borderRadius: "20px",
         backgroundColor: ( props.expired ? "#393939" : "#ccc" ),
         color: ( props.expired ? "#fff" : "#000" ),
-      }}
-      onClick={() => setShownSecret(!shownSecret)}>
+      }}>
         <Grid item xs={12}>
           <span style={{float: "right"}}>
             <Typography variant="h5">
@@ -62,7 +61,22 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
             </>
           ) : null }
           <Typography variant="body2">{props.item.description}</Typography>
-            <ReviewButton userId = {props.subscription.userId} gymId = {props.subscription.gymId} username = {props.user.firstName} courseId = {props.subscription.courseId} />
+          <ReviewButton userId = {props.subscription.userId} gymId = {props.subscription.gymId} username = {props.user.firstName} courseId = {props.subscription.courseId} />
+
+          <br />
+          <Button 
+            style={{
+              display: shownSecret || props.expired ? "none" : "block",
+              float: "right",
+              fontWeight: "bold"
+            }}
+            variant="outlined"
+            color="primary"
+            size="large"
+            onClick={() => setShownSecret(!shownSecret)}>
+            <i className="fa fa-lock" style={{ marginRight: "0.5em" }}>&nbsp;</i>
+            Reveal Access Code
+          </Button>
         </Grid>
       </Grid>
   );

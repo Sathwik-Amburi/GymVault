@@ -79,16 +79,14 @@ export default function ReviewButton(props: any) {
     };
 
     return (
-        <div>
+        <div style={{marginTop: "2rem"}}>
             {!reviewAdded &&            <>
-                <hr />
                 <Button variant="contained" onClick={handleClickOpen}>
                     Write a review!
                 </Button>
             </>}
             {reviewAdded &&
                 <>
-                    <hr />
                     <Typography component="legend" style={{display: "inline-block",fontWeight:'bold'}}>You have rated this subscription: </Typography>
                     <Rating name="read-only" value={rating} size = "large" readOnly />
                 </>
