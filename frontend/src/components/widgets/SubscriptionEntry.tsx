@@ -42,7 +42,9 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
               </span>
             </Typography>
           </span>
-          <Typography variant="h4" style={{fontWeight: "bold" }}>{props.item.courseName !== "" ? props.item.courseName : props.item.gymName}</Typography>
+          <Typography variant="h4" style={{fontWeight: "bold" }}>
+            {props.item.gymName}
+          </Typography>
           <span>{props.item.address}</span>
           <hr />
         </Grid>
