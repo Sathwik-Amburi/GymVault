@@ -22,5 +22,6 @@ router.get("/get/:id/courses", courseController.getCoursesByGymId);
 router.get("/get-gym-by-owner", validateJwtToken, gymController.gymByOwnerId)
 
 router.patch("/edit-subscriptions-discounts", validateJwtToken, gymController.editGymSubscriptionPrice)
+router.get("/add-permission", validateJwtToken, gymController.gymFormPermission)
 
 module.exports = router;

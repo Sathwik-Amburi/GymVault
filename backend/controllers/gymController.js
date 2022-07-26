@@ -1,7 +1,7 @@
 const gymService = require("../services/gymService");
 const gymModel = require("../database/models/gym");
 const courseModel = require("../database/models/course");
-
+const userModel = require("../database/models/user");
 
 const getAllGyms = async (req, res) => {
   try {
@@ -195,6 +195,22 @@ const addSubscription = async (req, res) => {
   }
 };
 
+const gymFormPermission = async (req, res) => {
+  const gym = await gymModel.findOne({userId: req.user.id})
+  const user = await userModel.findById(req.user.id)
+
+  if(!user.payouts_enabled){
+    return res.status(400).json({message: "unauthorized"})
+  }
+
+  if(gym){
+    res.status(400).json({message: "unauthorized"})
+  }
+  else{
+    res.status(200).json({message: "authorized"})
+  }
+}
+
 
 module.exports = {
   getAllGyms,
@@ -206,5 +222,6 @@ module.exports = {
   getAllGymAmenitiesByCity,
   addSubscription,
   gymByOwnerId,
-  editGymSubscriptionPrice
+  editGymSubscriptionPrice,
+  gymFormPermission
 };

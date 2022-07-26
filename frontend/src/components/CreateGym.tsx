@@ -42,6 +42,7 @@ import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import axios from 'axios';
 import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import { markers } from "../components/widgets/map/coordinates"
+import { useNavigate } from "react-router-dom";
 
 interface NewCourseState {
   name: string;
@@ -75,6 +76,7 @@ const courseModalStyle = {
 };
 
 const CreateGym: FC = () => {
+  const navigate = useNavigate()
   const [position, setPosition] = useState<[number, number]>([0, 0])
   const [mapCity, setMapCity] = useState<string>("")
   const [cityCoordinates, setCityCoordinates] = useState<any>([51.505, 10.4515])
@@ -103,7 +105,11 @@ const CreateGym: FC = () => {
   const [courseImages, setCourseImages] = useState<string[]>([]);
   const token = localStorage.getItem("token");
 
+  const [loaded, setLoaded] = useState<boolean>(false)
+
   useEffect(() => {
+    checkPermission()
+
     ApiCalls.getUserProfile(token)
       .then((res) => {
         setProfile(res.data);
@@ -129,6 +135,19 @@ const CreateGym: FC = () => {
     const map = useMap();
     map.setView(center, zoom);
     return null;
+  }
+
+  const checkPermission = async () => {
+    setLoaded(false)
+    try {
+      const headers = { "x-access-token": String(localStorage.getItem('token')) }
+      const { data } = await axios.get('/gyms/add-permission', { headers })
+      setLoaded(true)
+    } catch (error) {
+      setLoaded(false)
+      console.log(error)
+      navigate('/user/owner-profile')
+    }
   }
 
 
@@ -200,10 +219,11 @@ const CreateGym: FC = () => {
       const gym = values
       const gymoptions: any = options
       const gymcourses: any = courses
-      const gymlocation = chosen ? position: [999, 999]
+      const gymlocation = chosen ? position : [999, 999]
       const data = { gym, gymcourses, gymoptions, gymlocation }
       const headers = { "x-access-token": String(localStorage.getItem('token')) }
       await axios.post(`gyms/add-gym`, data, { headers })
+      navigate("/user/owner-profile")
       console.log(gym);
       console.log(gymoptions);
       console.log(gymcourses);
