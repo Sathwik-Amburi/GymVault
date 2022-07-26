@@ -1,6 +1,6 @@
 import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import { FC } from "react";
-import NoImage from "../images/no-pictures.png";
+import NoImage from "../images/no-pictures-2.png";
 import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { Course } from "../models/allModels";

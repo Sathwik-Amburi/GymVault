@@ -1,5 +1,7 @@
 import { Grid, Paper } from "@mui/material";
 import { FC, useEffect, useState } from "react";
+import NoImage from "../../images/no-pictures-2.png";
+
 
 type LbProps = {
   states: string[];
@@ -19,7 +21,7 @@ const Lightbox: FC<LbProps> = (props) => {
           style={{
             padding: "10em",
             textAlign: "center",
-            backgroundImage: `url(${viewing})`,
+            backgroundImage: props.states.length > 0 ? `url(${viewing})` : `url(${NoImage})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center center"

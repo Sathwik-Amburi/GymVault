@@ -100,16 +100,8 @@ const CreateGym: FC = () => {
     { sessionDay: "Saturday", sessionDetails: [] },
     { sessionDay: "Sunday", sessionDetails: [] },
   ]);
-  let [images, setImages] = React.useState<string[]>([
-    "https://thecatapi.com/api/images/get?format=src&type=png",
-    "https://thecatapi.com/api/images/get?format=src&type=png&2",
-    "https://thecatapi.com/api/images/get?format=src&type=png&3",
-  ]);
-  const [courseImages, setCourseImages] = useState<string[]>([
-    "https://thecatapi.com/api/images/get?format=src&type=png",
-    "https://thecatapi.com/api/images/get?format=src&type=png&2",
-    "https://thecatapi.com/api/images/get?format=src&type=png&3",
-  ]);
+  let [images, setImages] = React.useState<string[]>([]);
+  const [courseImages, setCourseImages] = useState<string[]>([]);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -622,7 +614,7 @@ const CreateGym: FC = () => {
                     container
                     spacing={3}
                     style={{
-                      padding: "1em",
+                      padding: "3em",
                       borderRadius: "20px",
                       backgroundColor: "#eee",
                       overflowY: "scroll",
@@ -886,16 +878,18 @@ const CreateGym: FC = () => {
                         label="Picture URLs (one per line)"
                       />
                     </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        variant="contained"
+                        color="success"
+                        fullWidth
+                        type="submit"
+                        id="myForm"
+                      >
+                        Add course
+                      </Button>
+                    </Grid>
                   </Grid>
-                  <Button
-                    variant="contained"
-                    color="success"
-                    fullWidth
-                    type="submit"
-                    id="myForm"
-                  >
-                    Add course
-                  </Button>
                 </form>
               </Box>
             </Modal>
