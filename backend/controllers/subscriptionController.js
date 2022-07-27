@@ -49,12 +49,10 @@ const checkOrPurchase = async (req, res) => {
 
 const countActiveSubscriptions = async (req, res) => {
     const owner_id = req.user.id
-    console.log(owner_id)
     if (req.user.role !== 'gym_owner') {
         return res.status(400).json({ message: "unauthorized" })
     }
     const gym = await gymModel.findOne({ userId: owner_id})
-    console.log(gym)
     if (!gym) {
         return res.status(400).json({ message: 'no gym created' })
     }
@@ -68,4 +66,23 @@ const countActiveSubscriptions = async (req, res) => {
 }
 
 
-module.exports = { getSubscriptionById, getSubscriptionsByUserId, getSubscriptionsByGymId, checkOrPurchase, countActiveSubscriptions };
+const getActiveSubscriptions = async (req, res) => {
+    const owner_id = req.user.id
+    if (req.user.role !== 'gym_owner') {
+        return res.status(400).json({ message: "unauthorized" })
+    }
+    const gym = await gymModel.findOne({ userId: owner_id})
+    if (!gym) {
+        return res.status(400).json({ message: 'no gym created' })
+    }
+
+    const subscriptions = await subscriptionModel.find({ 
+        gymId: gym._id,
+        expireDate: { $gte: new Date() },
+    }).populate("courseId")
+
+    res.json({subscriptions})
+}
+
+
+module.exports = { getSubscriptionById, getSubscriptionsByUserId, getSubscriptionsByGymId, checkOrPurchase, countActiveSubscriptions, getActiveSubscriptions };

@@ -32,6 +32,8 @@ import StripeGymCallback from "./components/stripe/StripeGymCheckoutCallback";
 import Footer from "./components/Footer";
 import GymSignUpPage from "./components/GymSignUpPage";
 import ContactUs from "./components/ContactUs";
+import RevenuePage from "./components/RevenuePage";
+
 
 const THEME = createTheme({
   typography: {
@@ -148,7 +150,7 @@ const App: FC = () => {
                     <Route
                       path="/gym/add"
                       element={
-                          <CreateGym />
+                        <CreateGym />
                       }
                     />
 
@@ -177,6 +179,16 @@ const App: FC = () => {
                     <Route path="/*" element={<PageNotFound />} />
                     <Route path="/gym-signup" element={<GymSignUpPage />} />
                     <Route path="/contact-us" element={<ContactUs />} />
+
+                    <Route
+                      path="/gym/revenue-overview"
+                      element={
+                        <RoleWrapper allowedRoles={["gym_owner"]}>
+                          <RevenuePage />
+                        </RoleWrapper>
+                      }
+                    />
+
                   </Routes>
                 </Container>
               </>
