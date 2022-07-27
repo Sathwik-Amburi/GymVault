@@ -62,6 +62,11 @@ const StripeConnect: FC<StripeConnectProps> = (props: any) => {
         window.location.href = response.data.link
     }
 
+    const navigateToOverview = () => {
+        props.gymAddPermission ? navigate('/gym/add') : navigate("/gym/revenue-overview")
+
+    }
+
     return (
         <div>
             <div style={loaded ? { display: 'none' } : { display: 'block' }}>
@@ -84,7 +89,7 @@ const StripeConnect: FC<StripeConnectProps> = (props: any) => {
                             },
                         }}
                     >
-                        <Paper style={{
+                        <Paper onClick={navigateToOverview} style={{
                             cursor: 'pointer', marginBottom: "25px", borderRadius: "15px 50px 30px", outline: '2px solid #d1d1d1',
                         }} elevation={3}>
 
@@ -92,8 +97,10 @@ const StripeConnect: FC<StripeConnectProps> = (props: any) => {
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '8px' }}>
                                 <img src={home} style={{ width: "190px" }} alt="" />
                                 <div style={{ textAlign: 'center', padding: '5px', fontWeight: 'bold', fontSize: '21px' }}>{gym}</div>
-                                <div style={{ color: 'darkblue', fontSize: '14px' }}>{activeSubs} active {activeSubs == 1 ? 'subscription' : 'subscriptions'}</div>
-                                {/* <i style={{ color: "#3a598c", textShadow: "7px 11px grey", margin: "20px 0", fontSize: "100px" }} className="fa fa-home" aria-hidden="true"></i> */}
+                                {activeSubs > 0 ? <div style={{ color: 'darkblue', fontSize: '14px' }}>{activeSubs} active {activeSubs == 1 ? 'subscription' : 'subscriptions'}</div> : ''}
+                                {props.gymAddPermission ? <div style={{ textAlign: "center", margin: "15px" }}>
+                                    <Button onClick={() => navigate('/gym/add')} variant="outlined"> <i style={{ fontSize: '27px', padding: "4px" }} className="fa-solid fa-dumbbell" aria-hidden="true"></i> Add Gym</Button>
+                                </div> : ''}
                             </div>
 
                         </Paper>
@@ -107,11 +114,6 @@ const StripeConnect: FC<StripeConnectProps> = (props: any) => {
                             <Button disabled={processing} onClick={handlePayoutSettings} variant="outlined"><i style={{ fontSize: '27px', padding: "4px" }} className="fa-solid fa-money-check" aria-hidden="true"></i>{processing ? 'Processing . . . ' : 'Manage Earnings'}</Button>
                             <div style={{ fontSize: "12px", margin: "11px 3px", color: "grey" }}> <i>You will be redirected to your Stripe Connect dashboard</i> </div>
                         </div>
-                        {props.gymAddPermission ? <div style={{ textAlign: "center", margin: "15px" }}>
-                            <Button onClick={() => navigate('/gym/add')} variant="outlined"> <i style={{ fontSize: '27px', padding: "4px" }} className="fa-solid fa-dumbbell" aria-hidden="true"></i> Gym Settings</Button>
-                            <div style={{ fontSize: "12px", margin: "11px 3px", color: "grey" }}> <i>You can add your gym's detail here</i> </div>
-                        </div> : ''}
-
 
 
                         <div style={{ textAlign: "center", margin: "15px" }}>

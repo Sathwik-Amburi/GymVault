@@ -44,7 +44,7 @@ const googleAuth = async (req, res) => {
             const newUser = await user.save();
 
             const token = jwt.sign(
-                { id: newUser.id, email: newUser.email, name: newUser.firstName + newUser.lastName, role: newUser.role },
+                { id: newUser.id, email: newUser.email, name: newUser.firstName + newUser.lastName, role: newUser.role, profilePicture: newUser.profilePicture },
                 process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION }
             );
 

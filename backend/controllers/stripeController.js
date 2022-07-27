@@ -88,7 +88,6 @@ const getBalances = async (req, res) => {
 
 const createCheckoutSession = async (req, res) => {
     const stripe_account_id = await getPayee(req.body.id)
-    console.log(stripe_account_id)
     // const stripe_account_id = gym_owner.stripe_account_id
 
     const product = 'gym'
