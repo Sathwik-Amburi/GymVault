@@ -43,9 +43,9 @@ const OwnerProfile: FC = () => {
 
   return (
     <>
-      <div>
+      {/* <div>
         Welcome to your dashboard, {profile?.firstName} {profile?.lastName}
-      </div>
+      </div> */}
       {loaded ? (profile?.payouts_enabled ? <StripeConnected gymAddPermission={gymAddPermission}/> : <StripeOnboard/>): ''}
     </>
   );

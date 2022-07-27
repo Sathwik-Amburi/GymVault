@@ -1,4 +1,7 @@
 const subscriptionService = require('../services/subscriptionService');
+const subscriptionModel = require("../database/models/subscription");
+const gymModel = require("../database/models/gym");
+
 
 const getSubscriptionById = async (req, res) => {
     const { id } = req.params;
@@ -24,11 +27,11 @@ const getSubscriptionsByGymId = async (req, res) => {
     const { gymId } = req.params;
     const subscriptions = await subscriptionService.getSubscriptionsByGymId(gymId);
     if (subscriptions) {
-      res
-        .status(200)
-        .json({ message: `Subscriptions found`, response: subscriptions });
+        res
+            .status(200)
+            .json({ message: `Subscriptions found`, response: subscriptions });
     } else {
-      res.status(404).json({ message: `Subscriptions` });
+        res.status(404).json({ message: `Subscriptions` });
     }
 };
 
@@ -44,5 +47,25 @@ const checkOrPurchase = async (req, res) => {
     // }
 }
 
+const countActiveSubscriptions = async (req, res) => {
+    const owner_id = req.user.id
+    console.log(owner_id)
+    if (req.user.role !== 'gym_owner') {
+        return res.status(400).json({ message: "unauthorized" })
+    }
+    const gym = await gymModel.findOne({ userId: owner_id})
+    console.log(gym)
+    if (!gym) {
+        return res.status(400).json({ message: 'no gym created' })
+    }
 
-module.exports = { getSubscriptionById, getSubscriptionsByUserId, getSubscriptionsByGymId, checkOrPurchase };
+    const countActiveSubscriptions = await subscriptionModel.countDocuments({ 
+        gymId: gym._id,
+        expireDate: { $gte: new Date() },
+    })
+
+    res.json({countActiveSubscriptions})
+}
+
+
+module.exports = { getSubscriptionById, getSubscriptionsByUserId, getSubscriptionsByGymId, checkOrPurchase, countActiveSubscriptions };
