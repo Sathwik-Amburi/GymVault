@@ -17,7 +17,6 @@ export default function RevenueOverview() {
     try {
       let { data } = await axios.get("/subscriptions/get-active-subscriptions", { headers })
       setSubscriptions(data.subscriptions)
-      console.log((data.subscriptions).length)
       setLoaded(true)
 
     } catch (error) {
@@ -34,7 +33,7 @@ export default function RevenueOverview() {
 
   return (
     <>
-      {loaded ? (subscriptions.length > 0 ? <RevenueTable /> :
+      {loaded ? (subscriptions.length > 0 ? <RevenueTable subscriptions={subscriptions} /> :
         <Container maxWidth="lg" style={{ padding: "2em", textAlign: "center" }}>
           <div className="twrapper">
             <i className="fa-solid fa-ticket" style={{ fontSize: "80px", marginBottom: "4vh" }}></i>

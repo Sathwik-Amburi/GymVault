@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import moment from "moment";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -37,20 +38,32 @@ function createData(
     price: number,
     ticketSecret: string,
     purchaseDate: string,
-    expirationData: string
+    expirationDate: string
 ) {
-    return { name, email, subscriptionFor, subscriptionType, price, ticketSecret, purchaseDate, expirationData };
+    return { name, email, subscriptionFor, subscriptionType, price, ticketSecret, purchaseDate, expirationDate };
 }
 
-const rows = [
-    createData('Mohamed Ghanem', "mohamedyehia@gmail.com", 'Gym', 'DAY_PASS', 55, '12345', '05-05-2021', '04-05-2022'),
-    createData('Mohamed Ghanem', "mohamedyehia@gmail.com", 'Gym', 'DAY_PASS', 55, '12345', '05-05-2021', '04-05-2022'),
-    createData('Mohamed Ghanem', "mohamedyehia@gmail.com", 'Gym', 'DAY_PASS', 55, '12345', '05-05-2021', '04-05-2022'),
-    createData('Mohamed Ghanem', "mohamedyehia@gmail.com", 'Gym', 'DAY_PASS', 55, '12345', '05-05-2021', '04-05-2022'),
-    createData('Mohamed Ghanem', "mohamedyehia@gmail.com", 'Gym', 'DAY_PASS', 55, '12345', '05-05-2021', '04-05-2022'),
-];
+export default function RevenueTable(props: any) {
 
-export default function RevenueTable() {
+    let [rows, setRows] = useState([])
+
+    useEffect(() => {
+        let subs = props.subscriptions
+        let aux : any = []
+        subs.forEach((sub: any) => {
+            let name = sub.userId.firstName + ' ' + sub.userId.lastName
+            let email = sub.userId.email
+            let subscriptionFor = sub.courseId ? sub.courseId.name : 'Gym'
+            let subscriptionType = sub.type
+            let price = sub.price
+            let ticketSecret = sub.ticketSecret
+            let purchaseDate = moment(sub.purchaseDate).format('DD/MM/YYYY')
+            let expirationDate = moment(sub.expireDate).format('DD/MM/YYYY')
+            aux.push(createData(name, email, subscriptionFor, subscriptionType, price, ticketSecret, purchaseDate, expirationDate))
+        });
+        setRows(aux)
+    }, [])
+
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -71,7 +84,7 @@ export default function RevenueTable() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {rows.map((row : any) => (
                         <StyledTableRow key={row.name}>
                             <StyledTableCell component="th" scope="row">
                                 {row.name}
@@ -86,7 +99,7 @@ export default function RevenueTable() {
 
                             <StyledTableCell align="left">{row.ticketSecret}</StyledTableCell>
                             <StyledTableCell align="left">{row.purchaseDate}</StyledTableCell>
-                            <StyledTableCell align="left">{row.expirationData}</StyledTableCell>
+                            <StyledTableCell align="left">{row.expirationDate}</StyledTableCell>
                         </StyledTableRow>
                     ))}
                 </TableBody>
