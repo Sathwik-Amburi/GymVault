@@ -2,6 +2,7 @@ const courseService = require("../services/courseService");
 const courseModel = require("../database/models/course");
 
 const getAllCourses = async (req, res) => {
+  //this controller function uses the course service to fetch all the courses
   try {
     const courses = await courseService.getAllCourses();
 
@@ -13,6 +14,7 @@ const getAllCourses = async (req, res) => {
 };
 
 const getCourse = async (req, res) => {
+  //this controller function uses the course service to get a course by its ID
   const { id } = req.params;
   const course = await courseService.getCourse(id);
   if (course) {
@@ -23,6 +25,7 @@ const getCourse = async (req, res) => {
 };
 
 const getCoursesByGymId = async (req, res) => {
+  //this controller function uses the course service to fetch courses with the same gym id
   const { id } = req.params;
   const courses = await courseService.getCoursesByGymId(id);
   if (courses) {
@@ -33,6 +36,7 @@ const getCoursesByGymId = async (req, res) => {
 };
 
 const addCourse = async (req, res) => {
+  //this controller function uses the course service to add a course to a database
   try {
     const course = new courseModel(req.body);
     courseService.addCourse(course);

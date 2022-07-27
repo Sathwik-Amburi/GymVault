@@ -2,6 +2,7 @@ const reviewService = require("../services/reviewService");
 const reviewModel = require("../database/models/review");
 
 const getAllReviews = async (req, res) => {
+  //this controller function uses the review service to fetch all the reviews from the database
   try {
     const reviews = await reviewService.getAllReviews();
 
@@ -13,6 +14,7 @@ const getAllReviews = async (req, res) => {
 };
 
 const getReviewsById = async (req, res) => {
+  //this controller function uses the review service to fetch the reviews of course or a gym.
   const { id } = req.params;
   const gymReviews = await reviewService.getReviewsById(id);
   if (gymReviews) {
@@ -23,6 +25,7 @@ const getReviewsById = async (req, res) => {
 };
 
 const getReviewByUserId =  async (req, res) => {
+  //this controller function uses the review service to fetch the reviews/ratings of a user.
   const { userid,id } = req.params;
   const userReview = await reviewService.getReviewByUserId(userid,id);
   if (userReview) {
@@ -34,6 +37,7 @@ const getReviewByUserId =  async (req, res) => {
 
 
 const addReview = async (req, res) => {
+  //this controller function uses the review service to add a review by a user for a gym or a course
   try {
     const { userId, username, gymId, courseId, rating, title, description } =
       req.body;
@@ -56,6 +60,7 @@ const addReview = async (req, res) => {
 };
 
 const getCourseOrGymRating = async (req, res) => {
+  //this controller function uses the review service to fetch the review ratings a gym/course.
   try {
     const { id } = req.params;
     const rating = await reviewService.getCourseOrGymRating(id);

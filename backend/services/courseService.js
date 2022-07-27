@@ -4,6 +4,7 @@ const reviewModel = require("../database/models/review");
 
 class CourseService {
   getAllCourses = async () => {
+    // this service gets all the courses from the database
     try {
       const courses = await courseModel.find();
       return courses;
@@ -13,6 +14,7 @@ class CourseService {
   };
 
   getCourse = async (courseId) => {
+    // this service gets a course by its course id from the database
     try {
       const course = await courseModel.findById(courseId);
       return course;
@@ -22,6 +24,7 @@ class CourseService {
   };
 
   getCoursesByGymId = async (gymId) => {
+    // this service gets the courses assigned to a gym from the database
     try {
       const courses = await courseModel.find({ gymId: ObjectId(gymId) });
       return courses;
@@ -31,6 +34,7 @@ class CourseService {
   };
 
   addCourse = async (course) => {
+    // this service posts a course to the database
     try {
       await course.save();
     } catch (error) {

@@ -1,6 +1,7 @@
 const reviewModel = require("../database/models/review");
 
 class ReviewService {
+  // this service gets all the reviews from the database
   getAllReviews = async () => {
     try {
       const reviews = await reviewModel.find();
@@ -11,6 +12,7 @@ class ReviewService {
   };
 
   getReviewsById = async (Id) => {
+    // this service gets reviews by a gym or course ID from the database
     try {
       const gymReviews = await reviewModel.find({
         $or: [{ gymId: Id }, { courseId: Id }],
@@ -22,6 +24,7 @@ class ReviewService {
   };
 
   getReviewByUserId = async (userId, Id) => {
+    // this service gets reviews/rating of a user by userID from the database
     try {
       const reviewByUser = await reviewModel.findOne({
         $and: [{ userId: userId }, { $or: [{ gymId: Id }, { courseId: Id }] }],
@@ -36,6 +39,7 @@ class ReviewService {
   };
 
   getCourseOrGymRating = async (id) => {
+    //this service gets ratings of a gym or a course from the database
     try {
       const allRatings = await reviewModel
         .find({
@@ -70,6 +74,7 @@ class ReviewService {
     title,
     description
   ) => {
+    //this service posts a review to the database
     const review = new reviewModel({
       userId,
       username,
