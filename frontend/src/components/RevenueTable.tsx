@@ -15,7 +15,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
         color: theme.palette.common.white,
     },
     [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
+        fontSize: 13,
     },
 }));
 
@@ -34,13 +34,13 @@ function createData(
     email: string,
     subscriptionFor: string,
     subscriptionType: string,
-    // optionals: string,
     price: number,
+    optionalsNames: string,
     ticketSecret: string,
     purchaseDate: string,
     expirationDate: string
 ) {
-    return { name, email, subscriptionFor, subscriptionType, price, ticketSecret, purchaseDate, expirationDate };
+    return { name, email, subscriptionFor, subscriptionType, price, optionalsNames, ticketSecret, purchaseDate, expirationDate };
 }
 
 export default function RevenueTable(props: any) {
@@ -56,12 +56,15 @@ export default function RevenueTable(props: any) {
             let subscriptionFor = sub.courseId ? sub.courseId.name : 'Gym'
             let subscriptionType = sub.type
             let price = sub.price
+            let optionalsNames:any = [] 
+            sub.optionals.forEach((optional : any) => optionalsNames.push(optional.name))
             let ticketSecret = sub.ticketSecret
             let purchaseDate = moment(sub.purchaseDate).format('DD/MM/YYYY')
             let expirationDate = moment(sub.expireDate).format('DD/MM/YYYY')
-            aux.push(createData(name, email, subscriptionFor, subscriptionType, price, ticketSecret, purchaseDate, expirationDate))
+            aux.push(createData(name, email, subscriptionFor, subscriptionType, price, optionalsNames.toString(), ticketSecret, purchaseDate, expirationDate))
         });
         setRows(aux)
+        console.log(subs)
     }, [])
 
     return (
@@ -75,7 +78,9 @@ export default function RevenueTable(props: any) {
                         <StyledTableCell align="left">Subscription</StyledTableCell>
                         <StyledTableCell align="left">Type&nbsp;</StyledTableCell>
 
-                        <StyledTableCell align="left">Price&nbsp;</StyledTableCell>
+                        <StyledTableCell align="left">Price&nbsp;(€)</StyledTableCell>
+                        <StyledTableCell align="left">Optionals</StyledTableCell>
+
 
                         <StyledTableCell align="left">Ticket Secret</StyledTableCell>
                         <StyledTableCell align="left">Purchase Date&nbsp;</StyledTableCell>
@@ -96,6 +101,8 @@ export default function RevenueTable(props: any) {
                             <StyledTableCell align="left">{row.subscriptionType}</StyledTableCell>
 
                             <StyledTableCell align="left">{row.price}</StyledTableCell>
+                            <StyledTableCell align="left">{row.optionalsNames ? row.optionalsNames: 'none'}</StyledTableCell>
+
 
                             <StyledTableCell align="left">{row.ticketSecret}</StyledTableCell>
                             <StyledTableCell align="left">{row.purchaseDate}</StyledTableCell>
