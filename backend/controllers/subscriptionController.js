@@ -79,8 +79,7 @@ const getActiveSubscriptions = async (req, res) => {
     const subscriptions = await subscriptionModel.find({ 
         gymId: gym._id,
         expireDate: { $gte: new Date() },
-    }).populate("courseId")
-
+    }).populate("courseId userId")
     res.json({subscriptions})
 }
 
