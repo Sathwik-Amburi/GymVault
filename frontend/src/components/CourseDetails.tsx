@@ -78,6 +78,7 @@ const CourseViewPage: FC = () => {
         UnifiedErrorHandler.handle(err, "Cannot get course rating")
       );
 
+    //fetch the course reviews by its id
     ApiCalls.getReviewsById(fid)
       .then((res) => {
         setReviews(res.data.response);
@@ -227,6 +228,7 @@ const CourseViewPage: FC = () => {
       <Grid>
         <Grid>
           {reviews.length > 0 ? (
+              //map all the reviews into review cards
             reviews.map((review) => {
               return (
                 <Paper

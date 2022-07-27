@@ -70,6 +70,7 @@ const GymViewPage: FC = () => {
       .then((res) => setRatingData(res.data.response))
       .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gym rating"));
 
+    // fetch all the reviews for a gym by its ID
     ApiCalls.getReviewsById(fid)
       .then((res) => {
         setReviews(res.data.response);
@@ -287,6 +288,7 @@ const GymViewPage: FC = () => {
       <Grid>
         <Grid>
           {reviews.length > 0 ? (
+              // map all the reviews into review cards
             reviews.map((review) => {
               return (
                 <Paper

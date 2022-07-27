@@ -20,7 +20,7 @@ const theme = createTheme();
 export default function ReviewButton(props: any) {
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState<number | null>(0);
-    const [rating, setReview] = useState<any>(0);
+    const [rating, setReview] = useState<any>(0);//to get the reviews/rating of a user for a particular gym/course.
     const [reviewAdded,setReviewAdded] = useState<boolean>(false);
     let gymId = props.gymId
     let courseId = props.courseId
@@ -35,7 +35,7 @@ export default function ReviewButton(props: any) {
         gymId = null
     }
 
-
+    //fetch existing reviews by the user
     try {
         ApiCalls.getReviewByUserId(userId,Id)
             .then((res) => {
@@ -63,7 +63,7 @@ export default function ReviewButton(props: any) {
             title: data.get('title'),
             description: data.get('description'),
         });
-
+        //add the review by the user
         ApiCalls.addReview(
             data.get("userId"),
             data.get("username"),
