@@ -120,7 +120,7 @@ class authService {
       email,
       password: encryptedPassword,
       phoneNumber,
-      emailVerified: true,
+      emailVerified: false,
       role: "gym_owner",
     });
 
