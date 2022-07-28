@@ -92,9 +92,9 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
         <br />
         <Button 
           style={{
-            //display: shownSecret || props.expired ? "none" : "block",
             float: "right",
             fontWeight: "bold",
+            display: props.expired ? "none" : "block"
           }}
           variant="outlined"
           color="primary"

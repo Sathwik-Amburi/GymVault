@@ -19,6 +19,7 @@ export interface CartItem {
   name: string;
   description: string;
   price: number;
+  priceDiscount?: number;
   base: boolean; // if false, this is an option and can be removed
   _id: string;
 }
@@ -56,6 +57,8 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
     setLoading(true);
     props.setEditable(false);
     let baseItem = props.cart.find((item) => item.base);
+    if(baseItem && baseItem.price && baseItem.priceDiscount)
+      baseItem.price = baseItem.priceDiscount;
     let options = props.cart.filter((item) => !item.base);
     let startDate = props.startDate;
     const headers = { "x-access-token": String(localStorage.getItem("token")) };
@@ -90,7 +93,9 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
           <TableRow>
             <TableCell>
               <Typography variant="h6">
-                {opt.price > 0 ? "€ " + opt.price : "free"}
+                {opt.priceDiscount !== undefined ? (
+                    opt.priceDiscount > 0 ? "€ " + opt.priceDiscount : "free"
+                  ) : ( !isNaN(opt.price) && opt.price > 0 ? "€ " + opt.price : "free" )}
               </Typography>
             </TableCell>
             <TableCell>
@@ -103,7 +108,12 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
           <TableCell>
             <Typography variant="h5" style={{ fontWeight: "bold" }}>
               €{" "}
-              {props.cart.reduce((acc, curr) => acc + curr.price, 0).toFixed(2)}
+              {props.cart.reduce((acc, curr) => (
+                curr.priceDiscount !== undefined 
+                  ? acc + curr.priceDiscount
+                  : acc + curr.price 
+                ), 0).toFixed(2)
+              }
             </Typography>
           </TableCell>
           <TableCell>

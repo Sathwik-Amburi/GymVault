@@ -76,10 +76,9 @@ const CheckoutPage: FC = () => {
               : "?",
           name: toCleanSubscriptionTypeFormat(so.subscriptionType),
           description: "Fixed duration, base-tier ticket",
-          price:
-            so.discount !== undefined
-              ? +((so.subscriptionPrice * (100 - so.discount)) / 100).toFixed(2)
-              : +so.subscriptionPrice.toFixed(2),
+          price: +so.subscriptionPrice.toFixed(2),
+          priceDiscount: so.discount ? +((so.subscriptionPrice * (100 - so.discount)) / 100).toFixed(2) 
+                                     : undefined,
           bgColor: "#030",
           fgColor: "#fff",
         } as PurchaseOption);

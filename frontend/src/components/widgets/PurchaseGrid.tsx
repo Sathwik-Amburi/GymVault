@@ -64,6 +64,7 @@ const PurchaseGrid: FC<GridProps> = (props: GridProps) => {
                     name: item.name,
                     description: item.description,
                     price: item.price,
+                    priceDiscount: item.priceDiscount,
                     base: true,
                     _id: item._id,
                   } as CartItem;
@@ -71,21 +72,6 @@ const PurchaseGrid: FC<GridProps> = (props: GridProps) => {
                   props.setCart([cartItem].concat(cart));
                 }
               }
-              /*{
-              "_id": "1",
-              "name": "Base Ticket",
-              "description": "",
-              "price": 40,
-              "base": true,
-            },
-            {
-              "_id": "2",
-              "name": "Sauna Access",
-              "description": "",
-              "price": 40,
-              "base": false,
-            }
-          ]*/
             }
           >
             {props.editable ? (
@@ -102,11 +88,21 @@ const PurchaseGrid: FC<GridProps> = (props: GridProps) => {
               variant="h6"
               style={{
                 fontWeight: "bold",
+                textAlign: "right",
                 float: "right",
               }}
             >
-              {item.price}
-              {isNaN(item.price) ? "" : "€"}
+
+              <span style={{ 
+                display: "block",
+                textDecoration: item.priceDiscount ? "line-through" : "none",
+                fontSize: item.priceDiscount ? "0.7em" : "1em",
+                color: item.priceDiscount ? "#c10000" : "white",
+              }}>
+                {item.price}
+                {isNaN(item.price) ? "" : "€"}
+              </span>
+              {item.priceDiscount ? item.priceDiscount + "€" : null}
             </Typography>
             <div
               style={{
@@ -176,6 +172,7 @@ const PurchaseGrid: FC<GridProps> = (props: GridProps) => {
                         name: item.name,
                         description: item.description,
                         price: item.price,
+                        priceDiscount: item.priceDiscount,
                         base: false,
                         _id: item._id,
                       } as CartItem,
