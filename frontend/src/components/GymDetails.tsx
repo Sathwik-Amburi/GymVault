@@ -29,6 +29,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CityMap from "./widgets/map/CityMap";
 import { setErrorAlert } from "../store/slices/errorAlertSlice";
 import { useDispatch } from "react-redux";
+import NoImage from "../images/no-pictures-2.png";
 
 const moment = require("moment");
 
@@ -213,7 +214,7 @@ const GymViewPage: FC = () => {
                         <CardMedia
                           component="img"
                           height="140"
-                          image={`${item.images[0]}`}
+                          image={`${item.images !== undefined && item.images.length > 0 ? item.images[0] : NoImage}`}
                         />
                         <CardContent>
                           <Typography gutterBottom variant="h5" component="div">
