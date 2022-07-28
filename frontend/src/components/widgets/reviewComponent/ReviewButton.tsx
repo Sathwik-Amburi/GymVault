@@ -22,6 +22,9 @@ export default function ReviewButton(props: any) {
   const [value, setValue] = React.useState<number | null>(0);
   const [rating, setReview] = useState<any>(0); //to get the reviews/rating of a user for a particular gym/course.
   const [reviewAdded, setReviewAdded] = useState<boolean>(false);
+  const [title,setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("")
+  const [reviewValidation, setReviewValidation] = useState(false)
   let gymId = props.gymId;
   let courseId = props.courseId;
   let userId = props.userId;
@@ -49,6 +52,16 @@ export default function ReviewButton(props: any) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleTitleChange = (
+      event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setTitle(event.target.value);
+  };
+  const handleDescriptionChange = (
+      event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setDescription(event.target.value);
   };
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -174,6 +187,10 @@ export default function ReviewButton(props: any) {
                       label="Title"
                       type="text"
                       variant="standard"
+                      error={title === ""? true:false}
+                      helperText={title === ""?"Please enter a title":null}
+                      onChange = {handleTitleChange}
+                      value = {title}
                     />
                     <TextField
                       autoFocus
@@ -186,6 +203,11 @@ export default function ReviewButton(props: any) {
                       variant="filled"
                       multiline
                       rows={4}
+                      error={description=== ""? true:false}
+                      helperText={description=== ""? "Please share your experience":null}
+                      onChange = {handleDescriptionChange}
+                      value = {description}
+
                     />
                   </Grid>
                   <Button
