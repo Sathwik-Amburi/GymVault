@@ -10,18 +10,15 @@ const getProfile = async (req, res) => {
   res.status(200).json(profileDetails);
 };
 
-
 const retrievePutSignedURL = async (req, res) => {
-    const key = `profiles/${req.user.name}-${req.user.id}/${req.body.fileName}`
-    const type = req.body.type
+  const key = `profiles/${req.user.name}-${req.user.id}/${req.body.fileName}`;
+  const type = req.body.type;
 
-    s3Service.emptyS3Directory(`profiles/${req.user.name}-${req.user.id}`)
-    const url = s3Service.retrievePutSignedURL(key, type)
-    await userService.setProfile(req.user.id, key)
+  s3Service.emptyS3Directory(`profiles/${req.user.name}-${req.user.id}`);
+  const url = s3Service.retrievePutSignedURL(key, type);
+  await userService.setProfile(req.user.id, key);
 
-    res.json({ url, key })
-}
-
-
+  res.json({ url, key });
+};
 
 module.exports = { getProfile, retrievePutSignedURL };

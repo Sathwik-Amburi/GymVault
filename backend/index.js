@@ -7,17 +7,19 @@ const cors = require("cors");
 const PORT = 8000;
 const apiRoute = require("./routes/apiRoute");
 const app = express();
-const courseModel = require("./database/models/course")
+const courseModel = require("./database/models/course");
 
 app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(fileupload())
+app.use(fileupload());
 
 gymvaultDb.connect();
 
-app.get("/", (req, res) => { res.send("Connected to API") })
+app.get("/", (req, res) => {
+  res.send("Connected to API");
+});
 
 app.use("/api", apiRoute);
 

@@ -64,20 +64,20 @@ const UserSchema = new mongoose.Schema({
   stripe_account_id: {
     type: String,
   },
-  payouts_enabled:{
+  payouts_enabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   stripe_session: {
     type: Object,
     required: false,
-    default: null
+    default: null,
   },
 
   profilePicture: {
     type: String,
-    default: 'defaults/usericon.png'
-  }
+    default: "defaults/usericon.png",
+  },
 });
 
 const User = mongoose.model("User", UserSchema);

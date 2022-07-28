@@ -22,7 +22,6 @@ import jwt_decode, { JwtPayload } from "jwt-decode";
 import { setProfilePicture } from "../store/slices/profilePictureSlice";
 import userIcon from "../images/usericon.png";
 
-
 const theme = createTheme();
 
 const LoginPage: FC = () => {
@@ -36,11 +35,11 @@ const LoginPage: FC = () => {
     });
 
   interface payload {
-    id: String,
-    email: String,
-    name: String,
-    role: String,
-    profilePicture: String
+    id: String;
+    email: String;
+    name: String;
+    role: String;
+    profilePicture: String;
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -52,10 +51,13 @@ const LoginPage: FC = () => {
       .then((res) => {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("role", res.data.role);
-        localStorage.setItem("profilepicture",jwt_decode<any>(String(res.data.token)).profilePicture)
-        
-        const { profilePicture } = jwt_decode<payload>(res.data.token)
-        dispatch(setProfilePicture({ url: String(profilePicture)}))
+        localStorage.setItem(
+          "profilepicture",
+          jwt_decode<any>(String(res.data.token)).profilePicture
+        );
+
+        const { profilePicture } = jwt_decode<payload>(res.data.token);
+        dispatch(setProfilePicture({ url: String(profilePicture) }));
 
         dispatch(
           setAuthentication({ isAuthenticated: true, role: res.data.role })
@@ -89,10 +91,13 @@ const LoginPage: FC = () => {
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("role", "user");
-        localStorage.setItem("profilepicture",jwt_decode<any>(String(response.data.token)).profilePicture)
+        localStorage.setItem(
+          "profilepicture",
+          jwt_decode<any>(String(response.data.token)).profilePicture
+        );
 
-        const { profilePicture } = jwt_decode<payload>(response.data.token)
-        dispatch(setProfilePicture({ url: String(profilePicture) }))
+        const { profilePicture } = jwt_decode<payload>(response.data.token);
+        dispatch(setProfilePicture({ url: String(profilePicture) }));
 
         dispatch(setAuthentication({ isAuthenticated: true, role: "user" }));
         navigate("/");

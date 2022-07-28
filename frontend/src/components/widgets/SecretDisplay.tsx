@@ -1,4 +1,3 @@
-
 import { Grid, Paper, Typography } from "@mui/material";
 import { FC, useState } from "react";
 
@@ -9,21 +8,36 @@ type SdProps = {
 };
 
 const SecretDisplay: FC<SdProps> = (props) => {
-
   return (
-    <Grid item md={6} xs={12} style={{ padding: "2em", display: props.shown ? "block" : "none" }}>
-      <Paper style={{ backgroundColor: "#fff", padding: "2.5em", borderRadius: "12px" }}>
-        <Typography variant="h6" style={{fontWeight: "bold" }}>
-          <span className="fas fa-lock" style={ { color: "#00763D", marginRight: "0.5em" } }></span>
+    <Grid
+      item
+      md={6}
+      xs={12}
+      style={{ padding: "2em", display: props.shown ? "block" : "none" }}
+    >
+      <Paper
+        style={{
+          backgroundColor: "#fff",
+          padding: "2.5em",
+          borderRadius: "12px",
+        }}
+      >
+        <Typography variant="h6" style={{ fontWeight: "bold" }}>
+          <span
+            className="fas fa-lock"
+            style={{ color: "#00763D", marginRight: "0.5em" }}
+          ></span>
           Secret Access Code
         </Typography>
         <br />
         <Typography display="inline" variant="h5">
           {props.code}
         </Typography>
-        <br /><br />
+        <br />
+        <br />
         <Typography variant="body2">
-          You will be asked to present this code by the gym staff upon entry. Do not share this code with anyone.
+          You will be asked to present this code by the gym staff upon entry. Do
+          not share this code with anyone.
         </Typography>
       </Paper>
     </Grid>

@@ -24,17 +24,16 @@ const getReviewsById = async (req, res) => {
   }
 };
 
-const getReviewByUserId =  async (req, res) => {
+const getReviewByUserId = async (req, res) => {
   //this controller function uses the review service to fetch the reviews/ratings of a user.
-  const { userid,id } = req.params;
-  const userReview = await reviewService.getReviewByUserId(userid,id);
+  const { userid, id } = req.params;
+  const userReview = await reviewService.getReviewByUserId(userid, id);
   if (userReview) {
     res.status(200).json({ message: `Review found`, response: userReview });
   } else {
     res.status(404).json({ message: `Review not found` });
   }
 };
-
 
 const addReview = async (req, res) => {
   //this controller function uses the review service to add a review by a user for a gym or a course
@@ -76,5 +75,5 @@ module.exports = {
   getReviewsById,
   addReview,
   getCourseOrGymRating,
-  getReviewByUserId
+  getReviewByUserId,
 };

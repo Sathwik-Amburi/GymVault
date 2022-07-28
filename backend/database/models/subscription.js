@@ -29,7 +29,7 @@ const SubscriptionSchema = new mongoose.Schema({
   },
   courseId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Course"
+    ref: "Course",
   },
   name: {
     type: String,

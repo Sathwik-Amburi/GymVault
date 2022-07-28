@@ -29,7 +29,7 @@ class authService {
             email: match.email,
             name: match.firstName + match.lastName,
             role: match.role,
-            profilePicture: match.profilePicture
+            profilePicture: match.profilePicture,
           },
           process.env.JWT_SECRET,
           { expiresIn: process.env.JWT_EXPIRATION }
@@ -37,7 +37,7 @@ class authService {
         return {
           token,
           message: "Logged in",
-          role: match.role
+          role: match.role,
         };
       } else {
         return {

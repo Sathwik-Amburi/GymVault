@@ -7,7 +7,7 @@ type Props = {
 
 const StarWidget: FC<Props> = ({ rating }) => {
   return (
-    <div style={{ display: "inline"}}>
+    <div style={{ display: "inline" }}>
       {[...Array(5)].map((_, i) => {
         const starValue = i + 1;
         return (

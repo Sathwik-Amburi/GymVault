@@ -18,17 +18,13 @@ class UserService {
       phoneNumber: user.phoneNumber,
       payouts_enabled: user.payouts_enabled,
       profilePicture: user.profilePicture,
-      created: user.created
+      created: user.created,
     };
   };
 
-
   setProfile = async (user_id, key) => {
-    await userModel.findByIdAndUpdate(user_id, {profilePicture: key})
-  }
-  
+    await userModel.findByIdAndUpdate(user_id, { profilePicture: key });
+  };
 }
-
-
 
 module.exports = new UserService();

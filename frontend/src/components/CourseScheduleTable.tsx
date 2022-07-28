@@ -17,11 +17,11 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { CourseSession } from "../models/allModels";
 import moment from "moment";
 
-const Row = (props: { 
-  row: CourseSession, 
-  selected?: string, 
-  setSelected?: (id: string) => void, 
-  showNextSessionDate?: boolean
+const Row = (props: {
+  row: CourseSession;
+  selected?: string;
+  setSelected?: (id: string) => void;
+  showNextSessionDate?: boolean;
 }) => {
   const { row, selected, setSelected, showNextSessionDate } = props;
   const [open, setOpen] = useState(false);
@@ -30,11 +30,11 @@ const Row = (props: {
   function getNextWeekday(day: string): string {
     var weekDayToFind = moment().day(day).weekday(); //change to searched day name
     var searchDate = moment(); //now or change to any date
-    while (searchDate.weekday() !== weekDayToFind){ 
-      searchDate.add(1, 'day'); 
+    while (searchDate.weekday() !== weekDayToFind) {
+      searchDate.add(1, "day");
     }
-    
-    return searchDate.format("DD/MM/YYYY")
+
+    return searchDate.format("DD/MM/YYYY");
   }
 
   return (
@@ -50,19 +50,11 @@ const Row = (props: {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          { showNextSessionDate && (
-            <span>
-              Next{" "}
-            </span>
-          ) }
+          {showNextSessionDate && <span>Next </span>}
           {row.sessionDay}
-          { showNextSessionDate && (
-            <span>
-              {" "}({ 
-                getNextWeekday(row.sessionDay)
-              })
-            </span>
-          ) }
+          {showNextSessionDate && (
+            <span> ({getNextWeekday(row.sessionDay)})</span>
+          )}
         </TableCell>
       </TableRow>
       <TableRow>
@@ -72,7 +64,7 @@ const Row = (props: {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    { selected !== undefined && <TableCell> </TableCell> }
+                    {selected !== undefined && <TableCell> </TableCell>}
                     <TableCell>Time</TableCell>
                     <TableCell>Instructor</TableCell>
                   </TableRow>
@@ -80,11 +72,28 @@ const Row = (props: {
                 <TableBody>
                   {row.sessionDetails.map((historyRow) => (
                     <TableRow key={historyRow.sessionTime}>
-                      { selected !== undefined && <TableCell> 
-                        <Radio onChange={() => {
-                          if(setSelected !== undefined) setSelected("S:" + row.sessionDay + historyRow.sessionTime + historyRow.sessionsInstructor);
-                        }} checked={selected === "S:" + row.sessionDay + historyRow.sessionTime + historyRow.sessionsInstructor} />
-                      </TableCell>}
+                      {selected !== undefined && (
+                        <TableCell>
+                          <Radio
+                            onChange={() => {
+                              if (setSelected !== undefined)
+                                setSelected(
+                                  "S:" +
+                                    row.sessionDay +
+                                    historyRow.sessionTime +
+                                    historyRow.sessionsInstructor
+                                );
+                            }}
+                            checked={
+                              selected ===
+                              "S:" +
+                                row.sessionDay +
+                                historyRow.sessionTime +
+                                historyRow.sessionsInstructor
+                            }
+                          />
+                        </TableCell>
+                      )}
                       <TableCell component="th" scope="row">
                         {historyRow.sessionTime}
                       </TableCell>
@@ -109,7 +118,10 @@ interface CourseScheduleTableProps {
 }
 
 const CourseScheduleTable: FC<CourseScheduleTableProps> = ({
-  courseSessions, selected, setSelected, showNextSessionDate
+  courseSessions,
+  selected,
+  setSelected,
+  showNextSessionDate,
 }) => {
   return (
     <TableContainer component={Paper}>
@@ -118,15 +130,19 @@ const CourseScheduleTable: FC<CourseScheduleTableProps> = ({
           <TableRow>
             <TableCell />
             <TableCell>
-              <b>
-                Weekly Schedule
-              </b>
+              <b>Weekly Schedule</b>
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {courseSessions.map((row) => (
-            <Row key={row.sessionDay} row={row} selected={selected} setSelected={setSelected} showNextSessionDate={showNextSessionDate} />
+            <Row
+              key={row.sessionDay}
+              row={row}
+              selected={selected}
+              setSelected={setSelected}
+              showNextSessionDate={showNextSessionDate}
+            />
           ))}
         </TableBody>
       </Table>

@@ -10,10 +10,10 @@ const subscriptionOffer = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  discount:{
+  discount: {
     type: Number,
-    default:0
-  }
+    default: 0,
+  },
 });
 
 const Option = new mongoose.Schema({
@@ -85,8 +85,8 @@ const GymSchema = new mongoose.Schema({
   },
   coordinates: {
     type: [Number],
-    default: [999, 999]
-  }
+    default: [999, 999],
+  },
 });
 
 const Gym = mongoose.model("Gym", GymSchema);

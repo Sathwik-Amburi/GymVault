@@ -10,7 +10,6 @@ import { Provider } from "react-redux";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import ErrorAlert from "./components/ErrorAlert";
 
-
 axios.defaults.baseURL = API_URL;
 
 const root = ReactDOM.createRoot(
@@ -18,11 +17,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   // <React.StrictMode>
-    <Provider store={store}>
-      <ErrorAlert/>
-      <GoogleOAuthProvider clientId="195046756501-pg2ktn9ociknvjsltlhi27c9b39hq7qb.apps.googleusercontent.com">
-        <App />
-      </GoogleOAuthProvider>
-    </Provider>
+  <Provider store={store}>
+    <ErrorAlert />
+    <GoogleOAuthProvider clientId="195046756501-pg2ktn9ociknvjsltlhi27c9b39hq7qb.apps.googleusercontent.com">
+      <App />
+    </GoogleOAuthProvider>
+  </Provider>
   // </React.StrictMode>
 );

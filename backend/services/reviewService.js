@@ -14,9 +14,11 @@ class ReviewService {
   getReviewsById = async (Id) => {
     // this service gets reviews by a gym or course ID from the database
     try {
-      const gymReviews = await reviewModel.find({
-        $or: [{ gymId: Id }, { courseId: Id }],
-      }).populate("userId", "-password");
+      const gymReviews = await reviewModel
+        .find({
+          $or: [{ gymId: Id }, { courseId: Id }],
+        })
+        .populate("userId", "-password");
       return gymReviews;
     } catch (error) {
       console.log("Error while fetching gym reviews", error.message);

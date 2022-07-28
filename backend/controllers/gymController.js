@@ -16,22 +16,29 @@ const getAllGyms = async (req, res) => {
 
 const gymByOwnerId = async (req, res) => {
   if (req.user.role !== "gym_owner") {
-    return res.status(403).json({ message: 'forbidden' })
+    return res.status(403).json({ message: "forbidden" });
   }
-  const gym = await gymModel.findOne({userId: req.user.id})
-  res.json({ gym })
-}
+  const gym = await gymModel.findOne({ userId: req.user.id });
+  res.json({ gym });
+};
 
 const editGymSubscriptionPrice = async (req, res) => {
   if (req.user.role !== "gym_owner") {
-    return res.status(403).json({ message: 'forbidden' })
+    return res.status(403).json({ message: "forbidden" });
   }
-  if (!req.body.subscriptionOffers || req.body.subscriptionOffers === undefined) {
-    return res.status(400).json({ message: 'invalid request' })
+  if (
+    !req.body.subscriptionOffers ||
+    req.body.subscriptionOffers === undefined
+  ) {
+    return res.status(400).json({ message: "invalid request" });
   }
-  const gym = await gymModel.findOneAndUpdate({ userId: req.user.id }, { subscriptionOffers: req.body.subscriptionOffers }, { new: true })
-  res.json({ gym })
-}
+  const gym = await gymModel.findOneAndUpdate(
+    { userId: req.user.id },
+    { subscriptionOffers: req.body.subscriptionOffers },
+    { new: true }
+  );
+  res.json({ gym });
+};
 
 const getAllAvailableSearchCities = async (req, res) => {
   try {
@@ -63,27 +70,47 @@ const getGym = async (req, res) => {
 };
 
 const addGym = async (req, res) => {
-
-  let { gym, gymcourses, gymoptions, gymlocation } = req.body
+  let { gym, gymcourses, gymoptions, gymlocation } = req.body;
 
   // create gym
-  let { address, city, description, name, phone, website,
-    amenities, gymImages,
-    dayPassSelected, dayPassPrice,
-    gymMonthlySubscriptionSelected, gymMonthlySubscriptionPrice,
-    gymYearlySubscriptionSelected, gymYearlySubscriptionPrice,
-  } = gym
+  let {
+    address,
+    city,
+    description,
+    name,
+    phone,
+    website,
+    amenities,
+    gymImages,
+    dayPassSelected,
+    dayPassPrice,
+    gymMonthlySubscriptionSelected,
+    gymMonthlySubscriptionPrice,
+    gymYearlySubscriptionSelected,
+    gymYearlySubscriptionPrice,
+  } = gym;
 
-  let subscriptionOffers = []
-  dayPassSelected && dayPassPrice > 0 ?
-    subscriptionOffers.push({ subscriptionType: 'DAY_PASS', subscriptionPrice: dayPassPrice }) : ''
+  let subscriptionOffers = [];
+  dayPassSelected && dayPassPrice > 0
+    ? subscriptionOffers.push({
+        subscriptionType: "DAY_PASS",
+        subscriptionPrice: dayPassPrice,
+      })
+    : "";
 
-  gymMonthlySubscriptionSelected && gymMonthlySubscriptionPrice > 0 ?
-    subscriptionOffers.push({ subscriptionType: 'MONTHLY_PASS', subscriptionPrice: gymMonthlySubscriptionPrice }) : ''
+  gymMonthlySubscriptionSelected && gymMonthlySubscriptionPrice > 0
+    ? subscriptionOffers.push({
+        subscriptionType: "MONTHLY_PASS",
+        subscriptionPrice: gymMonthlySubscriptionPrice,
+      })
+    : "";
 
-  gymYearlySubscriptionSelected && gymYearlySubscriptionPrice > 0 ?
-    subscriptionOffers.push({ subscriptionType: 'YEARLY_PASS', subscriptionPrice: gymYearlySubscriptionPrice }) : ''
-
+  gymYearlySubscriptionSelected && gymYearlySubscriptionPrice > 0
+    ? subscriptionOffers.push({
+        subscriptionType: "YEARLY_PASS",
+        subscriptionPrice: gymYearlySubscriptionPrice,
+      })
+    : "";
 
   const newGym = new gymModel({
     name,
@@ -92,32 +119,43 @@ const addGym = async (req, res) => {
     phoneNumber: phone,
     address,
     description,
-    amenities: amenities.split('\n'),
+    amenities: amenities.split("\n"),
     websiteURL: website,
     subscriptionOffers,
     optionals: gymoptions ? gymoptions : [],
-    images: gymImages.split('\n'),
+    images: gymImages.split("\n"),
     coordinates: gymlocation,
-    userId: req.user.id
+    userId: req.user.id,
   });
-  await newGym.save()
+  await newGym.save();
 
   // create courses
   if (gymcourses.length > 0) {
     gymcourses.forEach(async (course) => {
-      let description = course.description
-      let name = course.name
-      let subscriptionOffers = course.subscriptionOffers.filter((s) => s.subscriptionPrice > 0)
-      let sessions = course.sessions.filter((session) => session.sessionDetails.length > 0)
-      let images = course.images.split('\n')
-      let gymId = newGym._id
-      const newCourse = new courseModel({ name, description, images, subscriptionOffers, sessions, gymId, userId: req.user.id })
-      await newCourse.save()
-    })
+      let description = course.description;
+      let name = course.name;
+      let subscriptionOffers = course.subscriptionOffers.filter(
+        (s) => s.subscriptionPrice > 0
+      );
+      let sessions = course.sessions.filter(
+        (session) => session.sessionDetails.length > 0
+      );
+      let images = course.images.split("\n");
+      let gymId = newGym._id;
+      const newCourse = new courseModel({
+        name,
+        description,
+        images,
+        subscriptionOffers,
+        sessions,
+        gymId,
+        userId: req.user.id,
+      });
+      await newCourse.save();
+    });
   }
 
-  res.status(201).send("success")
-
+  res.status(201).send("success");
 };
 
 const filterGyms = async (req, res) => {
@@ -196,21 +234,19 @@ const addSubscription = async (req, res) => {
 };
 
 const gymFormPermission = async (req, res) => {
-  const gym = await gymModel.findOne({userId: req.user.id})
-  const user = await userModel.findById(req.user.id)
+  const gym = await gymModel.findOne({ userId: req.user.id });
+  const user = await userModel.findById(req.user.id);
 
-  if(!user.payouts_enabled){
-    return res.status(400).json({message: "unauthorized"})
+  if (!user.payouts_enabled) {
+    return res.status(400).json({ message: "unauthorized" });
   }
 
-  if(gym){
-    res.status(400).json({message: "unauthorized"})
+  if (gym) {
+    res.status(400).json({ message: "unauthorized" });
+  } else {
+    res.status(200).json({ message: "authorized" });
   }
-  else{
-    res.status(200).json({message: "authorized"})
-  }
-}
-
+};
 
 module.exports = {
   getAllGyms,
@@ -223,5 +259,5 @@ module.exports = {
   addSubscription,
   gymByOwnerId,
   editGymSubscriptionPrice,
-  gymFormPermission
+  gymFormPermission,
 };

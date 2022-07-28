@@ -34,7 +34,6 @@ import GymSignUpPage from "./components/GymSignUpPage";
 import ContactUs from "./components/ContactUs";
 import RevenuePage from "./components/RevenuePage";
 
-
 const THEME = createTheme({
   typography: {
     fontFamily: `"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif`,
@@ -88,7 +87,14 @@ const App: FC = () => {
             path="/*"
             element={
               <>
-                <Container maxWidth="lg" style={{ padding: "3em", position: "relative", minHeight: "90vh" }}>
+                <Container
+                  maxWidth="lg"
+                  style={{
+                    padding: "3em",
+                    position: "relative",
+                    minHeight: "90vh",
+                  }}
+                >
                   <Routes>
                     <Route path="/" element={<FrontPage />} />
                     <Route path="/terms" element={<Terms />} />
@@ -147,12 +153,7 @@ const App: FC = () => {
                       }
                     />
 
-                    <Route
-                      path="/gym/add"
-                      element={
-                        <CreateGym />
-                      }
-                    />
+                    <Route path="/gym/add" element={<CreateGym />} />
 
                     <Route
                       path="/stripe/checkout/callback/gym/:gym_id"
@@ -188,7 +189,6 @@ const App: FC = () => {
                         </RoleWrapper>
                       }
                     />
-
                   </Routes>
                 </Container>
               </>

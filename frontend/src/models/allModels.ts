@@ -22,7 +22,7 @@ export interface Rating {
 export interface SubscriptionOffers {
   subscriptionType: SubscriptionTypes;
   subscriptionPrice: number;
-  discount: number
+  discount: number;
 }
 
 export interface Course {
@@ -80,7 +80,7 @@ export enum SubscriptionTypes {
 export interface Subscription {
   userId: string;
   gymId: string;
-  courseId:string;
+  courseId: string;
   name?: string;
   type: SubscriptionTypes;
   price: number;
@@ -93,8 +93,7 @@ export interface Subscription {
 
 export interface Filter {
   priceRanges: PriceRangeFilter[];
-  amenities: string[]
-
+  amenities: string[];
 }
 
 export interface PriceRangeFilter {
@@ -120,5 +119,5 @@ export interface UserProfileDetails {
   email: string;
   payouts_enabled: boolean;
   profilePicture: string;
-  created: string
+  created: string;
 }

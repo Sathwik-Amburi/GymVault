@@ -1,14 +1,14 @@
 .google {
-    width: 100%;
-    font-size:15px;
-    margin-bottom: 10px;
-    background-color: rgba(255, 0, 0, 0.685);
-    color:white;
-    border: red;
-    padding: 10px;
-    border-radius: 5px;
-  }
+  width: 100%;
+  font-size: 15px;
+  margin-bottom: 10px;
+  background-color: rgba(255, 0, 0, 0.685);
+  color: white;
+  border: red;
+  padding: 10px;
+  border-radius: 5px;
+}
 
-  .google:hover {
-    background-color: red
-  }
+.google:hover {
+  background-color: red;
+}
