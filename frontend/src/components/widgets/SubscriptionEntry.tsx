@@ -4,6 +4,7 @@ import { Item, Subscription, UserProfileDetails } from "../../models/allModels";
 import SecretDisplay from "./SecretDisplay";
 import SubscriptionSummary from "./SubscriptionSummary";
 import ReviewButton from "./reviewComponent/ReviewButton";
+import { AutoFixHigh } from "@mui/icons-material";
 
 type SsProps = {
   subscription: Subscription;
@@ -89,9 +90,9 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
         />
 
         <br />
-        <Button
+        <Button 
           style={{
-            display: shownSecret || props.expired ? "none" : "block",
+            //display: shownSecret || props.expired ? "none" : "block",
             float: "right",
             fontWeight: "bold",
           }}
@@ -100,10 +101,13 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
           size="large"
           onClick={() => setShownSecret(!shownSecret)}
         >
-          <i className="fa fa-lock" style={{ marginRight: "0.5em" }}>
-            &nbsp;
-          </i>
-          Reveal Access Code
+          { shownSecret ? <>
+            <AutoFixHigh style={{ marginRight: "0.5em" }} />
+            Show Order Log
+          </> : <>
+            <i className="fa fa-lock" style={{ marginRight: "0.5em" }}>&nbsp;</i>
+            Reveal Access Code
+          </> }
         </Button>
       </Grid>
     </Grid>
