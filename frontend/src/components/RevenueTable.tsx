@@ -9,6 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import moment from "moment";
 import { toCleanSubscriptionTypeFormat } from '../api/utils/formatters';
+import { Typography } from '@mui/material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -68,7 +69,11 @@ export default function RevenueTable(props: any) {
         console.log(subs)
     }, [])
 
-    return (
+    return (<>
+        <Typography variant="h4" style={{fontWeight: "bold"}} gutterBottom>
+            Customer Subscriptions Check
+        </Typography>
+        <hr />
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
                 <TableHead>
@@ -113,5 +118,6 @@ export default function RevenueTable(props: any) {
                 </TableBody>
             </Table>
         </TableContainer>
+        </>
     );
 }
