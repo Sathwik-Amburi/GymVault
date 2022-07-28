@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import moment from "moment";
+import { toCleanSubscriptionTypeFormat } from '../api/utils/formatters';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -98,7 +99,7 @@ export default function RevenueTable(props: any) {
                                 {row.email}
                             </StyledTableCell>
                             <StyledTableCell align="left">{row.subscriptionFor}</StyledTableCell>
-                            <StyledTableCell align="left">{row.subscriptionType}</StyledTableCell>
+                            <StyledTableCell align="left">{toCleanSubscriptionTypeFormat(row.subscriptionType)}</StyledTableCell>
 
                             <StyledTableCell align="left">{row.price}</StyledTableCell>
                             <StyledTableCell align="left">{row.optionalsNames ? row.optionalsNames: 'none'}</StyledTableCell>

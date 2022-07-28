@@ -2,6 +2,8 @@ import React from 'react'
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { Button } from '@mui/material';
+import { toCleanSubscriptionTypeFormat } from '../api/utils/formatters';
+import { SubscriptionTypes } from '../models/allModels';
 
 let newOffers: any = {}
 
@@ -10,7 +12,7 @@ function valuetext(value: number) {
 }
 
 interface subscriptionOffer {
-    subscriptionType: string,
+    subscriptionType: SubscriptionTypes,
     subscriptionPrice: number,
     discount: number,
 }
@@ -36,7 +38,7 @@ const DiscountsPage: React.FC<DiscountsPageProps> = ({ subscriptionOffers, editS
     const displaySubscriptionOffers = (s: subscriptionOffer) => {
 
         return <>
-            <div>{s.subscriptionType}</div>
+            <div>{toCleanSubscriptionTypeFormat(s.subscriptionType)}</div>
             <Box sx={{ width: 300 }}>
                 <Slider
                     onChange={(event: Event) => handleChange(event, s)}

@@ -5,6 +5,7 @@ import Modal from '@mui/material/Modal';
 import DiscountsContent from './DiscountsContent';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { SubscriptionTypes } from '../models/allModels';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -20,7 +21,7 @@ const style = {
 };
 
 interface subscriptionOffer {
-    subscriptionType: string,
+    subscriptionType: SubscriptionTypes,
     subscriptionPrice: number,
     discount: number
 }
