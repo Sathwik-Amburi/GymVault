@@ -107,6 +107,7 @@ export interface PurchaseOption {
   name: string;
   description: string;
   price: number;
+  priceDiscount?: number;
   bgColor: string;
   fgColor: string;
   _id: string;
