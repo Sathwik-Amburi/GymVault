@@ -46,6 +46,23 @@ export default function ReviewButton(props: any) {
     //do nothing
   }
 
+  const deleteReview = () => {
+    let Id;
+    if (props.courseId === null) {
+      Id = props.gymId;
+    } else {
+      Id = props.courseId;
+      gymId = null;
+    }
+    try {
+      ApiCalls.deleteReviewByUserId(userId, Id).then((res) => {
+        setReviewAdded(false);
+      });
+    } catch (e) {
+      //do nothing
+    }
+  };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -103,6 +120,10 @@ export default function ReviewButton(props: any) {
             You have rated this subscription:{" "}
           </Typography>
           <Rating name="read-only" value={rating} size="large" readOnly />
+          <br />
+          <Button variant="contained" onClick={deleteReview}>
+            Delete Review
+          </Button>
         </>
       )}
 

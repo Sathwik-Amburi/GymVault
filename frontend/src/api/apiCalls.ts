@@ -164,6 +164,15 @@ export default class ApiCalls {
     });
   };
 
+  public static deleteReviewByUserId = async (userid: string, id: string) => {
+    return await axios.delete(`/reviews/user/${userid}-${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
+
   public static addReview = async (
     userId: any,
     username: any,

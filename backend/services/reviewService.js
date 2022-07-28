@@ -40,6 +40,21 @@ class ReviewService {
     }
   };
 
+  deleteReviewByUserId = async (userId, Id) => {
+    // this service deletes reviews/rating of a user by userID from the database
+    try {
+      const deleteReview = await reviewModel.deleteOne({
+        $and: [{ userId: userId }, { $or: [{ gymId: Id }, { courseId: Id }] }],
+      });
+      if (deleteReview) {
+        return deleteReview;
+      }
+      return deleteReview;
+    } catch (error) {
+      console.log("Error while deleting user review", error.message);
+    }
+  };
+
   getCourseOrGymRating = async (id) => {
     //this service gets ratings of a gym or a course from the database
     try {

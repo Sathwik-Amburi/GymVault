@@ -35,6 +35,17 @@ const getReviewByUserId = async (req, res) => {
   }
 };
 
+const deleteReviewByUserId = async (req, res) => {
+  //this controller function uses the review service to delete the reviews/ratings of a user.
+  const { userid, id } = req.params;
+  const userReview = await reviewService.deleteReviewByUserId(userid, id);
+  if (userReview) {
+    res.status(200).json({ message: `Review deleted`, response: userReview });
+  } else {
+    res.status(404).json({ message: `Review not deleted` });
+  }
+};
+
 const addReview = async (req, res) => {
   //this controller function uses the review service to add a review by a user for a gym or a course
   try {
@@ -76,4 +87,5 @@ module.exports = {
   addReview,
   getCourseOrGymRating,
   getReviewByUserId,
+  deleteReviewByUserId,
 };
