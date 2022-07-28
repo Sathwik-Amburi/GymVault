@@ -10,6 +10,6 @@ export default class UnifiedErrorHandler {
       localStorage.removeItem("token");
       document.location.href = "/user/login?reason=expired";
     }
-    console.error(error.message);
+    console.error(error);
   }
 }

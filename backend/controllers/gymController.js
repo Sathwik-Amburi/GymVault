@@ -174,7 +174,7 @@ const filterGyms = async (req, res) => {
       .status(200)
       .json({ message: `${gyms.length} results found`, response: gyms });
   } else {
-    res.status(404).json({ message: `No results found` });
+    res.status(200).json({ message: `No results found`, response: [] });
   }
 };
 

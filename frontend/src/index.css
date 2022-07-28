@@ -442,3 +442,18 @@ hr {
   background: #cd201f;
   color: #ffffff;
 }
+
+.leaflet-popup-content { 
+  max-width: 400px;
+  width: auto;
+}
+
+.leaflet-popup-content-wrapper, .leaflet-popup.tip {
+  background-color: #D7053E;
+  color: white;
+  font-weight: 700;
+}
+
+.leaflet-popup-close-button {
+  display: none; 
+}

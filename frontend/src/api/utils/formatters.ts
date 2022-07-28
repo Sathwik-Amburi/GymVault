@@ -37,17 +37,17 @@ export const toCleanSubscriptionRange = (
 export const getCourseSpelling = (resultLength: number | undefined): string => {
   switch (resultLength) {
     case 1:
-      return "Course ";
+      return "course ";
     default:
-      return "Courses ";
+      return "courses ";
   }
 };
 
 export const getGymSpelling = (resultLength: number | undefined): string => {
   switch (resultLength) {
     case 1:
-      return "Gym ";
+      return "gym ";
     default:
-      return "Gyms ";
+      return "gyms ";
   }
 };

@@ -32,7 +32,6 @@ const ResultsPage: FC = () => {
           dispatch(setGymResults({ filteredGyms: res.data.response }));
           setLoading(false);
         })
-
         .catch((err) => {
           UnifiedErrorHandler.handle(err);
           dispatch(
@@ -46,45 +45,72 @@ const ResultsPage: FC = () => {
 
   return (
     <>
-      <Grid>
+      {gymResults && gymResults.length > 0 ? (
+        <>
+          <Grid>
+            <Grid>
+              <Typography fontSize={"2em"} fontWeight="bold">
+                {gymResults ? gymResults.length : 0}{" "}
+                {getGymSpelling(gymResults?.length)}
+                found in {city}
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <ResultsFilter city={city} name={name} gyms={gymResults} />
+            <ResultsSort />
+          </Grid>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              margin: "30px 0px",
+            }}
+          >
+            <CityMap item="gym" city={city} />
+          </div>
+
+          <ChonkySpinner loading={loading}>
+            <Grid
+              container
+              spacing={{ xs: 2, md: 3 }}
+              columns={{ xs: 4, sm: 8, md: 12 }}
+            >
+              {gymResults &&
+                gymResults.map((item, index) => (
+                  <Grid item xs={2} sm={4} md={4} key={index}>
+                    <ResultCard gym={item} />
+                  </Grid>
+                ))}
+            </Grid>
+          </ChonkySpinner>
+        </>
+      ) : (
         <Grid>
-          <Typography fontSize={"2em"} fontWeight="bold">
-            {gymResults ? gymResults.length : 0}{" "}
-            {getGymSpelling(gymResults?.length)}
-            found in {city}
-          </Typography>
+          <Grid>
+            <Typography fontSize={"2em"} fontWeight="bold">
+              {gymResults ? gymResults.length : 0}{" "}
+              {getGymSpelling(gymResults?.length)} called {name} found in {city}
+            </Typography>
+            <Typography fontSize={"1em"} variant="caption">
+              Please try searching using a different name or try searching by
+              city
+            </Typography>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                margin: "30px 0px",
+              }}
+            >
+              <CityMap item="gym" city={city} />
+            </div>
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid container>
-        <ResultsFilter city={city} name={name} gyms={gymResults} />
-        <ResultsSort />
-      </Grid>
-
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          margin: "30px 0px",
-        }}
-      >
-        <CityMap item="gym" city={city} />
-      </div>
-
-      <ChonkySpinner loading={loading}>
-        <Grid
-          container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
-        >
-          {gymResults &&
-            gymResults.map((item, index) => (
-              <Grid item xs={2} sm={4} md={4} key={index}>
-                <ResultCard gym={item} />
-              </Grid>
-            ))}
-        </Grid>
-      </ChonkySpinner>
+      )}
     </>
   );
 };

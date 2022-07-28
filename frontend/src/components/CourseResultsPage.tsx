@@ -44,45 +44,73 @@ const CourseResultsPage: FC = () => {
 
   return (
     <>
-      <Grid>
+      {courseResults && courseResults.length > 0 ? (
+        <>
+          <Grid>
+            <Grid>
+              <Typography fontSize={"2em"} fontWeight="bold">
+                {courseResults ? courseResults.length : 0}{" "}
+                {getCourseSpelling(courseResults?.length)}
+                found in {city}
+              </Typography>
+            </Grid>
+            <Grid container>
+              <CourseResultsFilter city={city} name={name} />
+              <CourseResultsSort />
+            </Grid>
+          </Grid>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              margin: "30px 0px",
+            }}
+          >
+            <CityMap item="course" city={city} />
+          </div>
+
+          <ChonkySpinner loading={loading}>
+            <Grid
+              container
+              spacing={{ xs: 2, md: 3 }}
+              columns={{ xs: 4, sm: 8, md: 12 }}
+            >
+              {courseResults &&
+                courseResults.map((item, index) => (
+                  <Grid item xs={2} sm={4} md={4} key={index}>
+                    <CourseResultCard course={item} />
+                  </Grid>
+                ))}
+            </Grid>
+          </ChonkySpinner>
+        </>
+      ) : (
         <Grid>
-          <Typography fontSize={"2em"} fontWeight="bold">
-            {courseResults ? courseResults.length : 0}{" "}
-            {getCourseSpelling(courseResults?.length)}
-            found in {city}
-          </Typography>
+          <Grid>
+            <Typography fontSize={"2em"} fontWeight="bold">
+              {courseResults ? courseResults.length : 0}{" "}
+              {getCourseSpelling(courseResults?.length)} called {name}
+              found in {city}
+            </Typography>
+            <Typography fontSize={"1em"} variant="caption">
+              Please try searching using a different name or try searching by
+              city
+            </Typography>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                margin: "30px 0px",
+              }}
+            >
+              <CityMap item="course" city={city} />
+            </div>
+          </Grid>
         </Grid>
-        <Grid container>
-          <CourseResultsFilter city={city} name={name} />
-          <CourseResultsSort />
-        </Grid>
-      </Grid>
-
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          margin: "30px 0px",
-        }}
-      >
-        <CityMap item="course" city={city} />
-      </div>
-
-      <ChonkySpinner loading={loading}>
-        <Grid
-          container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
-        >
-          {courseResults &&
-            courseResults.map((item, index) => (
-              <Grid item xs={2} sm={4} md={4} key={index}>
-                <CourseResultCard course={item} />
-              </Grid>
-            ))}
-        </Grid>
-      </ChonkySpinner>
+      )}
     </>
   );
 };
