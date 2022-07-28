@@ -27,15 +27,19 @@ const ResultCard: FC<ResultCardProps> = ({ course }) => {
           sx={{
             maxWidth: 345,
             ":hover": {
-              boxShadow: 20,
+              boxShadow: 10,
             },
+            borderColor: "#519DD9",
+            borderRadius: "18px",
           }}
         >
           <CardMedia
             component="img"
             alt="course picture"
             height="250"
-            image={course.images && course.images[0] ? course.images[0] : NoImage}
+            image={
+              course.images && course.images[0] ? course.images[0] : NoImage
+            }
           />
           <CardContent>
             <Grid container direction={"row"} alignItems="center">
@@ -49,7 +53,7 @@ const ResultCard: FC<ResultCardProps> = ({ course }) => {
               <StarIcon fontSize="small" sx={{ color: "#faec2d" }} />
               {course.rating.length > 0 ? (
                 <Typography>
-                  {course.rating[0].rating.toFixed(1)} (
+                  {course.rating[0].rating.toFixed(2)} (
                   {course.rating[0].ratedBy})
                 </Typography>
               ) : (

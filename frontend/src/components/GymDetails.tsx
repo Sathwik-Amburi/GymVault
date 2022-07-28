@@ -27,10 +27,13 @@ import { S3_BASE_URL } from "../config/config";
 import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CityMap from "./widgets/map/CityMap";
+import { setErrorAlert } from "../store/slices/errorAlertSlice";
+import { useDispatch } from "react-redux";
 
 const moment = require("moment");
 
 const GymViewPage: FC = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
@@ -59,16 +62,27 @@ const GymViewPage: FC = () => {
         setGym(res.data.response);
         setLoading(false);
       })
-      .catch((err) =>
-        UnifiedErrorHandler.handle(
-          err,
-          "TODO: The gym you're seeing does not exist in the database"
-        )
-      );
+      .catch((err) => {
+        UnifiedErrorHandler.handle(err);
+        dispatch(
+          setErrorAlert({
+            showError: true,
+            errorMessage: "Error while fetching gym",
+          })
+        );
+      });
 
     ApiCalls.getGymOrCourseRating(fid)
       .then((res) => setRatingData(res.data.response))
-      .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gym rating"));
+      .catch((err) => {
+        UnifiedErrorHandler.handle(err);
+        dispatch(
+          setErrorAlert({
+            showError: true,
+            errorMessage: "Cannot get gym rating",
+          })
+        );
+      });
 
     // fetch all the reviews for a gym by its ID
     ApiCalls.getReviewsById(fid)
@@ -76,23 +90,29 @@ const GymViewPage: FC = () => {
         setReviews(res.data.response);
         console.log(res.data.response);
       })
-      .catch((err) =>
-        UnifiedErrorHandler.handle(
-          err,
-          "TODO: The review you're seeing does not exist in the database"
-        )
-      );
+      .catch((err) => {
+        UnifiedErrorHandler.handle(err);
+        dispatch(
+          setErrorAlert({
+            showError: true,
+            errorMessage: "Error while fetching reviews",
+          })
+        );
+      });
 
     ApiCalls.getCoursesByGymId(fid)
       .then((res) => {
         setCourses(res.data.response);
       })
-      .catch((err) =>
-        UnifiedErrorHandler.handle(
-          err,
-          "TODO: The course you're seeing does not exist in the database"
-        )
-      );
+      .catch((err) => {
+        UnifiedErrorHandler.handle(err);
+        dispatch(
+          setErrorAlert({
+            showError: true,
+            errorMessage: "Error while fetching course",
+          })
+        );
+      });
   }, [id]);
 
   const handleBuySubscriptionClick = () => {
@@ -237,7 +257,7 @@ const GymViewPage: FC = () => {
           </Paper>
         </Grid>
         <Grid item md={5} xs={12}>
-          <Grid item style={{marginBottom: "16px"}}>
+          <Grid item style={{ marginBottom: "16px" }}>
             <Typography
               variant="h5"
               style={{
@@ -260,7 +280,7 @@ const GymViewPage: FC = () => {
                 color: "#519dd9",
               }}
             >
-              Where you'll find us 
+              Where you'll find us
             </Typography>
             <hr className="mini-hr" style={{ backgroundColor: "#519dd9" }} />
             <div
@@ -271,7 +291,9 @@ const GymViewPage: FC = () => {
                 margin: "30px 0px",
               }}
             >
-              {gym.city && <CityMap item="gymDetails" city={gym.city} gym={gym} />}
+              {gym.city && (
+                <CityMap item="gymDetails" city={gym.city} gym={gym} />
+              )}
             </div>
           </Grid>
         </Grid>
@@ -288,7 +310,7 @@ const GymViewPage: FC = () => {
       <Grid>
         <Grid>
           {reviews.length > 0 ? (
-              // map all the reviews into review cards
+            // map all the reviews into review cards
             reviews.map((review) => {
               return (
                 <Paper
@@ -305,7 +327,9 @@ const GymViewPage: FC = () => {
                     subheader={moment(review.dateAdded).format("MMM Do YYYY")}
                   />
                   <p>
-                    <b><StarWidget rating={review.rating} /> {review.title}</b>
+                    <b>
+                      <StarWidget rating={review.rating} /> {review.title}
+                    </b>
                   </p>
                   <p>{review.description}</p>
                 </Paper>

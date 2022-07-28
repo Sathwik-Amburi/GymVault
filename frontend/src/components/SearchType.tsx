@@ -8,12 +8,15 @@ import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import Map from "./widgets/map/GermanyMap";
 import SearchIcon from "@mui/icons-material/Search";
+import { useDispatch } from "react-redux";
+import { setErrorAlert } from "../store/slices/errorAlertSlice";
 
 interface City {
   label: string;
 }
 
 export default function SearchType(props: any) {
+  const dispatch = useDispatch();
   let [name, setName] = useState<string>("");
   let [city, setCity] = useState<string>("");
   let [error, setError] = useState<string>("");
@@ -31,7 +34,15 @@ export default function SearchType(props: any) {
         );
         setLoaded(true);
       })
-      .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gym cities"));
+      .catch((err) => {
+        UnifiedErrorHandler.handle(err);
+        dispatch(
+          setErrorAlert({
+            showError: true,
+            errorMessage: "Cannot find gym cities. Please try again.",
+          })
+        );
+      });
   }, [props.type]);
 
   let navigate = useNavigate();
@@ -64,7 +75,11 @@ export default function SearchType(props: any) {
 
   return (
     <>
-      {loaded ? <Map type={props.type} cities={cities} setCity={setCity} /> : ""}
+      {loaded ? (
+        <Map type={props.type} cities={cities} setCity={setCity} />
+      ) : (
+        ""
+      )}
       <div
         style={{
           display: "flex",

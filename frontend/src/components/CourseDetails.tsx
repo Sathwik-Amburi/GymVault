@@ -19,10 +19,13 @@ import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import PricingList from "./widgets/PricingList";
 import StarIcon from "@mui/icons-material/Star";
 import CourseScheduleTable from "./CourseScheduleTable";
+import { setErrorAlert } from "../store/slices/errorAlertSlice";
+import { useDispatch } from "react-redux";
 
 const moment = require("moment");
 
 const CourseViewPage: FC = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
@@ -66,29 +69,52 @@ const CourseViewPage: FC = () => {
             setCourse(newCourse);
             setLoading(false);
           })
-          .catch((err) =>
-            UnifiedErrorHandler.handle(err, "Error fetching gym")
-          );
+          .catch((err) => {
+            UnifiedErrorHandler.handle(err);
+            dispatch(
+              setErrorAlert({
+                showError: true,
+                errorMessage: "Error fetching gym",
+              })
+            );
+          });
       })
-      .catch((err) => UnifiedErrorHandler.handle(err, "Error fetching course"));
+      .catch((err) => {
+        UnifiedErrorHandler.handle(err);
+        dispatch(
+          setErrorAlert({
+            showError: true,
+            errorMessage: "Error fetching course",
+          })
+        );
+      });
 
     ApiCalls.getGymOrCourseRating(fid)
       .then((res) => setRatingData(res.data.response))
-      .catch((err) =>
-        UnifiedErrorHandler.handle(err, "Cannot get course rating")
-      );
+      .catch((err) => {
+        UnifiedErrorHandler.handle(err);
+        dispatch(
+          setErrorAlert({
+            showError: true,
+            errorMessage: "Cannot get course rating",
+          })
+        );
+      });
 
     //fetch the course reviews by its id
     ApiCalls.getReviewsById(fid)
       .then((res) => {
         setReviews(res.data.response);
       })
-      .catch((err) =>
-        UnifiedErrorHandler.handle(
-          err,
-          "The review does not exist in the database"
-        )
-      );
+      .catch((err) => {
+        UnifiedErrorHandler.handle(err);
+        dispatch(
+          setErrorAlert({
+            showError: true,
+            errorMessage: "The review does not exist in the database",
+          })
+        );
+      });
   }, [id]);
 
   const handleBuySubscriptionClick = () => {
@@ -130,7 +156,7 @@ const CourseViewPage: FC = () => {
               border: "3px solid #C31D56",
               borderRadius: "20px 0 20px 0",
             }}
-            sx={{boxShadow: 5}}
+            sx={{ boxShadow: 5 }}
           >
             <p style={{ margin: 0 }}>{course.description}</p>
           </Box>
@@ -228,7 +254,7 @@ const CourseViewPage: FC = () => {
       <Grid>
         <Grid>
           {reviews.length > 0 ? (
-              //map all the reviews into review cards
+            //map all the reviews into review cards
             reviews.map((review) => {
               return (
                 <Paper
@@ -242,7 +268,9 @@ const CourseViewPage: FC = () => {
                   />
 
                   <p>
-                    <b><StarWidget rating={review.rating} /> {review.title}</b>
+                    <b>
+                      <StarWidget rating={review.rating} /> {review.title}
+                    </b>
                   </p>
                   <p>{review.description}</p>
                 </Paper>

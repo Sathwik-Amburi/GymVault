@@ -1,7 +1,16 @@
 import { Card, Grid, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
-import { Course, CourseSession, Gym, Item, Option, PurchaseOption, SubscriptionOffers, SubscriptionTypes } from "../models/allModels";
+import {
+  Course,
+  CourseSession,
+  Gym,
+  Item,
+  Option,
+  PurchaseOption,
+  SubscriptionOffers,
+  SubscriptionTypes,
+} from "../models/allModels";
 import PurchaseGrid from "./widgets/PurchaseGrid";
 import PurchaseCart, { CartItem } from "./widgets/PurchaseCart";
 import ApiCalls from "../api/apiCalls";
@@ -13,14 +22,24 @@ import CourseScheduleTable from "./CourseScheduleTable";
 import moment from "moment";
 import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
 import EuropeanDatePicker from "./widgets/EuropeanDatePicker";
+import { setErrorAlert } from "../store/slices/errorAlertSlice";
+import { useDispatch } from "react-redux";
 
 const CheckoutPage: FC = () => {
+  const dispatch = useDispatch();
   const { id, returnState } = useParams<{
     id: string;
     returnState: string;
   }>();
   if (!id) {
-    alert("No ID provided! This should NOT happen");
+    {
+      dispatch(
+        setErrorAlert({
+          showError: true,
+          errorMessage: "Error, no ID is provided",
+        })
+      );
+    }
   }
   const [editable, setEditable] = useState(true);
   const navigate = useNavigate();
@@ -29,11 +48,12 @@ const CheckoutPage: FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [courseSessions, setCourseSessions] = useState<CourseSession[]>([]);
   const [selectedSession, setSelectedSession] = useState<string>("");
-  const [selectedStartDate, setSelectedStartDate] = useState<string>("choose one");
+  const [selectedStartDate, setSelectedStartDate] =
+    useState<string>("choose one");
 
   function validateStartDate(date: string) {
     return !(
-      !moment(date, "DD/MM/YYYY").isValid() || 
+      !moment(date, "DD/MM/YYYY").isValid() ||
       moment(date, "DD/MM/YYYY").isAfter(moment().add(1, "month")) ||
       moment(date, "DD/MM/YYYY").isBefore(moment().startOf("day"))
     );
@@ -44,16 +64,24 @@ const CheckoutPage: FC = () => {
       let items: PurchaseOption[] = [];
       subscriptionOffers.forEach((so) => {
         items.push({
-          _id: so.subscriptionType === SubscriptionTypes.DAY_PASS ? "1" :
-               so.subscriptionType === SubscriptionTypes.MONTHLY_PASS ? "2" :
-               so.subscriptionType === SubscriptionTypes.YEARLY_PASS ? "3" :
-               so.subscriptionType === SubscriptionTypes.SESSION_PASS ? "4" :
-               "?",
+          _id:
+            so.subscriptionType === SubscriptionTypes.DAY_PASS
+              ? "1"
+              : so.subscriptionType === SubscriptionTypes.MONTHLY_PASS
+              ? "2"
+              : so.subscriptionType === SubscriptionTypes.YEARLY_PASS
+              ? "3"
+              : so.subscriptionType === SubscriptionTypes.SESSION_PASS
+              ? "4"
+              : "?",
           name: toCleanSubscriptionTypeFormat(so.subscriptionType),
           description: "Fixed duration, base-tier ticket",
-          price: so.discount !== undefined ? +(so.subscriptionPrice * (100-so.discount)/100).toFixed(2) : +(so.subscriptionPrice).toFixed(2),
+          price:
+            so.discount !== undefined
+              ? +((so.subscriptionPrice * (100 - so.discount)) / 100).toFixed(2)
+              : +so.subscriptionPrice.toFixed(2),
           bgColor: "#030",
-          fgColor: "#fff"
+          fgColor: "#fff",
         } as PurchaseOption);
       });
 
@@ -70,7 +98,12 @@ const CheckoutPage: FC = () => {
       address: gym.address,
       description: gym.description,
       price: -1, // TODO: this "price" here can be dropped from the schema i think?
-      optionals: gym.optionals === undefined ? [] : gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
+      optionals:
+        gym.optionals === undefined
+          ? []
+          : gym.optionals.map((opt: Option) => {
+              return optionToPurchase(opt, opt._id);
+            }),
       subscriptionOffers: gym.subscriptionOffers,
 
       fgColor: "",
@@ -86,7 +119,12 @@ const CheckoutPage: FC = () => {
       type: "course",
       address: gym.address,
       description: course.description,
-      optionals: gym.optionals === undefined ? [] : gym.optionals.map((opt: Option) => { return optionToPurchase(opt, opt._id) }),
+      optionals:
+        gym.optionals === undefined
+          ? []
+          : gym.optionals.map((opt: Option) => {
+              return optionToPurchase(opt, opt._id);
+            }),
 
       fgColor: "",
       bgColor: "",
@@ -118,7 +156,17 @@ const CheckoutPage: FC = () => {
             setGym(gymRes.data.response);
             setCourse(courseResponse, gymRes.data.response);
             setSubscriptionBases(courseResponse.subscriptionOffers);
-          }).catch((err) => UnifiedErrorHandler.handle(err, "Could not load gym for course"));
+          })
+          .catch((err) => {
+            UnifiedErrorHandler.handle(err);
+            dispatch(
+              setErrorAlert({
+                showError: true,
+                errorMessage:
+                  "Could not load gym for course. Please try again.",
+              })
+            );
+          });
 
         setLoading(false);
       })
@@ -130,11 +178,20 @@ const CheckoutPage: FC = () => {
             setSubscriptionBases(res.data.response.subscriptionOffers);
 
             setLoading(false);
-          }).catch((err) => UnifiedErrorHandler.handle(err, "Neither a gym nor a course with this ID exists"));
-            // navigate to 404?
+          })
+          .catch((err) => {
+            UnifiedErrorHandler.handle(err);
+            dispatch(
+              setErrorAlert({
+                showError: true,
+                errorMessage: "Neither a gym nor a course with this ID exists",
+              })
+            );
+          });
+        // navigate to 404?
       });
-      
-      /* /confirm route taken
+
+    /* /confirm route taken
       if(stripeCallback !== undefined) {
         // TODO: call APIs to check validity of ("confirm") purchase, and redirect if valid
         let uid = String(localStorage.getItem("token"));
@@ -144,7 +201,7 @@ const CheckoutPage: FC = () => {
           }).catch((err) => UnifiedErrorHandler.handle(err, "(display): Error checking purchase"));
       }*/
   }, [id, navigate, returnState]);
-  
+
   function optionToPurchase(option: Option, colorHash: string): PurchaseOption {
     return {
       ...option,
@@ -181,24 +238,26 @@ const CheckoutPage: FC = () => {
         </Grid>
 
         <Grid item md={6} xs={12}>
-          <PurchaseGrid 
-            bases={basePurchases} 
+          <PurchaseGrid
+            bases={basePurchases}
             optionals={item.optionals}
-            cart={cart} 
-            setCart={setCart} 
+            cart={cart}
+            setCart={setCart}
             editable={editable}
           />
         </Grid>
         <Grid item md={6} xs={12}>
-          { returnState == "cancelled" ? 
-            <Card style={{
-              borderRadius: "8px",
-              backgroundColor: "#a00",
-              color: "#fff",
-              padding: "1em",
-              marginTop: "1em",
-              marginBottom: "1em",
-            }}>
+          {returnState == "cancelled" ? (
+            <Card
+              style={{
+                borderRadius: "8px",
+                backgroundColor: "#a00",
+                color: "#fff",
+                padding: "1em",
+                marginTop: "1em",
+                marginBottom: "1em",
+              }}
+            >
               <Typography variant="body1" style={{ fontWeight: "bold" }}>
                 This order has been cancelled
               </Typography>
@@ -206,7 +265,7 @@ const CheckoutPage: FC = () => {
                 To buy this item, please proceed to the checkout once again
               </Typography>
             </Card>
-            : null }
+          ) : null}
           <Typography variant="h4" style={{ fontWeight: "bold" }}>
             {item.courseName}
           </Typography>
@@ -215,7 +274,6 @@ const CheckoutPage: FC = () => {
           <br />
           <br />
           <br />
-          
 
           <Typography variant="h6" style={{ fontWeight: "bold" }}>
             When
@@ -224,54 +282,73 @@ const CheckoutPage: FC = () => {
             The range of validity depends on your ticket type
           </Typography>
           <hr className="mini-hr" />
-          { (item.type == "course" 
-                  && cart.length > 0
-                  && cart[0].name == toCleanSubscriptionTypeFormat(SubscriptionTypes.SESSION_PASS)) ? 
-          <>
-            <CourseScheduleTable 
-              courseSessions={ courseSessions } 
-              selected={selectedSession} 
-              setSelected={setSelectedSession} 
-              showNextSessionDate={true}
-            />
-          </> : <>
-            <br />
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <EuropeanDatePicker 
-                  defaultValue={new Date()}
-                  min={moment().toDate()}
-                  max={moment().add(1, "month").toDate()}
-                  setValue={setSelectedStartDate}
-                  value={selectedStartDate}
-                  validator={validateStartDate}
-                />
+          {item.type == "course" &&
+          cart.length > 0 &&
+          cart[0].name ==
+            toCleanSubscriptionTypeFormat(SubscriptionTypes.SESSION_PASS) ? (
+            <>
+              <CourseScheduleTable
+                courseSessions={courseSessions}
+                selected={selectedSession}
+                setSelected={setSelectedSession}
+                showNextSessionDate={true}
+              />
+            </>
+          ) : (
+            <>
+              <br />
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <EuropeanDatePicker
+                    defaultValue={new Date()}
+                    min={moment().toDate()}
+                    max={moment().add(1, "month").toDate()}
+                    setValue={setSelectedStartDate}
+                    value={selectedStartDate}
+                    validator={validateStartDate}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="body1" style={{ fontWeight: "bold" }}>
+                    Start Date
+                  </Typography>
+                  <Typography variant="body1">{selectedStartDate}</Typography>
+                </Grid>
+                <Grid item xs={6} style={{ textAlign: "right" }}>
+                  <Typography variant="body1" style={{ fontWeight: "bold" }}>
+                    Duration
+                  </Typography>
+                  <Typography variant="body1">
+                    {cart === undefined
+                      ? "-"
+                      : cart.length === 0
+                      ? "-"
+                      : cart[0].name ===
+                        toCleanSubscriptionTypeFormat(
+                          SubscriptionTypes.DAY_PASS
+                        )
+                      ? "One day"
+                      : cart[0].name ===
+                        toCleanSubscriptionTypeFormat(
+                          SubscriptionTypes.SESSION_PASS
+                        )
+                      ? "One session"
+                      : cart[0].name ===
+                        toCleanSubscriptionTypeFormat(
+                          SubscriptionTypes.MONTHLY_PASS
+                        )
+                      ? "30 days"
+                      : cart[0].name ===
+                        toCleanSubscriptionTypeFormat(
+                          SubscriptionTypes.YEARLY_PASS
+                        )
+                      ? "365 days"
+                      : "-"}
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={6}>
-                <Typography variant="body1" style={{ fontWeight: "bold" }}>
-                  Start Date
-                </Typography>
-                <Typography variant="body1">
-                  { selectedStartDate }
-                </Typography>
-              </Grid>
-              <Grid item xs={6} style={{textAlign: "right"}}>
-                <Typography variant="body1" style={{ fontWeight: "bold" }}>
-                  Duration
-                </Typography>
-                <Typography variant="body1">
-                  { cart === undefined ? "-" : 
-                    cart.length === 0 ? "-" :
-                    cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.DAY_PASS) ? "One day" :
-                    cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.SESSION_PASS) ? "One session" :
-                    cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.MONTHLY_PASS) ? "30 days" :
-                    cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.YEARLY_PASS) ? "365 days" :
-                    "-" 
-                  }
-                </Typography>
-              </Grid>
-            </Grid>
-          </> }
+            </>
+          )}
 
           <br />
           <br />
@@ -282,9 +359,12 @@ const CheckoutPage: FC = () => {
           <hr className="mini-hr" />
           <PurchaseCart
             baseId={id!}
-            startDate={selectedSession 
-                && cart[0].name === toCleanSubscriptionTypeFormat(SubscriptionTypes.SESSION_PASS)
-                  ? selectedSession : selectedStartDate 
+            startDate={
+              selectedSession &&
+              cart[0].name ===
+                toCleanSubscriptionTypeFormat(SubscriptionTypes.SESSION_PASS)
+                ? selectedSession
+                : selectedStartDate
             }
             dateValidator={validateStartDate}
             cart={cart}

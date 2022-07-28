@@ -3,8 +3,11 @@ import ApiCalls from "../api/apiCalls";
 import { Gym } from "../models/allModels";
 import { Link } from "react-router-dom";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
+import { setErrorAlert } from "../store/slices/errorAlertSlice";
+import { useDispatch } from "react-redux";
 
 const LandingPage: FC = () => {
+  const dispatch = useDispatch();
   const [gyms, setGyms] = useState<Gym[]>([
     {
       name: "",
@@ -28,7 +31,15 @@ const LandingPage: FC = () => {
         console.log(res.data);
         setGyms(res.data);
       })
-      .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms"));
+      .catch((err) => {
+        UnifiedErrorHandler.handle(err);
+        dispatch(
+          setErrorAlert({
+            showError: true,
+            errorMessage: "Cannot get user profile",
+          })
+        );
+      });
   }, []);
 
   return (

@@ -20,6 +20,7 @@ import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
 import { useDispatch } from "react-redux";
 import { setCourseResults } from "../store/slices/courseResultsSlice";
 import PriceCheckIcon from "@mui/icons-material/PriceCheck";
+import { setErrorAlert } from "../store/slices/errorAlertSlice";
 
 interface PriceRangeSliderState {
   minPrice: number;
@@ -79,9 +80,15 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
             );
           }
         })
-        .catch((err) =>
-          UnifiedErrorHandler.handle(err, "Cannot get courses by price range")
-        );
+        .catch((err) => {
+          UnifiedErrorHandler.handle(err);
+          dispatch(
+            setErrorAlert({
+              showError: true,
+              errorMessage: "Cannot get courses by the specified filters",
+            })
+          );
+        });
   };
 
   const handleSessionPassSliderChange = (
@@ -136,9 +143,15 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
             );
           }
         })
-        .catch((err) =>
-          UnifiedErrorHandler.handle(err, "Cannot get courses by price range")
-        );
+        .catch((err) => {
+          UnifiedErrorHandler.handle(err);
+          dispatch(
+            setErrorAlert({
+              showError: true,
+              errorMessage: "Cannot get courses by the specified filters",
+            })
+          );
+        });
     setOpenModal(false);
   };
 
@@ -233,7 +246,15 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
           dispatch(setCourseResults({ filteredCourses: res.data.response }));
           setOpenModal(false);
         })
-        .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get courses"));
+        .catch((err) => {
+          UnifiedErrorHandler.handle(err);
+          dispatch(
+            setErrorAlert({
+              showError: true,
+              errorMessage: "Cannot get courses",
+            })
+          );
+        });
   };
 
   return (

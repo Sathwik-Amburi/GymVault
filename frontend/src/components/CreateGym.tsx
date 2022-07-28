@@ -39,10 +39,18 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
 import ApiCalls from "../api/apiCalls";
 import UnifiedErrorHandler from "./widgets/utilities/UnifiedErrorHandler";
-import axios from 'axios';
-import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-leaflet";
-import { markers } from "../components/widgets/map/coordinates"
+import axios from "axios";
+import {
+  MapContainer,
+  Marker,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
+import { markers } from "../components/widgets/map/coordinates";
 import { useNavigate } from "react-router-dom";
+import { setErrorAlert } from "../store/slices/errorAlertSlice";
+import { useDispatch } from "react-redux";
 
 interface NewCourseState {
   name: string;
@@ -76,12 +84,15 @@ const courseModalStyle = {
 };
 
 const CreateGym: FC = () => {
-  const navigate = useNavigate()
-  const [position, setPosition] = useState<[number, number]>([0, 0])
-  const [mapCity, setMapCity] = useState<string>("")
-  const [cityCoordinates, setCityCoordinates] = useState<any>([51.505, 10.4515])
-  const [zoom, setZoom] = useState<number>(6)
-  const [chosen, setChosen] = useState<boolean>(false)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [position, setPosition] = useState<[number, number]>([0, 0]);
+  const [mapCity, setMapCity] = useState<string>("");
+  const [cityCoordinates, setCityCoordinates] = useState<any>([
+    51.505, 10.4515,
+  ]);
+  const [zoom, setZoom] = useState<number>(6);
+  const [chosen, setChosen] = useState<boolean>(false);
 
   const [profile, setProfile] = useState<UserProfileDetails>();
   const [openOptionModal, setOpenOptionModal] = useState(false);
@@ -105,51 +116,60 @@ const CreateGym: FC = () => {
   const [courseImages, setCourseImages] = useState<string[]>([]);
   const token = localStorage.getItem("token");
 
-  const [loaded, setLoaded] = useState<boolean>(false)
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    checkPermission()
+    checkPermission();
 
     ApiCalls.getUserProfile(token)
       .then((res) => {
         setProfile(res.data);
       })
-      .catch((err) =>
-        UnifiedErrorHandler.handle(err, "Cannot get user profile")
-      );
+      .catch((err) => {
+        UnifiedErrorHandler.handle(err);
+        dispatch(
+          setErrorAlert({
+            showError: true,
+            errorMessage: "Cannot get user profile",
+          })
+        );
+      });
   }, [token]);
 
   const Markers = () => {
     const map = useMapEvents({
       click(e) {
-        setPosition([e.latlng.lat, e.latlng.lng])
-        setChosen(true)
+        setPosition([e.latlng.lat, e.latlng.lng]);
+        setChosen(true);
       },
-    })
-    return (
-      position[0] !== 0 && position[1] !== 0 ? <Marker position={position} /> : <></>
-    )
-  }
+    });
+    return position[0] !== 0 && position[1] !== 0 ? (
+      <Marker position={position} />
+    ) : (
+      <></>
+    );
+  };
 
   const SetMapCenter = ({ center, zoom }: any) => {
     const map = useMap();
     map.setView(center, zoom);
     return null;
-  }
+  };
 
   const checkPermission = async () => {
-    setLoaded(false)
+    setLoaded(false);
     try {
-      const headers = { "x-access-token": String(localStorage.getItem('token')) }
-      const { data } = await axios.get('/gyms/add-permission', { headers })
-      setLoaded(true)
+      const headers = {
+        "x-access-token": String(localStorage.getItem("token")),
+      };
+      const { data } = await axios.get("/gyms/add-permission", { headers });
+      setLoaded(true);
     } catch (error) {
-      setLoaded(false)
-      console.log(error)
-      navigate('/user/owner-profile')
+      setLoaded(false);
+      console.log(error);
+      navigate("/user/owner-profile");
     }
-  }
-
+  };
 
   const gymValidationSchema = yup.object({
     name: yup.string().required("Name is required"),
@@ -183,12 +203,20 @@ const CreateGym: FC = () => {
         sessionDay: yup.string(),
         sessionDetails: yup.array().of(
           yup.object().shape({
-            sessionTime: yup.string().trim().matches(new RegExp('/^[0-2][0-9]\:[0-5][0-9]\s{1}-\s{1}[0-2][0-9]\:[0-5][0-9]$/'), 'invalid format'),
-            sessionsInstructor: yup.string()
+            sessionTime: yup
+              .string()
+              .trim()
+              .matches(
+                new RegExp(
+                  "/^[0-2][0-9]:[0-5][0-9]s{1}-s{1}[0-2][0-9]:[0-5][0-9]$/"
+                ),
+                "invalid format"
+              ),
+            sessionsInstructor: yup.string(),
           })
         ),
       })
-    )
+    ),
   });
 
   const optionValidationSchema = yup.object({
@@ -216,18 +244,20 @@ const CreateGym: FC = () => {
     },
     validationSchema: gymValidationSchema,
     onSubmit: async (values: any) => {
-      const gym = values
-      const gymoptions: any = options
-      const gymcourses: any = courses
-      const gymlocation = chosen ? position : [999, 999]
-      const data = { gym, gymcourses, gymoptions, gymlocation }
-      const headers = { "x-access-token": String(localStorage.getItem('token')) }
-      await axios.post(`gyms/add-gym`, data, { headers })
-      navigate("/user/owner-profile")
+      const gym = values;
+      const gymoptions: any = options;
+      const gymcourses: any = courses;
+      const gymlocation = chosen ? position : [999, 999];
+      const data = { gym, gymcourses, gymoptions, gymlocation };
+      const headers = {
+        "x-access-token": String(localStorage.getItem("token")),
+      };
+      await axios.post(`gyms/add-gym`, data, { headers });
+      navigate("/user/owner-profile");
       console.log(gym);
       console.log(gymoptions);
       console.log(gymcourses);
-      console.log(gymlocation)
+      console.log(gymlocation);
     },
   });
 
@@ -261,7 +291,7 @@ const CreateGym: FC = () => {
       yearlySubscriptionSelected: false,
       yearlySubscriptionPrice: 0,
       courseImages: "",
-      courseSessions: {}
+      courseSessions: {},
     },
     validationSchema: courseValidationSchema,
     onSubmit: (values: any) => {
@@ -274,17 +304,17 @@ const CreateGym: FC = () => {
           {
             subscriptionType: SubscriptionTypes.SESSION_PASS,
             subscriptionPrice: values.courseSessionTicketPrice,
-            discount: 0
+            discount: 0,
           },
           {
             subscriptionType: SubscriptionTypes.MONTHLY_PASS,
             subscriptionPrice: values.monthlySubscriptionPrice,
-            discount: 0
+            discount: 0,
           },
           {
             subscriptionType: SubscriptionTypes.YEARLY_PASS,
             subscriptionPrice: values.yearlySubscriptionPrice,
-            discount: 0
+            discount: 0,
           },
         ],
         images: values.courseImages,
@@ -414,7 +444,15 @@ const CreateGym: FC = () => {
             label="City"
             id="city"
             name="city"
-            onChange={(e: any) => { gymFormik.handleChange(e); setMapCity(e.target.value); setCityCoordinates(markers.find((m) => m.city === e.target.value)?.coordinates); setZoom(13); SetMapCenter({ center: cityCoordinates, zoom: 11 }) }}
+            onChange={(e: any) => {
+              gymFormik.handleChange(e);
+              setMapCity(e.target.value);
+              setCityCoordinates(
+                markers.find((m) => m.city === e.target.value)?.coordinates
+              );
+              setZoom(13);
+              SetMapCenter({ center: cityCoordinates, zoom: 11 });
+            }}
             inputProps={{ style: { fontWeight: "bold" } }}
             value={gymFormik.values.city}
           >
@@ -1155,7 +1193,11 @@ const CreateGym: FC = () => {
           <hr className="mini-hr" />
         </Grid>
         <Grid item md={6} xs={12}>
-          <MapContainer center={cityCoordinates} zoom={zoom} scrollWheelZoom={false}>
+          <MapContainer
+            center={cityCoordinates}
+            zoom={zoom}
+            scrollWheelZoom={false}
+          >
             <Markers />
             <SetMapCenter center={cityCoordinates} zoom={zoom} />
             <TileLayer
@@ -1164,12 +1206,6 @@ const CreateGym: FC = () => {
             />
           </MapContainer>
         </Grid>
-
-
-
-
-
-
 
         <Grid item xs={12} style={{ marginTop: "5em" }} />
         <Grid item md={9} xs={12}>
@@ -1195,6 +1231,11 @@ const Row = (props: {
   setCourseSessions: (sessions: CourseSession[]) => void;
 }) => {
   const [open, setOpen] = useState(false);
+  const [timeFormatError, setTimeFormatError] = useState<boolean>(false);
+  const [timeValidationError, setTimeValidationError] =
+    useState<boolean>(false);
+  const [instructorValidationError, setInstructorValidationError] =
+    useState<boolean>(false);
   const [time, setTime] = useState<string>("");
   const [instructor, setInstructor] = useState<string>("");
   const { row, courseSessions, setCourseSessions } = props;
@@ -1216,7 +1257,19 @@ const Row = (props: {
   };
 
   const handleSessionInfoAdd = () => {
-    if (instructor === "" || time === "") {
+    if (instructor === "") {
+      setInstructorValidationError(true);
+    }
+    if (time === "") {
+      setTimeValidationError(true);
+      return;
+    }
+    if (
+      !time.match(
+        /^([0-1]?[0-9]|2[0-3]):[0-5][0-9] (-) ([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
+      )
+    ) {
+      setTimeFormatError(true);
       return;
     }
     setDaySessions([
@@ -1236,6 +1289,9 @@ const Row = (props: {
     setCourseSessions(allSessions);
     setTime("");
     setInstructor("");
+    setTimeValidationError(false);
+    setTimeFormatError(false);
+    setInstructorValidationError(false);
   };
 
   const handleSessionDetailsDelete = (session: SessionDetails) => {
@@ -1315,8 +1371,19 @@ const Row = (props: {
                         placeholder="11:30 - 14:00"
                         inputProps={{ "aria-label": "description" }}
                         onChange={handleTimeInput}
+                        error={timeValidationError}
                         value={time}
                       />
+                      {timeValidationError && (
+                        <div style={{ color: "red", fontWeight: "bold" }}>
+                          Session time is required
+                        </div>
+                      )}
+                      {timeFormatError && (
+                        <div style={{ color: "red", fontWeight: "bold" }}>
+                          Time must match format HH:mm - HH:mm
+                        </div>
+                      )}
                     </TableCell>
                     <TableCell>
                       <Input
@@ -1325,6 +1392,11 @@ const Row = (props: {
                         onChange={handleInstructorInput}
                         value={instructor}
                       />
+                      {instructorValidationError && (
+                        <div style={{ color: "red", fontWeight: "bold" }}>
+                          Instructor name is required
+                        </div>
+                      )}
                     </TableCell>
                     <TableCell>
                       <AddCircleIcon

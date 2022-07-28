@@ -11,6 +11,7 @@ import { RootState } from "../store";
 import { setGymResults } from "../store/slices/gymResultsSlice";
 import ResultsSort from "./ResultsSort";
 import CityMap from "./widgets/map/CityMap";
+import { setErrorAlert } from "../store/slices/errorAlertSlice";
 
 const ResultsPage: FC = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,15 @@ const ResultsPage: FC = () => {
           setLoading(false);
         })
 
-        .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms"));
+        .catch((err) => {
+          UnifiedErrorHandler.handle(err);
+          dispatch(
+            setErrorAlert({
+              showError: true,
+              errorMessage: "Cannot get gyms",
+            })
+          );
+        });
   }, []);
 
   return (

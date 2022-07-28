@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCourseResults } from "../store/slices/courseResultsSlice";
 import CourseResultsSort from "./CourseResultsSort";
 import CityMap from "./widgets/map/CityMap";
+import { setErrorAlert } from "../store/slices/errorAlertSlice";
 
 const CourseResultsPage: FC = () => {
   const dispatch = useDispatch();
@@ -30,7 +31,15 @@ const CourseResultsPage: FC = () => {
           dispatch(setCourseResults({ filteredCourses: res.data.response }));
           setLoading(false);
         })
-        .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get courses"));
+        .catch((err) => {
+          UnifiedErrorHandler.handle(err);
+          dispatch(
+            setErrorAlert({
+              showError: true,
+              errorMessage: "Cannot get courses",
+            })
+          );
+        });
   }, []);
 
   return (

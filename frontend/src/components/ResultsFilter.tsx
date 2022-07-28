@@ -25,6 +25,7 @@ import { useDispatch } from "react-redux";
 import { setGymResults } from "../store/slices/gymResultsSlice";
 import PriceCheckIcon from "@mui/icons-material/PriceCheck";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import { setErrorAlert } from "../store/slices/errorAlertSlice";
 
 interface PriceRangeSliderState {
   minPrice: number;
@@ -77,9 +78,15 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
         .then((res) => {
           setAllAmenities(res.data.amenities);
         })
-        .catch((err) =>
-          UnifiedErrorHandler.handle(err, `Cannot get gym amenities in ${city}`)
-        );
+        .catch((err) => {
+          UnifiedErrorHandler.handle(err);
+          dispatch(
+            setErrorAlert({
+              showError: true,
+              errorMessage: `Cannot get gym amenities in ${city}`,
+            })
+          );
+        });
   }, [gyms]);
 
   const handleOpenModal = () => setOpenModal(true);
@@ -106,9 +113,15 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
             dispatch(setGymResults({ filteredGyms: res.data.response.gyms }));
           }
         })
-        .catch((err) =>
-          UnifiedErrorHandler.handle(err, "Cannot get gyms by price range")
-        );
+        .catch((err) => {
+          UnifiedErrorHandler.handle(err);
+          dispatch(
+            setErrorAlert({
+              showError: true,
+              errorMessage: "Cannot get gyms by the specified filters",
+            })
+          );
+        });
   };
 
   const handleDayPassSliderChange = (
@@ -165,9 +178,15 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
             dispatch(setGymResults({ filteredGyms: res.data.response.gyms }));
           }
         })
-        .catch((err) =>
-          UnifiedErrorHandler.handle(err, "Cannot get gyms by price range")
-        );
+        .catch((err) => {
+          UnifiedErrorHandler.handle(err);
+          dispatch(
+            setErrorAlert({
+              showError: true,
+              errorMessage: "Cannot get gyms by the specified filters",
+            })
+          );
+        });
     setOpenModal(false);
   };
 
@@ -272,7 +291,15 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
           dispatch(setGymResults({ filteredGyms: res.data.response }));
           setOpenModal(false);
         })
-        .catch((err) => UnifiedErrorHandler.handle(err, "Cannot get gyms"));
+        .catch((err) => {
+          UnifiedErrorHandler.handle(err);
+          dispatch(
+            setErrorAlert({
+              showError: true,
+              errorMessage: "Cannot get gyms",
+            })
+          );
+        });
   };
 
   return (
