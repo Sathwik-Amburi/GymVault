@@ -210,7 +210,16 @@ const GymViewPage: FC = () => {
                       xs={6}
                       onClick={() => handleCourseChipClick(item._id)}
                     >
-                      <Card>
+                      <Card
+                        sx={{
+                          maxWidth: 345,
+                          ":hover": {
+                            boxShadow: 10,
+                            cursor: "pointer",
+                          },
+                          borderColor: "#519DD9",
+                          borderRadius: "18px",
+                      }}>
                         <CardMedia
                           component="img"
                           height="140"
