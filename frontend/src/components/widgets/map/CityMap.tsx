@@ -71,6 +71,9 @@ export default function CityMap(props: any) {
           mouseout: (e) => {
             e.target.closePopup();
           },
+          click: (e) => {
+            navigate(`/gym/${course.gymId._id}`);
+          },
         }}
       >
         <Popup>{course.gymId.name}</Popup>

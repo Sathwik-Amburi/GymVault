@@ -346,7 +346,7 @@ const GymViewPage: FC = () => {
                         <StarWidget rating={review.rating} /> {review.title}
                       </b>
                     </p>
-                    <p>{review.description}</p>
+                    <p style={{ marginTop: "8px" }}>{review.description}</p>
                   </Paper>
                   <Divider className="review-hr" />
                 </>
