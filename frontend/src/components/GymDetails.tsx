@@ -10,7 +10,6 @@ import {
   Divider,
   Card,
   CardContent,
-  CardActions,
   CardMedia,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
@@ -219,11 +218,16 @@ const GymViewPage: FC = () => {
                           },
                           borderColor: "#519DD9",
                           borderRadius: "18px",
-                      }}>
+                        }}
+                      >
                         <CardMedia
                           component="img"
                           height="140"
-                          image={`${item.images !== undefined && item.images.length > 0 ? item.images[0] : NoImage}`}
+                          image={`${
+                            item.images !== undefined && item.images.length > 0
+                              ? item.images[0]
+                              : NoImage
+                          }`}
                         />
                         <CardContent>
                           <Typography gutterBottom variant="h5" component="div">
@@ -323,26 +327,29 @@ const GymViewPage: FC = () => {
             // map all the reviews into review cards
             reviews.map((review) => {
               return (
-                <Paper
-                  style={{ padding: "1em", marginBottom: "8px" }}
-                  elevation={3}
-                >
-                  <CardHeader
-                    avatar={
-                      <Avatar
-                        src={`${S3_BASE_URL}/${review.userId.profilePicture}`}
-                      />
-                    }
-                    title={review.username}
-                    subheader={moment(review.dateAdded).format("MMM Do YYYY")}
-                  />
-                  <p>
-                    <b>
-                      <StarWidget rating={review.rating} /> {review.title}
-                    </b>
-                  </p>
-                  <p>{review.description}</p>
-                </Paper>
+                <>
+                  <Paper
+                    style={{ padding: "1em", marginBottom: "8px" }}
+                    elevation={0}
+                  >
+                    <CardHeader
+                      avatar={
+                        <Avatar
+                          src={`${S3_BASE_URL}/${review.userId.profilePicture}`}
+                        />
+                      }
+                      title={review.username}
+                      subheader={moment(review.dateAdded).format("MMM Do YYYY")}
+                    />
+                    <p>
+                      <b>
+                        <StarWidget rating={review.rating} /> {review.title}
+                      </b>
+                    </p>
+                    <p>{review.description}</p>
+                  </Paper>
+                  <Divider className="review-hr" />
+                </>
               );
             })
           ) : (

@@ -149,7 +149,7 @@ export default function FrontPage() {
         </Grid>
       </Grid>
 
-      <Card elevation={3} style={{ borderRadius: "20px", margin: "3em" }}>
+      <Card elevation={3} style={{ borderRadius: "20px", margin: "3em", outline: "2px solid #d1d1d1", }}>
         <div
           style={{
             display: "flex",
@@ -219,7 +219,7 @@ export default function FrontPage() {
         </Grid>
         <Grid item md={1} xs={12}></Grid>
         <Grid item md={5} xs={12}>
-          <Card elevation={3} style={{ borderRadius: "20px", padding: "3em" }}>
+          <Card elevation={3} style={{ borderRadius: "20px", padding: "3em", outline: "2px solid #d1d1d1"  }}>
             <Typography
               component="h2"
               variant="h5"

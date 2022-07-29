@@ -143,7 +143,7 @@ const createCheckoutSession = async (req, res) => {
       success_url: `http://localhost:3000/stripe/checkout/callback/${product}/${req.body.id}`,
       cancel_url: `http://localhost:3000/buy/${req.body.id}/cancelled`,
       payment_intent_data: {
-        application_fee_amount: Math.ceil(totalPrice * 0.25) * 100, // we get 25% cut and round up to nearest int in eur cent
+        application_fee_amount: Math.ceil(100*totalPrice * 0.10), // we get 10% cut and round up to nearest in eur cent
         transfer_data: {
           destination: stripe_account_id,
         },

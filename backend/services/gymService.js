@@ -174,10 +174,7 @@ class GymService {
   };
 
   getAllGymAmenitiesByCity = async (name, city) => {
-    const amenities = await gymModel.find(
-      { city, name: { $regex: String(name), $options: "i" } },
-      { amenities: 1, _id: 0 }
-    );
+    const amenities = await gymModel.find({ city }, { amenities: 1, _id: 0 });
     const allAmenities = amenities
       .map((item) => {
         return item.amenities;

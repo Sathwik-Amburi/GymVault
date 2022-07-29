@@ -7,5 +7,7 @@ router.get("/get/:id", reviewController.getReviewsById); // use this route to ge
 router.post("/add-review", reviewController.addReview); // use this route to let user add a review
 router.get("/rating/:id", reviewController.getCourseOrGymRating); //use this route to get gym or course rating
 router.get("/user/:userid-:id", reviewController.getReviewByUserId); // use this route to get the reviews/rating of a user
+router.delete("/user/:userid-:id", reviewController.deleteReviewByUserId); // use this route to delete the reviews/rating of a user
+
 
 module.exports = router;

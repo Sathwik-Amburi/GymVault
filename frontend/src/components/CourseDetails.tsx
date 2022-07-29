@@ -7,6 +7,7 @@ import {
   CardHeader,
   Card,
   Box,
+  Divider,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import ApiCalls from "../api/apiCalls";
@@ -257,23 +258,26 @@ const CourseViewPage: FC = () => {
             //map all the reviews into review cards
             reviews.map((review) => {
               return (
-                <Paper
-                  style={{ padding: "1em", marginBottom: "8px" }}
-                  elevation={3}
-                >
-                  <CardHeader
-                    avatar={<Avatar src="todo" />}
-                    title={review.username}
-                    subheader={moment(review.dateAdded).format("MMM Do YYYY")}
-                  />
+                <>
+                  <Paper
+                    style={{ padding: "1em", marginBottom: "8px" }}
+                    elevation={0}
+                  >
+                    <CardHeader
+                      avatar={<Avatar src="todo" />}
+                      title={review.username}
+                      subheader={moment(review.dateAdded).format("MMM Do YYYY")}
+                    />
 
-                  <p>
-                    <b>
-                      <StarWidget rating={review.rating} /> {review.title}
-                    </b>
-                  </p>
-                  <p>{review.description}</p>
-                </Paper>
+                    <p>
+                      <b>
+                        <StarWidget rating={review.rating} /> {review.title}
+                      </b>
+                    </p>
+                    <p>{review.description}</p>
+                  </Paper>
+                  <Divider className="review-hr" />
+                </>
               );
             })
           ) : (

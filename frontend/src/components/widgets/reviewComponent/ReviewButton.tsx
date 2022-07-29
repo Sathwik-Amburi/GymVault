@@ -12,9 +12,11 @@ import ApiCalls from "../../../api/apiCalls";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
+import DeleteIcon from "@mui/icons-material/Delete";
 import TextField from "@mui/material/TextField";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
+import RateReviewIcon from '@mui/icons-material/RateReview';
 
 const theme = createTheme();
 export default function ReviewButton(props: any) {
@@ -22,9 +24,9 @@ export default function ReviewButton(props: any) {
   const [value, setValue] = React.useState<number | null>(0);
   const [rating, setReview] = useState<any>(0); //to get the reviews/rating of a user for a particular gym/course.
   const [reviewAdded, setReviewAdded] = useState<boolean>(false);
-  const [title,setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("")
-  const [reviewValidation, setReviewValidation] = useState(false)
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [reviewValidation, setReviewValidation] = useState(false);
   let gymId = props.gymId;
   let courseId = props.courseId;
   let userId = props.userId;
@@ -46,6 +48,23 @@ export default function ReviewButton(props: any) {
     //do nothing
   }
 
+  const deleteReview = () => {
+    let Id;
+    if (props.courseId === null) {
+      Id = props.gymId;
+    } else {
+      Id = props.courseId;
+      gymId = null;
+    }
+    try {
+      ApiCalls.deleteReviewByUserId(userId, Id).then((res) => {
+        setReviewAdded(false);
+      });
+    } catch (e) {
+      //do nothing
+    }
+  };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -54,12 +73,12 @@ export default function ReviewButton(props: any) {
     setOpen(false);
   };
   const handleTitleChange = (
-      event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     setTitle(event.target.value);
   };
   const handleDescriptionChange = (
-      event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     setDescription(event.target.value);
   };
@@ -89,8 +108,8 @@ export default function ReviewButton(props: any) {
     <div style={{ marginTop: "2rem" }}>
       {!reviewAdded && (
         <>
-          <Button variant="contained" onClick={handleClickOpen}>
-            Write a review!
+          <Button variant="contained" onClick={handleClickOpen} startIcon={<RateReviewIcon sx={{ color: "white" }} />}>
+            Write a review
           </Button>
         </>
       )}
@@ -103,6 +122,14 @@ export default function ReviewButton(props: any) {
             You have rated this subscription:{" "}
           </Typography>
           <Rating name="read-only" value={rating} size="large" readOnly />
+          <br />
+          <Button
+            variant="contained"
+            onClick={deleteReview}
+            startIcon={<DeleteIcon sx={{ color: "white" }} />}
+          >
+            Delete Review
+          </Button>
         </>
       )}
 
@@ -187,10 +214,10 @@ export default function ReviewButton(props: any) {
                       label="Title"
                       type="text"
                       variant="standard"
-                      error={title === ""? true:false}
-                      helperText={title === ""?"Please enter a title":null}
-                      onChange = {handleTitleChange}
-                      value = {title}
+                      error={title === "" ? true : false}
+                      helperText={title === "" ? "Please enter a title" : null}
+                      onChange={handleTitleChange}
+                      value={title}
                     />
                     <TextField
                       autoFocus
@@ -203,11 +230,14 @@ export default function ReviewButton(props: any) {
                       variant="filled"
                       multiline
                       rows={4}
-                      error={description=== ""? true:false}
-                      helperText={description=== ""? "Please share your experience":null}
-                      onChange = {handleDescriptionChange}
-                      value = {description}
-
+                      error={description === "" ? true : false}
+                      helperText={
+                        description === ""
+                          ? "Please share your experience"
+                          : null
+                      }
+                      onChange={handleDescriptionChange}
+                      value={description}
                     />
                   </Grid>
                   <Button

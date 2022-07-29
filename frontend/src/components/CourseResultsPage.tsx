@@ -46,11 +46,26 @@ const CourseResultsPage: FC = () => {
     <>
       <Grid>
         <Grid>
-          <Typography fontSize={"2em"} fontWeight="bold">
-            {courseResults ? courseResults.length : 0}{" "}
-            {getCourseSpelling(courseResults?.length)}
-            found in {city}
-          </Typography>
+          {courseResults && courseResults.length > 0 ? (
+            <Typography fontSize={"2em"} fontWeight="bold">
+              {courseResults ? courseResults.length : 0}{" "}
+              {getCourseSpelling(courseResults?.length)}
+              found in {city}
+            </Typography>
+          ) : (
+            <>
+              <Typography fontSize={"2em"} fontWeight="bold">
+                {courseResults ? courseResults.length : 0}{" "}
+                {getCourseSpelling(courseResults?.length)}{" "}
+                {name !== "" ? `called ${name}` : "matching these filters"}{" "}
+                found in {city}
+              </Typography>
+              <Typography fontSize={"1em"} variant="caption">
+                Please try searching using a different name or filters, or try
+                searching by city
+              </Typography>
+            </>
+          )}
         </Grid>
         <Grid container>
           <CourseResultsFilter city={city} name={name} />

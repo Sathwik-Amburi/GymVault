@@ -115,6 +115,12 @@ const StripeConnect: FC<StripeConnectProps> = (props: any) => {
                 cursor: "pointer",
                 marginBottom: "25px",
                 borderRadius: "15px 50px 30px",
+              }}
+              sx={{
+                ":hover": {
+                  outline: "2px solid #D7053E",
+                  transition: "color 0.5s",
+                },
                 outline: "2px solid #d1d1d1",
               }}
               elevation={3}
@@ -151,6 +157,7 @@ const StripeConnect: FC<StripeConnectProps> = (props: any) => {
                     <Button
                       onClick={() => navigate("/gym/add")}
                       variant="outlined"
+                      style={{ fontWeight: "bold" }}
                     >
                       {" "}
                       <i
@@ -180,6 +187,7 @@ const StripeConnect: FC<StripeConnectProps> = (props: any) => {
                 disabled={processing}
                 onClick={handlePayoutSettings}
                 variant="outlined"
+                style={{ fontWeight: "bold" }}
               >
                 <i
                   style={{ fontSize: "27px", padding: "4px" }}

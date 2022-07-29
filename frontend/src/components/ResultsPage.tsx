@@ -32,7 +32,6 @@ const ResultsPage: FC = () => {
           dispatch(setGymResults({ filteredGyms: res.data.response }));
           setLoading(false);
         })
-
         .catch((err) => {
           UnifiedErrorHandler.handle(err);
           dispatch(
@@ -48,11 +47,26 @@ const ResultsPage: FC = () => {
     <>
       <Grid>
         <Grid>
-          <Typography fontSize={"2em"} fontWeight="bold">
-            {gymResults ? gymResults.length : 0}{" "}
-            {getGymSpelling(gymResults?.length)}
-            found in {city}
-          </Typography>
+          {gymResults && gymResults.length > 0 ? (
+            <Typography fontSize={"2em"} fontWeight="bold">
+              {gymResults ? gymResults.length : 0}{" "}
+              {getGymSpelling(gymResults?.length)}
+              found in {city}
+            </Typography>
+          ) : (
+            <>
+              <Typography fontSize={"2em"} fontWeight="bold">
+                {gymResults ? gymResults.length : 0}{" "}
+                {getGymSpelling(gymResults?.length)}{" "}
+                {name !== "" ? `called ${name}` : "matching these filters"}{" "}
+                found in {city}
+              </Typography>
+              <Typography fontSize={"1em"} variant="caption">
+                Please try searching using a different name or filters, or try
+                searching by city
+              </Typography>
+            </>
+          )}
         </Grid>
       </Grid>
       <Grid container>

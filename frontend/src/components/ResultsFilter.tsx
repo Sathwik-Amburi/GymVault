@@ -107,11 +107,7 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
     city &&
       ApiCalls.getGymsByFilters(filters, city)
         .then((res) => {
-          if (res.data.message === "No results found") {
-            dispatch(setGymResults({ filteredGyms: [] }));
-          } else {
-            dispatch(setGymResults({ filteredGyms: res.data.response.gyms }));
-          }
+          dispatch(setGymResults({ filteredGyms: res.data.response.gyms }));
         })
         .catch((err) => {
           UnifiedErrorHandler.handle(err);
@@ -172,11 +168,7 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
     city &&
       ApiCalls.getGymsByFilters(filters, city)
         .then((res) => {
-          if (res.data.message === "No results found") {
-            dispatch(setGymResults({ filteredGyms: [] }));
-          } else {
-            dispatch(setGymResults({ filteredGyms: res.data.response.gyms }));
-          }
+          dispatch(setGymResults({ filteredGyms: res.data.response.gyms }));
         })
         .catch((err) => {
           UnifiedErrorHandler.handle(err);
@@ -198,6 +190,7 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
         minPrice: dailyPasspriceRange.minPrice,
         maxPrice: dailyPasspriceRange.maxPrice,
       });
+      console.log(activeFilters);
       setDailyPassPriceRange({ ...dailyPasspriceRange, sliderChanged: false });
     }
     if (monthlyPasspriceRange.sliderChanged) {
@@ -268,7 +261,7 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
   };
 
   const handleFilterClear = () => {
-    setActiveAmenities([""]);
+    setActiveAmenities([]);
     setActiveFilters([]);
     setDailyPassPriceRange({
       minPrice: 0,
