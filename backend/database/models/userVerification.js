@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// TODO: Add remaining fields, Add remaining Schemas
 const UserVerificationSchema = new mongoose.Schema({
   userId: {
     type: String,

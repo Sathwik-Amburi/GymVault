@@ -44,7 +44,6 @@ const UserSubscriptionsPage: FC = () => {
           let pastItems: [Item, Subscription][] = [];
 
           res.data.response.forEach((obj: any) => {
-            // TODO check if it's present
             let item: Item = {
               _id: obj._id,
               gymName: obj.gym.name,

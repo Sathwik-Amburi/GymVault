@@ -14,7 +14,6 @@ class SubscriptionService {
         subscriptions.map(async (subscription) => {
           const gym = await gymService.getGym(subscription.gymId);
           if (subscription.courseId) {
-            // TODO - what if the course is deleted?
             const course = await courseService.getCourse(subscription.courseId);
             return {
               ...subscription.toJSON(),
@@ -69,7 +68,6 @@ class SubscriptionService {
     basePrice,
     rawOptionals
   ) => {
-    // parse baseType - TODO: is this correct? (aka, is baseType reliably mapped?)
     let type =
       baseType == 1
         ? "DAY_PASS"

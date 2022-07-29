@@ -18,7 +18,7 @@ hr {
   height: 5px;
   margin: 1.5rem 0;
   border: none;
-  background-color: #232323; /* TODO set to theme color */
+  background-color: #232323;
   max-width: 8em;
   border-radius: 3px;
 }
@@ -27,7 +27,7 @@ hr {
   height: 3px;
   margin: 0.5rem 0;
   border: none;
-  background-color: #232323; /* TODO set to theme color */
+  background-color: #232323;
   max-width: 4em;
   border-radius: 3px;
 }
@@ -35,14 +35,14 @@ hr {
 .review-hr {
   height: 1px;
   border: none;
-  background-color: gray; /* TODO set to theme color */
+  background-color: gray;
   max-width: inherit;
   opacity: 0.15;
   margin-bottom: 8px;
 }
 
 .purchase-grid-item :hover {
-  border: 2px solid #232323; /* TODO set to theme color */
+  border: 2px solid #232323;
 }
 
 #notfound {

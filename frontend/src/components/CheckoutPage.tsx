@@ -97,7 +97,7 @@ const CheckoutPage: FC = () => {
       type: "gym",
       address: gym.address,
       description: gym.description,
-      price: -1, // TODO: this "price" here can be dropped from the schema i think?
+      price: -1,
       optionals:
         gym.optionals === undefined
           ? []
@@ -147,7 +147,6 @@ const CheckoutPage: FC = () => {
   });
 
   useEffect(() => {
-    // TODO: rewrite the other way around (get the gym first, then the course if it exists)
     ApiCalls.getCourse(id!)
       .then((res) => {
         let courseResponse = res.data.response;
@@ -188,18 +187,7 @@ const CheckoutPage: FC = () => {
               })
             );
           });
-        // navigate to 404?
       });
-
-    /* /confirm route taken
-      if(stripeCallback !== undefined) {
-        // TODO: call APIs to check validity of ("confirm") purchase, and redirect if valid
-        let uid = String(localStorage.getItem("token"));
-        ApiCalls.checkOrPurchase(id!, uid, stripeCallback)
-          .then((res) => {
-            navigate("/user/tickets?highlight=" + id);
-          }).catch((err) => UnifiedErrorHandler.handle(err, "(display): Error checking purchase"));
-      }*/
   }, [id, navigate, returnState]);
 
   function optionToPurchase(option: Option, colorHash: string): PurchaseOption {

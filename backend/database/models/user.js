@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// TODO: Add remaining fields, Add remaining Schemas
 const UserSchema = new mongoose.Schema({
   role: {
     type: String,
@@ -19,12 +18,6 @@ const UserSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  // username: {
-  //     type: String,
-  //     unique: 'testing error message',
-  //     required: 'Please fill in a username',
-  //     trim: true
-  // },
   email: {
     type: String,
     trim: true,

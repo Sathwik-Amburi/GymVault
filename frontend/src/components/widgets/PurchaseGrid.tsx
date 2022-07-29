@@ -125,7 +125,6 @@ const PurchaseGrid: FC<GridProps> = (props: GridProps) => {
         <hr className="mini-hr" />
       </Grid>
 
-      {/* !!!!! TODO: deduplicate logic !!!!! */}
       {props.optionals.length > 0 && (
         <span>
           <hr />

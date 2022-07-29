@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// TODO: make option.js, deduplicate
 const Option = new mongoose.Schema({
   name: {
     type: String,

@@ -22,11 +22,8 @@ function StripeCallback() {
       };
       let response = await axios.get("/stripe/get-payment-status", { headers });
       if (response.data.paid === true) {
-        // TODO: API POST Request to add record in subscriptions table to register user to gym with id: gym_id
         return navigate("/user/tickets?highlight=" + gym_id);
       } else {
-        // payment associated with session is incomplete (payment_status: unpaid)
-
         dispatch(
           setErrorAlert({
             showError: true,
