@@ -15,6 +15,7 @@ import { useNavigate } from "react-router";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch } from "react-redux";
 import { setAuthentication } from "../store/slices/authenticationSlice";
+import * as yup from "yup";
 import {
   Dialog,
   DialogContent,
@@ -26,6 +27,7 @@ import style from "../css/google.module.css";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
+import * as React from "react";
 const theme = createTheme();
 
 export interface ValidationState {
@@ -62,6 +64,54 @@ const SignUpPage: FC = () => {
   };
 
   const [tosPopupOpen, setTosPopupOpen] = useState(false);
+  const [passwordValidation,setPasswordValidation] = useState<ValidationState>({
+      status: "",
+      message: "",
+  });
+  const[password,setPassword] = useState("")
+
+
+
+    const handlePasswordChange = (
+        event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    ) => {
+        let decimal=  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+        if (!event.target.value.match(decimal)){
+            setPasswordValidation({
+                status: "warning",
+                message: "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character",
+            })
+        }
+        else{
+            setPasswordValidation({
+                status: "success",
+                message: "passwords match",
+            })
+        }
+            setPassword(event.target.value);
+
+
+    };
+
+    const handleConfirmPassword = (
+        event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    ) => {
+
+        if (event.target.value !== password){
+            setPasswordValidation({
+                status: "error",
+                message: "passwords don't match",
+            })
+            return  false
+        }else {
+            setPasswordValidation({
+                status: "success",
+                message: "passwords match",
+            })
+            return true
+        }
+    };
+
   const [registrationValidation, setRegistrationValidation] =
     useState<ValidationState>({
       status: "",
@@ -163,6 +213,10 @@ const SignUpPage: FC = () => {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={handlePasswordChange}
+                  value={password}
+                  error={passwordValidation.status ==="warning"?true:false}
+                  helperText={passwordValidation.status ==="warning"?"Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character":null}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -174,6 +228,11 @@ const SignUpPage: FC = () => {
                   type="password"
                   id="confirmPassword"
                   autoComplete="confirm-password"
+                  onChange={handleConfirmPassword}
+                  error={
+                      passwordValidation.status === "error"
+                  }
+                  helperText={ passwordValidation.status ==="error" ?"Passwords don't Match":null}
                 />
               </Grid>
               <Grid item xs={12}>
