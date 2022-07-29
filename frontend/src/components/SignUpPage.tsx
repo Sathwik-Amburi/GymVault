@@ -15,7 +15,6 @@ import { useNavigate } from "react-router";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch } from "react-redux";
 import { setAuthentication } from "../store/slices/authenticationSlice";
-import * as yup from "yup";
 import {
   Dialog,
   DialogContent,

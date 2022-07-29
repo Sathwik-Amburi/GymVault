@@ -87,7 +87,7 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
             })
           );
         });
-  }, [gyms]);
+      }, [gyms, city, dispatch, name]);
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
