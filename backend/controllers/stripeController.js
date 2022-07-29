@@ -245,26 +245,13 @@ const getPayee = async (item_id) => {
 
 
 const sendReceipt = (email, session) => {
-  // const options = {
-  //   to: email,
-  //   subject: "GymVault - Please verify you email address",
-  //   html: `<p>Please verify your email to confirm your signup to GymVault by clicking the following link
-  //   </p><p><b>This link expires in 6 hours</b>.</p><p>
-  //  <a href=${
-  //    dev_url + "/authentication/verifyEmail/" + user_id + "/" + uniqueString
-  //  }>${
-  //     dev_url + "/authentication/verifyEmail/" + user_id + "/" + uniqueString
-  //   }</a></p>`,
-  //   textEncoding: "base64",
-  // };
-
+  
   const options = {
     to: email,
     subject: "GymVault - Payment Successful",
     html: emailTemplate(session.pending_subscription.ticketSecret, session.pending_subscription.name, session.pending_subscription.type, session.pending_subscription.price, session.pending_subscription.expireDate),
     textEncoding: "base64",
   };
-  console.log(session)
 
   sendMail(options).catch((error) => {
     console.log("Error while sending verification email", error);
