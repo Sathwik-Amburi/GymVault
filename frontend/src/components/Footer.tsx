@@ -22,6 +22,7 @@ export default function Footer() {
     navigate("/");
   };
   return (
+      <div className="footerstyle">
     <Box
       sx={{
         display: "flex",
@@ -130,5 +131,6 @@ export default function Footer() {
         </Container>
       </Box>
     </Box>
+      </div>
   );
 }

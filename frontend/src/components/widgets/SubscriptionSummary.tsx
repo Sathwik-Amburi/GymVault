@@ -22,7 +22,7 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
     <Grid container spacing={3}>
       <Grid
         item
-        md={6}
+        lg={6}
         xs={12}
         style={{
           borderRadius: "12px",
@@ -30,7 +30,7 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
       >
         <Paper
           style={{
-            backgroundColor: "#f00",
+            backgroundColor: "#1a7244",
             color: "#fff",
             borderRadius: "12px",
             padding: "1.5em",
@@ -48,7 +48,7 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
                 <tr>
                   <td>
                     <Typography variant="subtitle1">
-                      {!props.expired ? "From " : "Purchased "}
+                      {!props.expired ? "From " : "Started "}
                     </Typography>
                   </td>
                   <td>
@@ -63,13 +63,11 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
                     {props.item.type === SubscriptionTypes.SESSION_PASS && (
                       <Typography
                         variant="body1"
-                        style={{ display: "inline", marginLeft: "4px" }}
+                        style={{ display: "inline", marginLeft: "4px", fontWeight: "bold" }}
                       >
-                        <b>
-                          {moment(props.subscription.purchaseDate)
-                            .utc()
-                            .format("HH:mm")}
-                        </b>
+                        {moment(props.subscription.purchaseDate)
+                          .utc()
+                          .format("HH:mm")}
                       </Typography>
                     )}
                   </td>
@@ -77,7 +75,7 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
                 <tr>
                   <td>
                     <Typography variant="subtitle1">
-                      {!props.expired ? "To " : "Expired "}
+                      {!props.expired ? "To " : "Ended "}
                     </Typography>
                   </td>
                   <td>
@@ -93,13 +91,11 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
                     {props.item.type === SubscriptionTypes.SESSION_PASS && (
                       <Typography
                         variant="body1"
-                        style={{ display: "inline", marginLeft: "4px" }}
+                        style={{ display: "inline", marginLeft: "4px", fontWeight: "bold" }}
                       >
-                        <b>
-                          {moment(props.subscription.expireDate)
-                            .utc()
-                            .format("HH:mm")}
-                        </b>
+                        {moment(props.subscription.expireDate)
+                          .utc()
+                          .format("HH:mm")}
                       </Typography>
                     )}
                   </td>
