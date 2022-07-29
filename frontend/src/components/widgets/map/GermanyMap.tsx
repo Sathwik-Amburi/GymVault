@@ -26,7 +26,6 @@ export default function Map(props: any) {
       aux.push(city.label);
     });
     setPresentCities([...aux]);
-    console.log(aux);
     setLoaded(true);
   }, []);
 

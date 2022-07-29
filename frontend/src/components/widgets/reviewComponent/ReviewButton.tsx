@@ -85,10 +85,6 @@ export default function ReviewButton(props: any) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      title: data.get("title"),
-      description: data.get("description"),
-    });
     //add the review by the user
     ApiCalls.addReview(
       data.get("userId"),

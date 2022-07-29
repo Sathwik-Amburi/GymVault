@@ -89,7 +89,6 @@ export default function RevenueTable(props: any) {
       );
     });
     setRows(aux);
-    console.log(subs);
   }, []);
 
   return (

@@ -88,7 +88,6 @@ const GymViewPage: FC = () => {
     ApiCalls.getReviewsById(fid)
       .then((res) => {
         setReviews(res.data.response);
-        console.log(res.data.response);
       })
       .catch((err) => {
         UnifiedErrorHandler.handle(err);

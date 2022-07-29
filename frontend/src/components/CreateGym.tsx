@@ -266,10 +266,6 @@ const CreateGym: FC = () => {
       };
       await axios.post(`gyms/add-gym`, data, { headers });
       navigate("/user/owner-profile");
-      console.log(gym);
-      console.log(gymoptions);
-      console.log(gymcourses);
-      console.log(gymlocation);
     },
   });
 

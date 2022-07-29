@@ -40,7 +40,6 @@ export default function DiscountsModal() {
     const { data } = await axios.get(`gyms/get-gym-by-owner`, { headers });
     const subscriptionOffers: subscriptionOffer[] = data.gym.subscriptionOffers;
     setSubscriptionOffers(subscriptionOffers);
-    console.log(subscriptionOffers);
   };
 
   const editSubscriptionOffers = async (
