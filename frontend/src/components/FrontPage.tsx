@@ -75,14 +75,14 @@ export default function FrontPage() {
           </Typography>
         </Grid>
         <Grid item xs={12} style={{ textAlign: "center" }}>
-          <Typography variant="h6" color="text.primary" gutterBottom>
+          <Typography variant="h6" color="text.primary">
             We help gym owners and clients connect{" "}
             <b>faster, easier, and hassle-free</b>
           </Typography>
         </Grid>
       </Grid>
 
-      <Grid container spacing={3} maxWidth="lg" style={{ padding: "5em" }}>
+      <Grid container spacing={3} maxWidth="lg" style={{ padding: "1em" }}>
         <Grid item md={6} xs={12}>
           <Typography
             component="h2"
@@ -100,9 +100,9 @@ export default function FrontPage() {
             color="text.primary"
             gutterBottom
           >
-            Browse our large gym and course catalog, choose the one that matches
-            your exact needs, and pay only for what you use. All fully
-            digitally.
+            Have you been thinking about starting your fitness journey ? Unsure
+            of what gym to choose, or what course to sign up for ? Well you came
+            to the right place !
           </Typography>
         </Grid>
         <Grid item md={2} xs={4}>
@@ -149,7 +149,14 @@ export default function FrontPage() {
         </Grid>
       </Grid>
 
-      <Card elevation={3} style={{ borderRadius: "20px", margin: "3em", outline: "2px solid #d1d1d1", }}>
+      <Card
+        elevation={3}
+        style={{
+          borderRadius: "20px",
+          margin: "3em",
+          outline: "2px solid #d1d1d1",
+        }}
+      >
         <div
           style={{
             display: "flex",
@@ -219,7 +226,14 @@ export default function FrontPage() {
         </Grid>
         <Grid item md={1} xs={12}></Grid>
         <Grid item md={5} xs={12}>
-          <Card elevation={3} style={{ borderRadius: "20px", padding: "3em", outline: "2px solid #d1d1d1"  }}>
+          <Card
+            elevation={3}
+            style={{
+              borderRadius: "20px",
+              padding: "3em",
+              outline: "2px solid #d1d1d1",
+            }}
+          >
             <Typography
               component="h2"
               variant="h5"
