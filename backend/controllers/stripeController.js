@@ -4,6 +4,9 @@ const subscriptionService = require("../services/subscriptionService");
 const subscriptionModel = require("../database/models/subscription");
 const gymModel = require("../database/models/gym");
 const courseModel = require("../database/models/course");
+const sendMail = require("../googleCloud/gmail");
+const { emailTemplate } = require("../templates/emailTemplate");
+
 
 const createStripeConnectAccount = async (req, res) => {
   // only gym owners can onboard to stripe
@@ -196,6 +199,7 @@ const getPaymentStatus = async (req, res) => {
       ...user.stripe_session.pending_subscription,
     }).save();
     if (subscription) {
+      sendReceipt(req.user.email, user.stripe_session)
       res
         .status(200)
         .json({
@@ -238,6 +242,21 @@ const getPayee = async (item_id) => {
     }
   }
 };
+
+
+const sendReceipt = (email, session) => {
+  
+  const options = {
+    to: email,
+    subject: "GymVault - Payment Successful",
+    html: emailTemplate(session.pending_subscription.ticketSecret, session.pending_subscription.name, session.pending_subscription.type, session.pending_subscription.price, session.pending_subscription.expireDate),
+    textEncoding: "base64",
+  };
+
+  sendMail(options).catch((error) => {
+    console.log("Error while sending verification email", error);
+  });
+}
 
 module.exports = {
   createStripeConnectAccount,

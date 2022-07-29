@@ -1,11 +1,11 @@
-import { Button, Grid, Paper, Typography } from "@mui/material";
-import React, { FC, useState } from "react";
-import { Item, Subscription, UserProfileDetails } from "../../models/allModels";
+import { Button, Grid, Typography } from "@mui/material";
+import { FC, useState } from "react";
+import { Item, Subscription } from "../../models/allModels";
 import SecretDisplay from "./SecretDisplay";
 import SubscriptionSummary from "./SubscriptionSummary";
 import ReviewButton from "./reviewComponent/ReviewButton";
-import { AutoFixHigh } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 type SsProps = {
   subscription: Subscription;
@@ -28,14 +28,15 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
         padding: "3em",
         marginTop: "3em",
         borderRadius: "20px",
-        backgroundColor: props.expired ? "#393939" : "#ccc",
+        outline:"2px solid black",
+        backgroundColor: props.expired ? "#393939" : "#fff",
         color: props.expired ? "#fff" : "#000",
       }}
     >
       <Grid item xs={12}>
-        <span style={{ float: "right" }}>
+        <span style={{ float: "right", fontStyle: "italic" }}>
           <Typography variant="h5">
-            <span style={{ fontWeight: "800", color: "#999" }}>
+            <span style={{ color: "#999", fontSize: "40px" }}>
               {props.subscription.type === "DAY_PASS"
                 ? "daily ticket"
                 : props.subscription.type === "MONTHLY_PASS"
@@ -77,6 +78,12 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
           shown={shownSecret}
           expired={props.expired}
         />
+        <ReviewButton
+          userId={props.subscription.userId}
+          gymId={props.subscription.gymId}
+          username={props.user.firstName}
+          courseId={props.subscription.courseId}
+        />
       </Grid>
 
       {/* Secret display */}
@@ -89,39 +96,62 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
         <Typography
           variant="h5"
           style={{ fontWeight: "bold" }}
-          onClick={() => navigate(`/course/${props.subscription.courseId}`)}
-          sx={{
-            "&:hover": {
-              color: "#D7053E",
-              cursor: "pointer",
-              transition: "color 0.2s ease-out",
-            },
-          }}>
+          onClick={() => {
+            props.item.courseName &&
+              navigate(`/course/${props.subscription.courseId}`);
+          }}
+          sx={
+            props.item.courseName
+              ? {
+                  "&:hover": {
+                    color: "#D7053E",
+                    cursor: "pointer",
+                    transition: "color 0.2s ease-out",
+                  },
+                }
+              : undefined
+          }
+        >
           {props.item.courseName !== "" ? (
-            <>
-                {props.item.courseName}
-            </>
-          ) : 
-          <>
-              Fixed-Time Subscription
-          </>}
+            <>{props.item.courseName}</>
+          ) : (
+            <>Fixed-Time Subscription</>
+          )}
         </Typography>
-        <hr />
-        
-        <Typography variant="body2">{props.item.description}</Typography>
-        <ReviewButton
-          userId={props.subscription.userId}
-          gymId={props.subscription.gymId}
-          username={props.user.firstName}
-          courseId={props.subscription.courseId}
-        />
+        {props.expired ? (
+          <Typography variant="subtitle2" style={{ marginTop: "8px" }}>
+            This subscription has{" "}
+            <span style={{ fontWeight: "bold", color: "red" }}>expired</span>.
+            <br />
+            <br />{" "}
+            <div style={{ display: "flex" }}>
+              We hope you enjoyed your workout
+              <FavoriteIcon style={{ marginLeft: "4px" }} color="error" />
+            </div>
+            Thank you for using GymVault
+          </Typography>
+        ) : (
+          <Typography variant="subtitle2" style={{ marginTop: "8px" }}>
+            This subscription is currently{" "}
+            <span style={{ fontWeight: "bold", color: "green" }}>active</span>.
+            Your access code is hiden below. Once you have arrived to the
+            location, please make sure to have your access code ready and
+            provide it to the gym staff as they will need to verify it to grant
+            you access. <br />
+            <br />{" "}
+            <div style={{ display: "flex" }}>
+              Enjoy your workout{" "}
+              <FavoriteIcon style={{ marginLeft: "4px" }} color="error" />
+            </div>
+          </Typography>
+        )}
 
-        <Button 
+        <Button
           style={{
             float: "right",
             fontWeight: "bold",
             marginTop: "2em",
-            display: props.expired ? "none" : "block"
+            display: props.expired ? "none" : "block",
           }}
           variant="outlined"
           color="primary"
@@ -131,20 +161,39 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
           {shownSecret ? (
             <>
               <i
-                className="fa-solid fa-eye"
+                className="fa-solid fa-receipt"
                 style={{ marginRight: "0.5em" }}
               ></i>
-              Show Order Log
+              Show Order Details
             </>
           ) : (
             <>
-              <i className="fa fa-lock" style={{ marginRight: "0.5em" }}>
-                &nbsp;
-              </i>
+              <i
+                style={{ marginRight: "0.5em" }}
+                className="fa-solid fa-wand-magic-sparkles"
+              ></i>
               Reveal Access Code
             </>
           )}
         </Button>
+        <Grid item xs={12}>
+          <table style={{ border: "none", width: "100%" }}>
+            <tbody>
+              <tr>
+                <td style={{ textAlign: "right" }}>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>
+                    €{props.subscription.price}
+                  </Typography>
+                </td>
+              </tr>
+              <tr>
+                <td style={{ textAlign: "right" }}>
+                  <Typography variant="body1">Total paid</Typography>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Grid>
       </Grid>
     </Grid>
   );
