@@ -63,8 +63,6 @@ export default class ColorGenerator {
     "LavenderBlush",
     "LawnGreen",
     "LemonChiffon",
-    "Lime",
-    "LimeGreen",
     "Linen",
     "Magenta",
     "Maroon",
@@ -101,7 +99,6 @@ export default class ColorGenerator {
     "PowderBlue",
     "Purple",
     "RebeccaPurple",
-    "Red",
     "RosyBrown",
     "RoyalBlue",
     "SaddleBrown",
@@ -121,8 +118,6 @@ export default class ColorGenerator {
     "Turquoise",
     "Violet",
     "Wheat",
-    "Yellow",
-    "YellowGreen",
   ];
   public static nameToColor(name: string): string {
     var hash = ColorGenerator.hashStr(name);

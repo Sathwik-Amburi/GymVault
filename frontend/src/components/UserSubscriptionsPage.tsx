@@ -199,7 +199,6 @@ const UserSubscriptionsPage: FC = () => {
             padding: "3em",
             margin: "3em 0 0 0",
             backgroundColor: "#555",
-            width: "100%",
           }}
         >
           <Container maxWidth="lg" style={{ padding: "3em" }}>
