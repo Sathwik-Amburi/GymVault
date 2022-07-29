@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from "react";
+import L from "leaflet";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setTimeout } from "timers";
 import { markers } from "./coordinates";
 
 export default function CityMap(props: any) {
+  var redMarker = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });
+
   let [center, setCenter] = useState<[number, number]>([0, 0]);
   let [loaded, setLoaded] = useState<boolean>(false);
   const [zoom, setZoom] = useState<number>(12);
@@ -34,6 +43,7 @@ export default function CityMap(props: any) {
   const displayGymMarker = (gym: any) => {
     return (
       <Marker
+        icon={redMarker}
         position={gym.coordinates}
         eventHandlers={{
           mouseover: (e) => {
@@ -63,6 +73,7 @@ export default function CityMap(props: any) {
   const displayCourseMarker = (course: any) => {
     return (
       <Marker
+        icon={redMarker}
         position={course.gymId.coordinates}
         eventHandlers={{
           mouseover: (e) => {
@@ -72,7 +83,7 @@ export default function CityMap(props: any) {
             e.target.closePopup();
           },
           click: (e) => {
-            navigate(`/gym/${course.gymId}`);
+            navigate(`/gym/${course.gymId._id}`);
           },
         }}
       >

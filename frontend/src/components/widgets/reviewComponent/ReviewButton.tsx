@@ -16,7 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import TextField from "@mui/material/TextField";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
-import RateReviewIcon from '@mui/icons-material/RateReview';
+import RateReviewIcon from "@mui/icons-material/RateReview";
 
 const theme = createTheme();
 export default function ReviewButton(props: any) {
@@ -108,7 +108,13 @@ export default function ReviewButton(props: any) {
     <div style={{ marginTop: "2rem" }}>
       {!reviewAdded && (
         <>
-          <Button variant="contained" onClick={handleClickOpen} startIcon={<RateReviewIcon sx={{ color: "white" }} />}>
+          <Button
+            variant="outlined"
+            style={{ fontWeight: "bold" }}
+            color="info"
+            onClick={handleClickOpen}
+            startIcon={<RateReviewIcon color="info" />}
+          >
             Write a review
           </Button>
         </>
@@ -124,9 +130,11 @@ export default function ReviewButton(props: any) {
           <Rating name="read-only" value={rating} size="large" readOnly />
           <br />
           <Button
-            variant="contained"
+            variant="outlined"
+            style={{ fontWeight: "bold" }}
             onClick={deleteReview}
-            startIcon={<DeleteIcon sx={{ color: "white" }} />}
+            startIcon={<DeleteIcon color="error" />}
+            color="error"
           >
             Delete Review
           </Button>

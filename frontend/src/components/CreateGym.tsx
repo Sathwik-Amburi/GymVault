@@ -47,6 +47,7 @@ import {
   useMap,
   useMapEvents,
 } from "react-leaflet";
+import L from "leaflet";
 import { markers } from "../components/widgets/map/coordinates";
 import { useNavigate } from "react-router-dom";
 import { setErrorAlert } from "../store/slices/errorAlertSlice";
@@ -84,6 +85,15 @@ const courseModalStyle = {
 };
 
 const CreateGym: FC = () => {
+  var redMarker = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [position, setPosition] = useState<[number, number]>([0, 0]);
@@ -144,7 +154,7 @@ const CreateGym: FC = () => {
       },
     });
     return position[0] !== 0 && position[1] !== 0 ? (
-      <Marker position={position} />
+      <Marker position={position} icon={redMarker} />
     ) : (
       <></>
     );

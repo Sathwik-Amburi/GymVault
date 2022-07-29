@@ -22,6 +22,7 @@ import StarIcon from "@mui/icons-material/Star";
 import CourseScheduleTable from "./CourseScheduleTable";
 import { setErrorAlert } from "../store/slices/errorAlertSlice";
 import { useDispatch } from "react-redux";
+import { S3_BASE_URL } from "../config/config";
 
 const moment = require("moment");
 
@@ -264,7 +265,11 @@ const CourseViewPage: FC = () => {
                     elevation={0}
                   >
                     <CardHeader
-                      avatar={<Avatar src="todo" />}
+                      avatar={
+                        <Avatar
+                          src={`${S3_BASE_URL}/${review.userId.profilePicture}`}
+                        />
+                      }
                       title={review.username}
                       subheader={moment(review.dateAdded).format("MMM Do YYYY")}
                     />
@@ -274,7 +279,7 @@ const CourseViewPage: FC = () => {
                         <StarWidget rating={review.rating} /> {review.title}
                       </b>
                     </p>
-                    <p>{review.description}</p>
+                    <p style={{ marginTop: "8px" }}>{review.description}</p>
                   </Paper>
                   <Divider className="review-hr" />
                 </>
