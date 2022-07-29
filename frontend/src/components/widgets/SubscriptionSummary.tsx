@@ -43,9 +43,70 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
                 props.item.type as SubscriptionTypes
               )}
             </span>
-            <br />
-            <br />
-            <span>
+            <table style={{ marginTop: "8px" }}>
+              <tbody>
+                <tr>
+                  <td>
+                    <Typography variant="subtitle1">
+                      {!props.expired ? "From " : "Purchased "}
+                    </Typography>
+                  </td>
+                  <td>
+                    <Typography
+                      variant="subtitle1"
+                      style={{ display: "inline", marginLeft: "4px" }}
+                    >
+                      {moment(props.subscription.purchaseDate)
+                        .utc()
+                        .format("DD/MM/YYYY")}
+                    </Typography>
+                    {props.item.type === SubscriptionTypes.SESSION_PASS && (
+                      <Typography
+                        variant="body1"
+                        style={{ display: "inline", marginLeft: "4px" }}
+                      >
+                        <b>
+                          {moment(props.subscription.purchaseDate)
+                            .utc()
+                            .format("HH:mm")}
+                        </b>
+                      </Typography>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <Typography variant="subtitle1">
+                      {!props.expired ? "To " : "Expired "}
+                    </Typography>
+                  </td>
+                  <td>
+                    <Typography
+                      variant="subtitle1"
+                      style={{ display: "inline", marginLeft: "4px" }}
+                    >
+                      {moment(props.subscription.expireDate!)
+                        .utc()
+                        .format("DD/MM/YYYY")}
+                    </Typography>
+
+                    {props.item.type === SubscriptionTypes.SESSION_PASS && (
+                      <Typography
+                        variant="body1"
+                        style={{ display: "inline", marginLeft: "4px" }}
+                      >
+                        <b>
+                          {moment(props.subscription.expireDate)
+                            .utc()
+                            .format("HH:mm")}
+                        </b>
+                      </Typography>
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <span style={{ fontSize: "12px" }}>
               {props.item.type === SubscriptionTypes.DAY_PASS
                 ? "Lasts 24 hours from purchase"
                 : props.item.type === SubscriptionTypes.MONTHLY_PASS
@@ -85,75 +146,6 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
           </Paper>
         </Grid>
       ))}
-      <Grid item xs={12}>
-        <table style={{ border: "none", width: "100%" }}>
-          <tbody>
-            <tr>
-              <td>
-                <Typography variant="body1">
-                  {!props.expired ? "From " : "Purchased on "}
-                </Typography>
-              </td>
-              <td>
-                <Typography variant="h6" style={{ display: "inline" }}>
-                  {moment(props.subscription.purchaseDate)
-                    .utc()
-                    .format("DD/MM/YYYY")}
-                </Typography>
-                {props.item.type === SubscriptionTypes.SESSION_PASS && (
-                  <Typography
-                    variant="body1"
-                    style={{ display: "inline", marginLeft: "1em" }}
-                  >
-                    @{" "}
-                    <b>
-                      {moment(props.subscription.purchaseDate)
-                        .utc()
-                        .format("HH:mm")}
-                    </b>
-                  </Typography>
-                )}
-              </td>
-              <td style={{ textAlign: "right" }}>
-                <Typography variant="h6" style={{ fontWeight: "bold" }}>
-                  €{props.subscription.price}
-                </Typography>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <Typography variant="body1">
-                  {!props.expired ? "To " : "Expired on "}
-                </Typography>
-              </td>
-              <td>
-                <Typography variant="h6" style={{ display: "inline" }}>
-                  {moment(props.subscription.expireDate!)
-                    .utc()
-                    .format("DD/MM/YYYY")}
-                </Typography>
-
-                {props.item.type === SubscriptionTypes.SESSION_PASS && (
-                  <Typography
-                    variant="body1"
-                    style={{ display: "inline", marginLeft: "1em" }}
-                  >
-                    @{" "}
-                    <b>
-                      {moment(props.subscription.expireDate)
-                        .utc()
-                        .format("HH:mm")}
-                    </b>
-                  </Typography>
-                )}
-              </td>
-              <td style={{ textAlign: "right" }}>
-                <Typography variant="body1">Total paid</Typography>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </Grid>
     </Grid>
   );
 };
