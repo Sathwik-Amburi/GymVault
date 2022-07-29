@@ -101,6 +101,22 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
         maxPrice: newValue[1],
         sliderChanged: true,
       });
+
+      const cleanedFilters = activeFilters.filter(
+        (item) => item.type !== SubscriptionTypes.SESSION_PASS
+      );
+
+      const updatedActiveFilters = [
+        ...cleanedFilters,
+        {
+          type: SubscriptionTypes.SESSION_PASS,
+          name: "Session pass between",
+          minPrice: sessionPasspriceRange.minPrice,
+          maxPrice: sessionPasspriceRange.maxPrice,
+        },
+      ];
+
+      setActiveFilters(updatedActiveFilters);
     }
   };
 
@@ -114,6 +130,22 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
         maxPrice: newValue[1],
         sliderChanged: true,
       });
+
+      const cleanedFilters = activeFilters.filter(
+        (item) => item.type !== SubscriptionTypes.MONTHLY_PASS
+      );
+
+      const updatedActiveFilters = [
+        ...cleanedFilters,
+        {
+          type: SubscriptionTypes.MONTHLY_PASS,
+          name: "Monthly pass between",
+          minPrice: monthlyPasspriceRange.minPrice,
+          maxPrice: monthlyPasspriceRange.maxPrice,
+        },
+      ];
+
+      setActiveFilters(updatedActiveFilters);
     }
   };
 
@@ -127,11 +159,39 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
         maxPrice: newValue[1],
         sliderChanged: true,
       });
+
+      const cleanedFilters = activeFilters.filter(
+        (item) => item.type !== SubscriptionTypes.YEARLY_PASS
+      );
+
+      const updatedActiveFilters = [
+        ...cleanedFilters,
+        {
+          type: SubscriptionTypes.YEARLY_PASS,
+          name: "Yearly pass between",
+          minPrice: yearlyPasspriceRange.minPrice,
+          maxPrice: yearlyPasspriceRange.maxPrice,
+        },
+      ];
+
+      setActiveFilters(updatedActiveFilters);
     }
   };
 
   const handleFilter = () => {
-    buildActiveFilters();
+    setSessionPassPriceRange({
+      ...sessionPasspriceRange,
+      sliderChanged: false,
+    });
+    setMonthlyPassPriceRange({
+      ...monthlyPasspriceRange,
+      sliderChanged: false,
+    });
+    setYearlyPassPriceRange({
+      ...yearlyPasspriceRange,
+      sliderChanged: false,
+    });
+
     city &&
       ApiCalls.getCoursesByFilters(activeFilters, city, name)
         .then((res) => {
@@ -153,45 +213,6 @@ const CourseResultsFilter: FC<ResultsFilterProps> = ({ city, name }) => {
           );
         });
     setOpenModal(false);
-  };
-
-  const buildActiveFilters = () => {
-    if (sessionPasspriceRange.sliderChanged) {
-      activeFilters.push({
-        type: SubscriptionTypes.SESSION_PASS,
-        name: "Session pass between",
-        minPrice: sessionPasspriceRange.minPrice,
-        maxPrice: sessionPasspriceRange.maxPrice,
-      });
-      setSessionPassPriceRange({
-        ...sessionPasspriceRange,
-        sliderChanged: false,
-      });
-    }
-    if (monthlyPasspriceRange.sliderChanged) {
-      activeFilters.push({
-        type: SubscriptionTypes.MONTHLY_PASS,
-        name: "Monthly pass between",
-        minPrice: monthlyPasspriceRange.minPrice,
-        maxPrice: monthlyPasspriceRange.maxPrice,
-      });
-      setMonthlyPassPriceRange({
-        ...monthlyPasspriceRange,
-        sliderChanged: false,
-      });
-    }
-    if (yearlyPasspriceRange.sliderChanged) {
-      activeFilters.push({
-        type: SubscriptionTypes.YEARLY_PASS,
-        name: "Yearly pass between",
-        minPrice: yearlyPasspriceRange.minPrice,
-        maxPrice: yearlyPasspriceRange.maxPrice,
-      });
-      setYearlyPassPriceRange({
-        ...yearlyPasspriceRange,
-        sliderChanged: false,
-      });
-    }
   };
 
   const resetFilterPriceRangeValue = (filterType: SubscriptionTypes) => {
