@@ -130,6 +130,22 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
         maxPrice: newValue[1],
         sliderChanged: true,
       });
+
+      const cleanedFilters = activeFilters.filter(
+        (item) => item.type !== SubscriptionTypes.DAY_PASS
+      );
+
+      const updatedActiveFilters = [
+        ...cleanedFilters,
+        {
+          type: SubscriptionTypes.DAY_PASS,
+          name: "Day pass between",
+          minPrice: dailyPasspriceRange.minPrice,
+          maxPrice: dailyPasspriceRange.maxPrice,
+        },
+      ];
+
+      setActiveFilters(updatedActiveFilters);
     }
   };
 
@@ -143,6 +159,22 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
         maxPrice: newValue[1],
         sliderChanged: true,
       });
+
+      const cleanedFilters = activeFilters.filter(
+        (item) => item.type !== SubscriptionTypes.MONTHLY_PASS
+      );
+
+      const updatedActiveFilters = [
+        ...cleanedFilters,
+        {
+          type: SubscriptionTypes.MONTHLY_PASS,
+          name: "Monthly pass between",
+          minPrice: monthlyPasspriceRange.minPrice,
+          maxPrice: monthlyPasspriceRange.maxPrice,
+        },
+      ];
+
+      setActiveFilters(updatedActiveFilters);
     }
   };
 
@@ -156,11 +188,33 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
         maxPrice: newValue[1],
         sliderChanged: true,
       });
+      const cleanedFilters = activeFilters.filter(
+        (item) => item.type !== SubscriptionTypes.YEARLY_PASS
+      );
+      const updatedActiveFilters = [
+        ...cleanedFilters,
+        {
+          type: SubscriptionTypes.YEARLY_PASS,
+          name: "Yearly pass between",
+          minPrice: yearlyPasspriceRange.minPrice,
+          maxPrice: yearlyPasspriceRange.maxPrice,
+        },
+      ];
+
+      setActiveFilters(updatedActiveFilters);
     }
   };
 
   const handleFilter = () => {
-    buildActiveFilters();
+    setDailyPassPriceRange({ ...dailyPasspriceRange, sliderChanged: false });
+    setMonthlyPassPriceRange({
+      ...monthlyPasspriceRange,
+      sliderChanged: false,
+    });
+    setYearlyPassPriceRange({
+      ...yearlyPasspriceRange,
+      sliderChanged: false,
+    });
     const filters: Filter = {
       priceRangeFilters: activeFilters,
       amenitiesFilters: activeAmenities,
@@ -180,43 +234,6 @@ const ResultsFilter: FC<ResultsFilterProps> = ({ city, name, gyms }) => {
           );
         });
     setOpenModal(false);
-  };
-
-  const buildActiveFilters = () => {
-    if (dailyPasspriceRange.sliderChanged) {
-      activeFilters.push({
-        type: SubscriptionTypes.DAY_PASS,
-        name: "Day pass between",
-        minPrice: dailyPasspriceRange.minPrice,
-        maxPrice: dailyPasspriceRange.maxPrice,
-      });
-      console.log(activeFilters);
-      setDailyPassPriceRange({ ...dailyPasspriceRange, sliderChanged: false });
-    }
-    if (monthlyPasspriceRange.sliderChanged) {
-      activeFilters.push({
-        type: SubscriptionTypes.MONTHLY_PASS,
-        name: "Monthly pass between",
-        minPrice: monthlyPasspriceRange.minPrice,
-        maxPrice: monthlyPasspriceRange.maxPrice,
-      });
-      setMonthlyPassPriceRange({
-        ...monthlyPasspriceRange,
-        sliderChanged: false,
-      });
-    }
-    if (yearlyPasspriceRange.sliderChanged) {
-      activeFilters.push({
-        type: SubscriptionTypes.YEARLY_PASS,
-        name: "Yearly pass between",
-        minPrice: yearlyPasspriceRange.minPrice,
-        maxPrice: yearlyPasspriceRange.maxPrice,
-      });
-      setYearlyPassPriceRange({
-        ...yearlyPasspriceRange,
-        sliderChanged: false,
-      });
-    }
   };
 
   const resetFilterPriceRangeValue = (filterType: SubscriptionTypes) => {

@@ -41,7 +41,10 @@ const SignUpPage: FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+      if (passwordValidation.status !=="success"){
+          return
+      }
+      const data = new FormData(event.currentTarget);
     const email = data.get("email");
     ApiCalls.registerUser(
       data.get("firstName"),
@@ -70,6 +73,7 @@ const SignUpPage: FC = () => {
   });
   const[password,setPassword] = useState("")
 
+    const [passRegex,setPassRegex] = useState(true)
 
 
     const handlePasswordChange = (
@@ -81,11 +85,13 @@ const SignUpPage: FC = () => {
                 status: "warning",
                 message: "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character",
             })
+            setPassRegex(false)
         }
         else{
+            setPassRegex(true)
             setPasswordValidation({
-                status: "success",
-                message: "passwords match",
+                status: "validating",
+                message: "passwords match regex",
             })
         }
             setPassword(event.target.value);
@@ -104,11 +110,18 @@ const SignUpPage: FC = () => {
             })
             return  false
         }else {
-            setPasswordValidation({
-                status: "success",
-                message: "passwords match",
-            })
-            return true
+            if(passRegex){
+                setPasswordValidation({
+                    status: "success",
+                    message: "passwords match",
+                })
+            }
+            else{
+                setPasswordValidation({
+                    status: "validating",
+                    message: "passwords match but does not match regex",
+                })
+            }
         }
     };
 
@@ -215,8 +228,8 @@ const SignUpPage: FC = () => {
                   autoComplete="new-password"
                   onChange={handlePasswordChange}
                   value={password}
-                  error={passwordValidation.status ==="warning"?true:false}
-                  helperText={passwordValidation.status ==="warning"?"Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character":null}
+                  error={passRegex ===false}
+                  helperText={passRegex ===false?"Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character":null}
                 />
               </Grid>
               <Grid item xs={12}>
