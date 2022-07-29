@@ -5,6 +5,7 @@ import SecretDisplay from "./SecretDisplay";
 import SubscriptionSummary from "./SubscriptionSummary";
 import ReviewButton from "./reviewComponent/ReviewButton";
 import { AutoFixHigh } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 type SsProps = {
   subscription: Subscription;
@@ -14,6 +15,7 @@ type SsProps = {
 };
 
 const SubscriptionEntry: FC<SsProps> = (props) => {
+  const navigate = useNavigate();
   let [shownSecret, setShownSecret] = useState(false); // weird hack to prevent showing the secret if the subscription is expired
   if (props.expired) {
     // prevent showing the secret if the subscription is expired
@@ -46,7 +48,18 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
             </span>
           </Typography>
         </span>
-        <Typography variant="h4" style={{ fontWeight: "bold" }}>
+        <Typography
+          variant="h4"
+          style={{ fontWeight: "bold" }}
+          sx={{
+            "&:hover": {
+              color: "#519DD9",
+              cursor: "pointer",
+              transition: "color 0.2s ease-out",
+            },
+          }}
+          onClick={() => navigate(`/gym/${props.subscription.gymId}`)}
+        >
           {props.item.gymName}
         </Typography>
         <span>{props.item.address}</span>
@@ -75,7 +88,18 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
       <Grid item md={6} xs={12} style={{ paddingLeft: "2em" }}>
         {props.item.courseName !== "" ? (
           <>
-            <Typography variant="h5" style={{ fontWeight: "bold" }}>
+            <Typography
+              variant="h5"
+              style={{ fontWeight: "bold" }}
+              onClick={() => navigate(`/course/${props.subscription.courseId}`)}
+              sx={{
+                "&:hover": {
+                  color: "#D7053E",
+                  cursor: "pointer",
+                  transition: "color 0.2s ease-out",
+                },
+              }}
+            >
               {props.item.courseName}
             </Typography>
             <hr />
@@ -90,24 +114,33 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
         />
 
         <br />
-        <Button 
+        <Button
           style={{
             float: "right",
             fontWeight: "bold",
-            display: props.expired ? "none" : "block"
+            display: props.expired ? "none" : "block",
           }}
           variant="outlined"
           color="primary"
           size="large"
           onClick={() => setShownSecret(!shownSecret)}
         >
-          { shownSecret ? <>
-            <AutoFixHigh style={{ marginRight: "0.5em" }} />
-            Show Order Log
-          </> : <>
-            <i className="fa fa-lock" style={{ marginRight: "0.5em" }}>&nbsp;</i>
-            Reveal Access Code
-          </> }
+          {shownSecret ? (
+            <>
+              <i
+                className="fa-solid fa-eye"
+                style={{ marginRight: "0.5em" }}
+              ></i>
+              Show Order Log
+            </>
+          ) : (
+            <>
+              <i className="fa fa-lock" style={{ marginRight: "0.5em" }}>
+                &nbsp;
+              </i>
+              Reveal Access Code
+            </>
+          )}
         </Button>
       </Grid>
     </Grid>

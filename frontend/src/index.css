@@ -32,6 +32,15 @@ hr {
   border-radius: 3px;
 }
 
+.review-hr {
+  height: 1px;
+  border: none;
+  background-color: gray; /* TODO set to theme color */
+  max-width: inherit;
+  opacity: 0.15;
+  margin-bottom: 8px;
+}
+
 .purchase-grid-item :hover {
   border: 2px solid #232323; /* TODO set to theme color */
 }

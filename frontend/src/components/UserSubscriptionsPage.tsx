@@ -208,7 +208,7 @@ const UserSubscriptionsPage: FC = () => {
                 <Typography variant="h6" style={{ fontWeight: "bold" }}>
                   Expired Subscriptions
                 </Typography>
-                <Typography variant="body1">In memoriam</Typography>
+                <Typography variant="body1">Below are your expired subscriptions</Typography>
               </Grid>
               {pastItems.map((i: [Item, Subscription]) => {
                 let item = i[0];

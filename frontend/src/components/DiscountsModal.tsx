@@ -62,7 +62,11 @@ export default function DiscountsModal() {
 
   return (
     <div>
-      <Button variant="contained" onClick={handleOpen}>
+      <Button
+        variant="contained"
+        onClick={handleOpen}
+        style={{ fontWeight: "bold" }}
+      >
         <i
           style={{ fontSize: "27px", padding: "4px" }}
           className="fa fa-percent"

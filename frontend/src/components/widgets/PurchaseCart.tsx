@@ -57,7 +57,7 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
     setLoading(true);
     props.setEditable(false);
     let baseItem = props.cart.find((item) => item.base);
-    if(baseItem && baseItem.price && baseItem.priceDiscount)
+    if (baseItem && baseItem.price && baseItem.priceDiscount)
       baseItem.price = baseItem.priceDiscount;
     let options = props.cart.filter((item) => !item.base);
     let startDate = props.startDate;
@@ -93,9 +93,13 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
           <TableRow>
             <TableCell>
               <Typography variant="h6">
-                {opt.priceDiscount !== undefined ? (
-                    opt.priceDiscount > 0 ? "€ " + opt.priceDiscount : "free"
-                  ) : ( !isNaN(opt.price) && opt.price > 0 ? "€ " + opt.price : "free" )}
+                {opt.priceDiscount !== undefined
+                  ? opt.priceDiscount > 0
+                    ? "€ " + opt.priceDiscount
+                    : "free"
+                  : !isNaN(opt.price) && opt.price > 0
+                  ? "€ " + opt.price
+                  : "free"}
               </Typography>
             </TableCell>
             <TableCell>
@@ -108,12 +112,15 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
           <TableCell>
             <Typography variant="h5" style={{ fontWeight: "bold" }}>
               €{" "}
-              {props.cart.reduce((acc, curr) => (
-                curr.priceDiscount !== undefined 
-                  ? acc + curr.priceDiscount
-                  : acc + curr.price 
-                ), 0).toFixed(2)
-              }
+              {props.cart
+                .reduce(
+                  (acc, curr) =>
+                    curr.priceDiscount !== undefined
+                      ? acc + curr.priceDiscount
+                      : acc + curr.price,
+                  0
+                )
+                .toFixed(2)}
             </Typography>
           </TableCell>
           <TableCell>
@@ -123,12 +130,12 @@ const PurchaseGrid: FC<CartProps> = (props: CartProps) => {
                 <div style={{ float: "right" }}>
                   <Button
                     disabled={loading}
+                    style={{ fontWeight: "bold" }}
                     variant="contained"
                     color="success"
                     onClick={() => {
                       stripeHandlePayment();
                     }}
-                    // href={`/buy/${props.baseId}/confirm/SOME_STRIPE_ID`}
                   >
                     {loading ? "Processing ..." : "Secure Checkout"}
                   </Button>
