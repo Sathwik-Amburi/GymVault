@@ -86,25 +86,28 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
         code={props.subscription.ticketSecret}
       />
       <Grid item md={6} xs={12} style={{ paddingLeft: "2em" }}>
-        {props.item.courseName !== "" ? (
+        <Typography
+          variant="h5"
+          style={{ fontWeight: "bold" }}
+          onClick={() => navigate(`/course/${props.subscription.courseId}`)}
+          sx={{
+            "&:hover": {
+              color: "#D7053E",
+              cursor: "pointer",
+              transition: "color 0.2s ease-out",
+            },
+          }}>
+          {props.item.courseName !== "" ? (
+            <>
+                {props.item.courseName}
+            </>
+          ) : 
           <>
-            <Typography
-              variant="h5"
-              style={{ fontWeight: "bold" }}
-              onClick={() => navigate(`/course/${props.subscription.courseId}`)}
-              sx={{
-                "&:hover": {
-                  color: "#D7053E",
-                  cursor: "pointer",
-                  transition: "color 0.2s ease-out",
-                },
-              }}
-            >
-              {props.item.courseName}
-            </Typography>
-            <hr />
-          </>
-        ) : null}
+              Fixed-Time Subscription
+          </>}
+        </Typography>
+        <hr />
+        
         <Typography variant="body2">{props.item.description}</Typography>
         <ReviewButton
           userId={props.subscription.userId}
@@ -113,12 +116,12 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
           courseId={props.subscription.courseId}
         />
 
-        <br />
-        <Button
+        <Button 
           style={{
             float: "right",
             fontWeight: "bold",
-            display: props.expired ? "none" : "block",
+            marginTop: "2em",
+            display: props.expired ? "none" : "block"
           }}
           variant="outlined"
           color="primary"
