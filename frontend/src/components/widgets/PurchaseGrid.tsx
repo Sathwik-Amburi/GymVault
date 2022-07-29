@@ -55,24 +55,22 @@ const PurchaseGrid: FC<GridProps> = (props: GridProps) => {
               padding: "1.5em",
               margin: "1em",
             }}
-            onClick={
-              () => {
-                if (props.editable) {
-                  setSelected(item._id);
-                  let cart = props.cart.filter((item) => !item.base); // only 1 "base" element at a time!
-                  let cartItem = {
-                    name: item.name,
-                    description: item.description,
-                    price: item.price,
-                    priceDiscount: item.priceDiscount,
-                    base: true,
-                    _id: item._id,
-                  } as CartItem;
-                  // base elem first, options after
-                  props.setCart([cartItem].concat(cart));
-                }
+            onClick={() => {
+              if (props.editable) {
+                setSelected(item._id);
+                let cart = props.cart.filter((item) => !item.base); // only 1 "base" element at a time!
+                let cartItem = {
+                  name: item.name,
+                  description: item.description,
+                  price: item.price,
+                  priceDiscount: item.priceDiscount,
+                  base: true,
+                  _id: item._id,
+                } as CartItem;
+                // base elem first, options after
+                props.setCart([cartItem].concat(cart));
               }
-            }
+            }}
           >
             {props.editable ? (
               <span style={{ fontSize: "1.5em" }}>
@@ -92,13 +90,14 @@ const PurchaseGrid: FC<GridProps> = (props: GridProps) => {
                 float: "right",
               }}
             >
-
-              <span style={{ 
-                display: "block",
-                textDecoration: item.priceDiscount ? "line-through" : "none",
-                fontSize: item.priceDiscount ? "0.7em" : "1em",
-                color: item.priceDiscount ? "#c10000" : "white",
-              }}>
+              <span
+                style={{
+                  display: "block",
+                  textDecoration: item.priceDiscount ? "line-through" : "none",
+                  fontSize: item.priceDiscount ? "0.7em" : "1em",
+                  color: item.priceDiscount ? "#c10000" : "white",
+                }}
+              >
                 {item.price}
                 {isNaN(item.price) ? "" : "€"}
               </span>

@@ -40,10 +40,10 @@ const SignUpPage: FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-      if (passwordValidation.status !=="success"){
-          return
-      }
-      const data = new FormData(event.currentTarget);
+    if (passwordValidation.status !== "success") {
+      return;
+    }
+    const data = new FormData(event.currentTarget);
     const email = data.get("email");
     ApiCalls.registerUser(
       data.get("firstName"),
@@ -66,63 +66,61 @@ const SignUpPage: FC = () => {
   };
 
   const [tosPopupOpen, setTosPopupOpen] = useState(false);
-  const [passwordValidation,setPasswordValidation] = useState<ValidationState>({
+  const [passwordValidation, setPasswordValidation] = useState<ValidationState>(
+    {
       status: "",
       message: "",
-  });
-  const[password,setPassword] = useState("")
+    }
+  );
+  const [password, setPassword] = useState("");
 
-    const [passRegex,setPassRegex] = useState(true)
+  const [passRegex, setPassRegex] = useState(true);
 
+  const handlePasswordChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    let decimal =
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+    if (!event.target.value.match(decimal)) {
+      setPasswordValidation({
+        status: "warning",
+        message:
+          "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character",
+      });
+      setPassRegex(false);
+    } else {
+      setPassRegex(true);
+      setPasswordValidation({
+        status: "validating",
+        message: "passwords match regex",
+      });
+    }
+    setPassword(event.target.value);
+  };
 
-    const handlePasswordChange = (
-        event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-    ) => {
-        let decimal=  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
-        if (!event.target.value.match(decimal)){
-            setPasswordValidation({
-                status: "warning",
-                message: "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character",
-            })
-            setPassRegex(false)
-        }
-        else{
-            setPassRegex(true)
-            setPasswordValidation({
-                status: "validating",
-                message: "passwords match regex",
-            })
-        }
-            setPassword(event.target.value);
-
-
-    };
-
-    const handleConfirmPassword = (
-        event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-    ) => {
-
-        if (event.target.value !== password){
-            setPasswordValidation({
-                status: "error",
-                message: "passwords don't match",
-            })
-            return  false
-        }else {
-            if(passRegex){
-                setPasswordValidation({
-                    status: "success",
-                    message: "passwords match",
-                })
-            }
-            else{
-                setPasswordValidation({
-                    status: "validating",
-                    message: "passwords match but does not match regex",
-                })
-            }
-        }
-    };
+  const handleConfirmPassword = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    if (event.target.value !== password) {
+      setPasswordValidation({
+        status: "error",
+        message: "passwords don't match",
+      });
+      return false;
+    } else {
+      if (passRegex) {
+        setPasswordValidation({
+          status: "success",
+          message: "passwords match",
+        });
+      } else {
+        setPasswordValidation({
+          status: "validating",
+          message: "passwords match but does not match regex",
+        });
+      }
+    }
+  };
 
   const [registrationValidation, setRegistrationValidation] =
     useState<ValidationState>({
@@ -227,8 +225,12 @@ const SignUpPage: FC = () => {
                   autoComplete="new-password"
                   onChange={handlePasswordChange}
                   value={password}
-                  error={passRegex ===false}
-                  helperText={passRegex ===false?"Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character":null}
+                  error={passRegex === false}
+                  helperText={
+                    passRegex === false
+                      ? "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+                      : null
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
@@ -241,10 +243,12 @@ const SignUpPage: FC = () => {
                   id="confirmPassword"
                   autoComplete="confirm-password"
                   onChange={handleConfirmPassword}
-                  error={
-                      passwordValidation.status === "error"
+                  error={passwordValidation.status === "error"}
+                  helperText={
+                    passwordValidation.status === "error"
+                      ? "Passwords don't Match"
+                      : null
                   }
-                  helperText={ passwordValidation.status ==="error" ?"Passwords don't Match":null}
                 />
               </Grid>
               <Grid item xs={12}>

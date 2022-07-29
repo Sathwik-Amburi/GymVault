@@ -63,7 +63,11 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
                     {props.item.type === SubscriptionTypes.SESSION_PASS && (
                       <Typography
                         variant="body1"
-                        style={{ display: "inline", marginLeft: "4px", fontWeight: "bold" }}
+                        style={{
+                          display: "inline",
+                          marginLeft: "4px",
+                          fontWeight: "bold",
+                        }}
                       >
                         {moment(props.subscription.purchaseDate)
                           .utc()
@@ -91,7 +95,11 @@ const SubscriptionSummary: FC<SsProps> = (props) => {
                     {props.item.type === SubscriptionTypes.SESSION_PASS && (
                       <Typography
                         variant="body1"
-                        style={{ display: "inline", marginLeft: "4px", fontWeight: "bold" }}
+                        style={{
+                          display: "inline",
+                          marginLeft: "4px",
+                          fontWeight: "bold",
+                        }}
                       >
                         {moment(props.subscription.expireDate)
                           .utc()

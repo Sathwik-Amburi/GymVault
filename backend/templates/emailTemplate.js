@@ -1,5 +1,5 @@
 const emailTemplate = (ticketSecret, GymName, type, price, expiration) => {
-    return `<html>
+  return `<html>
     <head>
     <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -193,7 +193,7 @@ const emailTemplate = (ticketSecret, GymName, type, price, expiration) => {
     </table>
         
     </body>
-    </html>`
-}
+    </html>`;
+};
 
-module.exports = { emailTemplate }
+module.exports = { emailTemplate };

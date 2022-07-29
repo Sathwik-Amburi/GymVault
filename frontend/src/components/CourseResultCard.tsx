@@ -115,26 +115,52 @@ const ResultCard: FC<ResultCardProps> = ({ course }) => {
                   </div>
                 );
               })}
-              { course.subscriptionOffers.filter((item: any) => item.subscriptionType === SubscriptionTypes.MONTHLY_PASS).length === 0 && (
-                <div style={{ fontSize: "12px", alignItems: "center", display: "flex" }}>
+              {course.subscriptionOffers.filter(
+                (item: any) =>
+                  item.subscriptionType === SubscriptionTypes.MONTHLY_PASS
+              ).length === 0 && (
+                <div
+                  style={{
+                    fontSize: "12px",
+                    alignItems: "center",
+                    display: "flex",
+                  }}
+                >
                   <MoneyOff
                     fontSize="small"
                     color="error"
                     style={{ marginRight: "4px" }}
                   />
-                  <Typography variant="body2" color="text.secondary" style={{ display: "inline-block" }}>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    style={{ display: "inline-block" }}
+                  >
                     No Monthly Pass offered
                   </Typography>
                 </div>
               )}
-              { course.subscriptionOffers.filter((item: any) => item.subscriptionType === SubscriptionTypes.YEARLY_PASS).length === 0 && (
-                <div  style={{ fontSize: "12px", alignItems: "center", display: "flex" }}>
+              {course.subscriptionOffers.filter(
+                (item: any) =>
+                  item.subscriptionType === SubscriptionTypes.YEARLY_PASS
+              ).length === 0 && (
+                <div
+                  style={{
+                    fontSize: "12px",
+                    alignItems: "center",
+                    display: "flex",
+                  }}
+                >
                   <MoneyOff
                     fontSize="small"
                     color="error"
                     style={{ marginRight: "4px" }}
                   />
-                  <Typography variant="body2" color="text.secondary" style={{ display: "inline-block" }}>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    style={{ display: "inline-block" }}
+                  >
                     No Yearly Pass offered
                   </Typography>
                 </div>

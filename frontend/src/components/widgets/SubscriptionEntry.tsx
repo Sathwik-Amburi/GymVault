@@ -28,7 +28,7 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
         padding: "3em",
         marginTop: "3em",
         borderRadius: "20px",
-        outline:"2px solid rgb(153, 153, 153)",
+        outline: "2px solid rgb(153, 153, 153)",
         backgroundColor: props.expired ? "#393939" : "#f4f4f4",
         color: props.expired ? "#fff" : "#000",
       }}
@@ -132,10 +132,10 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
           <Typography variant="subtitle2" style={{ marginTop: "8px" }}>
             This subscription is currently{" "}
             <span style={{ fontWeight: "bold", color: "green" }}>active</span>.
-            Your access code is hidden, and can be revealed by using the button below. Once you have arrived to the
-            location, please make sure to have your access code ready and
-            provide it to the gym staff as they will need to verify it to grant
-            you access. <br />
+            Your access code is hidden, and can be revealed by using the button
+            below. Once you have arrived to the location, please make sure to
+            have your access code ready and provide it to the gym staff as they
+            will need to verify it to grant you access. <br />
             <br />{" "}
             <div style={{ display: "flex" }}>
               Enjoy your workout{" "}

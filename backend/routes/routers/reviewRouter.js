@@ -9,5 +9,4 @@ router.get("/rating/:id", reviewController.getCourseOrGymRating); //use this rou
 router.get("/user/:userid-:id", reviewController.getReviewByUserId); // use this route to get the reviews/rating of a user
 router.delete("/user/:userid-:id", reviewController.deleteReviewByUserId); // use this route to delete the reviews/rating of a user
 
-
 module.exports = router;

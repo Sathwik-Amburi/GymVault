@@ -451,13 +451,14 @@ hr {
   color: #ffffff;
 }
 
-.leaflet-popup-content { 
+.leaflet-popup-content {
   max-width: 400px;
   width: auto;
 }
 
-.leaflet-popup-content-wrapper, .leaflet-popup-tip {
-  background-color: #D7053E;
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background-color: #d7053e;
   color: white;
   font-weight: 700;
   border: 1.6px solid #fff;
@@ -466,11 +467,11 @@ hr {
   width: 0px;
   height: 0px;
   border-radius: 50%;
-  background-color: #D7053E;
+  background-color: #d7053e;
   color: white;
   font-weight: 700;
 }
 
 .leaflet-popup-close-button {
-  display: none; 
+  display: none;
 }

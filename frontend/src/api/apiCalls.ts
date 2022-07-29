@@ -172,7 +172,6 @@ export default class ApiCalls {
     });
   };
 
-
   public static addReview = async (
     userId: any,
     username: any,

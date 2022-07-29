@@ -7,7 +7,6 @@ const courseModel = require("../database/models/course");
 const sendMail = require("../googleCloud/gmail");
 const { emailTemplate } = require("../templates/emailTemplate");
 
-
 const createStripeConnectAccount = async (req, res) => {
   // only gym owners can onboard to stripe
   if (req.user.role !== "gym_owner") {
@@ -146,7 +145,7 @@ const createCheckoutSession = async (req, res) => {
       success_url: `http://localhost:3000/stripe/checkout/callback/${product}/${req.body.id}`,
       cancel_url: `http://localhost:3000/buy/${req.body.id}/cancelled`,
       payment_intent_data: {
-        application_fee_amount: Math.ceil(100*totalPrice * 0.10), // we get 10% cut and round up to nearest in eur cent
+        application_fee_amount: Math.ceil(100 * totalPrice * 0.1), // we get 10% cut and round up to nearest in eur cent
         transfer_data: {
           destination: stripe_account_id,
         },
@@ -199,14 +198,12 @@ const getPaymentStatus = async (req, res) => {
       ...user.stripe_session.pending_subscription,
     }).save();
     if (subscription) {
-      sendReceipt(req.user.email, user.stripe_session)
-      res
-        .status(200)
-        .json({
-          paid: true,
-          message: `Subscription purchased`,
-          response: subscription,
-        });
+      sendReceipt(req.user.email, user.stripe_session);
+      res.status(200).json({
+        paid: true,
+        message: `Subscription purchased`,
+        response: subscription,
+      });
       await user.update({ stripe_session: null }); // delete checkout session so that it is not reused
     } else {
       res.status(404).json({ message: `Subscription not purchased` });
@@ -243,20 +240,24 @@ const getPayee = async (item_id) => {
   }
 };
 
-
 const sendReceipt = (email, session) => {
-  
   const options = {
     to: email,
     subject: "GymVault - Payment Successful",
-    html: emailTemplate(session.pending_subscription.ticketSecret, session.pending_subscription.name, session.pending_subscription.type, session.pending_subscription.price, session.pending_subscription.expireDate),
+    html: emailTemplate(
+      session.pending_subscription.ticketSecret,
+      session.pending_subscription.name,
+      session.pending_subscription.type,
+      session.pending_subscription.price,
+      session.pending_subscription.expireDate
+    ),
     textEncoding: "base64",
   };
 
   sendMail(options).catch((error) => {
     console.log("Error while sending verification email", error);
   });
-}
+};
 
 module.exports = {
   createStripeConnectAccount,
