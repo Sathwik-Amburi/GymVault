@@ -174,7 +174,7 @@ const filterGyms = async (req, res) => {
       .status(200)
       .json({ message: `${gyms.length} results found`, response: gyms });
   } else {
-    res.status(200).json({ message: `No results found`, response: [] });
+    res.status(200).json({ message: `No results found`, response: gyms });
   }
 };
 
@@ -189,7 +189,7 @@ const filterGymsBySelectedFilters = async (req, res) => {
       response: results,
     });
   } else {
-    res.status(200).json({ message: `No results found` });
+    res.status(200).json({ message: `No results found`, response: results });
   }
 };
 
@@ -210,7 +210,7 @@ const getAllGymAmenitiesByCity = async (req, res) => {
       amenities: amenities,
     });
   } else {
-    res.status(200).json({ message: `No amenities found` });
+    res.status(200).json({ message: `No amenities found`, amenities: [] });
   }
 };
 
