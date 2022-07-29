@@ -3,11 +3,11 @@ import { FC } from "react";
 import NoImage from "../images/no-pictures-2.png";
 import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { Course } from "../models/allModels";
+import { Course, SubscriptionTypes } from "../models/allModels";
 import { useNavigate } from "react-router-dom";
 import PriceCheckIcon from "@mui/icons-material/PriceCheck";
 import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
-import { StoreMallDirectoryTwoTone } from "@mui/icons-material";
+import { MoneyOff, StoreMallDirectoryTwoTone } from "@mui/icons-material";
 
 interface ResultCardProps {
   course: Course;
@@ -115,6 +115,30 @@ const ResultCard: FC<ResultCardProps> = ({ course }) => {
                   </div>
                 );
               })}
+              { course.subscriptionOffers.filter((item: any) => item.subscriptionType === SubscriptionTypes.MONTHLY_PASS).length === 0 && (
+                <div style={{ fontSize: "12px", alignItems: "center", display: "flex" }}>
+                  <MoneyOff
+                    fontSize="small"
+                    color="error"
+                    style={{ marginRight: "4px" }}
+                  />
+                  <Typography variant="body2" color="text.secondary" style={{ display: "inline-block" }}>
+                    No Monthly Pass offered
+                  </Typography>
+                </div>
+              )}
+              { course.subscriptionOffers.filter((item: any) => item.subscriptionType === SubscriptionTypes.YEARLY_PASS).length === 0 && (
+                <div  style={{ fontSize: "12px", alignItems: "center", display: "flex" }}>
+                  <MoneyOff
+                    fontSize="small"
+                    color="error"
+                    style={{ marginRight: "4px" }}
+                  />
+                  <Typography variant="body2" color="text.secondary" style={{ display: "inline-block" }}>
+                    No Yearly Pass offered
+                  </Typography>
+                </div>
+              )}
             </Grid>
           </CardContent>
         </Card>

@@ -10,11 +10,12 @@ import { FC } from "react";
 import image from "../images/progym.jpg";
 import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { Gym, SubscriptionOffers } from "../models/allModels";
+import { Gym, SubscriptionOffers, SubscriptionTypes } from "../models/allModels";
 import { useNavigate } from "react-router-dom";
 import PriceCheckIcon from "@mui/icons-material/PriceCheck";
 import { toCleanSubscriptionTypeFormat } from "../api/utils/formatters";
 import DiscountIcon from "@mui/icons-material/Discount";
+import { MoneyOff } from "@mui/icons-material";
 
 interface ResultCardProps {
   gym: Gym;
@@ -50,7 +51,7 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
           }}
         >
           {gym.subscriptionOffers.filter((item) => item.discount !== 0)
-            .length != 0 ? (
+            .length !== 0 ? (
             <Chip
               icon={<DiscountIcon fontSize="small" />}
               label={
@@ -172,6 +173,42 @@ const ResultCard: FC<ResultCardProps> = ({ gym }) => {
                   </div>
                 );
               })}
+              { gym.subscriptionOffers.filter((item: any) => item.subscriptionType === SubscriptionTypes.DAY_PASS).length === 0 && (
+                <div style={{ fontSize: "12px", alignItems: "center", display: "flex" }}>
+                  <MoneyOff
+                    fontSize="small"
+                    color="error"
+                    style={{ marginRight: "4px" }}
+                  />
+                  <Typography variant="body2" color="text.secondary" style={{ display: "inline-block" }}>
+                    No Daily Pass offered
+                  </Typography>
+                </div>
+              )}
+              { gym.subscriptionOffers.filter((item: any) => item.subscriptionType === SubscriptionTypes.MONTHLY_PASS).length === 0 && (
+                <div style={{ fontSize: "12px", alignItems: "center", display: "flex" }}>
+                  <MoneyOff
+                    fontSize="small"
+                    color="error"
+                    style={{ marginRight: "4px" }}
+                  />
+                  <Typography variant="body2" color="text.secondary" style={{ display: "inline-block" }}>
+                    No Monthly Pass offered
+                  </Typography>
+                </div>
+              )}
+              { gym.subscriptionOffers.filter((item: any) => item.subscriptionType === SubscriptionTypes.YEARLY_PASS).length === 0 && (
+                <div  style={{ fontSize: "12px", alignItems: "center", display: "flex" }}>
+                  <MoneyOff
+                    fontSize="small"
+                    color="error"
+                    style={{ marginRight: "4px" }}
+                  />
+                  <Typography variant="body2" color="text.secondary" style={{ display: "inline-block" }}>
+                    No Yearly Pass offered
+                  </Typography>
+                </div>
+              )}
             </Grid>
           </CardContent>
         </Card>

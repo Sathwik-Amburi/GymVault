@@ -125,10 +125,8 @@ const SubscriptionEntry: FC<SsProps> = (props) => {
             <br />
             <br />{" "}
             <div style={{ display: "flex" }}>
-              We hope you enjoyed your workout
-              <FavoriteIcon style={{ marginLeft: "4px" }} color="error" />
+              We hope you enjoyed your workout!
             </div>
-            Thank you for using GymVault
           </Typography>
         ) : (
           <Typography variant="subtitle2" style={{ marginTop: "8px" }}>
